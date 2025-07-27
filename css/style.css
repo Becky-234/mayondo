@@ -1,0 +1,409 @@
+/* Universal Box-Sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Main Body Layout: Flexbox for Sidebar and Main Content */
+body {
+    display: flex;
+    /* Makes direct children (aside and main) flex items */
+    min-height: 100vh;
+    /* Ensures body takes full viewport height */
+    background: bisque;
+    /* Overall page background */
+    overflow-x: hidden;
+    /* Prevents horizontal scrollbar if content overflows */
+}
+
+.form-container {
+    width: 420px;
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+    padding: 30px 40px;
+    margin-left:450px;
+    margin-top: 50px;
+}
+
+.head {
+    text-align: center;
+    color: white;
+    font-size: 36px;
+}
+
+.form-container .input-box {
+    width: 100%;
+    height: 50px;
+    background: lawngreen;
+    margin: 30px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(223, 61, 223, 0.2);
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff;
+    padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder {
+    color: #fff;
+}
+
+.form-container .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.remember-forgot label input {
+    accent-color: #fff;
+    margin-right: 3px;
+}
+
+.remember-forgot a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.form-container .btn {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+    font-size: 15px;
+    color: grey;
+    font-weight: 500;
+}
+
+.form-container .register-link {
+    text-align: center;
+    font-size: 14.5px;
+    margin: 20px 0 15px;
+}
+
+.register-link p a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link p a:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar Styling */
+.side-menu-container {
+    position: sticky;
+    /* Makes sidebar stick to the top as you scroll */
+    top: 0;
+    left: 0;
+    /* Hardcode the width you want, or use :hover for interaction without JS */
+    width: 260px;
+    /* Default width (expanded) */
+    height: 100vh;
+    /* Full viewport height */
+    background: green;
+    padding: 6px 14px;
+    /* transition: width 0.5s; Keep if you manually toggle 'active' class with external means or CSS hover */
+    flex-shrink: 0;
+    /* Prevents sidebar from shrinking if content is too wide */
+    z-index: 1000;
+    /* Ensures sidebar stays on top of other content */
+}
+
+/* If you want a collapsed sidebar by default, remove 'active' from HTML and set width to 80px here,
+   then you can add a :hover effect for expansion if desired:
+.side-menu-container:hover {
+    width: 260px;
+}
+*/
+
+.side-menu-container.active {
+    width: 260px;
+    /* Ensures it's expanded if 'active' class is present */
+}
+
+.side-menu-container .logo-menu {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
+    /* Space below logo */
+}
+
+.side-menu-container .logo-menu .logo {
+    font-size: 25px;
+    color: #fff;
+    pointer-events: none;
+    /* Make text not clickable for events */
+    opacity: 1;
+    /* Always visible if 'active' is hardcoded */
+    transition: opacity 0.3s;
+}
+
+/* If you use an interactive sidebar without JS, these need adjustment */
+/* .side-menu-container.active .logo-menu .logo {
+    opacity: 1;
+    transition-delay: 0.2s;
+} */
+
+.side-menu-container .logo-menu .fa-bars {
+    position: absolute;
+    /* Adjust positioning of icon based on whether sidebar is always active or if you add hover */
+    left: calc(100% - 25px);
+    /* Position for expanded sidebar */
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    /* Vertically center the icon */
+    cursor: pointer;
+    transition: left 0.5s, transform 0.5s;
+}
+
+/* If you use an interactive sidebar without JS, these need adjustment */
+/* .side-menu-container.active .logo-menu .fa-bars {
+    left: calc(100% - 25px);
+    transform: translateX(-50%);
+} */
+
+
+.side-menu-container .list {
+    margin-top: 0;
+    /* Reset margin from previous HTML */
+}
+
+.list .list-item {
+    list-style: none;
+    width: 100%;
+    height: 50px;
+    margin: 10px 0;
+    /* Vertical spacing between list items */
+    line-height: 50px;
+    /* Center text vertically */
+}
+
+.list .list-item a {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    white-space: nowrap;
+    /* Prevent link name from wrapping */
+    transition: background 0.5s;
+    padding: 0 10px;
+    /* Horizontal padding for text/icon */
+}
+
+.list .list-item.active a,
+.list .list-item a:hover {
+    background: rgba(225, 255, 255, 0.2);
+    /* Hover/active background */
+}
+
+.list .list-item a i {
+    min-width: 50px;
+    /* Fixed width for icons */
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+
+.side-menu-container .link-name {
+    opacity: 1;
+    /* Always visible if 'active' is hardcoded */
+    pointer-events: auto;
+    /* Enable interaction when visible */
+    transition: opacity 0.3s;
+}
+
+/* If you use an interactive sidebar without JS, these need adjustment */
+/* .side-menu-container.active .link-name {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0.2s;
+} */
+
+
+/* Main Content Area Styling */
+.main-content {
+    flex-grow: 1;
+    /* Allows main content to take up all available space */
+    background-color: #f8f9fa;
+    /* Light beige background from your image */
+    position: relative;
+    /* Crucial: Establishes a positioning context for absolute children */
+    padding: 20px;
+    /* General padding inside the main content area */
+    padding-top: 80px;
+    /* Space for the absolutely positioned navbar */
+    /* Removed transition for margin-left as there's no JS to toggle sidebar-collapsed class */
+}
+
+/* Removed .main-content.sidebar-collapsed as there's no JS to toggle this class */
+
+/* Styling for the top-right Search and Logout Navbar */
+.dashboard-header {
+    position: absolute;
+    /* Positioned relative to .main-content */
+    top: 10px;
+    /* 10px from the top of .main-content */
+    right: 10px;
+    /* 10px from the right of .main-content */
+    background-color: transparent !important;
+    /* Make navbar background transparent if Bootstrap adds one */
+    border: none !important;
+    /* Remove any default Bootstrap borders */
+    padding: 0;
+    /* Remove default padding */
+    width: auto;
+    /* Allow content to dictate width */
+    z-index: 100;
+    /* Ensure it's above other content if needed */
+}
+
+.dashboard-header .container-fluid {
+    padding: 0;
+    /* Remove padding from container-fluid if it's adding unwanted space */
+}
+
+/* General styles for content within the dashboard body */
+.dashboard-body {
+    padding-top: 10px;
+    /* Add a bit more padding if needed below the header */
+}
+
+.container-one {
+    background: lightgreen;
+    padding: 2rem;
+    border-radius: 10px;
+    padding: 1.2rem;
+}
+
+/* --- Styles Below This Line Are Likely For Other Pages (e.g., Login/Registration) --- */
+/* You should consider moving these to a separate CSS file or
+   ensuring their class names are specific enough not to conflict with dashboard elements. */
+
+
+
+.table-content {
+    margin-top: 90px;
+    border-collapse: collapse;
+    /* This is crucial for single, well-defined borders */
+    width: 100%;
+    /* Make the table take up available width */
+}
+
+.table-content th,
+.table-content td {
+    border: 1px solid #ddd;
+    /* Light grey border for all cells */
+    padding: 8px;
+    /* Add some padding inside the cells */
+    text-align: left;
+    /* Align text to the left */
+}
+
+.table-content thead {
+    background-color: #f2f2f2;
+    /* Light grey background for the header row */
+}
+
+.table-content tr:nth-child(even) {
+    background-color: #f9f9f9;
+    /* Alternate row background for better readability */
+}
+
+.table-content tr:hover {
+    background-color: #ddd;
+    /* Highlight row on hover */
+}
+
+/* Styling for the icons within the Operation column */
+.table-content td i {
+    margin-right: 5px;
+    /* Add some space between icons */
+    cursor: pointer;
+    /* Indicate that icons are clickable */
+}
+
+/* Optional: Style for the "Login" button/link */
+.table-content td:last-child {
+    text-align: center;
+    /* Center the "Login" text */
+}
+
+.card-img-overlay {
+    color: white;
+    font-size: 50px;
+    border-radius: 10px;
+    margin-top: 90px;
+    margin-left: 20px;
+}
+
+.middle .card {
+    margin-top: 500px;
+    margin-left: 150px;
+}
+
+.card.custom-size {
+    width: 300px;
+    height: 250px;
+}
+
+.card.custom-size .card-img {
+    min-height: 30;
+    object-fit: cover;
+}
+
+/*card styles for products*/
+
+.card {
+    width: 16rem;
+    height: 16rem;
+    font-size: 13px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.card-img-top {
+    height: 100px;
+    object-fit: cover;
+}
+
+.card-text {
+    height: 10px;
+}
+
+.up-card {
+    margin-left: 100px;
+    margin-top: 100px;
+}
+
+.up-card-text {
+    margin-top: 100px;
+    text-align: center;
+    font-size: 40px;
+}
