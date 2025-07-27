@@ -87,8 +87,15 @@ body {
     border-radius: 40px;
     box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
     font-size: 15px;
-    color: grey;
+    color: white;
     font-weight: 500;
+    background: #4CAF50;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.form-container .button:hover {
+    background: #45a049;
+    /* Darker shade on hover */
 }
 
 .form-container .register-link {
