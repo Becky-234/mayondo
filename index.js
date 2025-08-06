@@ -3,10 +3,16 @@ const isCorrectEmail = true;
 if (isCorrectEmail) {
     console.log("Password")
 }
+else {
+    console.log("Incorect Email")
+}
 
 const isCorrectPassword = true;
 if (isCorrectPassword) {
     console.log("logging In");
+}
+else {
+    console.log("Incorrect Password")
 }
 
 
