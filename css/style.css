@@ -412,3 +412,9 @@ body {
     text-align: center;
     font-size: 40px;
 }
+
+#first-row {
+    display: flex;
+    gap: 1rem;
+    width: 18rem;
+}
