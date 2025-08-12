@@ -8,56 +8,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="bootstrap-5.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bootstrap-5.3.7-dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <header>
-    <aside class="side-menu-container active">
-        <div class="logo-menu">
-            <h2 class="logo">MWF</h2>
-            <i class="fa-solid fa-bars"></i>
-        </div>
-        <ul class="list">
-            <li class="list-item active">
-                <a href="dashboard.html">
-                    <i class="fa-solid fa-house"></i>
-                    <span class="link-name">Dashboard</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="users.html">
-                    <i class="fa-solid fa-users"></i>
-                    <span class="link-name">Users</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="sales.html">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span class="link-name">Sales</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="stock.html">
-                    <i class="fa-solid fa-truck"></i>
-                    <span class="link-name">Stock</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="products.html">
-                    <i class="fa-solid fa-couch"></i>
-                    <span class="link-name">Products</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="#">
-                    <i class="fa-solid fa-gear"></i>
-                    <span class="link-name">Settings</span>
-                </a>
-            </li>
-        </ul>
-    </aside>
+        <aside class="side-menu-container active">
+            <div class="logo-menu">
+                <h2 class="logo">MWF</h2>
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <ul class="list">
+                <li class="list-item active">
+                    <a href="dashboard.html">
+                        <i class="fa-solid fa-house"></i>
+                        <span class="link-name">Dashboard</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="users.html">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="link-name">Users</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="sales.html">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="link-name">Sales</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="stock.html">
+                        <i class="fa-solid fa-truck"></i>
+                        <span class="link-name">Stock</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="products.html">
+                        <i class="fa-solid fa-couch"></i>
+                        <span class="link-name">Products</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="#">
+                        <i class="fa-solid fa-gear"></i>
+                        <span class="link-name">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
     </header>
     <main class="main-content">
         <nav class="navbar bg-body-tertiary dashboard-header">
@@ -71,10 +71,10 @@
                 </div>
             </div>
         </nav>
-
+        <a class="btn btn-primary" href="add-new-user.html">Add New User</a>
         <table class="table-content">
             <tr>
-                <thead class="row-one">
+                <thead class="row-one" id="top-one">
                     <td>Full Name</td>
                     <td>Email</td>
                     <td>Contact</td>
@@ -83,7 +83,7 @@
                     <td>Actions</td>
                 </thead>
             </tr>
-            <tbody class="row-others">
+            <tbody class="row-others" id="others">
                 <tr class="attendant-one">
                     <td>Martin Bongani</td>
                     <td>martinbongani@.com</td>
@@ -182,9 +182,9 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-   
-     <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
+        </div>
+
+        <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>
 
 </html>

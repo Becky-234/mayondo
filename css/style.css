@@ -128,11 +128,13 @@ body {
     background: green;
     padding: 6px 14px;
     /* transition: width 0.5s; Keep if you manually toggle 'active' class with external means or CSS hover */
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
     /* Prevents sidebar from shrinking if content is too wide */
-    z-index: 1000;
+    /* z-index: 1000; */
     /* Ensures sidebar stays on top of other content */
+    transition: 0.5s;
 }
+
 
 /* If you want a collapsed sidebar by default, remove 'active' from HTML and set width to 80px here,
    then you can add a :hover effect for expansion if desired:
@@ -150,7 +152,7 @@ body {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 50px;
+    height: 70px;
     margin-bottom: 20px;
     /* Space below logo */
 }
@@ -172,6 +174,8 @@ body {
 } */
 
 .side-menu-container .logo-menu .fa-bars {
+    font-size: 22px;
+    color: #fff;
     position: absolute;
     /* Adjust positioning of icon based on whether sidebar is always active or if you add hover */
     left: calc(100% - 25px);
@@ -179,14 +183,18 @@ body {
     transform: translateX(-50%);
     width: 50px;
     height: 50px;
-    font-size: 22px;
-    color: #fff;
     text-align: center;
-    line-height: 40px;
-    /* Vertically center the icon */
+    line-height: 40px; /* Vertically center the icon */
     cursor: pointer;
     transition: left 0.5s, transform 0.5s;
 }
+
+.side-menu-container.active .logo-menu .fa-bars {
+    left: 90%;
+    /* opacity: 1;
+    transition-delay: 0.2s; */
+}
+
 
 /* If you use an interactive sidebar without JS, these need adjustment */
 /* .side-menu-container.active .logo-menu .fa-bars {
@@ -312,7 +320,7 @@ body {
    ensuring their class names are specific enough not to conflict with dashboard elements. */
 
 
-
+/* User Page */
 .table-content {
     margin-top: 90px;
     border-collapse: collapse;
