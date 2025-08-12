@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New User</title>
+    <title>Add Customer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -73,28 +72,61 @@
                 </div>
             </div>
         </nav>
+
         <div class="user-form-container">
 
             <form action="submit">
 
-                <label for="full-name">Full Name</label><br><br>
+                <h2>Add Customer Here!</h2>
+
+                <label for="full-name">Name of Customer</label><br><br>
                 <input type="text" id="full-name">
                 <br><br>
 
-                <label for="email">Email</label><br><br>
-                <input type="text" id="email">
+                <label for="full-name">Type of Product</label><br><br>
+                <input type="text" id="full-name">
                 <br><br>
 
-                <label for="contact">Contact</label><br><br>
-                <input type="text" id="contact">
+                <label for="full-name">Name of Product</label><br><br>
+                <input type="text" id="full-name">
                 <br><br>
 
-                <a class="btn btn-primary" id="save" href="users.html">Save</a>
-                <a class="btn btn-danger" id="cancel" href="users.html">Cancel</a>
+                <label for="full-name">Quantity</label><br><br>
+                <input type="text" id="full-name">
+                <br><br>
+
+                <label for="date">Date</label><br><br>
+                <input type="text" id="date">
+                <br><br>
+
+                <p>Select Payment Type</p>
+                <label>
+                    <input type="radio" name="Payment" value="apple">
+                    Cash
+                </label><br>
+
+                <label>
+                    <input type="radio" name="Payment" value="banana">
+                    Cheque
+                </label><br>
+
+                <label>
+                    <input type="radio" name="Payment" value="mango">
+                    Bank overdraft
+                    <br><br>
+
+                    <label for="full-name">Sales Agent Name</label><br><br>
+                    <input type="text" id="full-name">
+                    <br><br>
+
+                    <a class="btn btn-primary" id="save" href="users.html">Save</a>
+
+                    <a class="btn btn-danger" id="cancel" href="users.html">Cancel</a>
 
         </div>
 
         </form>
+
         <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>
 

@@ -320,7 +320,7 @@ body {
    ensuring their class names are specific enough not to conflict with dashboard elements. */
 
 
-/* User Page */
+/* User Page and add user page*/
 .table-content {
     margin-top: 90px;
     border-collapse: collapse;
@@ -366,6 +366,17 @@ body {
 .table-content td:last-child {
     text-align: center;
     /* Center the "Login" text */
+}
+
+/*add user page */
+.user-form-container {
+    width: 420px;
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+    padding: 30px 40px;
+    margin-left: 300px;
+    margin-top: 50px;
 }
 
 .card-img-overlay {
@@ -426,3 +437,8 @@ body {
     gap: 1rem;
     width: 18rem;
 }
+
+
+
+ 
+
