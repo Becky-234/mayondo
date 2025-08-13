@@ -311,9 +311,27 @@ body {
 }
 
 .sp-one {
-    background: lightgreen;
-    
+    background: lightgreen;  
 }
+
+.dash {
+    margin-left: 70px;
+    gap: 30px;
+}
+
+.dash-card {
+    border: solid 1px white;
+    border-radius: 10px;
+    padding: 5px;
+    width: 200px;
+    height: 100px;
+    background-color: bisque;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow */     
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+ 
 
 /* --- Styles Below This Line Are Likely For Other Pages (e.g., Login/Registration) --- */
 /* You should consider moving these to a separate CSS file or
