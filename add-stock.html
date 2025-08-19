@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock</title>
+    <title>Add stock</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -12,11 +12,10 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-
 </head>
 
 <body>
-    <aside class="side-menu-container active">
+    <aside class="side-menu-container">
         <div class="logo-menu">
             <h2 class="logo">MWF</h2>
             <i class="fa-solid fa-bars"></i>
@@ -60,7 +59,7 @@
             </li>
         </ul>
     </aside>
-    </header>
+
     <main class="main-content">
         <nav class="navbar bg-body-tertiary dashboard-header">
             <div class="container-fluid d-flex justify-content-end align-items-center">
@@ -69,34 +68,57 @@
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <a class="btn btn-danger" href="dashboard.html">Logout</a>
+                    <a class="btn btn-danger" href="index.html">Logout</a>
                 </div>
             </div>
         </nav>
-        <form>
-            <a class="btn btn-primary" href="add-stock.html">ADD PRODUCT</a>
-        </form>
-        <table class="table-content" id="newStock">
-            <tr>
-                <thead class="row-one">
-                    <th>Product Name</th>
-                    <th>Product Type</th>
-                    <th>Cost Price</th>
-                    <th>Quantity</th>
-                    <th>Product Price</th>
-                    <th>Supplier Name</th>
-                    <th>Date</th>
-                    <th>Quality</th>
-                </thead>
-            </tr>
-            <tbody class="row-others">
 
-            </tbody>
-        </table>
+        <div class="stock-form-container">
+
+            <form id="addStock">
+
+                <h2>Add Stock Here!</h2>
+
+                <label for="pdtname">Product Name</label><br>
+                <input type="text" id="pdtname" name="pdtname">
+                <br><br>
+
+                <label for="pdttype">Type of Product</label><br>
+                <input type="text" id="pdttype" name="pdttype">
+                <br><br>
+
+                <label for="cprice">Cost Price</label><br>
+                <input type="number" id="cprice" name="cprice">
+                <br><br>
+
+                <label for="pdtquantity">Quantity</label><br>
+                <input type="number" id="pdtquantity" name="pdtquantity">
+                <br><br>
+
+                <label for="pdtprice">Product Price</label><br>
+                <input type="number" id="pdtprice" name="pdtprice">
+                <br><br>
+
+                <label for="supplier">Supplier Name</label><br>
+                <input type="text" id="supplier" name="supplier">
+                <br><br>
+
+                <label for="date">Date</label><br>
+                <input type="date" id="date" name="date">
+                <br><br>
+
+                <label for="quality">Quality</label><br>
+                <input type="text" id="quality" name="quality">
+                <br><br>
+
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-danger" style="margin-left: 70px;">Cancel</button>
+
         </div>
-    </main>
-    <script src="stock.js"></script>
-    <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
+
+        </form>
+        <script src="sales.js"></script>
+        <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>
 
 </html>

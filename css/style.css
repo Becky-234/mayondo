@@ -6,6 +6,9 @@
     font-family: "Poppins", sans-serif;
 }
 
+/*LANDING PAGE*/
+
+
 /* Main Body Layout: Flexbox for Sidebar and Main Content */
 body {
     display: flex;
@@ -18,6 +21,7 @@ body {
     /* Prevents horizontal scrollbar if content overflows */
 }
 
+/* LOGIN PAGE */
 .form-container {
     width: 420px;
     background-color: green;
@@ -114,7 +118,7 @@ body {
     text-decoration: underline;
 }
 
-/* Sidebar Styling */
+/* SIDE BAR */
 .side-menu-container {
     position: sticky;
     /* Makes sidebar stick to the top as you scroll */
@@ -262,7 +266,7 @@ body {
 } */
 
 
-/* Main Content Area Styling */
+/* MAIN CONTENT AREA */
 .main-content {
     flex-grow: 1;
     /* Allows main content to take up all available space */
@@ -279,7 +283,7 @@ body {
 
 /* Removed .main-content.sidebar-collapsed as there's no JS to toggle this class */
 
-/* Styling for the top-right Search and Logout Navbar */
+/* TOP RIGHT NAVBAR AND LOGOUT */
 .dashboard-header {
     position: absolute;
     /* Positioned relative to .main-content */
@@ -331,14 +335,18 @@ body {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
- 
+#pieChart {
+    position: relative;
+    width: 50%;
+    height: 50%;
+}
 
 /* --- Styles Below This Line Are Likely For Other Pages (e.g., Login/Registration) --- */
 /* You should consider moving these to a separate CSS file or
    ensuring their class names are specific enough not to conflict with dashboard elements. */
 
 
-/* User Page and add user page*/
+/* USERS PAGE*/
 .table-content {
     margin-top: 90px;
     border-collapse: collapse;
@@ -386,7 +394,7 @@ body {
     /* Center the "Login" text */
 }
 
-/*add user page */
+/*ADD NEW USER*/
 .user-form-container {
     width: 420px;
     background-color: green;
@@ -420,7 +428,26 @@ body {
     object-fit: cover;
 }
 
-/*card styles for products*/
+/*SALES PAGE AND FORM */
+  .chartcard {
+    width: 18rem;
+    background: bisque;
+    border: 1px solid;
+  }
+
+  /*ADD STOCK PAGE*/
+  #addStock {
+    width: 420px;
+        background-color: green;
+        color: white;
+        border-radius: 10px;
+        padding: 30px 40px;
+        margin-left: 300px;
+        margin-top: 50px;
+  }
+ 
+
+/*CARDS FOR PRODUCTS PAGE*/
 
 .card {
     width: 16rem;

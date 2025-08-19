@@ -75,58 +75,61 @@
 
         <div class="user-form-container">
 
-            <form action="submit">
+            <form id="addCustomer">
 
                 <h2>Add Customer Here!</h2>
 
-                <label for="full-name">Name of Customer</label><br><br>
-                <input type="text" id="full-name">
+                <label for="fname">Name of Customer</label><br>
+                <input type="text" id="fname" name="name">
                 <br><br>
 
-                <label for="full-name">Type of Product</label><br><br>
-                <input type="text" id="full-name">
+                    <label for="tproduct">Type of Product</label><br>
+                    <input type="text" id="tproduct" name="tproduct">
+                    <br><br>
+
+                    <label for="nproduct">Name of Product</label><br>
+                    <input type="text" id="nproduct" name="nproduct">
+                    <br><br>
+              
+                <label for="quantity">Quantity</label><br>
+                <input type="number" id="quantity" name="quantity">
                 <br><br>
 
-                <label for="full-name">Name of Product</label><br><br>
-                <input type="text" id="full-name">
-                <br><br>
-
-                <label for="full-name">Quantity</label><br><br>
-                <input type="text" id="full-name">
-                <br><br>
-
-                <label for="date">Date</label><br><br>
-                <input type="text" id="date">
+                <label for="price">Price</label><br>
+                <input type="number" id="price" name="price">
                 <br><br>
 
                 <p>Select Payment Type</p>
                 <label>
-                    <input type="radio" name="Payment" value="apple">
+                    <input type="radio" name="Payment" value="cash">
                     Cash
                 </label><br>
-
+                
                 <label>
-                    <input type="radio" name="Payment" value="banana">
+                    <input type="radio" name="Payment" value="cheque">
                     Cheque
                 </label><br>
-
+                
                 <label>
-                    <input type="radio" name="Payment" value="mango">
+                    <input type="radio" name="Payment" value="bank">
                     Bank overdraft
-                    <br><br>
+                </label><br><br>
 
-                    <label for="full-name">Sales Agent Name</label><br><br>
-                    <input type="text" id="full-name">
-                    <br><br>
+                <label for="date">Date</label><br>
+                <input type="date" id="date" name="date">
+                <br><br>
 
-                    <a class="btn btn-primary" id="save" href="sales.html">Save</a>
+                <label for="agent">Sales Agent Name</label><br>
+                <input type="text" id="agent" name="agent">
+                <br><br>
 
-                    <a class="btn btn-danger" id="cancel" href="sales.html">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-danger" style="margin-left: 70px;">Cancel</button>
 
         </div>
 
         </form>
-
+        <script src="sales.js"></script>
         <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>
 
