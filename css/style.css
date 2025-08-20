@@ -478,7 +478,6 @@ body {
 }
 
 #first-row {
-    display: flex;
     gap: 1rem;
     width: 18rem;
 }
