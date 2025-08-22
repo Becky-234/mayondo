@@ -396,13 +396,18 @@ body {
 
 /*ADD NEW USER*/
 .user-form-container {
-    width: 420px;
+    width: 750px;
     background-color: green;
     color: white;
     border-radius: 10px;
     padding: 30px 40px;
-    margin-left: 300px;
-    margin-top: 50px;
+    margin-left: 120px;
+    margin-top: 30px;
+}
+
+.user-form-container .input-box {
+    width: 50%;
+    height: 10px;
 }
 
 .card-img-overlay {
@@ -437,13 +442,13 @@ body {
 
   /*ADD STOCK PAGE*/
   #addStock {
-    width: 420px;
-        background-color: green;
-        color: white;
-        border-radius: 10px;
-        padding: 30px 40px;
-        margin-left: 300px;
-        margin-top: 50px;
+    width: 600px;
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+    padding: 30px 40px;
+    margin-left: 170px;
+    margin-top: 20px;
   }
  
 

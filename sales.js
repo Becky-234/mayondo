@@ -1,4 +1,4 @@
-const form = document.getElementById("newSale");
+const form = document.getElementById("addCustomer");
 const tableBody = document.querySelector("#salesTable tbody");
 
 form.addEventListener("submit", saveSale);
