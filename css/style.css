@@ -123,7 +123,7 @@ body {
     position: sticky;
     /* Makes sidebar stick to the top as you scroll */
     top: 0;
-    left: 0;
+    left: -260px;
     /* Hardcode the width you want, or use :hover for interaction without JS */
     width: 260px;
     /* Default width (expanded) */
@@ -148,9 +148,11 @@ body {
 */
 
 .side-menu-container.active {
-    width: 260px;
+    /* width: 260px; */
     /* Ensures it's expanded if 'active' class is present */
+    left: 0;
 }
+
 
 .side-menu-container .logo-menu {
     display: flex;
@@ -333,6 +335,7 @@ body {
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow */     
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+     
 }
 
 #pieChart {

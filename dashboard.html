@@ -22,6 +22,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            margin-right: 10px;
         }
 
         .card-title {
@@ -34,6 +35,8 @@
             height: 280px !important;
             /* makes the chart big & clear */
         }
+         
+
     </style>
 
 </head>
@@ -88,7 +91,7 @@
             <div class="container-fluid d-flex justify-content-end align-items-center">
                 <div class="d-flex align-items-center">
                     <form class="d-flex me-3" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                        <input id= "dashSearch" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     <a class="btn btn-danger" href="login.html">Logout</a>
@@ -96,7 +99,7 @@
             </div>
         </nav>
 
-        <div class="dashboard-body">
+        <div class="dashboardBody">
             <h3>Dashboard</h3>
             <!-- <div style="height: 650px; background-color:#e0e0e0; margin-top: 20px; padding: 20px; border-radius: 5px;"> -->
             <div>
@@ -230,8 +233,17 @@
                 <div class="col-md-6">
                     <div class="card shadow-sm p-3 mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">Sales Overview</h5>
-                            <canvas id="salesChart"></canvas>
+                            <h5 class="card-title">Top products earlier this year</h5>
+                            <ol>
+                            <li>Beds</li> <progress value="80" max="100"></progress>
+                            <br><br>
+                            <li>Timber</li><progress value="75" max="100"></progress>
+                            <br><br>
+                            <li>Chairs</li><progress value="60" max="100"></progress>
+                            <br><br>
+                            <li>Tables</li><progress value="55" max="100"></progress>
+
+                            </ol>
                         </div>
                     </div>
                 </div>
