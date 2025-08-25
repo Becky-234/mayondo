@@ -397,6 +397,7 @@ body {
 /*ADD NEW USER*/
 .user-form-container {
     width: 750px;
+    
     background-color: green;
     color: white;
     border-radius: 10px;

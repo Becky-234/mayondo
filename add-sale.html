@@ -12,17 +12,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-        <!-- <style>
-            .the-pdt {
-                display: flex;
-            }
-            .the-pdt .input-box {
-                height: 10px;
-            }
-            .amt {
-                display: flex;
-            }
-        </style> -->
 </head>
 
 <body>
@@ -85,46 +74,42 @@
         </nav>
 
         <div class="user-form-container">
-            <form id="addCustomer">
-
-                <h2>Add Customer Here!</h2>
+            <form id="addSale">
+                <h2>Add Sale</h2>
 
                 <label for="fname">Name of Customer</label><br>
                 <input type="text" id="fname" name="name">
                 <br><br>
 
-                <div class="the-pdt">
-                    <label for="tproduct">Type of Product</label><br>
-                    <input type="text" id="tproduct" name="tproduct">
-                    <br><br>
+                <label for="tproduct">Type of Product</label><br>
+                <input type="text" id="tproduct" name="tproduct">
+                <br><br>
 
-                    <label for="nproduct">Name of Product</label><br>
-                    <input type="text" id="nproduct" name="nproduct">
-                    <br><br>
-                </div>
-                <div class="amt">
-                    <label for="quantity">Quantity</label><br>
-                    <input type="number" id="quantity" name="quantity">
-                    <br><br>
+                <label for="nproduct">Name of Product</label><br>
+                <input type="text" id="nproduct" name="nproduct">
+                <br><br>
 
-                    <label for="price">Price</label><br>
-                    <input type="number" id="price" name="price">
-                    <br><br>
-                </div>
+                <label for="quantity">Quantity</label><br>
+                <input type="number" id="quantity" name="quantity">
+                <br><br>
+
+                <label for="price">Price</label><br>
+                <input type="number" id="price" name="price">
+                <br><br>
 
                 <p>Select Payment Type</p>
                 <label>
-                    <input type="radio" name="Payment" value="cash">
+                    <input type="radio" id="cash" name="Payment">
                     Cash
                 </label><br>
 
                 <label>
-                    <input type="radio" name="Payment" value="cheque">
+                    <input type="radio" id="cheque" name="Payment">
                     Cheque
                 </label><br>
 
                 <label>
-                    <input type="radio" name="Payment" value="bank">
+                    <input type="radio" id="bank" name="Payment">
                     Bank overdraft
                 </label><br><br>
 
