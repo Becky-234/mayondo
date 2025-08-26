@@ -1,10 +1,9 @@
- const menuToggle = document.getElementById('menu-toggle');
+const menuToggle = document.getElementById('menu-toggle');
 const sideMenu = document.querySelector('.side-menu-container');
 
 menuToggle.addEventListener('click', () => {
     sideMenu.classList.toggle('active');
 });
-
 
 
 //Search

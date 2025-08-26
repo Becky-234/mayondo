@@ -83,7 +83,7 @@ body {
     text-decoration: underline;
 }
 
-.form-container .button {
+ .form-container .button {
     width: 100%;
     height: 45px;
     border: none;
@@ -131,28 +131,20 @@ body {
     /* Full viewport height */
     background: green;
     padding: 6px 14px;
-    /* transition: width 0.5s; Keep if you manually toggle 'active' class with external means or CSS hover */
-    /* flex-shrink: 0; */
+    overflow: hidden;
+    transition: width 0.5s;
+    /*Keep if you manually toggle 'active' class with external means or CSS hover */ 
+    flex-shrink: 0; 
     /* Prevents sidebar from shrinking if content is too wide */
-    /* z-index: 1000; */
-    /* Ensures sidebar stays on top of other content */
-    transition: 0.5s;
+    z-index: 1000;
+    /* Ensures sidebar stays on top of other content */    
 }
-
-
-/* If you want a collapsed sidebar by default, remove 'active' from HTML and set width to 80px here,
-   then you can add a :hover effect for expansion if desired:
-.side-menu-container:hover {
-    width: 260px;
-}
-*/
 
 .side-menu-container.active {
-    /* width: 260px; */
+    width: 260px;
     /* Ensures it's expanded if 'active' class is present */
     left: 0;
 }
-
 
 .side-menu-container .logo-menu {
     display: flex;
@@ -168,19 +160,13 @@ body {
     color: #fff;
     pointer-events: none;
     /* Make text not clickable for events */
-    opacity: 1;
-    /* Always visible if 'active' is hardcoded */
     transition: opacity 0.3s;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
-/* If you use an interactive sidebar without JS, these need adjustment */
-/* .side-menu-container.active .logo-menu .logo {
-    opacity: 1;
-    transition-delay: 0.2s;
-} */
-
 .side-menu-container .logo-menu .fa-bars {
-    font-size: 22px;
+    font-size: 25px;
     color: #fff;
     position: absolute;
     /* Adjust positioning of icon based on whether sidebar is always active or if you add hover */
@@ -190,7 +176,8 @@ body {
     width: 50px;
     height: 50px;
     text-align: center;
-    line-height: 40px; /* Vertically center the icon */
+    line-height: 40px;
+    /* Vertically center the icon */
     cursor: pointer;
     transition: left 0.5s, transform 0.5s;
 }
@@ -201,20 +188,20 @@ body {
     transition-delay: 0.2s; */
 }
 
-
-/* If you use an interactive sidebar without JS, these need adjustment */
-/* .side-menu-container.active .logo-menu .fa-bars {
-    left: calc(100% - 25px);
-    transform: translateX(-50%);
-} */
-
+.side-menu-container .link-name {
+    opacity: 1;
+    /* Always visible if 'active' is hardcoded */
+    pointer-events: auto;
+    /* Enable interaction when visible */
+    transition: opacity 0.3s;
+}
 
 .side-menu-container .list {
     margin-top: 0;
     /* Reset margin from previous HTML */
 }
 
-.list .list-item {
+.side-menu-container .list .list-item {
     list-style: none;
     width: 100%;
     height: 50px;
@@ -222,9 +209,10 @@ body {
     /* Vertical spacing between list items */
     line-height: 50px;
     /* Center text vertically */
+    align-items: center;
 }
 
-.list .list-item a {
+.side-menu-container .list .list-item a {
     display: flex;
     align-items: center;
     font-size: 18px;
@@ -233,7 +221,7 @@ body {
     border-radius: 6px;
     white-space: nowrap;
     /* Prevent link name from wrapping */
-    transition: background 0.5s;
+    transition: background 0.3s;
     padding: 0 10px;
     /* Horizontal padding for text/icon */
 }
@@ -244,28 +232,84 @@ body {
     /* Hover/active background */
 }
 
-.list .list-item a i {
+/* Collapsed state */
+.side-menu-container.collapsed {
+    width: 80px;
+    /* Only icons visible */
+}
+
+.side-menu-container.collapsed .logo-menu .logo {
+    opacity: 0;
+    /* Hide text logo */
+}
+
+.side-menu-container.collapsed .link-name {
+    opacity: 0;
+    /* Hide text */
+    pointer-events: none;
+}
+
+.side-menu-container.collapsed .list .list-item a {
+    justify-content: center;
+    /* Center icons only */
+    padding: 0;
+}
+
+.side-menu-container.collapsed .list .list-item a i {
     min-width: 50px;
-    /* Fixed width for icons */
     height: 50px;
-    text-align: center;
     line-height: 50px;
+    text-align: center;
+    font-size: 20px;
 }
 
-.side-menu-container .link-name {
-    opacity: 1;
-    /* Always visible if 'active' is hardcoded */
-    pointer-events: auto;
-    /* Enable interaction when visible */
-    transition: opacity 0.3s;
+/* Base Sidebar (Desktop view) */
+.side-menu-container.active {
+    left: 0; /* Show sidebar */
 }
 
-/* If you use an interactive sidebar without JS, these need adjustment */
-/* .side-menu-container.active .link-name {
-    opacity: 1;
-    pointer-events: auto;
-    transition-delay: 0.2s;
-} */
+/* For smaller screens */
+@media (max-width: 768px) {
+    .side-menu-container {
+        width: 220px; /* Slightly smaller for tablets */
+    }
+}
+
+@media (max-width: 576px) {
+    .side-menu-container {
+        width: 200px; /* Mobile sidebar width */
+    }
+
+    .side-menu-container .logo-menu .logo {
+        font-size: 20px;
+    }
+
+    .list .list-item a {
+        font-size: 16px;
+        padding: 0 8px;
+    }
+
+    .side-menu-container .logo-menu .fa-bars {
+        left: 100%; /* Place toggle outside sidebar */
+        transform: translateX(-100%);
+    }
+}
+
+/* Push page content when sidebar is active */
+body.sidebar-active {
+    margin-left: 260px;
+    transition: margin-left 0.5s;
+}
+@media (max-width: 768px) {
+    body.sidebar-active {
+        margin-left: 220px;
+    }
+}
+@media (max-width: 576px) {
+    body.sidebar-active {
+        margin-left: 200px;
+    }
+}
 
 
 /* MAIN CONTENT AREA */

@@ -45,7 +45,7 @@
             <i class="fa-solid fa-bars"></i>
         </div>
         <ul class="list">
-            <li class="list-item active">
+            <li class="list-item">
                 <a href="dashboard.html">
                     <i class="fa-solid fa-house"></i>
                     <span class="link-name">Dashboard</span>
@@ -63,7 +63,7 @@
                     <span class="link-name">Sales</span>
                 </a>
             </li>
-            <li class="list-item">
+            <li class="list-item active">
                 <a href="stock.html">
                     <i class="fa-solid fa-truck"></i>
                     <span class="link-name">Stock</span>
@@ -82,6 +82,15 @@
                 </a>
             </li>
         </ul>
+        <script>
+            const sidebar = document.querySelector('.side-menu-container');
+            const toggleBtn = document.querySelector('.fa-bars');
+
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                console.log("Sidebar toggled"); // debug check
+            });
+        </script>
     </aside>
     </header>
     <main class="main-content">
