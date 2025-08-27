@@ -6,16 +6,13 @@
     font-family: "Poppins", sans-serif;
 }
 
-/*LANDING PAGE*/
-
-
 /* Main Body Layout: Flexbox for Sidebar and Main Content */
 body {
     display: flex;
     /* Makes direct children (aside and main) flex items */
     min-height: 100vh;
     /* Ensures body takes full viewport height */
-    background: bisque;
+    background: white;
     /* Overall page background */
     overflow-x: hidden;
     /* Prevents horizontal scrollbar if content overflows */
@@ -26,10 +23,10 @@ body {
     width: 420px;
     background-color: green;
     color: white;
-    border-radius: 10px;
+    border-radius: 40px;
     padding: 30px 40px;
-    margin-left:450px;
-    margin-top: 50px;
+    margin-top: 15px;
+    margin: 15px 0 0 450px;
 }
 
 .head {
@@ -294,7 +291,7 @@ body.sidebar-active {
     /* Removed transition for margin-left as there's no JS to toggle sidebar-collapsed class */
 }
 
-/* Removed .main-content.sidebar-collapsed as there's no JS to toggle this class */
+ 
 
 /* TOP RIGHT NAVBAR AND LOGOUT */
 .dashboard-header {
@@ -362,7 +359,7 @@ body.sidebar-active {
 
 /* USERS PAGE*/
 .table-content {
-    margin-top: 90px;
+    margin-top: 30px;
     border-collapse: collapse;
     /* This is crucial for single, well-defined borders */
     width: 100%;

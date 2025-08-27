@@ -1,4 +1,3 @@
-
 const form = document.getElementById("addSale");
 const tableBody = document.querySelector("#salesTable tbody");
 
@@ -6,6 +5,7 @@ form.addEventListener("submit", saveSale);
 
 function saveSale(event) {
   event.preventDefault();
+
   const customerName = document.getElementById("fname").value;
   const productType = document.getElementById("tproduct").value;
   const productName = document.getElementById("nproduct").value;
@@ -22,6 +22,7 @@ function saveSale(event) {
   }
   const date = document.getElementById("date").value;
   const salesAgentName = document.getElementById("agent").value;
+
   //creating a new row
   const newRow = document.createElement("tr");
   newRow.innerHTML = `
