@@ -29,7 +29,7 @@ form.reset();
 };
 
 
-// stock.js (for add-stock.html)
+//for add-stock.html
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("stockForm");
     if (!form) return; // Only run on add-stock.html
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// stock.js (for stock.html)
+// for stock.html
 document.addEventListener("DOMContentLoaded", () => {
     const tableBody = document.querySelector("#newStock tbody");
     if (!tableBody) return; // Only run on stock.html

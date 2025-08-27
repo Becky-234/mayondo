@@ -73,15 +73,20 @@
             <div class="container-fluid d-flex justify-content-end align-items-center">
                 <div class="d-flex align-items-center">
                     <form class="d-flex me-3" role="search">
-                        <input id="userSearch" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                        <input id="userSearch" class="form-control me-2" type="search" placeholder="Search"
+                            aria-label="Search" />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     <a class="btn btn-danger" href="index.html">Logout</a>
                 </div>
             </div>
         </nav>
-        <a class="btn btn-primary" href="add-new-user.html">Add New User</a>
-        <table class="table-content">
+        <div class="to-do">
+            <a id="" class="btn btn-primary" href="add-new-user.html">Add New User</a>
+            <a id="downloadExcel" class="btn btn-primary">Download Excel</a>
+            <a id="downloadPdf" class="btn btn-primary">Download PDF</a>
+        </div>
+        <table id="addUser" class="table-content">
             <tr>
                 <thead class="row-one" id="top-one">
                     <td>Full Name</td>
@@ -192,9 +197,12 @@
             </tbody>
         </table>
         </div>
-
-        <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
         <script src="user.js"></script>
+        <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
+
 </body>
 
 </html>
