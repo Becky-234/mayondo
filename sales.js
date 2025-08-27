@@ -40,3 +40,67 @@ function saveSale(event) {
 
   form.reset();
 }
+
+
+// sales.js (for add-sale.html)
+document.getElementById("saleForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  // Collect values
+  const sale = {
+    customerName: document.getElementById("customerName").value,
+    productType: document.getElementById("productType").value,
+    productName: document.getElementById("productName").value,
+    quantity: document.getElementById("quantity").value,
+    price: document.getElementById("price").value,
+    paymentType: document.getElementById("paymentType").value,
+    date: document.getElementById("date").value,
+    salesAgent: document.getElementById("salesAgent").value
+  };
+
+  // Get existing sales or empty array
+  let sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+  // Add new sale
+  sales.push(sale);
+
+  // Save back to localStorage
+  localStorage.setItem("sales", JSON.stringify(sales));
+
+  alert("Sale added successfully!");
+  this.reset();
+});
+
+
+
+// sales.js (for sales.html)
+window.addEventListener("DOMContentLoaded", () => {
+  let sales = JSON.parse(localStorage.getItem("sales")) || [];
+  const tableBody = document.querySelector("#salesTable tbody");
+
+  tableBody.innerHTML = ""; // clear first
+
+  sales.forEach(sale => {
+    const row = `
+            <tr>
+                <td>${sale.customerName}</td>
+                <td>${sale.productType}</td>
+                <td>${sale.productName}</td>
+                <td>${sale.quantity}</td>
+                <td>${sale.price}</td>
+                <td>${sale.paymentType}</td>
+                <td>${sale.date}</td>
+                <td>${sale.salesAgent}</td>
+            </tr>
+        `;
+    tableBody.innerHTML += row;
+  });
+});
+
+
+let sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+// Example: total sales per week (you can calculate by date)
+let totalSales = sales.reduce((sum, s) => sum + Number(s.price), 0);
+
+console.log("Total Sales:", totalSales);
