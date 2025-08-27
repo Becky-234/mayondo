@@ -42,7 +42,7 @@ function saveSale(event) {
 }
 
 
-// sales.js (for add-sale.html)
+// for add-sale.html
 document.getElementById("saleForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -73,7 +73,7 @@ document.getElementById("saleForm").addEventListener("submit", function (e) {
 
 
 
-// sales.js (for sales.html)
+// for sales.html
 window.addEventListener("DOMContentLoaded", () => {
   let sales = JSON.parse(localStorage.getItem("sales")) || [];
   const tableBody = document.querySelector("#salesTable tbody");
