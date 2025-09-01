@@ -1,0 +1,282 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Main Body Layout: Flexbox for Sidebar and Main Content */
+body {
+    display: flex;
+    /* Makes direct children (aside and main) flex items */
+    min-height: 100vh;
+    /* Ensures body takes full viewport height */
+    background: white;
+    /* Overall page background */
+    overflow-x: hidden;
+    /* Prevents horizontal scrollbar if content overflows */
+}
+
+/* LOGIN PAGE */
+.form-container {
+    width: 420px;
+    background-color: green;
+    color: white;
+    border-radius: 40px;
+    padding: 30px 40px;
+    margin-top: 15px;
+    margin: 15px 0 0 450px;
+}
+
+.head {
+    text-align: center;
+    color: white;
+    font-size: 36px;
+}
+
+.form-container .input-box {
+    width: 100%;
+    height: 50px;
+    background: lawngreen;
+    margin: 30px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(223, 61, 223, 0.2);
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff;
+    padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder {
+    color: #fff;
+}
+
+.form-container .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.remember-forgot label input {
+    accent-color: #fff;
+    margin-right: 3px;
+}
+
+.remember-forgot a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.form-container .button {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+    font-size: 15px;
+    color: white;
+    font-weight: 500;
+    background: #4CAF50;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.form-container .button:hover {
+    background: #45a049;
+    /* Darker shade on hover */
+}
+
+.form-container .register-link {
+    text-align: center;
+    font-size: 14.5px;
+    margin: 20px 0 15px;
+}
+
+.register-link p a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link p a:hover {
+    text-decoration: underline;
+}
+
+/* SIDE BAR */
+.side-menu-container {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 260px;
+    /* default expanded */
+    height: 100vh;
+    background: green;
+    padding: 6px 14px;
+    overflow: hidden;
+    transition: width 0.5s;
+    flex-shrink: 0;
+    z-index: 1000;
+}
+
+/* Use only .collapsed (drop .active for clarity) */
+.side-menu-container.collapsed {
+    width: 80px;
+}
+
+/* --- Logo --- */
+.side-menu-container .logo-menu {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    margin-bottom: 20px;
+}
+
+.side-menu-container .logo-menu .logo {
+    font-size: 25px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.3s;
+}
+
+.side-menu-container.collapsed .logo-menu .logo {
+    opacity: 0;
+    /* hide logo text when collapsed */
+}
+
+/* --- Hamburger toggle --- */
+.side-menu-container .logo-menu .fa-bars {
+    font-size: 25px;
+    color: #fff;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* --- List --- */
+.side-menu-container .list {
+    margin-top: 0;
+}
+
+.side-menu-container .list .list-item {
+    list-style: none;
+    width: 100%;
+    height: 50px;
+    margin: 10px 0;
+}
+
+.side-menu-container .list .list-item a {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 10px;
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.list .list-item.active a,
+.list .list-item a:hover {
+    background: rgba(225, 255, 255, 0.2);
+}
+
+/* --- Icons --- */
+.side-menu-container .list .list-item a i {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* center icon in box */
+    font-size: 20px;
+}
+
+/* --- Text --- */
+.side-menu-container .list .list-item a .link-name {
+    flex: 1;
+    white-space: nowrap;
+    transition: opacity 0.3s;
+}
+
+/* Collapse behavior */
+.side-menu-container.collapsed .list .list-item a {
+    justify-content: center;
+    /* only icon in middle */
+    padding: 0;
+}
+
+.side-menu-container.collapsed .list .list-item a .link-name {
+    display: none;
+    /* hide text when collapsed */
+}
+
+
+/* Base Sidebar (Desktop view) */
+.side-menu-container.active {
+    left: 0;
+    /* Show sidebar */
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+    .side-menu-container {
+        width: 220px;
+        /* Slightly smaller for tablets */
+    }
+}
+
+@media (max-width: 576px) {
+    .side-menu-container {
+        width: 200px;
+        /* Mobile sidebar width */
+    }
+
+    .side-menu-container .logo-menu .logo {
+        font-size: 20px;
+    }
+
+    .list .list-item a {
+        font-size: 16px;
+        padding: 0 8px;
+    }
+
+    .side-menu-container .logo-menu .fa-bars {
+        left: 100%;
+        /* Place toggle outside sidebar */
+        transform: translateX(-100%);
+    }
+}
+
+/* Push page content when sidebar is active */
+body.sidebar-active {
+    margin-left: 260px;
+    transition: margin-left 0.5s;
+}
+
+@media (max-width: 768px) {
+    body.sidebar-active {
+        margin-left: 220px;
+    }
+}
+
+@media (max-width: 576px) {
+    body.sidebar-active {
+        margin-left: 200px;
+    }
+}

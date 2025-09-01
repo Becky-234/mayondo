@@ -339,7 +339,7 @@ body.sidebar-active {
     padding: 5px;
     width: 200px;
     height: 100px;
-    background-color: bisque;
+     
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow */     
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -352,19 +352,59 @@ body.sidebar-active {
     height: 50%;
 }
 
-/* --- Styles Below This Line Are Likely For Other Pages (e.g., Login/Registration) --- */
-/* You should consider moving these to a separate CSS file or
-   ensuring their class names are specific enough not to conflict with dashboard elements. */
+.calendar {
+    background-color: #111111;
+    border-radius: 10px;
+    box-shadow: 0 0 30px #222222;
+    overflow: hidden;
+    width: 300px;
+    color: white;
+    padding: 20px;
+}
 
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    color: white;
+}
 
+.btn {
+    cursor: pointer;
+}
+
+#month-year {
+    font-weight: bold;
+    font-size: 20px;
+}
+ 
 /* USERS PAGE*/
 .to-do {
    display: flex;
    gap: 30px;
 }
 
+#downloadPdf {
+    background: #e74c3c;
+    color: white;
+}
+
+#downloadExcel {
+    background: #27ae60;
+    color: white;
+}
+
+button.export:hover {
+    opacity: 0.9;
+}
+
 .table-content {
     margin-top: 30px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
     border-collapse: collapse;
     /* This is crucial for single, well-defined borders */
     width: 100%;
@@ -373,17 +413,15 @@ body.sidebar-active {
 
 .table-content th,
 .table-content td {
-    border: 1px solid #ddd;
-    /* Light grey border for all cells */
-    padding: 8px;
-    /* Add some padding inside the cells */
+    border-bottom: 1px solid #eee;
+    padding: 12px 15px;
     text-align: left;
     /* Align text to the left */
 }
 
 .table-content thead {
-    background-color: #f2f2f2;
-    /* Light grey background for the header row */
+    background: #0077cc;
+    color: white;
 }
 
 .table-content tr:nth-child(even) {
@@ -392,8 +430,7 @@ body.sidebar-active {
 }
 
 .table-content tr:hover {
-    background-color: #ddd;
-    /* Highlight row on hover */
+    background: #f1f9ff;
 }
 
 /* Styling for the icons within the Operation column */

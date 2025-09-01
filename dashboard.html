@@ -9,7 +9,7 @@
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="bootstrap-5.3.7-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -84,203 +84,232 @@
             </li>
         </ul>
     </aside>
-        <script>
-            const sidebar = document.querySelector('.side-menu-container');
-            const toggleBtn = document.querySelector('.fa-bars');
+    <script>
+        const sidebar = document.querySelector('.side-menu-container');
+        const toggleBtn = document.querySelector('.fa-bars');
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
-                console.log("Sidebar toggled"); // debug check
-            });
-        </script>
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            console.log("Sidebar toggled"); // debug check
+        });
+    </script>
+
+</body>
+
+</aside>
+<main class="main-content">
+    <nav class="navbar bg-body-tertiary dashboard-header">
+        <div class="container-fluid d-flex justify-content-end align-items-center">
+            <div class="d-flex align-items-center">
+                <form class="d-flex me-3" role="search">
+                    <input id="dashSearch" class="form-control me-2" type="search" placeholder="Search"
+                        aria-label="Search" />
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <a class="btn btn-danger" href="index.html">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboarBody">
+        <h3>Dashboard</h3>
+        <!-- <div style="height: 650px; background-color:#e0e0e0; margin-top: 20px; padding: 20px; border-radius: 5px;"> -->
+        <div>
+            <h2>Mayondo Wood $ Furniture ltd</h2>
+            <br>
+            <section class="dash" id="dash-top">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="dash-card">
+                            <div class="card-body">
+                                <i class="fa-solid fa-dollar-sign"></i>
+                                <h5 class="card-title">Today's Sale</h5>
+                                <p class="card-text">Shs.500000</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dash-card">
+                            <div class="card-body">
+                                <i class="fa-regular fa-cart-shopping"></i>
+                                <h5 class="card-title">Today's Purchase</h5>
+                                <p class="card-text">15</p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="dash-card">
+                            <div class="card-body">
+                                <i class="fa-regular fa-user"></i>
+                                <h5 class="card-title">Customers</h5>
+                                <p class="card-text">5</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br><br>
+
+                <div class="row">
+                    <!-- Sales Overview -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm p-3 mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Sales Overview</h5>
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Categories -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm p-3 mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Categories</h5>
+                                <canvas id="productsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <script>
+                    // Sales Chart (Line)
+                    const ctx1 = document.getElementById('salesChart').getContext('2d');
+                    const salesChart = new Chart(ctx1, {
+                        type: 'line',
+                        data: {
+                            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                            datasets: [{
+                                label: 'Sales (Shs)',
+                                data: [500000, 400000, 600000, 300000, 700000, 200000, 450000],
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { position: 'top' },
+                                title: { display: true, text: 'Weekly Sales Overview' }
+                            },
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+
+                    //Products Chart (Pie)
+                    const ctx2 = document.getElementById('productsChart').getContext('2d');
+                    const productsChart = new Chart(ctx2, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Chairs', 'Tables', 'Sofas', 'Beds', 'Cabinets'],
+                            datasets: [{
+                                label: 'Product Share',
+                                data: [12, 19, 7, 10, 5], // sample data
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.7)',
+                                    'rgba(54, 162, 235, 0.7)',
+                                    'rgba(255, 206, 86, 0.7)',
+                                    'rgba(75, 192, 192, 0.7)',
+                                    'rgba(153, 102, 255, 0.7)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { position: 'right' },
+                                title: { display: true, text: 'Product Category Distribution' }
+                            }
+                        }
+                    });
+                </script>
+                <br><br><br>
+            </section>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Top products earlier this year</h5>
+                        <ol>
+                            <li>Beds</li> <progress value="80" max="100"></progress>
+                            <br><br>
+                            <li>Timber</li><progress value="75" max="100"></progress>
+                            <br><br>
+                            <li>Chairs</li><progress value="60" max="100"></progress>
+                            <br><br>
+                            <li>Tables</li><progress value="55" max="100"></progress>
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    </section>
+    <div style="height: 300px; background-color: #d0d0d0; margin-top: 20px; padding: 20px; border-radius: 5px;">
+        <h2>Recent Activity</h2>
+        <div class="calendar">
+            <div class="header">
+                <div id="prev" class="btn"><i class="fa-solid fa-arrow-left"></i></div>
+                <div id="month-year"></div>
+                <div id="next" class="btn"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+            <div class="weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thur</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+            <div class="days" id="days"></div>
+
+            <!-- Modal -->
+            <div id="eventModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3 id="selected-date"></h3>
+                    <textarea id="event-input" placeholder="Add event..."></textarea>
+                    <button id="save-event">Save Event</button>
+                    <div id="event-list"></div>
+                </div>
+            </div>
+        </div>
         
-        </body>
+        <p>New Stock In</p>
+        <img src="images/show-three.jpeg" width="150px" height="150px">
+        <img src="images/show-two.jpeg" width="150px" height="150px">
+        <img src="images/show-one.jpeg" width="150px" height="150px">
+    </div>
+    </div>
+</main>
 
-    </aside>
-    <main class="main-content">
-        <nav class="navbar bg-body-tertiary dashboard-header">
-            <div class="container-fluid d-flex justify-content-end align-items-center">
-                <div class="d-flex align-items-center">
-                    <form class="d-flex me-3" role="search">
-                        <input id="dashSearch" class="form-control me-2" type="search" placeholder="Search"
-                            aria-label="Search" />
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                    <a class="btn btn-danger" href="index.html">Logout</a>
-                </div>
-            </div>
-        </nav>
-
-        <div class="dashboarBody">
-            <h3>Dashboard</h3>
-            <!-- <div style="height: 650px; background-color:#e0e0e0; margin-top: 20px; padding: 20px; border-radius: 5px;"> -->
-            <div>
-                <h2>Mayondo Wood $ Furniture ltd</h2>
-                <br>
-                <section class="dash" id="dash-top">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="dash-card">
-                                <div class="card-body">
-                                    <i class="fa-solid fa-dollar-sign"></i>
-                                    <h5 class="card-title">Today's Sale</h5>
-                                    <p class="card-text">Shs.500000</p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="dash-card">
-                                <div class="card-body">
-                                    <i class="fa-regular fa-cart-shopping"></i>
-                                    <h5 class="card-title">Today's Purchase</h5>
-                                    <p class="card-text">15</p>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="dash-card">
-                                <div class="card-body">
-                                    <i class="fa-regular fa-user"></i>
-                                    <h5 class="card-title">Customers</h5>
-                                    <p class="card-text">5</p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br><br><br>
-
-                    <div class="row">
-                        <!-- Sales Overview -->
-                        <div class="col-md-6">
-                            <div class="card shadow-sm p-3 mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Sales Overview</h5>
-                                    <canvas id="salesChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Categories -->
-                        <div class="col-md-6">
-                            <div class="card shadow-sm p-3 mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Product Categories</h5>
-                                    <canvas id="productsChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <script>
-                        // Sales Chart (Line)
-                        const ctx1 = document.getElementById('salesChart').getContext('2d');
-                        const salesChart = new Chart(ctx1, {
-                            type: 'line',
-                            data: {
-                                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                                datasets: [{
-                                    label: 'Sales (Shs)',
-                                    data: [500000, 400000, 600000, 300000, 700000, 200000, 450000],
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    fill: true,
-                                    tension: 0.3
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: { position: 'top' },
-                                    title: { display: true, text: 'Weekly Sales Overview' }
-                                },
-                                scales: {
-                                    y: { beginAtZero: true }
-                                }
-                            }
-                        });
-
-                        //Products Chart (Pie)
-                        const ctx2 = document.getElementById('productsChart').getContext('2d');
-                        const productsChart = new Chart(ctx2, {
-                            type: 'pie',
-                            data: {
-                                labels: ['Chairs', 'Tables', 'Sofas', 'Beds', 'Cabinets'],
-                                datasets: [{
-                                    label: 'Product Share',
-                                    data: [12, 19, 7, 10, 5], // sample data
-                                    backgroundColor: [
-                                        'rgba(255, 99, 132, 0.7)',
-                                        'rgba(54, 162, 235, 0.7)',
-                                        'rgba(255, 206, 86, 0.7)',
-                                        'rgba(75, 192, 192, 0.7)',
-                                        'rgba(153, 102, 255, 0.7)'
-                                    ],
-                                    borderColor: [
-                                        'rgba(255, 99, 132, 1)',
-                                        'rgba(54, 162, 235, 1)',
-                                        'rgba(255, 206, 86, 1)',
-                                        'rgba(75, 192, 192, 1)',
-                                        'rgba(153, 102, 255, 1)'
-                                    ],
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: { position: 'right' },
-                                    title: { display: true, text: 'Product Category Distribution' }
-                                }
-                            }
-                        });
-                    </script>
-                    <br><br><br>
-                </section>
-
-                <div class="col-md-6">
-                    <div class="card shadow-sm p-3 mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Top products earlier this year</h5>
-                            <ol>
-                                <li>Beds</li> <progress value="80" max="100"></progress>
-                                <br><br>
-                                <li>Timber</li><progress value="75" max="100"></progress>
-                                <br><br>
-                                <li>Chairs</li><progress value="60" max="100"></progress>
-                                <br><br>
-                                <li>Tables</li><progress value="55" max="100"></progress>
-
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-
-
-
-            </div>
-        </div>
-
-        </section>
-        <div style="height: 300px; background-color: #d0d0d0; margin-top: 20px; padding: 20px; border-radius: 5px;">
-            <h2>Recent Activity</h2>
-            <p>New Stock In</p>
-            <img src="images/show-three.jpeg" width="150px" height="150px">
-            <img src="images/show-two.jpeg" width="150px" height="150px">
-            <img src="images/show-one.jpeg" width="150px" height="150px">
-        </div>
-        </div>
-    </main>
-
-    <script src="dashboard.js"></script>
-    <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.min.js"
-        integrity="sha512-n/G+dROKbKL3GVngGWmWfwK0yPctjZQM752diVYnXZtD/48agpUKLIn0xDQL9ydZ91x6BiOmTIFwWjjFi2kEFg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="dashboard.js"></script>
+<script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.min.js"
+    integrity="sha512-n/G+dROKbKL3GVngGWmWfwK0yPctjZQM752diVYnXZtD/48agpUKLIn0xDQL9ydZ91x6BiOmTIFwWjjFi2kEFg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
 </html>
