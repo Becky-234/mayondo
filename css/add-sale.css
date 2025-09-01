@@ -220,3 +220,20 @@ body.sidebar-active {
     z-index: 100;
     /* Ensure it's above other content if needed */
 }
+
+/*ADD NEW USER*/
+.user-form-container {
+    width: 750px;
+
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+    padding: 30px 40px;
+    margin-left: 120px;
+    margin-top: 30px;
+}
+
+.user-form-container .input-box {
+    width: 50%;
+    height: 10px;
+}

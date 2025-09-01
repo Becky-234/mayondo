@@ -195,7 +195,7 @@ body.sidebar-active {
     /* General padding inside the main content area */
     padding-top: 80px;
     /* Space for the absolutely positioned navbar */
-    /* Removed transition for margin-left as there's no JS to toggle sidebar-collapsed class */
+     
 }
 
 
@@ -218,6 +218,54 @@ body.sidebar-active {
     /* Allow content to dictate width */
     z-index: 100;
     /* Ensure it's above other content if needed */
+}
+
+.table-content {
+    margin-top: 30px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    border-collapse: collapse;
+    /* This is crucial for single, well-defined borders */
+    width: 100%;
+    /* Make the table take up available width */
+}
+
+.table-content th,
+.table-content td {
+    border-bottom: 1px solid #eee;
+    padding: 12px 15px;
+    text-align: left;
+    /* Align text to the left */
+}
+
+.table-content thead {
+    background: #0077cc;
+    color: white;
+}
+
+.table-content tr:nth-child(even) {
+    background-color: #f9f9f9;
+    /* Alternate row background for better readability */
+}
+
+.table-content tbody:hover {
+    background: #f1f9ff;
+}
+
+/* Styling for the icons within the Operation column */
+.table-content td i {
+    margin-right: 5px;
+    /* Add some space between icons */
+    cursor: pointer;
+    /* Indicate that icons are clickable */
+}
+
+/* Optional: Style for the "Login" button/link */
+.table-content td:last-child {
+    text-align: center;
+    /* Center the "Login" text */
 }
 
 

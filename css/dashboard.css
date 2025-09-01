@@ -286,3 +286,41 @@ body.sidebar-active {
     font-weight: bold;
     font-size: 20px;
 }
+
+.card {
+     border-radius: 16px;
+     height: 350px;
+     width: 400px;
+     /* adjust as needed */
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+     margin-right: 10px;
+ }
+
+ .card-title {
+     font-weight: 700;
+     margin-bottom: 1rem;
+ }
+
+ .card canvas {
+     width: 100% !important;
+     height: 280px !important;
+     /* makes the chart big & clear */
+ }
+
+  .dashboarBody {
+    height: 100%;
+   background-color:#e0e0e0;
+   margin-top: 20px;
+   padding: 20px;
+   border-radius: 35px; 
+  }
+
+  .dashLower {
+    height: 50%; 
+    background-color: #d0d0d0; 
+    margin-top: 20px; 
+    padding: 20px; 
+    border-radius: 5px;
+  }

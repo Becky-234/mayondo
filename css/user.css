@@ -270,7 +270,7 @@ button.export:hover {
     /* Alternate row background for better readability */
 }
 
-.table-content tr:hover {
+.table-content tbody:hover {
     background: #f1f9ff;
 }
 
