@@ -183,6 +183,44 @@ body.sidebar-active {
     }
 }
 
+/* MAIN CONTENT AREA */
+.main-content {
+    flex-grow: 1;
+    /* Allows main content to take up all available space */
+    background-color: #f8f9fa;
+    /* Light beige background from your image */
+    position: relative;
+    /* Crucial: Establishes a positioning context for absolute children */
+    padding: 20px;
+    /* General padding inside the main content area */
+    padding-top: 80px;
+    /* Space for the absolutely positioned navbar */
+    /* Removed transition for margin-left as there's no JS to toggle sidebar-collapsed class */
+}
+
+
+
+/* TOP RIGHT NAVBAR AND LOGOUT */
+.dashboard-header {
+    position: absolute;
+    /* Positioned relative to .main-content */
+    top: 10px;
+    /* 10px from the top of .main-content */
+    right: 10px;
+    /* 10px from the right of .main-content */
+    background-color: transparent !important;
+    /* Make navbar background transparent if Bootstrap adds one */
+    border: none !important;
+    /* Remove any default Bootstrap borders */
+    padding: 0;
+    /* Remove default padding */
+    width: auto;
+    /* Allow content to dictate width */
+    z-index: 100;
+    /* Ensure it's above other content if needed */
+}
+
+
 /*SALES PAGE AND FORM */
 .chartcard {
     width: 18rem;
@@ -190,3 +228,23 @@ body.sidebar-active {
     border: 1px solid;
 }
 
+.card {
+    border-radius: 16px;
+    height: 350px;
+    width: 400px;
+    /* adjust as needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.card canvas {
+    width: 100% !important;
+    height: 280px !important;
+    /* makes the chart big & clear */
+}

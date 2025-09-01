@@ -98,7 +98,7 @@ body {
     background: rgba(225, 255, 255, 0.2);
 }
 
-/* --- Icons --- */
+/* Icons */
 .side-menu-container .list .list-item a i {
     width: 50px;
     height: 50px;
@@ -165,6 +165,7 @@ body {
     }
 }
 
+
 /* Push page content when sidebar is active */
 body.sidebar-active {
     margin-left: 260px;
@@ -181,4 +182,86 @@ body.sidebar-active {
     body.sidebar-active {
         margin-left: 200px;
     }
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+    flex-grow: 1;
+    /* Allows main content to take up all available space */
+    background-color: #f8f9fa;
+    /* Light beige background from your image */
+    position: relative;
+    /* Crucial: Establishes a positioning context for absolute children */
+    padding: 20px;
+    /* General padding inside the main content area */
+    padding-top: 80px;
+    /* Space for the absolutely positioned navbar */
+    /* Removed transition for margin-left as there's no JS to toggle sidebar-collapsed class */
+}
+
+
+
+/* TOP RIGHT NAVBAR AND LOGOUT */
+.dashboard-header {
+    position: absolute;
+    /* Positioned relative to .main-content */
+    top: 10px;
+    /* 10px from the top of .main-content */
+    right: 10px;
+    /* 10px from the right of .main-content */
+    background-color: transparent !important;
+    /* Make navbar background transparent if Bootstrap adds one */
+    border: none !important;
+    /* Remove any default Bootstrap borders */
+    padding: 0;
+    /* Remove default padding */
+    width: auto;
+    /* Allow content to dictate width */
+    z-index: 100;
+    /* Ensure it's above other content if needed */
+}
+
+
+  h1 {
+      text-align: center;
+      font-size: 50px;
+  }
+
+  h2 {
+      text-align: center;
+      font-size: 25px;
+  }
+
+/*CARDS FOR PRODUCTS PAGE*/
+.card {
+    width: 16rem;
+    height: 16rem;
+    font-size: 13px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.card-img-top {
+    height: 100px;
+    object-fit: cover;
+}
+
+.card-text {
+    height: 10px;
+}
+
+.up-card {
+    margin-left: 100px;
+    margin-top: 100px;
+}
+
+.up-card-text {
+    margin-top: 100px;
+    text-align: center;
+    font-size: 40px;
+}
+
+#first-row {
+    gap: 1rem;
+    width: 18rem;
 }
