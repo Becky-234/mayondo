@@ -198,11 +198,13 @@ body.sidebar-active {
     /* General padding inside the main content area */
     padding-top: 80px;
     /* Space for the absolutely positioned navbar */
-    /* Removed transition for margin-left as there's no JS to toggle sidebar-collapsed class */
 }
 
+/*Add stock form*/
+h2 {
+    text-align: center;
+}
 
-/*ADD STOCK PAGE*/
 #addStock {
     width: 600px;
     background-color: green;
@@ -210,22 +212,19 @@ body.sidebar-active {
     border-radius: 10px;
     padding: 30px 40px;
     margin-left: 170px;
-    margin-top: 20px;
-}
-
-/*ADD NEW USER*/
-.user-form-container {
-    width: 750px;
-
-    background-color: green;
-    color: white;
-    border-radius: 10px;
-    padding: 30px 40px;
-    margin-left: 120px;
     margin-top: 30px;
 }
 
-.user-form-container .input-box {
-    width: 50%;
-    height: 10px;
+label {
+    text-align: justify;
+    font-size: 20px;
 }
+
+input {
+    width:100%;
+    padding: 10px;
+    border-radius: 4px;
+    border-style: none;
+}
+
+ 
