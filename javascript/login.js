@@ -41,10 +41,10 @@ form.addEventListener("submit", function (event) {
     valid = false;
   }
 
-  // Prevent normal form submission
-  event.preventDefault();
-
-  if (valid) {
+  if (!valid) {
+    // Prevent form submission if invalid
+    event.preventDefault();
+  } else {
     // Redirect based on role
     switch (role.value) {
       case "manager":
@@ -56,17 +56,10 @@ form.addEventListener("submit", function (event) {
       case "stock_attendant":
         window.location.href = "stock.html";
         break;
-      case "approver":
-        window.location.href = "approver_dashboard.html";
-        break;
-      case "transport_coordinator":
-        window.location.href = "transport_dashboard.html";
-        break;
-      case "administrator":
-        window.location.href = "admin_dashboard.html";
-        break;
       default:
         alert("Please select a role.");
+// Prevent submission if no role selected
+        event.preventDefault();
     }
   }
 });

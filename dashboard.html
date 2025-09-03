@@ -148,8 +148,8 @@
                     <div class="col">
                         <div class="card shadow-sm p-3 mb-4">
                             <div class="card-body">
-                                <h5 class="card-title">Stock Status</h5>
-                                <canvas id="stockChart"></canvas>
+                                <h5 class="card-title">Product Cartegories</h5>
+                                <canvas id="productsChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -157,8 +157,8 @@
                     <div class="col">
                         <div class="card shadow-sm p-3 mb-4">
                             <div class="card-body">
-                                <h5 class="card-title">Product Categories</h5>
-                                <canvas id="productsChart"></canvas>
+                                <h5 class="card-title">Stock Status</h5>
+                                <canvas id="stockChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -185,8 +185,8 @@
                     options: {
                         responsive: true,
                         plugins: {
-                            legend: { position: 'top' },
-                            title: { display: true, text: 'Weekly Sales Overview' }
+                             legend: { position: 'top' },
+                            // title: { display: true, text: 'Weekly Sales Overview' }
                         },
                         scales: {
                             y: { beginAtZero: true }
@@ -224,7 +224,7 @@
                         responsive: true,
                         plugins: {
                             legend: { position: 'right' },
-                            title: { display: true, text: 'Product Category Distribution' }
+                            // title: { display: true, text: 'Product Category Distribution' }
                         }
                     }
                 });
@@ -253,7 +253,7 @@
                         responsive: true,
                         plugins: {
                             legend: { position: 'right' },
-                            title: { display: true, text: 'Finished vs Raw Products' }
+                            // title: { display: true, text: 'Finished vs Raw Products' }
                         }
                     }
                 });
@@ -266,11 +266,11 @@
                         <h5 class="card-title">Top products earlier this year</h5>
                         <ol>
                             <li>Beds</li> <progress value="80" max="100"></progress>
-                            <br><br>
+                            <br>
                             <li>Timber</li><progress value="75" max="100"></progress>
-                            <br><br>
+                            <br>
                             <li>Chairs</li><progress value="60" max="100"></progress>
-                            <br><br>
+                            <br>
                             <li>Tables</li><progress value="55" max="100"></progress>
 
                         </ol>

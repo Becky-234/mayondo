@@ -246,61 +246,47 @@ body.sidebar-active {
     display: flex;
     gap: 5px;
     flex-wrap: nowrap; /* prevent wrapping */
-    
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;   
+}
+
+.dash-card:hover {
+  transform: translateY(-10px); /* lifts the card up by 10px */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* adds a shadow for depth */
 }
 
  .charts {
     display: flex;
-    flex: 1;
-    flex-wrap: nowrap;
+    flex: 1 1 calc(33.333% 100px); 
+    flex-wrap: nowrap; 
     gap: 15px;
-    justify-content: space-between; /* spread cards evenly */
-    align-items: flex-start;     /* align items to top */
+    justify-content: space-between; /*spread cards evenly */
+    flex: 1 1 calc(33.333% 10px); /* approximately 3 cards per row with spacing */
+    box-sizing: border-box;     /* include padding/border in width */
+    min-width: 280px;            /* prevent cards from getting too narrow */  
  }
-
-.charts > div {
-    flex: 1 1 calc(33.333% - 10px); /* approximately 3 cards per row with spacing */
-    box-sizing: border-box;      /* include padding/border in width */
-    min-width: 280px;            /* prevent cards from getting too narrow */
-}
-
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    color: white;
-}
-
-.btn {
-    cursor: pointer;
-}
-
-#month-year {
-    font-weight: bold;
-    font-size: 20px;
-}
-
+ 
 .card {
      border-radius: 16px;
-     height: 350px;
-     width: 400px;
-     /* adjust as needed */
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
+     height: 300px;
+     width: 300px;
      margin-right: 10px;
+     cursor: pointer;
+     transition: box-shadow 0.3s ease;   
  }
+
+.cards:hover {
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.3);
+}
 
  .card-title {
      font-weight: 700;
-     margin-bottom: 1rem;
+     /* margin-bottom: 1rem; */
  }
 
  .card canvas {
      width: 100% !important;
-     height: 280px !important;
+     /* height: 250px !important; */
      /* makes the chart big & clear */
  }
 

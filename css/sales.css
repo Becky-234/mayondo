@@ -231,8 +231,14 @@ body.sidebar-active {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     gap: 5px;
-    flex-wrap: nowrap; /* prevent wrapping */
-    
+    flex-wrap: nowrap; /* prevent wrapping */ 
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;   
+}
+
+.dash-card:hover {
+  transform: translateY(-10px); /* lifts the card up by 10px */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* adds a shadow for depth */
 }
 
 .table-content {
@@ -281,33 +287,4 @@ body.sidebar-active {
 .table-content td:last-child {
     text-align: center;
     /* Center the "Login" text */
-}
-
-
-/*SALES PAGE AND FORM */
-.chartcard {
-    width: 18rem;
-    background: bisque;
-    border: 1px solid;
-}
-
-.card {
-    border-radius: 16px;
-    height: 350px;
-    width: 400px;
-    /* adjust as needed */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.card-title {
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.card canvas {
-    width: 100% !important;
-    height: 280px !important;
-    /* makes the chart big & clear */
 }
