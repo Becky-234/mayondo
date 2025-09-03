@@ -185,6 +185,37 @@ body.sidebar-active {
     }
 }
 
+/* TOP RIGHT NAVBAR AND LOGOUT */
+.dashboard-header {
+    position: absolute;
+    /* Positioned relative to .main-content */
+    top: 10px;
+    /* 10px from the top of .main-content */
+    right: 10px;
+    /* 10px from the right of .main-content */
+    background-color: transparent !important;
+    /* Make navbar background transparent if Bootstrap adds one */
+    border: none !important;
+    /* Remove any default Bootstrap borders */
+    padding: 0;
+    /* Remove default padding */
+    width: auto;
+    /* Allow content to dictate width */
+    z-index: 100;
+    /* Ensure it's above other content if needed */
+}
+
+.dashboard-header .container-fluid {
+    padding: 10;
+    /* Remove padding from container-fluid if it's adding unwanted space */
+}
+
+/* General styles for content within the dashboard body */
+.dashboard-body {
+    padding-top: 1px;
+    /* Add a bit more padding if needed below the header */
+}
+
 
 /* MAIN CONTENT AREA */
 .main-content {
@@ -209,10 +240,11 @@ h2 {
     width: 600px;
     background-color: green;
     color: white;
-    border-radius: 10px;
+    border-radius: 40px;
     padding: 30px 40px;
-    margin-left: 170px;
+    margin-left: 195px;
     margin-top: 30px;
+    box-shadow: 5px 5px 15px  rgba(0, 0,0, 0.3);
 }
 
 label {
