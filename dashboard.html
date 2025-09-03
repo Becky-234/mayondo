@@ -62,15 +62,6 @@
             </li>
         </ul>
     </aside>
-    <script>
-        const sidebar = document.querySelector('.side-menu-container');
-        const toggleBtn = document.querySelector('.fa-bars');
-
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            console.log("Sidebar toggled"); // debug check
-        });
-    </script>
 
 </body>
 
@@ -96,7 +87,7 @@
             <br>
             <section class="dash" id="dash-top">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="dash-card">
                             <div class="card-body">
                                 <i class="fa-solid fa-dollar-sign"></i>
@@ -106,7 +97,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="dash-card">
                             <div class="card-body">
                                 <i class="fa-regular fa-cart-shopping"></i>
@@ -117,7 +108,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="dash-card">
                             <div class="card-body">
                                 <i class="fa-regular fa-user"></i>
@@ -127,37 +118,51 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-3">
+                        <div class="dash-card">
+                            <div class="card-body">
+                                <i class="fa-regular fa-user"></i>
+                                <h5 class="card-title">Customers</h5>
+                                <p class="card-text">5</p>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <br><br><br>
 
-                <div class="row">
-                    <!-- Sales Overview -->
-                    <div class="col-md-6">
-                        <div class="card shadow-sm p-3 mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Sales Overview</h5>
-                                <canvas id="salesChart"></canvas>
+                <section class="charts">
+                    <div class="row">
+                        <!-- Sales Overview -->
+                        <div class="col-md-6">
+                            <div class="card shadow-sm p-3 mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sales Overview</h5>
+                                    <canvas id="salesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Categories -->
+                        <div class="col-md-6">
+                            <div class="card shadow-sm p-3 mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Product Categories</h5>
+                                    <canvas id="productsChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Product Categories -->
-                    <div class="col-md-6">
-                        <div class="card shadow-sm p-3 mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Product Categories</h5>
-                                <canvas id="productsChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                </section>
 
                 <script>
                     // Sales Chart (Line)
                     const ctx1 = document.getElementById('salesChart').getContext('2d');
                     const salesChart = new Chart(ctx1, {
-                        type: 'line',
+                        type: 'bar',
                         data: {
                             labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                             datasets: [{

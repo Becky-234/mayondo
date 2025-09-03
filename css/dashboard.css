@@ -199,7 +199,6 @@ body.sidebar-active {
 }
 
 
-
 /* TOP RIGHT NAVBAR AND LOGOUT */
 .dashboard-header {
     position: absolute;
@@ -235,39 +234,27 @@ body.sidebar-active {
     background: lightgreen;
 }
 
-.dash {
-    margin-left: 70px;
-    gap: 30px;
-}
-
 .dash-card {
+    flex: 1;
+    min-width: 200px;
     border: solid 1px white;
     border-radius: 10px;
     padding: 5px;
-    width: 200px;
     height: 100px;
-
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* subtle shadow */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
+.row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap; /* prevent wrapping */
 }
 
 #pieChart {
     position: relative;
     width: 50%;
     height: 50%;
-}
-
-.calendar {
-    background-color: #111111;
-    border-radius: 10px;
-    box-shadow: 0 0 30px #222222;
-    overflow: hidden;
-    width: 300px;
-    color: white;
-    padding: 20px;
 }
 
 .header {
@@ -311,7 +298,7 @@ body.sidebar-active {
 
   .dashboarBody {
     height: 100%;
-   background-color:#e0e0e0;
+   /* background-color:#e0e0e0; */
    margin-top: 20px;
    padding: 20px;
    border-radius: 35px; 

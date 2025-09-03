@@ -107,20 +107,22 @@
                 <br><br>
 
                 <p>Select Payment Type</p>
-                <label>
-                    <input type="radio" id="cash" name="Payment">
-                    Cash
-                </label><br>
+                <div class="select">
+                    <label>
+                        Cash
+                        <input type="radio" id="cash" name="Payment">
+                    </label><br>
 
-                <label>
-                    <input type="radio" id="cheque" name="Payment">
-                    Cheque
-                </label><br>
+                    <label>
+                        Cheque
+                        <input type="radio" id="cheque" name="Payment">
+                    </label><br>
 
-                <label>
-                    <input type="radio" id="bank" name="Payment">
-                    Bank overdraft
-                </label><br><br>
+                    <label>
+                        Bank overdraft
+                        <input type="radio" id="bank" name="Payment">
+                    </label><br><br>
+                </div>
 
                 <label for="date">Date</label><br>
                 <input type="date" id="date" name="date">
@@ -135,7 +137,7 @@
             </form>
         </div>
 
-        <script src="sales.js"></script>
+        <script src="/javascript/sales.js"></script>
         <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>
 

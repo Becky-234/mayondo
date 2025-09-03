@@ -1,3 +1,12 @@
+//side menu
+const sidebar = document.querySelector('.side-menu-container');
+const toggleBtn = document.querySelector('.fa-bars');
+
+toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    console.log("Sidebar toggled"); // debug check
+});
+ 
 
 const form = document.getElementById("addStock");
 const tableBody = document.querySelector("#newStock tbody");
@@ -93,14 +102,4 @@ stock.forEach(item => {
     categories[item.productType] = (categories[item.productType] || 0) + Number(item.quantity);
 });
 
-// Use these in Chart.js
-const productsChart = new Chart(ctx2, {
-    type: 'pie',
-    data: {
-        labels: Object.keys(categories),
-        datasets: [{
-            data: Object.values(categories),
-            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff']
-        }]
-    }
-});
+ 
