@@ -232,6 +232,10 @@ body.sidebar-active {
       font-size: 25px;
   }
 
+  .pdt {
+     margin-top: 100px;
+  }
+
 /*CARDS FOR PRODUCTS PAGE*/
 .card {
     width: 16rem;

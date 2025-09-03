@@ -16,61 +16,55 @@
 </head>
 
 <body>
-    <aside class="side-menu-container active">
-        <div class="logo-menu">
-            <h2 class="logo">MWF</h2>
-            <i class="fa-solid fa-bars"></i>
-        </div>
-        <ul class="list">
-            <li class="list-item">
-                <a href="dashboard.html">
-                    <i class="fa-solid fa-house"></i>
-                    <span class="link-name">Dashboard</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="users.html">
-                    <i class="fa-solid fa-users"></i>
-                    <span class="link-name">Users</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="sales.html">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span class="link-name">Sales</span>
-                </a>
-            </li>
-            <li class="list-item active">
-                <a href="stock.html">
-                    <i class="fa-solid fa-truck"></i>
-                    <span class="link-name">Stock</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="products.html">
-                    <i class="fa-solid fa-couch"></i>
-                    <span class="link-name">Products</span>
-                </a>
-            </li>
-            <li class="list-item">
-                <a href="#">
-                    <i class="fa-solid fa-gear"></i>
-                    <span class="link-name">Settings</span>
-                </a>
-            </li>
-        </ul>
-        <script>
-            const sidebar = document.querySelector('.side-menu-container');
-            const toggleBtn = document.querySelector('.fa-bars');
-
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
-                console.log("Sidebar toggled"); // debug check
-            });
-        </script>
-    </aside>
+    <header>
+        <aside class="side-menu-container active">
+            <div class="logo-menu">
+                <h2 class="logo">MWF</h2>
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <ul class="list">
+                <li class="list-item">
+                    <a href="dashboard.html">
+                        <i class="fa-solid fa-house"></i>
+                        <span class="link-name">Dashboard</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="users.html">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="link-name">Users</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="sales.html">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="link-name">Sales</span>
+                    </a>
+                </li>
+                <li class="list-item active">
+                    <a href="stock.html">
+                        <i class="fa-solid fa-truck"></i>
+                        <span class="link-name">Stock</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="products.html">
+                        <i class="fa-solid fa-couch"></i>
+                        <span class="link-name">Products</span>
+                    </a>
+                </li>
+                <li class="list-item">
+                    <a href="#">
+                        <i class="fa-solid fa-gear"></i>
+                        <span class="link-name">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
     </header>
+
     <main class="main-content">
+
         <nav class="navbar bg-body-tertiary dashboard-header">
             <div class="container-fluid d-flex justify-content-end align-items-center">
                 <div class="d-flex align-items-center">
@@ -82,116 +76,82 @@
                 </div>
             </div>
         </nav>
-        <form>
+
+        <section class="dash" id="dash-top">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="dash-card">
+                        <div class="card-body">
+                            <i class="fa-solid fa-dollar-sign"></i>
+                            <h5 class="card-title">Invoinces</h5>
+                            <p class="card-text">Shs.500000</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dash-card">
+                        <div class="card-body">
+                            <i class="fa-regular fa-cart-shopping"></i>
+                            <h5 class="card-title">Profit</h5>
+                            <p class="card-text">70%</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="dash-card">
+                        <div class="card-body">
+                            <i class="fa-regular fa-user"></i>
+                            <h5 class="card-title">Revenue</h5>
+                            <p class="card-text">Shs. 50,000</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="dash-card">
+                        <div class="card-body">
+                            <i class="fa-regular fa-user"></i>
+                            <h5 class="card-title">Customers</h5>
+                            <p class="card-text">15</p>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br><br><br>
+        </section>
+
+        <section>
             <a class="btn btn-primary" href="add-stock.html">ADD PRODUCT</a>
-        </form>
-        <table class="table-content" id="newStock">
-            <tr>
-                <thead class="row-one">
-                    <th>Product Name</th>
-                    <th>Product Type</th>
-                    <th>Cost Price</th>
-                    <th>Quantity</th>
-                    <th>Product Price</th>
-                    <th>Supplier Name</th>
-                    <th>Date</th>
-                    <th>Quality</th>
-                </thead>
-            </tr>
-            <tbody class="row-others">
+        </section>
 
-            </tbody>
-        </table>
-        </div>
-        <br><br><br>
-        <div class="row">
-            <!-- Sales Overview -->
-            <div class="col-md-6">
-                <div class="card shadow-sm p-3 mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Stock Overview</h5>
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                </div>
-            </div>
+        <section>
+            <table class="table-content" id="newStock">
+                <tr>
+                    <thead class="row-one">
+                        <th>Product Name</th>
+                        <th>Product Type</th>
+                        <th>Cost Price</th>
+                        <th>Quantity</th>
+                        <th>Product Price</th>
+                        <th>Supplier Name</th>
+                        <th>Date</th>
+                        <th>Quality</th>
+                    </thead>
+                </tr>
+                <tbody class="row-others">
 
-            <!-- Product Categories -->
-            <div class="col-md-6">
-                <div class="card shadow-sm p-3 mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Product Categories</h5>
-                        <canvas id="productsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+                </tbody>
+            </table>
+        </section>
 
-
-         <script>
-            // Sales Chart (Line)
-            const ctx1 = document.getElementById('salesChart').getContext('2d');
-            const salesChart = new Chart(ctx1, {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [{
-                        label: '(Shs)',
-                        data: [500000, 600000, 300000, 700000],
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'top' },
-                        title: { display: true, text: 'Monthly Stock Overview' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-
-            //Products Chart (Pie)
-            const ctx2 = document.getElementById('productsChart').getContext('2d');
-            const productsChart = new Chart(ctx2, {
-                type: 'pie',
-                data: {
-                    labels: ['Chairs', 'Tables', 'Sofas', 'Beds', 'Cabinets'],
-                    datasets: [{
-                        label: 'Product Share',
-                        data: [12, 19, 7, 10, 5], // sample data
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)',
-                            'rgba(75, 192, 192, 0.7)',
-                            'rgba(153, 102, 255, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'right' },
-                        title: { display: true, text: 'Product Category Distribution' }
-                    }
-                }
-            });
-        </script> 
-        
     </main>
+
     <script src="/javascript/stock.js"></script>
     <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>

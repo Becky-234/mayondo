@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
 </head>
 
 <body>
@@ -60,17 +60,9 @@
                 </a>
             </li>
         </ul>
-        <script>
-            const sidebar = document.querySelector('.side-menu-container');
-            const toggleBtn = document.querySelector('.fa-bars');
-
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
-                console.log("Sidebar toggled"); // debug check
-            });
-        </script>
     </aside>
     </header>
+
     <main class="main-content">
         <nav class="navbar bg-body-tertiary dashboard-header">
             <div class="container-fluid d-flex justify-content-end align-items-center">
@@ -84,9 +76,60 @@
             </div>
         </nav>
 
+        <section class="dash" id="dash-top">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="dash-card">
+                        <div class="card-body">
+                            <i class="fa-solid fa-dollar-sign"></i>
+                            <h5 class="card-title">Total Sales</h5>
+                            <p class="card-text">Shs.950000</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dash-card">
+                        <div class="card-body">
+                            <i class="fa-regular fa-cart-shopping"></i>
+                            <h5 class="card-title">Total Orders</h5>
+                            <p class="card-text">15</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="dash-card">
+                        <div class="card-body">
+                            <i class="fa-regular fa-user"></i>
+                            <h5 class="card-title">Total Sold Products</h5>
+                            <p class="card-text">10</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="dash-card">
+                        <div class="card-body">
+                            <i class="fa-regular fa-user"></i>
+                            <h5 class="card-title">Discounts</h5>
+                            <p class="card-text">3</p>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br><br><br>
+
+        </section>
+
         <section class="include" id="including">
             <a class="btn btn-primary" href="add-sale.html">Add Sale</a>
         </section>
+
         <section>
             <table class="table-content" id="salesTable">
                 <tr>
@@ -108,95 +151,9 @@
 
             </div>
         </section>
-        <div class="row">
-            <!-- Sales Overview -->
-            <div class="col-md-6">
-                <div class="card shadow-sm p-3 mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Sales Overview</h5>
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Product Categories -->
-            <div class="col-md-6">
-                <div class="card shadow-sm p-3 mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Product Categories</h5>
-                        <canvas id="productsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <script>
-            // Sales Chart (Line)
-            const ctx1 = document.getElementById('salesChart').getContext('2d');
-            const salesChart = new Chart(ctx1, {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [{
-                        label: 'Sales (Shs)',
-                        data: [500000, 400000, 600000, 300000],
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'top' },
-                        title: { display: true, text: 'Weekly Sales Overview' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-
-            //Products Chart (Pie)
-            const ctx2 = document.getElementById('productsChart').getContext('2d');
-            const productsChart = new Chart(ctx2, {
-                type: 'pie',
-                data: {
-                    labels: ['Chairs', 'Tables', 'Sofas', 'Beds', 'Cabinets'],
-                    datasets: [{
-                        label: 'Product Share',
-                        data: [12, 19, 7, 10, 5], // sample data
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)',
-                            'rgba(75, 192, 192, 0.7)',
-                            'rgba(153, 102, 255, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'right' },
-                        title: { display: true, text: 'Product Category Distribution' }
-                    }
-                }
-            });
-        </script>
-
-        </div>
     </main>
+    
     <script src="/javascript/sales.js"></script>
     <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>

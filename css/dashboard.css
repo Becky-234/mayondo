@@ -243,19 +243,27 @@ body.sidebar-active {
     height: 100px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.row {
     display: flex;
     gap: 5px;
     flex-wrap: nowrap; /* prevent wrapping */
+    
 }
 
-#pieChart {
-    position: relative;
-    width: 50%;
-    height: 50%;
+ .charts {
+    display: flex;
+    flex: 1;
+    flex-wrap: nowrap;
+    gap: 15px;
+    justify-content: space-between; /* spread cards evenly */
+    align-items: flex-start;     /* align items to top */
+ }
+
+.charts > div {
+    flex: 1 1 calc(33.333% - 10px); /* approximately 3 cards per row with spacing */
+    box-sizing: border-box;      /* include padding/border in width */
+    min-width: 280px;            /* prevent cards from getting too narrow */
 }
+
 
 .header {
     display: flex;
