@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
@@ -14,10 +15,10 @@
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
 </head>
 
 <body>
+
     <aside class="side-menu-container">
         <div class="logo-menu">
             <h2 class="logo">MWF</h2>
@@ -64,6 +65,7 @@
     </aside>
 
     <main class="main-content">
+
         <nav class="navbar bg-body-tertiary dashboard-header">
             <div class="container-fluid d-flex justify-content-end align-items-center">
                 <div class="d-flex align-items-center">
@@ -88,7 +90,7 @@
                     <div class="col-md-3">
                         <div class="dash-card">
                             <div class="card-body">
-                                <i class="fa-solid fa-dollar-sign"></i>
+                                <i class="fa-solid fa-sack-dollar"></i>
                                 <h5 class="card-title">Today's Sale</h5>
                                 <p class="card-text">Shs.500000</p>
 
@@ -98,7 +100,7 @@
                     <div class="col-md-3">
                         <div class="dash-card">
                             <div class="card-body">
-                                <i class="fa-regular fa-cart-shopping"></i>
+                                <i class="fa-solid fa-credit-card"></i>
                                 <h5 class="card-title">Today's Purchase</h5>
                                 <p class="card-text">15</p>
 
@@ -109,7 +111,7 @@
                     <div class="col-md-3">
                         <div class="dash-card">
                             <div class="card-body">
-                                <i class="fa-regular fa-user"></i>
+                                <i class="fa-solid fa-users-line"></i>
                                 <h5 class="card-title">Customers</h5>
                                 <p class="card-text">5</p>
 
@@ -120,8 +122,8 @@
                     <div class="col-md-3">
                         <div class="dash-card">
                             <div class="card-body">
-                                <i class="fa-regular fa-user"></i>
-                                <h5 class="card-title">Customers</h5>
+                                <i class="fa-solid fa-truck-ramp-box"></i>
+                                <h5 class="card-title">Deliveries</h5>
                                 <p class="card-text">5</p>
 
                             </div>
@@ -185,7 +187,7 @@
                     options: {
                         responsive: true,
                         plugins: {
-                             legend: { position: 'top' },
+                            legend: { position: 'top' },
                             // title: { display: true, text: 'Weekly Sales Overview' }
                         },
                         scales: {
@@ -234,7 +236,7 @@
                 const stockChart = new Chart(ctx3, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Finished Products', 'Raw Products'],
+                        labels: ['Finished', 'Raw'],
                         datasets: [{
                             label: 'Stock Distribution',
                             data: [65, 35], // values
@@ -258,6 +260,7 @@
                     }
                 });
             </script>
+
             <br><br><br>
 
             <div class="col-md-6">
@@ -277,7 +280,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
 

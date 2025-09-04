@@ -1,13 +1,3 @@
-//side menu
-const sidebar = document.querySelector('.side-menu-container');
-const toggleBtn = document.querySelector('.fa-bars');
-
-toggleBtn.addEventListener('click', () => {
-  sidebar.classList.toggle('collapsed');
-  console.log("Sidebar toggled"); // debug check
-});
-
-
 const form = document.getElementById("loginForm");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
@@ -16,6 +6,7 @@ const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 
 form.addEventListener("submit", function (event) {
+  event.preventDefault();
   let valid = true;
 
   // Clear previous errors
@@ -41,10 +32,9 @@ form.addEventListener("submit", function (event) {
     valid = false;
   }
 
-  if (!valid) {
+  if (!valid) return;
     // Prevent form submission if invalid
-    event.preventDefault();
-  } else {
+ 
     // Redirect based on role
     switch (role.value) {
       case "manager":
@@ -62,4 +52,6 @@ form.addEventListener("submit", function (event) {
         event.preventDefault();
     }
   }
-});
+);
+
+ 

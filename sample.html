@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mayondo Wood & Furniture Ltd</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f8f8;
+            color: #333;
+        }
+
+        header {
+            background: url('https://images.unsplash.com/photo-1600607687920-4d8b5e85ab20?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+            height: 100vh;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.55);
+        }
+
+        header .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background: #8b5e3c;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #6a4329;
+        }
+
+        section {
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .about,
+        .products {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: #222;
+            color: #ccc;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #8b5e3c;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Hero Section -->
+    <header>
+        <div class="content">
+            <h1>Mayondo Wood & Furniture Ltd</h1>
+            <p>Quality Wood & Elegant Furniture for Homes and Businesses</p>
+            <a href="login.html" class="btn">Login to System</a>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="about">
+        <h2>About Us</h2>
+        <p>
+            At Mayondo Wood & Furniture Ltd, we pride ourselves on delivering top-quality wood
+            and finely crafted furniture for both residential and commercial spaces.
+            With years of experience, we combine craftsmanship with modern design to create
+            durable and elegant solutions for our clients.
+        </p>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <h2>Our Products</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80"
+                    alt="Wood">
+                <h3>Premium Wood</h3>
+                <p>High-quality timber for all your construction and carpentry needs.</p>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80"
+                    alt="Furniture">
+                <h3>Elegant Furniture</h3>
+                <p>Beautiful and durable furniture pieces crafted to perfection.</p>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80"
+                    alt="Office Furniture">
+                <h3>Office Solutions</h3>
+                <p>Stylish and ergonomic furniture designed for modern workspaces.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Mayondo Wood & Furniture Ltd. All rights reserved. |
+            <a href="login.html">System Login</a>
+        </p>
+    </footer>
+
+</body>
+
+</html>
