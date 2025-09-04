@@ -7,21 +7,19 @@
 
 /* Main Body Layout: Flexbox for Sidebar and Main Content */
 body {
-    min-height: 100vh;
     /* Ensures body takes full viewport height */
     background: white;
     /* Overall page background */
 }
 
-/* LOGIN PAGE */
+/* SIGNUP PAGE */
 .form-container {
     width: 420px;
     background-color: green;
     color: white;
     border-radius: 40px;
     padding: 30px 40px;
-    margin-top: 15px;
-    margin: 15px 0 0 450px;
+    margin: 100px 0 0 450px;
 }
 
 .head {
@@ -54,27 +52,6 @@ body {
     color: #fff;
 }
 
-.form-container .remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14.5px;
-    margin: -15px 0 15px;
-}
-
-.remember-forgot label input {
-    accent-color: #fff;
-    margin-right: 3px;
-}
-
-.remember-forgot a {
-    color: #fff;
-    text-decoration: none;
-}
-
-.remember-forgot a:hover {
-    text-decoration: underline;
-}
-
 .form-container .button {
     width: 100%;
     height: 45px;
@@ -95,20 +72,6 @@ body {
     /* Darker shade on hover */
 }
 
-.form-container .register-link {
-    text-align: center;
-    font-size: 14.5px;
-    margin: 20px 0 15px;
-}
-
-.register-link p a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.register-link p a:hover {
-    text-decoration: underline;
-}
+ 
 
  
