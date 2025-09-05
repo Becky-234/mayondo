@@ -25,7 +25,7 @@ body {
     width: 260px;
     /* default expanded */
     height: 100vh;
-    background: green;
+    background: #4c6444;
     padding: 6px 14px;
     overflow: hidden;
     transition: width 0.5s;
@@ -197,7 +197,7 @@ body.sidebar-active {
 .main-content {
     flex-grow: 1;
     /* Allows main content to take up all available space */
-    background-color: #f8f9fa;
+    background-color: #fff;
     /* Light beige background from your image */
     position: relative;
     /* Crucial: Establishes a positioning context for absolute children */
@@ -233,7 +233,9 @@ body.sidebar-active {
 .dash-card {
     flex: 1;
     min-width: 200px;
-    border: solid 1px white;
+    background: #4c6444;
+    color: #fff;
+    border: solid 1px #fff;
     border-radius: 10px;
     padding: 5px;
     height: 100px;
@@ -249,6 +251,21 @@ body.sidebar-active {
 .dash-card:hover {
   transform: translateY(-10px); /* lifts the card up by 10px */
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* adds a shadow for depth */
+}
+
+.include {
+    display: flex;
+    gap: 30px;
+}
+
+.btns {
+    padding: 5px;
+    text-decoration: none;
+    color: #fff;
+    background: #caba9c;
+    border: 1px solid #fff;
+    border-radius: 25px;
+    cursor: pointer;
 }
 
 .table-content {
@@ -272,7 +289,7 @@ body.sidebar-active {
 }
 
 .table-content thead {
-    background: #0077cc;
+    background: #4c6444;
     color: white;
 }
 
@@ -299,5 +316,13 @@ body.sidebar-active {
     /* Center the "Login" text */
 }
 
+.logoutBtn {
+    text-decoration: none;
+    padding: 10px;
+    background: #caba9c;
+    color: #fff;
+    border: 2px;
+    border-radius: 10px;
+}
 
  

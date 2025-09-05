@@ -232,21 +232,21 @@ body.sidebar-active {
     color: white;
     border: 1px solid #fff;
     border-radius: 25px;
-    background: #4c6444;
+    background: #caba9c;
 }
  #downloadExcel {
     padding: 5px;
     color: white;
     border: 1px solid #fff;
     border-radius: 25px;
-    background: #4c6444;
+    background: #caba9c;
 }
 #newUser {
     padding: 5px;
     color: white;
     border: 1px solid #fff;
     border-radius: 25px;
-    background: #4c6444;
+    background: #caba9c;
 }
 
 .logoutBtn {
