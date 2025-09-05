@@ -59,10 +59,11 @@
                 </a>
             </li>
         </ul>
-        
+
     </aside>
 
     <main class="main-content">
+
         <nav class="navbar bg-body-tertiary dashboard-header">
             <div class="container-fluid d-flex justify-content-end align-items-center">
                 <div class="d-flex align-items-center">
@@ -70,38 +71,42 @@
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <a class="btn btn-danger" href="/html/index.html">Logout</a>
+                    <a class="logoutBtn" href="/html/index.html">Logout</a>
                 </div>
             </div>
         </nav>
+
         <div class="user-form-container">
 
             <form action="submit">
-                <div class="fullName">
-                    <label for="fname">First Name</label><br><br>
-                    <input type="text" id="fname">
-                    <br><br>
+                <label for="fname">First Name</label><br>
+                <input type="text" id="fname">
+                <br><br>
 
-                    <label for="lname">Last Name</label><br><br>
-                    <input type="text" id="lname">
-                    <br><br>
-                </div>
+                <label for="lname">Last Name</label><br>
+                <input type="text" id="lname">
+                <br><br>
 
-                <label for="email">Email</label><br><br>
+                <label for="email">Email</label><br>
                 <input type="text" id="email">
                 <br><br>
 
-                <label for="contact">Contact</label><br><br>
+                <label for="contact">Contact</label><br>
                 <input type="text" id="contact">
                 <br><br>
 
-                <a class="btn btn-primary" id="save" href="/html/users.html">Save</a>
-                <a class="btn btn-danger" id="cancel" href="/html/users.html">Cancel</a>
+                <div class="buttons">
+                    <a class="btns" id="save" href="/html/users.html">Save</a>
+                    <a class="btns" id="cancel" href="/html/users.html">Cancel</a>
+                </div>
+            </form>
 
         </div>
 
-        </form>
-        <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
+    </main>
+
+    <script src="../javascript/user.js"></script>
+    <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>
 
 </html>
