@@ -4,45 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title> Landing Page</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.7-dist/css/bootstrap.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../css/index.css">
-    <title>Landing Page</title>
+
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 
 <body>
-    <section class="intro">
-        <div class="card">
-            <div class="card-body">
-                <h1>Mayondo Wood & Furniture Ltd</h1>
-                <p>Quality Wood & Elegant Furniture for Homes and Businesses</p>
-                <a href="/html/login.html" class="btn-start">Get Started <i class="fas fa-arrow-right ms-2"></i></a>
+
+    <header>
+        <section class="intro">
+            <p>Welcome to</p>
+            <h1>Mayondo Wood And Furniture Ltd</h1>
+            <a href="/html/login.html" class="btn">Get Started</a>
+        </section>
+    </header>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>
+            Our mission is to deliver high-quality services and products
+            that help businesses succeed in the digital era.
+            We focus on innovation, efficiency, and customer satisfaction.
+        </p>
+    </section>
+
+    <section class="products">
+        <h2>Our Products</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="../images/landing1.jpeg" alt="Wood">
+                <h3>Premium Wood</h3>
+                <p>High-quality timber for all your construction and carpentry needs.</p>
+            </div>
+            <div class="product-card">
+                <img src="../images/landing2.jpeg" alt="Furniture">
+                <h3>Elegant Furniture</h3>
+                <p>Beautiful and durable furniture pieces crafted to perfection.</p>
+            </div>
+            <div class="product-card">
+                <img src="../images/landing3.jpeg" alt="Office Furniture">
+                <h3>Office Solutions</h3>
+                <p>Stylish and ergonomic furniture designed for modern workspaces.</p>
             </div>
         </div>
     </section>
 
-    <section class="about">
-        <h2>About Us</h2>
-        <p>
-            At Mayondo Wood & Furniture Ltd, we pride ourselves on delivering top-quality wood
-            and finely crafted furniture for both residential and commercial spaces.
-            With years of experience, we combine craftsmanship with modern design to create
-            durable and elegant solutions for our clients.
-        </p>
-    </section>
 
     <footer>
-        <p>&copy; 2025 Mayondo Wood & Furniture Ltd. All rights reserved. |
-            <a href="/html/login.html">System Login</a>
-        </p>
+        <p>&copy; 2025 Mayondo Wood & Funiture Ltd. All rights reserved.</p>
     </footer>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

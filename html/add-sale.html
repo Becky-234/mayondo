@@ -58,15 +58,6 @@
                 </a>
             </li>
         </ul>
-        <script>
-            const sidebar = document.querySelector('.side-menu-container');
-            const toggleBtn = document.querySelector('.fa-bars');
-
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
-                console.log("Sidebar toggled"); // debug check
-            });
-        </script>
     </aside>
 
     <main class="main-content">
@@ -106,23 +97,14 @@
                 <input type="number" id="price" name="price">
                 <br><br>
 
-                <p>Select Payment Type</p>
-                <div class="select">
-                    <label>
-                        Cash
-                        <input type="radio" id="cash" name="Payment">
-                    </label><br>
-
-                    <label>
-                        Cheque
-                        <input type="radio" id="cheque" name="Payment">
-                    </label><br>
-
-                    <label>
-                        Bank overdraft
-                        <input type="radio" id="bank" name="Payment">
-                    </label><br><br>
-                </div>
+                <label for="role">Select Payment Method</label><br />
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Select your Payment Method</option>
+                    <option value="manager">Bank</option>
+                    <option value="sales_agent">Mobile Money</option>
+                    <option value="stock_attendant">Cheque</option>
+                </select>
+                <br><br>
 
                 <label for="date">Date</label><br>
                 <input type="date" id="date" name="date">
@@ -136,9 +118,10 @@
                 <button type="reset" class="btn btn-danger" style="margin-left: 70px;">Cancel</button>
             </form>
         </div>
+    </main>
 
-        <script src="../javascript/sales.js"></script>
-        <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
+    <script src="../javascript/sales.js"></script>
+    <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 </body>
 
 </html>

@@ -228,13 +228,22 @@ body.sidebar-active {
 }
 
 #downloadPdf {
-    background: #e74c3c;
+    padding: 10px;
     color: white;
+    border-radius: 25px;
+    background: lawngreen;
 }
-
-#downloadExcel {
-    background: #27ae60;
+ #downloadExcel {
+    padding: 10px;
     color: white;
+    border-radius: 25px;
+        background: greenyellow;
+}
+#newUser {
+    padding: 10px;
+    color: white;
+    border-radius: 25px;
+    background: lightgreen;
 }
 
 button.export:hover {
