@@ -27,7 +27,7 @@ body {
     width: 260px;
     /* default expanded */
     height: 100vh;
-    background: green;
+    background: #4c6444;
     padding: 6px 14px;
     overflow: hidden;
     transition: width 0.5s;
@@ -221,7 +221,7 @@ body.sidebar-active {
 .main-content {
     flex-grow: 1;
     /* Allows main content to take up all available space */
-    background-color: #f8f9fa;
+    background-color: #fff;
     /* Light beige background from your image */
     position: relative;
     /* Crucial: Establishes a positioning context for absolute children */
@@ -238,7 +238,7 @@ h2 {
 
 #addStock {
     width: 600px;
-    background-color: green;
+    background-color: #4c6444;
     color: white;
     border-radius: 40px;
     padding: 30px 40px;
@@ -259,4 +259,27 @@ input {
     border-style: none;
 }
 
+.logoutBtn {
+    text-decoration: none;
+    padding: 10px;
+    background: #caba9c;
+    color: #fff;
+    border: 2px;
+    border-radius: 10px;
+}
+
+.add {
+    display: flex;
+    gap: 150px;
+}
+
+.btns {
+    padding: 10px;
+    width: 30%;
+    background: #caba9c;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+}
  
