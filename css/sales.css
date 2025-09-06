@@ -327,3 +327,10 @@ body.sidebar-active {
     text-decoration: none;
     cursor: pointer;
 }
+
+#notFound {
+    color: red;
+    display: none;
+    text-align: center;
+    margin-top: 10px;
+}

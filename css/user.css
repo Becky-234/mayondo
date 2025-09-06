@@ -230,6 +230,16 @@ body.sidebar-active {
     border-radius: 10px;
 }
 
+.btns {
+    padding: 5px;
+    text-decoration: none;
+    color: white;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    background: #caba9c;
+    text-align: center;
+}
+
 .to-do input {
     border-radius: 10px;
     border: 2px solid #fff;
@@ -244,31 +254,6 @@ body.sidebar-active {
     display: none;
     text-align: center;
     margin-top: 10px;
-}
-
-#downloadPdf {
-    padding: 5px;
-    color: white;
-    border: 2px solid #fff;
-    border-radius: 10px;
-    background: #caba9c;
-    text-align: center;
-}
- #downloadExcel {
-    padding: 5px;
-    color: white;
-    border: 2px solid #fff;
-    border-radius: 10px;
-    background: #caba9c;
-    text-align: center;
-}
-#newUser {
-    padding: 5px;
-    color: white;
-    border: 2px solid #fff;
-    border-radius: 10px;
-    background: #caba9c;
-    text-align: center;
 }
 
 .logoutBtn {

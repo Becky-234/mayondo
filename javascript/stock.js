@@ -8,6 +8,39 @@ toggleBtn.addEventListener('click', () => {
 });
  
 
+//Search on the User Table
+document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('searchStock');
+    const table = document.getElementById('newStock');
+    const tbody = table.tBodies[0];
+    const rows = tbody.getElementsByTagName('tr');
+    const notFound = document.getElementById('notFound');
+
+    input.addEventListener('keyup', () => {
+        const filter = input.value.toUpperCase();
+        let hasResult = false;
+
+        for (let i = 0; i < rows.length; i++) { // skip header row
+            const cells = rows[i].getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent || cells[j].innerText;
+                if (cellText.toUpperCase().includes(filter)) {
+                    found = true;
+                    hasResult = true;
+                    break;
+                }
+            }
+            rows[i].style.display = found ? '' : 'none';
+        }
+
+        notFound.style.display = hasResult ? 'none' : 'block';
+    });
+});
+
+
+//Add stock form
 const form = document.getElementById("addStock");
 const tableBody = document.querySelector("#newStock tbody");
 
