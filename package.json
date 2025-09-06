@@ -1,0 +1,26 @@
+{
+  "name": "mwf-ltd",
+  "version": "1.0.0",
+  "description": "MWF Mgt' Syt'",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Becky-234/mayondo.git"
+  },
+  "keywords": [
+    "Mayondo"
+  ],
+  "author": "Kirabo Rebecca",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Becky-234/mayondo/issues"
+  },
+  "homepage": "https://github.com/Becky-234/mayondo#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
