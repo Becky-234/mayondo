@@ -81,21 +81,22 @@
             <a id="newUser" class="btn" href="/html/add-new-user.html">Add New User</a>
             <a id="downloadExcel" class="btn">Download Excel</a>
             <a id="downloadPdf" class="btn">Download PDF</a>
+            <input type="search" id="searchUser" placeholder="Search...">
         </div>
 
         <table id="addUser" class="table-content">
-            
-                <thead class="row-one" id="top-one">
-                    <tr>
+
+            <thead class="row-one" id="top-one">
+                <tr>
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Contact</th>
                     <th>Status</th>
                     <th>Actions</th>
                     <th>Operation</th>
-                    </tr>
-                </thead>
-           
+                </tr>
+            </thead>
+
             <tbody class="row-others" id="others">
                 <tr class="attendant-one">
                     <td>Martin Bongani</td>
@@ -195,6 +196,7 @@
                 </tr>
             </tbody>
         </table>
+        <h5 id="notFound">Not Found</h5>
 
         <!-- SheetJS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -203,7 +205,7 @@
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
         <script src="../javascript/user.js"></script>
-        <script src="bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
+        <script src="../bootstrap-5.3.7-dist/js/bootstrap.bundle.js"></script>
 
 </body>
 

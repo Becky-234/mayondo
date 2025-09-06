@@ -7,6 +7,10 @@ toggleBtn.addEventListener('click', () => {
   console.log("Sidebar toggled"); // debug check
 });
 
+//Search on the sales table
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById()
+})
 
 
 const form = document.getElementById("addSale");
