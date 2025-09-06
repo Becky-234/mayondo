@@ -1,0 +1,104 @@
+const express = require('express');
+const router = express.Router();
+
+
+
+
+//Login page
+router.get('/login', (req, res) => {
+    res.render(__dirname + '/html/login.html');
+});
+
+router.post('/login', (req, res) => {
+    console.log(req.body);
+});
+
+
+//Signup page
+router.get('/signup', (req, res) => {
+    res.render('signup', {title: 'Signup page'});
+});
+
+router.post('/signup', (req, res) => {
+    console.log(req.body);
+});
+
+
+//Dashboard Page
+router.get('/dashboard', (req, res) => {
+    res.render('dashboard', {title: 'Dashboard Page'});
+});
+
+router.post('/dashboard', (req, res) => {
+    console.log(req.body);
+});
+
+
+//Users page
+router.get('/users', (req, res) => {
+    res.render('users', {title: 'Users page'});
+});
+
+router.post('/users', (req, res) => {
+    console.log(req.body);
+});
+
+
+//Add user page
+router.get('/adduser', (req, res) => {
+    res.render('adduser', {title: 'Add user page'});
+});
+
+router.post('/adduser', (req, res) => {
+    console.log(req.body);
+});
+
+
+//Sales page
+router.get('/sales', (req, res) => {
+    res.render('sales', {title: 'Sales page'});
+});
+
+router.post('/sales', (req, res) => {
+    console.log(req.body);
+});
+
+//Add sales page
+router.get('/addsale', (req, res) => {
+    res.render('addsale', {title: 'Add sales page'});
+});
+
+router.post('/addsale', (req, res) => {
+    console.log(req.body);
+});
+
+//Stock page
+router.get('/stock', (req, res) => {
+    res.render('stock', {title: 'Stock page'});
+});
+
+router.post('/stock', (req, res) => {
+    console.log(req.body);
+});
+
+
+//Add stock page
+router.get('/addstock', (req, res) => {
+    res.render('addstock', {title: 'Add stock page'});
+});
+
+router.post('/addstock', (req, res) => {
+    console.log(req.body);
+});
+
+
+//Products page
+router.get('/products', (req, res) => {
+    res.render('products', { title: 'Products page'});
+});
+
+router.post('/products', (req, res) => {
+    console.log(req.body);
+});
+
+module.exports = router;
