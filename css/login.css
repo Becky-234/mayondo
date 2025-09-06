@@ -12,7 +12,6 @@ body {
     background: white;
     /* Overall page background */
     display: flex;
-    gap: -50px;
     align-items: center;
 }
 
@@ -23,34 +22,20 @@ body {
      border-radius: 10px;
      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
      transition: transform 0.3s ease;
-     margin-left: 100px;
-     width: 500px;
+     margin-left: 50px;
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-}
-
-.product-card img {
-     max-width: 100%;
-     border-radius: 10px;
-     margin-bottom: 1rem;
-}
-
-.product-card text {
-    max-width: 10%;
-    text-align: center;
-}
-
+ 
 
 /* LOGIN PAGE */
 .form-container {
-    width: 500px;
+    width: 420px;
     background-color: green;
     color: white;
     border-radius: 40px;
     padding: 30px 40px;
-    margin: 15px 0 0 150px;
+    margin-top: 15px;
+    margin: 15px 0 0 450px;
 }
 
 .head {
