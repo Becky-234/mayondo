@@ -236,7 +236,7 @@ body.sidebar-active {
     width: 30%;
     text-align: center;
     background: #caba9c;
-    
+
 }
 
 #notFound {
@@ -252,6 +252,7 @@ body.sidebar-active {
     border: 2px solid #fff;
     border-radius: 10px;
     background: #caba9c;
+    text-align: center;
 }
  #downloadExcel {
     padding: 5px;
@@ -259,6 +260,7 @@ body.sidebar-active {
     border: 2px solid #fff;
     border-radius: 10px;
     background: #caba9c;
+    text-align: center;
 }
 #newUser {
     padding: 5px;
@@ -266,6 +268,7 @@ body.sidebar-active {
     border: 2px solid #fff;
     border-radius: 10px;
     background: #caba9c;
+    text-align: center;
 }
 
 .logoutBtn {
@@ -275,6 +278,7 @@ body.sidebar-active {
     color: #fff;
     border: 2px;
     border-radius: 10px;
+    text-align: center;
 }
 
 button.export:hover {

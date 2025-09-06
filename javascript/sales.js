@@ -7,10 +7,36 @@ toggleBtn.addEventListener('click', () => {
   console.log("Sidebar toggled"); // debug check
 });
 
+
 //Search on the sales table
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById()
-})
+  const input = document.getElementById('searchSale');
+  const table = document.getElementById('salesTable');
+  const tbody = table.tBodies[0];
+  const rows = tbody.getElementsByName('tr');
+  const notFound = document.getElementById('notFound');
+
+  input.addEventListener('keyup', () => {
+    const filter = input.value.toUpperCase();
+    let hasResult = false;
+
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName('td');
+      let found = false;
+
+      for (let j = 0; j < cells.length; j++) {
+        const cellText = cells[j].cellTextContent || cells[j].innerText;
+        if (cellText.toUpperCase().includes(filter)) {
+          found = true;
+          hasResult = true;
+          break;
+        }
+      }
+      rows[i].style.display = found ? '' : 'none';
+    }
+    notFound.style.display = hasResult ? 'none' : 'block'
+  });
+});
 
 
 const form = document.getElementById("addSale");
