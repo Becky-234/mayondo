@@ -23,10 +23,9 @@ body {
     top: 0;
     left: 0;
     width: 260px;
-    /* default expanded */
     height: 100vh;
     background: #4c6444;
-    padding: 6px 14px;
+    padding: 6px 50px 0 0 ;
     overflow: hidden;
     transition: width 0.5s;
     flex-shrink: 0;
@@ -44,7 +43,7 @@ body {
     align-items: center;
     width: 100%;
     height: 70px;
-    margin-bottom: 20px;
+    margin: 0 20px 0 20px;
 }
 
 .side-menu-container .logo-menu .logo {
@@ -65,7 +64,7 @@ body {
     font-size: 25px;
     color: #fff;
     position: absolute;
-    right: 10px;
+    right: 30px;
     cursor: pointer;
 }
 
