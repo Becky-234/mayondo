@@ -1,17 +1,20 @@
 //1.DEPENDENCIES
 const express = require('express');
+const path = require('path');
 
 //Import Routes
-const authRoutes = require('./routes/authRoutes');
-
+const authRoutes = require('./routes/authRoutes.js');
+const stockRoutes = require('./routes/stockRoutes.js'); 
 
 
 //2.INSTANTIATIONS
 const app = express();
 const port = 3000;
 
-//3.CONFIGURATIONS
 
+//3.CONFIGURATIONS
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 //4.MIDDLEWARE
 app.use(express.static('public'));
@@ -21,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));    //helps to pass data from fo
 //5.ROUTES
 //Using Imported Routes
 app.use('/', authRoutes);
+app.use('/', stockRoutes);
 
 //Landing page
 // router.get('/', (req, res) => {

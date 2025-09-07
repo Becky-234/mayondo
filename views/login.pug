@@ -1,0 +1,40 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Login
+  link(rel='stylesheet' href='../css/login.css')
+form#loginForm(method='')
+  .form-container
+    h1.head Login
+    br
+    .input-box
+      input#email(type='email' placeholder='Email' name='email' required='')
+      span#emailError.error
+    .input-box
+      input#password(type='password' placeholder='Password' name='password' required='' minlength='6')
+      span#passwordError.error
+    .remember-forgot
+      label
+        input(type='checkbox')
+        | Remember Me
+      a(href='#') Forgot Password?
+    br
+    br
+    label(for='role') Select Role:
+    br
+    select#role(name='role' required='')
+      option(value='' disabled='' selected='') Select your role
+      option(value='manager') Manager
+      option(value='sales_agent') Sales Agent
+      option(value='stock_attendant') Stock Attendant
+    br
+    br
+    button#login-btn.button(type='submit') Login
+    br
+    .register-link
+      p
+        | Don&apos;t have an account?
+        a(href='/html/signup.html') Register
+script(src='../javascript/login.js')
+ 

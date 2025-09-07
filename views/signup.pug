@@ -1,0 +1,21 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  link(rel='stylesheet' href='/css/signup.css')
+  title Signup
+form#signupForm(method='')
+  .form-container
+    h1.head Signup
+    br
+    .input-box
+      input#name(type='text' placeholder='Fullname' name='name' required='')
+      span#nameError.error
+    .input-box
+      input#email(type='email' placeholder='Email' name='email' required='')
+      span#emailError.error
+    .input-box
+      input#password(type='password' placeholder='Password' name='password' required='' minlength='6')
+      span#passwordError.error
+    button#signup-btn.button(type='submit') Signup
+    br

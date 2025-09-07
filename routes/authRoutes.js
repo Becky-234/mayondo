@@ -6,7 +6,7 @@ const router = express.Router();
 
 //Login page
 router.get('/login', (req, res) => {
-    res.render(__dirname + '/html/login.html');
+    res.render('login', {title: 'Login here!'});
 });
 
 router.post('/login', (req, res) => {
@@ -69,25 +69,6 @@ router.get('/addsale', (req, res) => {
 });
 
 router.post('/addsale', (req, res) => {
-    console.log(req.body);
-});
-
-//Stock page
-router.get('/stock', (req, res) => {
-    res.render('stock', {title: 'Stock page'});
-});
-
-router.post('/stock', (req, res) => {
-    console.log(req.body);
-});
-
-
-//Add stock page
-router.get('/addstock', (req, res) => {
-    res.render('addstock', {title: 'Add stock page'});
-});
-
-router.post('/addstock', (req, res) => {
     console.log(req.body);
 });
 
