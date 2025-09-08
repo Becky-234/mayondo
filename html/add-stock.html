@@ -76,40 +76,39 @@
 
         <div class="stock-form-container">
 
-            <form id="addStock">
-
+            <form id="addStock" action="/addStock" method="post">
                 <h2>Add Stock Here!</h2>
 
                 <label for="pdtname">Product Name</label><br>
-                <input type="text" id="pdtname" name="pdtname">
+                <input type="text" id="pdtname" name="pdtname" required>
                 <br><br>
 
                 <label for="pdttype">Type of Product</label><br>
-                <input type="text" id="pdttype" name="pdttype">
+                <input type="text" id="pdttype" name="pdttype" required>
                 <br><br>
 
                 <label for="cprice">Cost Price</label><br>
-                <input type="number" id="cprice" name="cprice">
+                <input type="number" id="cprice" name="cprice" required>
                 <br><br>
 
                 <label for="pdtquantity">Quantity</label><br>
-                <input type="number" id="pdtquantity" name="pdtquantity">
+                <input type="number" id="pdtquantity" name="pdtquantity" required>
                 <br><br>
 
                 <label for="pdtprice">Product Price</label><br>
-                <input type="number" id="pdtprice" name="pdtprice">
+                <input type="number" id="pdtprice" name="pdtprice" required>
                 <br><br>
 
                 <label for="supplier">Supplier Name</label><br>
-                <input type="text" id="supplier" name="supplier">
+                <input type="text" id="supplier" name="supplier" required>
                 <br><br>
 
                 <label for="date">Date</label><br>
-                <input type="date" id="date" name="date">
+                <input type="date" id="date" name="date" required>
                 <br><br>
 
                 <label for="quality">Quality</label><br>
-                <input type="text" id="quality" name="quality">
+                <input type="text" id="quality" name="quality" required>
                 <br><br>
 
                 <div class="add">

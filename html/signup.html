@@ -10,7 +10,7 @@
 
 <body>
 
-    <form method="" id="signupForm">
+    <form action="/signup" method="post" id="signupForm">
 
         <div class="form-container">
             <h1 class="head">Signup</h1>
@@ -24,6 +24,17 @@
                 <input id="email" type="email" placeholder="Email" name="email" required>
                 <span id="emailError" class="error"></span>
             </div>
+
+            <div class="input-box">
+                <input id="tel" type="number" placeholder="Phone Number" name="tel" required>
+                <span id="telError" class="error"></span>
+            </div>
+
+            <div class="input-box">
+                <input id="username" type="text" placeholder="Username" name="username" required>
+                <span id="username" class="error"></span>
+            </div>
+
 
             <div class="input-box">
                 <input id="password" type="password" placeholder="Password" name="password" required minlength=6>

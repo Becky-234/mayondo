@@ -4,7 +4,7 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   link(rel='stylesheet' href='/css/signup.css')
   title Signup
-form#signupForm(method='')
+form#signupForm(action='/signup' method='post')
   .form-container
     h1.head Signup
     br
@@ -14,6 +14,12 @@ form#signupForm(method='')
     .input-box
       input#email(type='email' placeholder='Email' name='email' required='')
       span#emailError.error
+    .input-box
+      input#tel(type='number' placeholder='Phone Number' name='tel' required='')
+      span#telError.error
+    .input-box
+      input#username(type='text' placeholder='Username' name='username' required='')
+      span#username.error
     .input-box
       input#password(type='password' placeholder='Password' name='password' required='' minlength='6')
       span#passwordError.error

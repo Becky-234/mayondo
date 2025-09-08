@@ -5,6 +5,8 @@ const path = require('path');
 //Import Routes
 const authRoutes = require('./routes/authRoutes.js');
 const stockRoutes = require('./routes/stockRoutes.js'); 
+const salesRoutes = require('./routes/salesRoutes.js');
+const productRoutes = require('./routes/productRoutes.js');
 
 
 //2.INSTANTIATIONS
@@ -25,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));    //helps to pass data from fo
 //Using Imported Routes
 app.use('/', authRoutes);
 app.use('/', stockRoutes);
+app.use('/', salesRoutes);
+app.use('/', productRoutes)
 
 //Landing page
 // router.get('/', (req, res) => {

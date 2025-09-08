@@ -54,32 +54,7 @@ router.post('/adduser', (req, res) => {
 });
 
 
-//Sales page
-router.get('/sales', (req, res) => {
-    res.render('sales', {title: 'Sales page'});
-});
-
-router.post('/sales', (req, res) => {
-    console.log(req.body);
-});
-
-//Add sales page
-router.get('/addsale', (req, res) => {
-    res.render('addsale', {title: 'Add sales page'});
-});
-
-router.post('/addsale', (req, res) => {
-    console.log(req.body);
-});
 
 
-//Products page
-router.get('/products', (req, res) => {
-    res.render('products', { title: 'Products page'});
-});
-
-router.post('/products', (req, res) => {
-    console.log(req.body);
-});
 
 module.exports = router;
