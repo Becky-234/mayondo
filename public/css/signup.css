@@ -8,7 +8,7 @@
 /* Main Body Layout: Flexbox for Sidebar and Main Content */
 body {
     /* Ensures body takes full viewport height */
-    background: white;
+    background: #fff;
     /* Overall page background */
 }
 

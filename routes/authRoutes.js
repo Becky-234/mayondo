@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 
-
-
 //Login page
 router.get('/login', (req, res) => {
     res.render('login', {title: 'Login here!'});
@@ -11,6 +9,7 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res) => {
     console.log(req.body);
+    res.redirect('/dashboard');
 });
 
 
@@ -21,37 +20,10 @@ router.get('/signup', (req, res) => {
 
 router.post('/signup', (req, res) => {
     console.log(req.body);
+    res.redirect('/login');
 });
 
 
-//Dashboard Page
-router.get('/dashboard', (req, res) => {
-    res.render('dashboard', {title: 'Dashboard Page'});
-});
-
-router.post('/dashboard', (req, res) => {
-    console.log(req.body);
-});
-
-
-//Users page
-router.get('/users', (req, res) => {
-    res.render('users', {title: 'Users page'});
-});
-
-router.post('/users', (req, res) => {
-    console.log(req.body);
-});
-
-
-//Add user page
-router.get('/adduser', (req, res) => {
-    res.render('adduser', {title: 'Add user page'});
-});
-
-router.post('/adduser', (req, res) => {
-    console.log(req.body);
-});
 
 
 

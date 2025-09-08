@@ -4,9 +4,11 @@ const path = require('path');
 
 //Import Routes
 const authRoutes = require('./routes/authRoutes.js');
-const stockRoutes = require('./routes/stockRoutes.js'); 
+const stockRoutes = require('./routes/stockRoutes.js');
 const salesRoutes = require('./routes/salesRoutes.js');
 const productRoutes = require('./routes/productRoutes.js');
+const dashboardRoutes = require('./routes/dashboardRoutes.js');
+const indexRoutes = require('./routes/indexRoutes.js');
 
 
 //2.INSTANTIATIONS
@@ -28,16 +30,11 @@ app.use(express.urlencoded({ extended: true }));    //helps to pass data from fo
 app.use('/', authRoutes);
 app.use('/', stockRoutes);
 app.use('/', salesRoutes);
-app.use('/', productRoutes)
+app.use('/', productRoutes);
+app.use('/', dashboardRoutes);
+app.use('/', indexRoutes);
 
-//Landing page
-// router.get('/', (req, res) => {
-//     res.render(__dirname + '/html/index.html');
-// });
 
-// router.post('/index', (req, res) => {
-//     console.log(req.body);
-// });
 
 
 
