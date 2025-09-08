@@ -33,25 +33,24 @@ form.addEventListener("submit", function (event) {
   }
 
   if (!valid) return;
-    // Prevent form submission if invalid
- 
-    // Redirect based on role
-    switch (role.value) {
-      case "manager":
-        window.location.href = "dashboard.html";
-        break;
-      case "sales_agent":
-        window.location.href = "sales.html";
-        break;
-      case "stock_attendant":
-        window.location.href = "stock.html";
-        break;
-      default:
-        alert("Please select a role.");
-// Prevent submission if no role selected
-        event.preventDefault();
-    }
+  // Prevent form submission if invalid
+
+  // Redirect based on role
+  switch (role.value) {
+    case "manager":
+      window.location.href = "/html/dashboard.html";
+      break;
+    case "sales_agent":
+      window.location.href = "sales.html";
+      break;
+    case "stock_attendant":
+      window.location.href = "stock.html";
+      break;
+    default:
+      alert("Please select a role.");
+      // Prevent submission if no role selected
+      event.preventDefault();
   }
+}
 );
 
- 
