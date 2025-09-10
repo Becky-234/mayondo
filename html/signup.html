@@ -35,13 +35,18 @@
                 <span id="username" class="error"></span>
             </div>
 
-
             <div class="input-box">
                 <input id="password" type="password" placeholder="Password" name="password" required minlength=6>
                 <span id="passwordError" class="error"></span>
             </div>
 
-
+            <label for="role">Select Role:</label><br />
+            <select id="role" name="role" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="manager">Manager</option>
+                <option value="sales_agent">Sales Agent</option>
+            </select>
+            <br><br>
             <button type="submit" class="button" id="signup-btn">Signup</button>
             <br>
         </div>

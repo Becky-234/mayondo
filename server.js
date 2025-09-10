@@ -4,19 +4,19 @@ const path = require('path');
 const mongoose = require('mongoose');
 
 require('dotenv').config();
-
+ 
 //Import Routes
-const authRoutes = require('./routes/authRoutes.js');
-const stockRoutes = require('./routes/stockRoutes.js');
-const salesRoutes = require('./routes/salesRoutes.js');
-const productRoutes = require('./routes/productRoutes.js');
-const dashboardRoutes = require('./routes/dashboardRoutes.js');
-const indexRoutes = require('./routes/indexRoutes.js');
+const authRoutes = require('./routes/authRoutes');
+const stockRoutes = require('./routes/stockRoutes');
+const salesRoutes = require('./routes/salesRoutes');
+const productRoutes = require('./routes/productRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const indexRoutes = require('./routes/indexRoutes');
 
 
 //2.INSTANTIATIONS
 const app = express();
-const port = 3000;
+const port = 3001;
 
 
 //3.CONFIGURATIONS
@@ -33,15 +33,17 @@ mongoose.connection
     .on('error', (err) => {
         console.log(`Connection error: ${err.message}`);
     });
+
 //Setting view engine to pug
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+
 //4.MIDDLEWARE
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));    //helps to pass data from forms
-// Serve everything in "html"
-app.use("/html", express.static(path.join(__dirname, "html")));
+app.use("/html", express.static(path.join(__dirname, "html")));    // Serve everything in "html"
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 //5.ROUTES
@@ -52,11 +54,6 @@ app.use('/', salesRoutes);
 app.use('/', productRoutes);
 app.use('/', dashboardRoutes);
 app.use('/', indexRoutes);
-
-
-
-
-
 
 
 

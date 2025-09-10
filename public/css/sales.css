@@ -1,240 +1,236 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Main Body Layout: Flexbox for Sidebar and Main Content */
 body {
-    display: flex;
-    /* Makes direct children (aside and main) flex items */
-    min-height: 100vh;
-    /* Ensures body takes full viewport height */
-    background: #fff;
-    /* Overall page background */
-    overflow-x: hidden;
-    /* Prevents horizontal scrollbar if content overflows */
+  display: flex;
+  /* Makes direct children (aside and main) flex items */
+  min-height: 100vh;
+  /* Ensures body takes full viewport height */
+  background: #fff;
+  /* Overall page background */
+  overflow-x: hidden;
+  /* Prevents horizontal scrollbar if content overflows */
 }
 
 /* SIDE BAR */
 .side-menu-container {
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 260px;
-    height: 100vh;
-    background: #4c6444;
-    padding: 6px 50px 0 0;
-    overflow: hidden;
-    transition: width 0.5s;
-    flex-shrink: 0;
-    z-index: 1000;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: #4c6444;
+  padding: 6px 50px 0 0;
+  overflow: hidden;
+  transition: width 0.5s;
+  flex-shrink: 0;
+  z-index: 1000;
 }
 
 /* Use only .collapsed (drop .active for clarity) */
 .side-menu-container.collapsed {
-    width: 80px;
+  width: 80px;
 }
 
 /* --- Logo --- */
 .side-menu-container .logo-menu {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 70px;
-    margin: 0 20px 0 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+  margin: 0 20px 0 20px;
 }
 
 .side-menu-container .logo-menu .logo {
-    font-size: 25px;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    transition: opacity 0.3s;
+  font-size: 25px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.3s;
 }
 
 .side-menu-container.collapsed .logo-menu .logo {
-    opacity: 0;
-    /* hide logo text when collapsed */
+  opacity: 0;
+  /* hide logo text when collapsed */
 }
 
 /* --- Hamburger toggle --- */
 .side-menu-container .logo-menu .fa-bars {
-    font-size: 25px;
-    color: #fff;
-    position: absolute;
-    right: 30px;
-    cursor: pointer;
+  font-size: 25px;
+  color: #fff;
+  position: absolute;
+  right: 30px;
+  cursor: pointer;
 }
 
 /* --- List --- */
 .side-menu-container .list {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .side-menu-container .list .list-item {
-    list-style: none;
-    width: 100%;
-    height: 50px;
-    margin: 10px 0;
+  list-style: none;
+  width: 100%;
+  height: 50px;
+  margin: 10px 0;
 }
 
 .side-menu-container .list .list-item a {
-    display: flex;
-    align-items: center;
-    height: 50px;
-    padding: 0 10px;
-    font-size: 18px;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 10px;
+  font-size: 18px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.3s;
 }
 
 .list .list-item.active a,
 .list .list-item a:hover {
-    background: rgba(225, 255, 255, 0.2);
+  background: rgba(225, 255, 255, 0.2);
 }
 
 /* --- Icons --- */
 .side-menu-container .list .list-item a i {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* center icon in box */
-    font-size: 20px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* center icon in box */
+  font-size: 20px;
 }
 
 /* --- Text --- */
 .side-menu-container .list .list-item a .link-name {
-    flex: 1;
-    white-space: nowrap;
-    transition: opacity 0.3s;
+  flex: 1;
+  white-space: nowrap;
+  transition: opacity 0.3s;
 }
 
 /* Collapse behavior */
 .side-menu-container.collapsed .list .list-item a {
-    justify-content: center;
-    /* only icon in middle */
-    padding: 0;
+  justify-content: center;
+  /* only icon in middle */
+  padding: 0;
 }
 
 .side-menu-container.collapsed .list .list-item a .link-name {
-    display: none;
-    /* hide text when collapsed */
+  display: none;
+  /* hide text when collapsed */
 }
-
 
 /* Base Sidebar (Desktop view) */
 .side-menu-container.active {
-    left: 0;
-    /* Show sidebar */
+  left: 0;
+  /* Show sidebar */
 }
 
 /* For smaller screens */
 @media (max-width: 768px) {
-    .side-menu-container {
-        width: 220px;
-        /* Slightly smaller for tablets */
-    }
+  .side-menu-container {
+    width: 220px;
+    /* Slightly smaller for tablets */
+  }
 }
 
 @media (max-width: 576px) {
-    .side-menu-container {
-        width: 200px;
-        /* Mobile sidebar width */
-    }
+  .side-menu-container {
+    width: 200px;
+    /* Mobile sidebar width */
+  }
 
-    .side-menu-container .logo-menu .logo {
-        font-size: 20px;
-    }
+  .side-menu-container .logo-menu .logo {
+    font-size: 20px;
+  }
 
-    .list .list-item a {
-        font-size: 16px;
-        padding: 0 8px;
-    }
+  .list .list-item a {
+    font-size: 16px;
+    padding: 0 8px;
+  }
 
-    .side-menu-container .logo-menu .fa-bars {
-        left: 100%;
-        /* Place toggle outside sidebar */
-        transform: translateX(-100%);
-    }
+  .side-menu-container .logo-menu .fa-bars {
+    left: 100%;
+    /* Place toggle outside sidebar */
+    transform: translateX(-100%);
+  }
 }
 
 /* Push page content when sidebar is active */
 body.sidebar-active {
-    margin-left: 260px;
-    transition: margin-left 0.5s;
+  margin-left: 260px;
+  transition: margin-left 0.5s;
 }
 
 @media (max-width: 768px) {
-    body.sidebar-active {
-        margin-left: 220px;
-    }
+  body.sidebar-active {
+    margin-left: 220px;
+  }
 }
 
 @media (max-width: 576px) {
-    body.sidebar-active {
-        margin-left: 200px;
-    }
+  body.sidebar-active {
+    margin-left: 200px;
+  }
 }
 
 /* MAIN CONTENT AREA */
 .main-content {
-    flex-grow: 1;
-    /* Allows main content to take up all available space */
-    background: #fff;
-    /* Light beige background from your image */
-    position: relative;
-    /* Crucial: Establishes a positioning context for absolute children */
-    padding: 20px;
-    /* General padding inside the main content area */
-    padding-top: 80px;
-    /* Space for the absolutely positioned navbar */
-     
+  flex-grow: 1;
+  /* Allows main content to take up all available space */
+  background: #fff;
+  /* Light beige background from your image */
+  position: relative;
+  /* Crucial: Establishes a positioning context for absolute children */
+  padding: 20px;
+  /* General padding inside the main content area */
+  padding-top: 80px;
+  /* Space for the absolutely positioned navbar */
 }
-
-
 
 /* TOP RIGHT NAVBAR AND LOGOUT */
 .dashboard-header {
-    position: absolute;
-    /* Positioned relative to .main-content */
-    top: 10px;
-    /* 10px from the top of .main-content */
-    right: 10px;
-    /* 10px from the right of .main-content */
-    background-color: transparent !important;
-    /* Make navbar background transparent if Bootstrap adds one */
-    border: none !important;
-    /* Remove any default Bootstrap borders */
-    padding: 0;
-    /* Remove default padding */
-    width: auto;
-    /* Allow content to dictate width */
-    z-index: 100;
-    /* Ensure it's above other content if needed */
+  position: absolute;
+  /* Positioned relative to .main-content */
+  top: 10px;
+  /* 10px from the top of .main-content */
+  right: 10px;
+  /* 10px from the right of .main-content */
+  background-color: transparent !important;
+  /* Make navbar background transparent if Bootstrap adds one */
+  border: none !important;
+  /* Remove any default Bootstrap borders */
+  padding: 0;
+  /* Remove default padding */
+  width: auto;
+  /* Allow content to dictate width */
+  z-index: 100;
+  /* Ensure it's above other content if needed */
 }
 
 .dash-card {
-    flex: 1;
-    min-width: 200px;
-    border: solid 1px white;
-    background: #4c6444;
-    color: #fff;
-    border-radius: 10px;
-    padding: 5px;
-    height: 100px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    gap: 5px;
-    flex-wrap: nowrap; /* prevent wrapping */ 
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;   
+  flex: 1;
+  min-width: 200px;
+  border: solid 1px white;
+  background: #4c6444;
+  color: #fff;
+  border-radius: 10px;
+  padding: 5px;
+  height: 100px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap; /* prevent wrapping */
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .dash-card:hover {
@@ -243,93 +239,92 @@ body.sidebar-active {
 }
 
 .table-content {
-    margin-top: 30px;
-    background: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    border-radius: 8px;
-    overflow: hidden;
-    border-collapse: collapse;
-    /* This is crucial for single, well-defined borders */
-    width: 100%;
-    /* Make the table take up available width */
+  margin-top: 30px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  border-collapse: collapse;
+  /* This is crucial for single, well-defined borders */
+  width: 100%;
+  /* Make the table take up available width */
 }
 
 .table-content th,
 .table-content td {
-    border-bottom: 1px solid #eee;
-    padding: 12px 15px;
-    text-align: left;
-    /* Align text to the left */
+  border-bottom: 1px solid #eee;
+  padding: 12px 15px;
+  text-align: left;
+  /* Align text to the left */
 }
 
 .table-content thead {
-    background: #4c6444;
-    color: white;
+  background: #4c6444;
+  color: white;
 }
 
 .table-content tr:nth-child(even) {
-    background-color: #f9f9f9;
-    /* Alternate row background for better readability */
+  background-color: #f9f9f9;
+  /* Alternate row background for better readability */
 }
 
 .table-content tbody:hover {
-    background: #f1f9ff;
+  background: #f1f9ff;
 }
 
 /* Styling for the icons within the Operation column */
 .table-content td i {
-    margin-right: 5px;
-    /* Add some space between icons */
-    cursor: pointer;
-    /* Indicate that icons are clickable */
+  margin-right: 5px;
+  /* Add some space between icons */
+  cursor: pointer;
+  /* Indicate that icons are clickable */
 }
 
 /* Optional: Style for the "Login" button/link */
 .table-content td:last-child {
-    text-align: center;
-    /* Center the "Login" text */
+  text-align: center;
+  /* Center the "Login" text */
 }
 
 .logoutBtn {
-    text-decoration: none;
-    padding: 10px;
-    background: #caba9c;
-    color: #fff;
-    border: 2px;
-    border-radius: 10px;
+  text-decoration: none;
+  padding: 10px;
+  background: #caba9c;
+  color: #fff;
+  border: 2px;
+  border-radius: 10px;
 }
 
 .include {
-    display: flex;
-    gap: 30px;
-    border-radius: 10px;
-    background: #4c6444;
-    padding: 15px;
+  display: flex;
+  gap: 30px;
+  border-radius: 10px;
+  background: #4c6444;
+  padding: 15px;
 }
 
 .include input {
-    border-radius: 10px;
-    border: 2px solid #fff;
-    width: 30%;
-    text-align: center;
-    background: #caba9c;
-    
+  border-radius: 10px;
+  border: 2px solid #fff;
+  width: 30%;
+  text-align: center;
+  background: #caba9c;
 }
 
 .btns {
-    padding: 5px;
-    background: #caba9c;
-    color: #fff;
-    text-align: center;
-    border: 2px solid #fff;
-    border-radius: 10px;
-    text-decoration: none;
-    cursor: pointer;
+  padding: 5px;
+  background: #caba9c;
+  color: #fff;
+  text-align: center;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 #notFound {
-    color: red;
-    display: none;
-    text-align: center;
-    margin-top: 10px;
+  color: red;
+  display: none;
+  text-align: center;
+  margin-top: 10px;
 }

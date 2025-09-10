@@ -1,97 +1,95 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
-  link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
-  link(rel='stylesheet' href='../css/add-sale.css')
-  title Add Customer
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB", crossorigin="anonymous")
+link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css", integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==", crossorigin="anonymous", referrerpolicy="no-referrer")
+link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap", rel="stylesheet")
+link(rel="stylesheet", href="../css/add-sale.css")
+title Add Customer
 aside.side-menu-container
   .logo-menu
     h2.logo MWF
     i.fa-solid.fa-bars
   ul.list
     li.list-item.active
-      a(href='/html/dashboard.html')
+      a(href="/html/dashboard.html")
         i.fa-solid.fa-house
         span.link-name Dashboard
     li.list-item
-      a(href='/html/users.html')
+      a(href="/html/users.html")
         i.fa-solid.fa-users
         span.link-name Users
     li.list-item
-      a(href='/html/sales.html')
+      a(href="/html/sales.html")
         i.fa-solid.fa-cart-shopping
         span.link-name Sales
     li.list-item
-      a(href='/html/stock.html')
+      a(href="/html/stock.html")
         i.fa-solid.fa-truck
         span.link-name Stock
     li.list-item
-      a(href='/html/products.html')
+      a(href="/html/products.html")
         i.fa-solid.fa-couch
         span.link-name Products
     li.list-item
-      a(href='#')
+      a(href="#")
         i.fa-solid.fa-gear
         span.link-name Settings
 main.main-content
   nav.navbar.bg-body-tertiary.dashboard-header
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
-        form.d-flex.me-3(role='search')
-          input.form-control.me-2(type='search' placeholder='Search' aria-label='Search')
-          button.btn.btn-outline-success(type='submit') Search
-        a.logoutBtn(href='/html/index.html') Logout
+        form.d-flex.me-3(role="search")
+          input.form-control.me-2(type="search", placeholder="Search", aria-label="Search")
+          button.btn.btn-outline-success(type="submit") Search
+        a.logoutBtn(href="/html/index.html") Logout
   .user-form-container
-    form#addSale(action='addSale' method='post')
+    form#addSale(action="/addSale", method="post")
       h2 Add Sale
-      label(for='fname') Name of Customer
+      label(for="fname") Name of Customer
       br
-      input#fname(type='text' name='name')
-      br
-      br
-      label(for='tproduct') Type of Product
-      br
-      input#tproduct(type='text' name='tproduct')
+      input#fname(type="text", name="name", required)
       br
       br
-      label(for='nproduct') Name of Product
+      label(for="tproduct") Type of Product
       br
-      input#nproduct(type='text' name='nproduct')
-      br
-      br
-      label(for='quantity') Quantity
-      br
-      input#quantity(type='number' name='quantity')
+      input#tproduct(type="text", name="tproduct", required)
       br
       br
-      label(for='price') Price
+      label(for="nproduct") Name of Product
       br
-      input#price(type='number' name='price')
-      br
-      br
-      label(for='role') Select Payment Method
-      br
-      select#role(name='role' required='')
-        option(value='' disabled='' selected='') Select your Payment Method
-        option(value='manager') Bank
-        option(value='sales_agent') Mobile Money
-        option(value='stock_attendant') Cheque
+      input#nproduct(type="text", name="nproduct", required)
       br
       br
-      label(for='date') Date
+      label(for="quantity") Quantity
       br
-      input#date(type='date' name='date')
+      input#quantity(type="number", name="quantity", required)
       br
       br
-      label(for='agent') Sales Agent Name
+      label(for="price") Price
       br
-      input#agent(type='text' name='agent')
+      input#price(type="number", name="price", required)
+      br
+      br
+      label(for="role") Select Payment Method
+      br
+      select#role(name="role", required)
+        option(value, disabled, selected) Select your Payment Method
+        option(value="manager") Bank
+        option(value="sales_agent") Mobile Money
+        option(value="stock_attendant") Cheque
+      br
+      br
+      label(for="date") Date
+      br
+      input#date(type="date", name="date", required)
+      br
+      br
+      label(for="agent") Sales Agent Name
+      br
+      input#agent(type="text", name="agent", required)
       br
       br
       .add
-        button.btns(type='submit') Save
-        button.btns(type='reset') Cancel
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
+        button.btns(type="submit") Save
+        button.btns(type="reset") Cancel
+script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js", integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI", crossorigin="anonymous")

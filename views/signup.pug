@@ -1,27 +1,32 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  link(rel='stylesheet' href='/css/signup.css')
-  title Signup
-form#signupForm(action='/signup' method='post')
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+link(rel="stylesheet", href="/css/signup.css")
+title Signup
+form#signupForm(action="/signup", method="post")
   .form-container
     h1.head Signup
-    br
     .input-box
-      input#name(type='text' placeholder='Fullname' name='name' required='')
+      input#name(type="text", placeholder="Fullname", name="name", required)
       span#nameError.error
     .input-box
-      input#email(type='email' placeholder='Email' name='email' required='')
+      input#email(type="email", placeholder="Email", name="email", required)
       span#emailError.error
     .input-box
-      input#tel(type='number' placeholder='Phone Number' name='tel' required='')
+      input#tel(type="number", placeholder="Phone Number", name="tel", required)
       span#telError.error
     .input-box
-      input#username(type='text' placeholder='Username' name='username' required='')
+      input#username(type="text", placeholder="Username", name="username", required)
       span#username.error
     .input-box
-      input#password(type='password' placeholder='Password' name='password' required='' minlength='6')
+      input#password(type="password", placeholder="Password", name="password", required, minlength="6")
       span#passwordError.error
-    button#signup-btn.button(type='submit') Signup
+    label(for="role") Select Role:
+    br
+    select#role(name="role", required)
+      option(value, disabled, selected) Select your role
+      option(value="manager") Manager
+      option(value="sales_agent") Sales Agent
+    br
+    br
+    button.button#signup-btn(type="submit") Signup
     br

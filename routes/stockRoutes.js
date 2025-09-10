@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const StockModel = require('../models/stockModel');
+
 
 //Stock page
 router.get('/stock', (req, res) => {
@@ -13,14 +15,28 @@ router.post('/stock', (req, res) => {
 
 
 //Add stock page
-router.get('/addstock', (req, res) => {
-    res.render('addstock', { title: 'Add stock page' });
+router.get('/addStock', (req, res) => {
+    res.render('addStock', { title: 'Stock page' });
 });
 
-router.post('/addstock', (req, res) => {
-    console.log(req.body);
+
+router.post('/addStock', async (req, res) => {
+    try {
+        const stock = new StockModel(req.body);
+        console.log(req.body);
+        await stock.save();
+        res.redirect('/stock');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/addStock');
+    }
+});
+
+router.get('/stock', (req, res) => {
+    res.render('stock');
 });
 
 
 
 module.exports = router;
+
