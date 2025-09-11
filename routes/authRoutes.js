@@ -7,25 +7,11 @@ router.get('/signup', (req, res) => {
     res.render('signup', { title: 'signup page' })
 });
 
-router.post('/signup', async (req, res) => {
-    try {
-        const user = new UserModel(req.body);
-        console.log(req.body);
-        let existingUser = await UserModel.findOne({ email: req.body.email });
-        if (existingUser) {
-            return res.status(400).send('Not registered')
-        } else {
-            await UserModel.register(user, req.body.password, (error) => {
-                if (error) {
-                    throw error;
-                }
-                res.redirect('/login');
-            })
-        }
-    } catch (error) {
-        res.status(400).send('Opps! something went wrong')
-
-    }
+router.post('/signup', (req, res) => {
+    const user = new UserModel(req.body);
+    console.log(req.body);
+    user.save()
+    res.redirect('/login');
 });
 
 
@@ -35,24 +21,21 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    req.session.user = req.user;
-    if (req.user.role === 'Manager') {
-        res.redirect('/dashborad')
-    } else if (req.user.role = 'Sales Agent') {
-        res.redirect('/sales')
-    } else (res.render('noneuser'))
+    console.log(req.body);
+    res.redirect('/dashboard');
 });
+
 //LOGGING OUT
-router.get('/logout', (req, res) => {
-    if (req.session) {
-        req.session.destroy((error) => {
-            if (error) {
-                return res.status(500).send('Error logging out')
-            }
-            res.redirect('/');
-        })
-    }
-});
+// router.get('/logout', (req, res) => {
+//     if (req.session) {
+//         req.session.destroy((error) => {
+//             if (error) {
+//                 return res.status(500).send('Error logging out')
+//             }
+//             res.redirect('/');
+//         })
+//     }
+// });
 
 
 
