@@ -1,7 +1,6 @@
 const form = document.getElementById("loginForm");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
-const role = document.getElementById("role");
 const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 
@@ -32,25 +31,11 @@ form.addEventListener("submit", function (event) {
     valid = false;
   }
 
+  // Stop here if invalid
   if (!valid) return;
-  // Prevent form submission if invalid
 
-  // Redirect based on role
-  switch (role.value) {
-    case "manager":
-      window.location.href = "/html/dashboard.html";
-      break;
-    case "sales_agent":
-      window.location.href = "sales.html";
-      break;
-    case "stock_attendant":
-      window.location.href = "stock.html";
-      break;
-    default:
-      alert("Please select a role.");
-      // Prevent submission if no role selected
-      event.preventDefault();
-  }
-}
-);
-
+  // 👉 At this point you can submit the form via fetch/AJAX,
+  // or just call form.submit() if you have an action URL.
+  // Example:
+  // form.submit();
+});

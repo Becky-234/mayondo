@@ -1,31 +1,28 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Login
-  link(rel='stylesheet' href='../css/login.css')
-form#loginForm(action='/login' method='post')
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Login
+link(rel="stylesheet", href="../css/login.css")
+form#loginForm(method="post", action="/login")
   .form-container
     h1.head Login
     br
     .input-box
-      input#email(type='email' placeholder='Email' name='email' required='')
+      input#email(type="email", placeholder="Email", name="email", required)
       span#emailError.error
     .input-box
-      input#password(type='password' placeholder='Password' name='password' required='' minlength='6')
+      input#password(type="password", placeholder="Password", name="password", required, minlength="6")
       span#passwordError.error
     .remember-forgot
       label
-        input(type='checkbox')
+        input(type="checkbox")
         | Remember Me
-      a(href='#') Forgot Password?
+      a(href="#") Forgot Password?
     br
     br
-    button#login-btn.button(type='submit') Login
+    button.button#login-btn(type="submit") Login
     br
     .register-link
       p
-        | Don&apos;t have an account?
-        a(href='/html/signup.html') Register
-script(src='../javascript/login.js')
- 
+        | Don't have an account?
+        a(href="/html/signup.html") Register
+script(src="../javascript/login.js")
