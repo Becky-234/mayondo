@@ -2,8 +2,13 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const expressSession = require('express-session');
+const MongoStore = require('connect-mongo');
+
 
 require('dotenv').config();
+const UserModel = require('./models/userModel');
 
 //Import Routes
 const authRoutes = require('./routes/authRoutes');
@@ -41,10 +46,25 @@ app.set('views', path.join(__dirname, 'views'));
 
 //4.MIDDLEWARE
 app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true }));    //helps to pass data from forms
 app.use("/html", express.static(path.join(__dirname, "html")));    // Serve everything in "html"
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));    //helps to pass data from forms
+app.use(expressSession({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }   //One day
+}));
 
+//Passport Configs
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Authenticate with Passport local strategy
+passport.use(UserModel.createStrategy());
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
 
 //5.ROUTES
 //Using Imported Routes
