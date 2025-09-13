@@ -41,7 +41,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/login'
     } else if (req.user.role === 'Sales Agent') {
         res.redirect('/sales')
     } else (res.render('noneuser'))
-    
+
 });
 
 
@@ -56,7 +56,6 @@ router.get('/logout', (req, res) => {
         })
     }
 });
-
 
 
 module.exports = router;
