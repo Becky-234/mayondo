@@ -17,7 +17,6 @@ const salesRoutes = require("./routes/salesRoutes");
 const productRoutes = require("./routes/productRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const indexRoutes = require("./routes/indexRoutes");
-const userRoutes = require("./routes/userRoutes");
 
 //2.INSTANTIATIONS
 const app = express();
@@ -75,6 +74,5 @@ app.use("/", salesRoutes);
 app.use("/", productRoutes);
 app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
-app.use("/", userRoutes);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

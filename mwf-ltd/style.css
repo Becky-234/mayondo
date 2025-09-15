@@ -24,9 +24,10 @@ body {
   top: 0;
   left: 0;
   width: 260px;
+  /* default expanded */
   height: 100vh;
-  background: #4c6444;
-  padding: 6px 50px 0 0;
+  background: green;
+  padding: 6px 14px;
   overflow: hidden;
   transition: width 0.5s;
   flex-shrink: 0;
@@ -44,7 +45,7 @@ body {
   align-items: center;
   width: 100%;
   height: 70px;
-  margin: 0 20px 0 20px;
+  margin-bottom: 20px;
 }
 
 .side-menu-container .logo-menu .logo {
@@ -65,7 +66,7 @@ body {
   font-size: 25px;
   color: #fff;
   position: absolute;
-  right: 30px;
+  right: 10px;
   cursor: pointer;
 }
 
@@ -130,22 +131,19 @@ body {
 
 /* Base Sidebar (Desktop view) */
 .side-menu-container.active {
-  left: 0;
-  /* Show sidebar */
+  left: 0; /* Show sidebar */
 }
 
 /* For smaller screens */
 @media (max-width: 768px) {
   .side-menu-container {
-    width: 220px;
-    /* Slightly smaller for tablets */
+    width: 220px; /* Slightly smaller for tablets */
   }
 }
 
 @media (max-width: 576px) {
   .side-menu-container {
-    width: 200px;
-    /* Mobile sidebar width */
+    width: 200px; /* Mobile sidebar width */
   }
 
   .side-menu-container .logo-menu .logo {
@@ -158,8 +156,7 @@ body {
   }
 
   .side-menu-container .logo-menu .fa-bars {
-    left: 100%;
-    /* Place toggle outside sidebar */
+    left: 100%; /* Place toggle outside sidebar */
     transform: translateX(-100%);
   }
 }
@@ -169,17 +166,30 @@ body.sidebar-active {
   margin-left: 260px;
   transition: margin-left 0.5s;
 }
-
 @media (max-width: 768px) {
   body.sidebar-active {
     margin-left: 220px;
   }
 }
-
 @media (max-width: 576px) {
   body.sidebar-active {
     margin-left: 200px;
   }
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+  flex-grow: 1;
+  /* Allows main content to take up all available space */
+  background-color: #f8f9fa;
+  /* Light beige background from your image */
+  position: relative;
+  /* Crucial: Establishes a positioning context for absolute children */
+  padding: 20px;
+  /* General padding inside the main content area */
+  padding-top: 80px;
+  /* Space for the absolutely positioned navbar */
+  /* Removed transition for margin-left as there's no JS to toggle sidebar-collapsed class */
 }
 
 /* TOP RIGHT NAVBAR AND LOGOUT */
@@ -213,67 +223,217 @@ body.sidebar-active {
   /* Add a bit more padding if needed below the header */
 }
 
-/* MAIN CONTENT AREA */
-.main-content {
-  flex-grow: 1;
-  /* Allows main content to take up all available space */
-  background-color: #fff;
-  position: relative;
-  /* Crucial: Establishes a positioning context for absolute children */
-  padding: 20px;
-  /* General padding inside the main content area */
-  padding-top: 80px;
-  /* Space for the absolutely positioned navbar */
+.sp-one {
+  background: lightgreen;
 }
 
-/*Add stock form*/
-h2 {
+.dash {
+  margin-left: 70px;
+  gap: 30px;
+}
+
+.dash-card {
+  border: solid 1px white;
+  border-radius: 10px;
+  padding: 5px;
+  width: 200px;
+  height: 100px;
+
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-#addStock {
-  width: 600px;
-  background-color: #4c6444;
-  color: #fff;
-  border-radius: 40px;
-  padding: 30px 40px;
-  margin-left: 195px;
-  margin-top: 30px;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+#pieChart {
+  position: relative;
+  width: 50%;
+  height: 50%;
 }
 
-label {
-  text-align: justify;
+.calendar {
+  background-color: #111111;
+  border-radius: 10px;
+  box-shadow: 0 0 30px #222222;
+  overflow: hidden;
+  width: 300px;
+  color: white;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: white;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+#month-year {
+  font-weight: bold;
   font-size: 20px;
 }
 
-input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 4px;
-  border-style: none;
-}
-
-.logoutBtn {
-  text-decoration: none;
-  padding: 10px;
-  background: #caba9c;
-  color: #fff;
-  border: 2px;
-  border-radius: 10px;
-}
-
-.add {
+/* USERS PAGE*/
+.to-do {
   display: flex;
-  gap: 150px;
+  gap: 30px;
 }
 
-.btns {
-  padding: 10px;
-  width: 30%;
-  background: #caba9c;
-  border: 1px solid #fff;
-  border-radius: 10px;
-  color: #fff;
+#downloadPdf {
+  background: #e74c3c;
+  color: white;
+}
+
+#downloadExcel {
+  background: #27ae60;
+  color: white;
+}
+
+button.export:hover {
+  opacity: 0.9;
+}
+
+.table-content {
+  margin-top: 30px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  border-collapse: collapse;
+  /* This is crucial for single, well-defined borders */
+  width: 100%;
+  /* Make the table take up available width */
+}
+
+.table-content th,
+.table-content td {
+  border-bottom: 1px solid #eee;
+  padding: 12px 15px;
+  text-align: left;
+  /* Align text to the left */
+}
+
+.table-content thead {
+  background: #0077cc;
+  color: white;
+}
+
+.table-content tr:nth-child(even) {
+  background-color: #f9f9f9;
+  /* Alternate row background for better readability */
+}
+
+.table-content tr:hover {
+  background: #f1f9ff;
+}
+
+/* Styling for the icons within the Operation column */
+.table-content td i {
+  margin-right: 5px;
+  /* Add some space between icons */
+  cursor: pointer;
+  /* Indicate that icons are clickable */
+}
+
+/* Optional: Style for the "Login" button/link */
+.table-content td:last-child {
   text-align: center;
+  /* Center the "Login" text */
+}
+
+/*ADD NEW USER*/
+.user-form-container {
+  width: 750px;
+
+  background-color: green;
+  color: white;
+  border-radius: 10px;
+  padding: 30px 40px;
+  margin-left: 120px;
+  margin-top: 30px;
+}
+
+.user-form-container .input-box {
+  width: 50%;
+  height: 10px;
+}
+
+.card-img-overlay {
+  color: white;
+  font-size: 50px;
+  border-radius: 10px;
+  margin-top: 90px;
+  margin-left: 20px;
+}
+
+.middle .card {
+  margin-top: 500px;
+  margin-left: 150px;
+}
+
+.card.custom-size {
+  width: 300px;
+  height: 250px;
+}
+
+.card.custom-size .card-img {
+  min-height: 30;
+  object-fit: cover;
+}
+
+/*SALES PAGE AND FORM */
+.chartcard {
+  width: 18rem;
+  background: bisque;
+  border: 1px solid;
+}
+
+/*ADD STOCK PAGE*/
+#addStock {
+  width: 600px;
+  background-color: green;
+  color: white;
+  border-radius: 10px;
+  padding: 30px 40px;
+  margin-left: 170px;
+  margin-top: 20px;
+}
+
+/*CARDS FOR PRODUCTS PAGE*/
+
+.card {
+  width: 16rem;
+  height: 16rem;
+  font-size: 13px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.card-img-top {
+  height: 100px;
+  object-fit: cover;
+}
+
+.card-text {
+  height: 10px;
+}
+
+.up-card {
+  margin-left: 100px;
+  margin-top: 100px;
+}
+
+.up-card-text {
+  margin-top: 100px;
+  text-align: center;
+  font-size: 40px;
+}
+
+#first-row {
+  gap: 1rem;
+  width: 18rem;
 }

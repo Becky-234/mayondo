@@ -14,23 +14,23 @@ aside.side-menu-container
     i.fa-solid.fa-bars
   ul.list
     li.list-item
-      a(href='dashboard.html')
+      a(href='/dashboard')
         i.fa-solid.fa-house
         span.link-name Dashboard
     li.list-item
-      a(href='users.html')
+      a(href='/usersList')
         i.fa-solid.fa-users
         span.link-name Users
     li.list-item.active
-      a(href='sales.html')
+      a(href='/sales')
         i.fa-solid.fa-cart-shopping
         span.link-name Sales
     li.list-item
-      a(href='stock.html')
+      a(href='/stock')
         i.fa-solid.fa-truck
         span.link-name Stock
     li.list-item
-      a(href='products.html')
+      a(href='/products')
         i.fa-solid.fa-couch
         span.link-name Products
     li.list-item
@@ -44,7 +44,7 @@ main.main-content
         form.d-flex.me-3(role='search')
           input.form-control.me-2(type='search' placeholder='Search' aria-label='Search')
           button.btn.btn-outline-success(type='submit') Search
-        a.logoutBtn(href='index.html') Logout
+        a.logoutBtn(href='/index') Logout
   section#dash-top.dash
     .row
       .col-md-3
@@ -92,6 +92,17 @@ main.main-content
           th Date
           th Sales Agent Name
       tbody.row-others
+        if items.length 
+          each item in items 
+            tr
+              td #{item.name}
+              td #{item.tproduct}
+              td #{item.nproduct}
+              td #{item.quantity}
+              td #{item.price}
+              td #{item.payment}
+              td #{item.date}
+              td #{item.agent}
     br
     br
     h5#notFound Not Found!

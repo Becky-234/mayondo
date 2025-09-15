@@ -13,23 +13,23 @@ aside.side-menu-container
     i.fa-solid.fa-bars
   ul.list
     li.list-item.active
-      a(href='/html/dashboard.html')
+      a(href='/dashboard')
         i.fa-solid.fa-house
         span.link-name Dashboard
     li.list-item
-      a(href='/html/users.html')
+      a(href='/usersList')
         i.fa-solid.fa-users
         span.link-name Users
     li.list-item
-      a(href='/html/sales.html')
+      a(href='/sales')
         i.fa-solid.fa-cart-shopping
         span.link-name Sales
     li.list-item
-      a(href='/html/stock.html')
+      a(href='/stock')
         i.fa-solid.fa-truck
         span.link-name Stock
     li.list-item
-      a(href='/html/products.html')
+      a(href='/products')
         i.fa-solid.fa-couch
         span.link-name Products
     li.list-item
@@ -43,7 +43,7 @@ main.main-content
         form.d-flex.me-3(role='search')
           input.form-control.me-2(type='search' placeholder='Search' aria-label='Search')
           button.btn.btn-outline-success(type='submit') Search
-        a.logoutBtn(href='/html/index.html') Logout
+        a.logoutBtn(href='/index') Logout
   .stock-form-container
     form#addStock(action='/addStock' method='post')
       h2 Add Stock Here!

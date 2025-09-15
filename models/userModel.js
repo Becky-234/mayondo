@@ -12,6 +12,10 @@ const signupSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    tel: {
+        type: Number,
+        required: true
+    },
     username: {
         type: String,
         required: true

@@ -1,44 +1,43 @@
 //side menu
-const sidebar = document.querySelector('.side-menu-container');
-const toggleBtn = document.querySelector('.fa-bars');
+const sidebar = document.querySelector(".side-menu-container");
+const toggleBtn = document.querySelector(".fa-bars");
 
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
-    console.log("Sidebar toggled"); // debug check
+toggleBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("collapsed");
+  console.log("Sidebar toggled"); // debug check
 });
- 
 
 //Search on the User Table
-document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('searchStock');
-    const table = document.getElementById('newStock');
-    const tbody = table.tBodies[0];
-    const rows = tbody.getElementsByTagName('tr');
-    const notFound = document.getElementById('notFound');
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("searchStock");
+  const table = document.getElementById("newStock");
+  const tbody = table.tBodies[0];
+  const rows = tbody.getElementsByTagName("tr");
+  const notFound = document.getElementById("notFound");
 
-    input.addEventListener('keyup', () => {
-        const filter = input.value.toUpperCase();
-        let hasResult = false;
+  input.addEventListener("keyup", () => {
+    const filter = input.value.toUpperCase();
+    let hasResult = false;
 
-        for (let i = 0; i < rows.length; i++) { // skip header row
-            const cells = rows[i].getElementsByTagName('td');
-            let found = false;
+    for (let i = 0; i < rows.length; i++) {
+      // skip header row
+      const cells = rows[i].getElementsByTagName("td");
+      let found = false;
 
-            for (let j = 0; j < cells.length; j++) {
-                const cellText = cells[j].textContent || cells[j].innerText;
-                if (cellText.toUpperCase().includes(filter)) {
-                    found = true;
-                    hasResult = true;
-                    break;
-                }
-            }
-            rows[i].style.display = found ? '' : 'none';
+      for (let j = 0; j < cells.length; j++) {
+        const cellText = cells[j].textContent || cells[j].innerText;
+        if (cellText.toUpperCase().includes(filter)) {
+          found = true;
+          hasResult = true;
+          break;
         }
+      }
+      rows[i].style.display = found ? "" : "none";
+    }
 
-        notFound.style.display = hasResult ? 'none' : 'block';
-    });
+    notFound.style.display = hasResult ? "none" : "block";
+  });
 });
-
 
 // //Add stock form
 // const form = document.getElementById("addStock");
@@ -70,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // form.reset();
 // };
 
-
 // //for add-stock.html
 // document.addEventListener("DOMContentLoaded", () => {
 //     const form = document.getElementById("stockForm");
@@ -99,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //     });
 // });
 
-
 // // for stock.html
 // document.addEventListener("DOMContentLoaded", () => {
 //     const tableBody = document.querySelector("#newStock tbody");
@@ -126,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //     });
 // });
 
-
 // let stock = JSON.parse(localStorage.getItem("stock")) || [];
 
 // // Count per product type
@@ -134,5 +130,3 @@ document.addEventListener('DOMContentLoaded', () => {
 // stock.forEach(item => {
 //     categories[item.productType] = (categories[item.productType] || 0) + Number(item.quantity);
 // });
-
- 

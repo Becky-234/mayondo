@@ -1,42 +1,37 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const SalesModel = require("../models/salesModel");
 
-const SalesModel = require('../models/salesModel');
-
-//Sales page
-router.get('/sales', (req, res) => {
-    res.render('sales', { title: 'Sales page' });
+// GET /sales – fetch sales from DB and render the page
+router.get("/sales", async (req, res) => {
+  try {
+    const items = await SalesModel.find().sort({ $natural: -1 });
+    console.log(items);
+    res.render("sales", { items });
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("Unable to get sales");
+  }
 });
 
-router.post('/sales', (req, res) => {
-    console.log(req.body);
+router.post("/sales", (req, res) => {
+  console.log(req.body);
 });
 
-//Add sales page
-router.get('/addSale', (req, res) => {
-    res.render('addSale', { title: 'Add sales page' });
+// GET add-sale form
+router.get("/addSale", (req, res) => {
+  res.render("addSale", { title: "Add sales page" });
 });
 
-router.post('/addSale', async (req, res) => {
-    try {
-        const sales = new SalesModel(req.body);
-        console.log(req.body);
-        await sales.save();
-        res.redirect('/sales');
-    } catch (error) {
-        console.error(error);
-        res.redirect('/addSale');
-    }
+router.post("/addSale", async (req, res) => {
+  try {
+    const sale = new SalesModel(req.body);
+    await sale.save();
+    res.redirect("/sales");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/addSale");
+  }
 });
-
-router.get('/sales', (req, res) => {
-    res.render('sales');
-});
-
-
-
-
-
-
 
 module.exports = router;

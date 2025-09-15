@@ -19,6 +19,7 @@ router.post("/stock", (req, res) => {
   console.log(req.body);
 });
 
+
 //Add stock page
 router.get("/addStock", (req, res) => {
   res.render("addStock", { title: "Stock page" });
@@ -34,10 +35,6 @@ router.post("/addStock", async (req, res) => {
     console.error(error);
     res.redirect("/addStock");
   }
-});
-
-router.get("/stock", (req, res) => {
-  res.render("stock");
 });
 
 module.exports = router;

@@ -8,15 +8,20 @@
 /* Main Body Layout: Flexbox for Sidebar and Main Content */
 body {
   /* Ensures body takes full viewport height */
-  background: #fff;
+  background: url(../images/back.jpeg);
   /* Overall page background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* makes sure body takes full viewport height */
+  margin: 0;
 }
 
 /* SIGNUP PAGE */
 .form-container {
   width: 500px;
-  background-color: green;
-  color: white;
+  background-color: rgba(255, 255, 255, 0.5); /* white with 50% transparency */
+  color: #000;
   border-radius: 40px;
   padding: 30px 40px;
   margin: auto;
@@ -31,7 +36,7 @@ body {
 .form-container .input-box {
   width: 100%;
   height: 50px;
-  background: lawngreen;
+  /* background: lawngreen; */
   margin: 30px 0;
 }
 
@@ -41,15 +46,15 @@ body {
   background: transparent;
   border: none;
   outline: none;
-  border: 2px solid rgba(223, 61, 223, 0.2);
+  border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   font-size: 16px;
-  color: #fff;
+  color: #000;
   padding: 20px 45px 20px 20px;
 }
 
 .input-box input::placeholder {
-  color: #fff;
+  color: #000;
 }
 
 .form-container .button {
@@ -62,13 +67,13 @@ body {
   font-size: 15px;
   color: white;
   font-weight: 500;
-  background: #4caf50;
+  background: #4c6444;
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .form-container .button:hover {
-  background: #45a049;
+  background: #102820;
   /* Darker shade on hover */
 }
 

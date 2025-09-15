@@ -8,8 +8,7 @@ const stockSchema = new mongoose.Schema({
     pdttype: {
         type: String,
         trim: true,
-        required: true,
-        unique: true
+        required: true
     },
     cprice: {
         type: Number,

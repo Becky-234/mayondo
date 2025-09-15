@@ -11,23 +11,23 @@ aside.side-menu-container
     i.fa-solid.fa-bars
   ul.list
     li.list-item.active
-      a(href="/html/dashboard.html")
+      a(href="/dashboard")
         i.fa-solid.fa-house
         span.link-name Dashboard
     li.list-item
-      a(href="/html/users.html")
+      a(href="/usersList")
         i.fa-solid.fa-users
         span.link-name Users
     li.list-item
-      a(href="/html/sales.html")
+      a(href="/sales")
         i.fa-solid.fa-cart-shopping
         span.link-name Sales
     li.list-item
-      a(href="/html/stock.html")
+      a(href="/stock")
         i.fa-solid.fa-truck
         span.link-name Stock
     li.list-item
-      a(href="/html/products.html")
+      a(href="/products")
         i.fa-solid.fa-couch
         span.link-name Products
     li.list-item
@@ -45,7 +45,7 @@ main.main-content
   .user-form-container
     form#addSale(action="/addSale", method="post")
       h2 Add Sale
-      label(for="fname") Name of Customer
+      label(for="name") Name of Customer
       br
       input#fname(type="text", name="name", required)
       br
@@ -70,13 +70,13 @@ main.main-content
       input#price(type="number", name="price", required)
       br
       br
-      label(for="role") Select Payment Method
+      label(for="payment") Select Payment Method
       br
-      select#role(name="role", required)
-        option(value, disabled, selected) Select your Payment Method
-        option(value="manager") Bank
-        option(value="sales_agent") Mobile Money
-        option(value="stock_attendant") Cheque
+      select#payment(name="payment", required)
+        option(value, disabled, selected) Select Payment Method
+        option(value="Bank") Bank
+        option(value="Mobile Money") Mobile Money
+        option(value="Cheque") Cheque
       br
       br
       label(for="date") Date

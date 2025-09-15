@@ -24,6 +24,7 @@ body {
   left: 0;
   width: 260px;
   height: 100vh;
+  min-height: 100vh;
   background: #4c6444;
   padding: 6px 50px 0 0;
   overflow: hidden;
@@ -185,15 +186,13 @@ body.sidebar-active {
 .main-content {
   flex-grow: 1;
   /* Allows main content to take up all available space */
-  background-color: #f8f9fa;
-  /* Light beige background from your image */
+  background-color: #fff;
   position: relative;
   /* Crucial: Establishes a positioning context for absolute children */
   padding: 20px;
   /* General padding inside the main content area */
   padding-top: 80px;
   /* Space for the absolutely positioned navbar */
-  /* Removed transition for margin-left as there's no JS to toggle sidebar-collapsed class */
 }
 
 /* TOP RIGHT NAVBAR AND LOGOUT */
@@ -229,6 +228,7 @@ h2 {
   padding: 30px 40px;
   margin-left: 200px;
   margin-top: 30px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 input {
