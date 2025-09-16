@@ -36,7 +36,7 @@ router.get("/login", (req, res) => {
 router.post(
     "/login",
     passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
-        console.log("Logged-in user:", req.user); // debug
+        console.log("Logged-in user:", req.user);  
         req.session.user = req.user;
         if (req.user.role === "Manager") {
             return res.redirect("/dashboard");

@@ -19,7 +19,7 @@ form.addEventListener("submit", function (event) {
     } else if (email.validity.typeMismatch) {
       emailError.textContent = "Please enter a valid email address.";
     }
-    valid = false;
+    valid = true;
   }
 
   // Password validation

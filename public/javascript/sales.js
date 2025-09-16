@@ -7,6 +7,40 @@ toggleBtn.addEventListener("click", () => {
   console.log("Sidebar toggled");
 });
 
+
+//PDF Export
+const pdfBtn = document.getElementById("downloadPdf");
+if (pdfBtn) {
+  pdfBtn.addEventListener("click", () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.text("Sales Report", 14, 20);
+
+    doc.autoTable({
+      html: "#salesTable",
+      startY: 30,
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [0, 119, 204] },
+    });
+    doc.save("Sales_Report.pdf");
+  });
+}
+
+//Excel Export
+const excelBtn = document.getElementById("downloadExcel");
+if (excelBtn) {
+  excelBtn.addEventListener("click", () => {
+    const table = document.getElementById("salesTable");
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.table_to_sheet(table);
+
+    XLSX.utils.book_append_sheet(wb, ws, "sales");
+    XLSX.writeFile(wb, "Sales_Report.xlsx");
+  });
+}
+
+
 // Search on the sales table
 document.addEventListener("DOMContentLoaded", () => {
   const table = document.getElementById("salesTable");

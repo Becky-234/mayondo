@@ -129,8 +129,8 @@
 
         <div class="include">
             <a class="btns" href="add-stock.html">Add Product</a>
-            <a class="btns">Download Excel</a>
-            <a class="btns">Download PDF</a>
+            <a class="btns" id="downloadExcel">Download Excel</a>
+            <a class="btns" id="downloadPdf">Download PDF</a>
             <input type="search" id="searchStock" placeholder="Search...">
         </div>
 
@@ -154,10 +154,14 @@
             </table>
             <h5 id="notFound">Not Found</h5>
         </section>
-
     </main>
 
     <script src="/javascript/stock.js"></script>
+    <!-- SheetJS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!--jsPDF + AutoTable-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>

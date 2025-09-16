@@ -2,7 +2,7 @@ meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 title Login
 link(rel="stylesheet", href="../css/login.css")
-form#loginForm(method="post", action="/login")
+form#loginForm( action="/login", method="post")
   .form-container
     h1.head Login
     br
@@ -25,4 +25,4 @@ form#loginForm(method="post", action="/login")
       p
         | Don't have an account?
         a(href="/signup") Register
-script(src="../javascript/login.js")
+//- script(src="../javascript/login.js")
