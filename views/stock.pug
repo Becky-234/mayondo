@@ -92,6 +92,7 @@ main.main-content
           th Supplier Name
           th Date
           th Quality
+          th Actions 
       tbody.row-others
         if items.length 
           each item in items 
@@ -104,6 +105,9 @@ main.main-content
               td #{item.supplier}
               td #{item.date}
               td #{item.quality}
+              td 
+                a.btn(href=`/editStock/${item._id}`) Edit 
+                a.btn(href=`/stock/${item_id}`) Delete 
     h5#notFound Not Found
 script(src='/javascript/stock.js')
 //  SheetJS

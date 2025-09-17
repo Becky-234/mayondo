@@ -1,0 +1,94 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Add stock
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
+  link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
+  link(rel='stylesheet' href='../css/add-stock.css')
+aside.side-menu-container
+  .logo-menu
+    h2.logo MWF
+    i.fa-solid.fa-bars
+  ul.list
+    li.list-item.active
+      a(href='/dashboard')
+        i.fa-solid.fa-house
+        span.link-name Dashboard
+    li.list-item
+      a(href='/usersList')
+        i.fa-solid.fa-users
+        span.link-name Users
+    li.list-item
+      a(href='/sales')
+        i.fa-solid.fa-cart-shopping
+        span.link-name Sales
+    li.list-item
+      a(href='/stock')
+        i.fa-solid.fa-truck
+        span.link-name Stock
+    li.list-item
+      a(href='/products')
+        i.fa-solid.fa-couch
+        span.link-name Products
+    li.list-item
+      a(href='#')
+        i.fa-solid.fa-gear
+        span.link-name Settings
+main.main-content
+  nav.navbar.bg-body-tertiary.dashboard-header
+    .container-fluid.d-flex.justify-content-end.align-items-center
+      .d-flex.align-items-center
+        form.d-flex.me-3(role='search')
+          input.form-control.me-2(type='search' placeholder='Search' aria-label='Search')
+          button.btn.btn-outline-success(type='submit') Search
+        a.logoutBtn(href='/index') Logout
+  .stock-form-container
+    form#addStock(action=`/editStock/${item._id}`,  method='post')
+      h2 Edit Stock Here!
+      label(for='pdtname') Product Name
+      br
+      input#pdtname(type='text' name='pdtname' required='' value=`${item.pdtname}`)
+      br
+      br
+      label(for='pdttype') Type of Product
+      br
+      input#pdttype(type='text' name='pdttype' required='' value=`${item.pdttype}`)
+      br
+      br
+      label(for='cprice') Cost Price
+      br
+      input#cprice(type='number' name='cprice' required='' value=`${item.cprice}`)
+      br
+      br
+      label(for='pdtquantity') Quantity
+      br
+      input#pdtquantity(type='number' name='pdtquantity' required='' value=`${item.pdtquantity}`)
+      br
+      br
+      label(for='pdtprice') Product Price
+      br
+      input#pdtprice(type='number' name='pdtprice' required='' value=`${item.pdtprice}`)
+      br
+      br
+      label(for='supplier') Supplier Name
+      br
+      input#supplier(type='text' name='supplier' required='' value=`${item.supplier}`)
+      br
+      br
+      label(for='date') Date
+      br
+      input#date(type='date' name='date' required='' value=`${item.date}`)
+      br
+      br
+      label(for='quality') Quality
+      br
+      input#quality(type='text' name='quality' required='' value=`${item.quality}`)
+      br
+      br
+      .add
+        button.btns(type='submit') Update Stock
+        button.btns(type='reset') Cancel
+  script(src='../javascript/sales.js')
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous') 

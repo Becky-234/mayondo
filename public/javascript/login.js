@@ -25,17 +25,12 @@ form.addEventListener("submit", function (event) {
   // Password validation
   if (password.value === "") {
     passwordError.textContent = "Password is required.";
-    valid = false;
+    valid = true;
   } else if (password.value.length < 6) {
     passwordError.textContent = "Password must be at least 6 characters.";
-    valid = false;
+    valid = true;
   }
 
   // Stop here if invalid
   if (!valid) return;
-
-  // 👉 At this point you can submit the form via fetch/AJAX,
-  // or just call form.submit() if you have an action URL.
-  // Example:
-  // form.submit();
 });

@@ -91,6 +91,7 @@ main.main-content
           th Type of Payment
           th Date
           th Sales Agent Name
+          th Actions 
       tbody.row-others
         if items.length 
           each item in items 
@@ -103,6 +104,9 @@ main.main-content
               td #{item.payment}
               td #{item.date}
               td #{item.agent}
+              td 
+                a.btn(href=`/editStock/${item._id}`) Edit 
+                a.btn(href=`/stock/${item_id}`) Delete 
     br
     br
     h5#notFound Not Found!
