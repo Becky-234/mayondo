@@ -53,4 +53,16 @@ router.post("/editSales/:id", async (req, res) => {
     res.redirect("/sales");
   } catch (error) {}
 });
+
+//DELETING SALES
+router.post('/deleteSale', async (req, res) => {
+  try {
+    await SalesModel.deleteOne({_id: req.body.id});
+    res.redirect('sales');
+  } catch (error) {
+    res.status(400).send('Unable to delete item from the database')
+  }
+});
+
+
 module.exports = router;
