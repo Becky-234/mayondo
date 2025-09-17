@@ -19,7 +19,6 @@ router.post("/stock", (req, res) => {
   console.log(req.body);
 });
 
-
 //Add stock page
 router.get("/addStock", (req, res) => {
   res.render("addStock", { title: "Stock page" });
@@ -37,28 +36,35 @@ router.post("/addStock", async (req, res) => {
   }
 });
 
-
 //UPDATING STOCK
-router.get('/editStock/:id', async (req, res) => {
+router.get("/editStock/:id", async (req, res) => {
   let item = await StockModel.findById(req.params.id);
   //console.log(item)
   res.render(`editStock`, { item });
 });
 
-router.post('/editStock/:id', async (req, res) => {
+router.post("/editStock/:id", async (req, res) => {
   try {
-    const product = await StockModel.findByIdAndUpdate(req.params.id,
+    const product = await StockModel.findByIdAndUpdate(
+      req.params.id,
       req.body,
-      { new: true });
+      { new: true }
+    );
     if (!product) {
-      return res.status(404).send('Product not found')
+      return res.status(404).send("Product not found");
     }
-    res.redirect('/stock')
-  } catch (error) {
-
-  }
+    res.redirect("/stock");
+  } catch (error) {}
 });
 
-
+//DELETING STOCK
+router.post("/deleteStock", async (req, res) => {
+  try {
+    await StockModel.deleteOne({ _id: req.body.id });
+    res.redirect("stock");
+  } catch (error) {
+    res.status(400).send("Unable to delete item from the database");
+  }
+});
 
 module.exports = router;

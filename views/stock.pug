@@ -93,6 +93,7 @@ main.main-content
           th Date
           th Quality
           th Actions 
+          th Delete 
       tbody.row-others
         if items.length 
           each item in items 
@@ -107,7 +108,10 @@ main.main-content
               td #{item.quality}
               td 
                 a.btn(href=`/editStock/${item._id}`) Edit 
-                a.btn(href=`/stock/${item_id}`) Delete 
+              td 
+                form(method='post' action='/deleteStock') 
+                  input(type='hidden' name='id' value= item._id)
+                  button.btn(type='submit') Delete 
     h5#notFound Not Found
 script(src='/javascript/stock.js')
 //  SheetJS

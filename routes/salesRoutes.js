@@ -34,4 +34,23 @@ router.post("/addSale", async (req, res) => {
   }
 });
 
+//UPDATING SALES
+router.get("/editSales/:id", async (req, res) => {
+  let item = await SalesModel.findById(req.params.id);
+  res.render(`editSales`, { item });
+});
+
+router.post("/editSales/:id", async (req, res) => {
+  try {
+    const product = await SalesModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
+    res.redirect("/sales");
+  } catch (error) {}
+});
 module.exports = router;

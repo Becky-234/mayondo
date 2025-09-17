@@ -41,52 +41,52 @@ main.main-content
         form.d-flex.me-3(role="search")
           input.form-control.me-2(type="search", placeholder="Search", aria-label="Search")
           button.btn.btn-outline-success(type="submit") Search
-        a.logoutBtn(href="/html/index.html") Logout
+        a.logoutBtn(href="/index") Logout
   .user-form-container
-    form#addSale(action="/addSale", method="post")
+    form#addSale(action=`/editSales/${item._id}`, method="post")
       h2 Edit Sale Here!
       label(for="name") Name of Customer
       br
-      input#fname(type="text", name="name", required)
+      input#fname(type="text", name="name", required value=`${item.name}`)
       br
       br
       label(for="tproduct") Type of Product
       br
-      input#tproduct(type="text", name="tproduct", required)
+      input#tproduct(type="text", name="tproduct", required value=`${item.tproduct}`)
       br
       br
       label(for="nproduct") Name of Product
       br
-      input#nproduct(type="text", name="nproduct", required)
+      input#nproduct(type="text", name="nproduct", required value=`${item.nproduct}`)
       br
       br
       label(for="quantity") Quantity
       br
-      input#quantity(type="number", name="quantity", required)
+      input#quantity(type="number", name="quantity", required value=`${item.quantity}`)
       br
       br
       label(for="price") Price
       br
-      input#price(type="number", name="price", required)
+      input#price(type="number", name="price", required value=`${item.price}`)
       br
       br
       label(for="payment") Select Payment Method
       br
       select#payment(name="payment", required)
-        option(value, disabled, selected) Select Payment Method
-        option(value="Bank") Bank
+        option(value=`${item.payment}`) #{item.payment}
+        option(value="Bank Overdraft") Bank Overdraft
         option(value="Mobile Money") Mobile Money
         option(value="Cheque") Cheque
       br
       br
       label(for="date") Date
       br
-      input#date(type="date", name="date", required)
+      input#date(type="date", name="date", required value=`${item.date}`)
       br
       br
       label(for="agent") Sales Agent Name
       br
-      input#agent(type="text", name="agent", required)
+      input#agent(type="text", name="agent", required value=`${item.agent}`)
       br
       br
       .add
