@@ -73,7 +73,7 @@ main.main-content
             p.card-text 3
     br
     br
-    br
+    br  
   #including.include
     a.btns(href='addSale') Add Sale
     a.btns Download Excel
@@ -84,33 +84,33 @@ main.main-content
       tr
         thead.row-one
           th Customer Name
-          th Product Type
           th Product Name
+          th Product Type
           th Quantity
           th Price
           th Type of Payment
           th Date
           th Sales Agent Name
           th Actions
-          th Delete 
       tbody.row-others
         if items.length 
           each item in items 
             tr
               td #{item.name}
-              td #{item.tproduct}
               td #{item.nproduct}
+              td #{item.tproduct}
               td #{item.quantity}
               td #{item.price}
               td #{item.payment}
               td #{item.date}
               td #{item.agent}
-              td 
-                a.btn(href=`/editSales/${item._id}`) Edit
-              td 
-                form(method='post' action='/deleteSale')
-                  input(type='hidden' name='id' value= item._id)
-                  button.btn(type='submit') Delete               
+              td
+                a.btn-icon(href=`/editSales/${item._id}` title='Edit')
+                  i.fas.fa-edit
+                form(method='post', action='/deleteSale', style='display:inline')
+                  input(type='hidden', name='id', value=item._id)
+                  button.btn-icon(type='submit', title='Delete')
+                    i.fas.fa-trash
     br
     br
     h5#notFound Not Found!

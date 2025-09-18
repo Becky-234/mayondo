@@ -7,7 +7,10 @@ router.get("/sales", async (req, res) => {
   try {
     const items = await SalesModel.find().sort({ $natural: -1 });
     console.log(items);
-    res.render("sales", { items });
+    res.render("sales", {
+      items,
+      currentUser: req.user
+    });
   } catch (error) {
     console.error(error);
     res.status(400).send("Unable to get sales");
@@ -22,10 +25,25 @@ router.post("/sales", (req, res) => {
 router.get("/addSale", (req, res) => {
   res.render("addSale", { title: "Add sales page" });
 });
-
+//Only if you are logged in as a sales agent, you will be able to make a sale
 router.post("/addSale", async (req, res) => {
   try {
-    const sale = new SalesModel(req.body);
+    const { name, tproduct, nproduct, quantity, unitPrice, transportCheck, totalPrice, payment, date
+    } = req.body;
+    const userId = req.session.user._Id;
+    const sale = new SalesModel({
+      name,
+      tproduct,
+      nproduct,
+      quantity,
+      unitPrice,
+      transportCheck,
+      totalPrice,
+      payment,
+      date,
+      agent: userId
+    });
+    console.log(req.body);
     await sale.save();
     res.redirect("/sales");
   } catch (error) {
@@ -51,18 +69,17 @@ router.post("/editSales/:id", async (req, res) => {
       return res.status(404).send("Product not found");
     }
     res.redirect("/sales");
-  } catch (error) {}
+  } catch (error) { }
 });
 
 //DELETING SALES
-router.post('/deleteSale', async (req, res) => {
+router.post("/deleteSale", async (req, res) => {
   try {
-    await SalesModel.deleteOne({_id: req.body.id});
-    res.redirect('sales');
+    await SalesModel.deleteOne({ _id: req.body.id });
+    res.redirect("sales");
   } catch (error) {
-    res.status(400).send('Unable to delete item from the database')
+    res.status(400).send("Unable to delete item from the database");
   }
 });
-
 
 module.exports = router;

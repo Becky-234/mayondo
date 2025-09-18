@@ -19,7 +19,14 @@ const salesSchema = new mongoose.Schema({
     trim: true,
     required: true
   },
-  price: {
+  unitPrice: {
+    type: Number,
+    required: true
+  },
+  transportCheck: {
+    type: Boolean
+  },
+  totalPrice: {
     type: Number,
     required: true
   },
@@ -32,7 +39,8 @@ const salesSchema = new mongoose.Schema({
     required: true
   },
   agent: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserModel",
     required: true
   }
 });

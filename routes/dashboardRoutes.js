@@ -4,7 +4,8 @@ const router = express.Router();
 
 //Dashboard Page
 router.get('/dashboard', (req, res) => {
-    res.render('dashboard', { title: 'Dashboard Page' });
+    if (!req.user) return res.redirect('/login')
+    res.render('dashboard', { currentUser: req.user });
 });
 
 router.post('/dashboard', (req, res) => {

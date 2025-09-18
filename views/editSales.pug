@@ -65,9 +65,19 @@ main.main-content
       input#quantity(type="number", name="quantity", required value=`${item.quantity}`)
       br
       br
-      label(for="price") Price
+      label(for="unitPrice") Unit Price
       br
-      input#price(type="number", name="price", required value=`${item.price}`)
+      input#price(type="number", name="unitPrice", required value=`${item.unitPrice}`)
+      br
+      br
+      label(for="transportCheck") Transport Check
+      br
+      input#price(type="checkbox", name="transportCheck", required value=`${item.transportCheck}`)
+      br
+      br
+      label(for="totalPrice") Total Price
+      br
+      input#price(type="number", name="totalPrice", required value=`${item.totalPrice}`)
       br
       br
       label(for="payment") Select Payment Method

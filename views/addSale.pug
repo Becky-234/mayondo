@@ -50,14 +50,14 @@ main.main-content
       input#fname(type="text", name="name", required)
       br
       br
-      label(for="tproduct") Type of Product
-      br
-      input#tproduct(type="text", name="tproduct", required)
-      br
-      br
       label(for="nproduct") Name of Product
       br
       input#nproduct(type="text", name="nproduct", required)
+      br
+      br
+      label(for="tproduct") Type of Product
+      br
+      input#tproduct(type="text", name="tproduct", required)
       br
       br
       label(for="quantity") Quantity
@@ -65,9 +65,18 @@ main.main-content
       input#quantity(type="number", name="quantity", required)
       br
       br
-      label(for="price") Price
+      label(for="unitPrice") Unit Price
       br
-      input#price(type="number", name="price", required)
+      input#price(type="number", name="unitPrice", required)
+      br
+      br
+      label(for="transportCheck") Transport Check
+      input#price(type="checkbox", name="transportCheck", required)
+      br
+      br
+      label(for="totalPrice") Total Price
+      br
+      input#price(type="number", name="totalPrice", required)
       br
       br
       label(for="payment") Select Payment Method
@@ -84,11 +93,11 @@ main.main-content
       input#date(type="date", name="date", required)
       br
       br
-      label(for="agent") Sales Agent Name
-      br
-      input#agent(type="text", name="agent", required)
-      br
-      br
+      //- label(for="agent") Sales Agent Name
+      //- br
+      //- input#agent(type="text", name="agent", required)
+      //- br
+      //- br
       .add
         button.btns(type="submit") Save
         button.btns(type="reset") Cancel

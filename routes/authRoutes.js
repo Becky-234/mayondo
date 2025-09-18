@@ -11,22 +11,22 @@ router.get("/signup", (req, res) => {
 router.post("/signup", async (req, res) => {
     try {
         const user = new UserModel(req.body);
-        let existingUser = await UserModel.findOne({ email: req.body.email });
-        console.log(req.body);
+        const existingUser = await UserModel.findOne({ email: req.body.email });
         if (existingUser) {
             return res.status(400).send("Email exists");
-        } else {
-            await UserModel.register(user, req.body.password, (error) => {
-                if (error) {
-                    throw error;
-                }
-                res.redirect("/login");
-            });
         }
+        await UserModel.register(user, req.body.password, (err) => {
+            if (err) {
+                throw err;
+            }
+            res.redirect("/login");
+        });
     } catch (error) {
+        console.error(error);
         res.status(400).send("Try again");
     }
 });
+ 
 
 //Getting the Login form
 router.get("/login", (req, res) => {
@@ -40,13 +40,15 @@ router.post(
         req.session.user = req.user;
         if (req.user.role === "Manager") {
             return res.redirect("/dashboard");
-        } else if (req.user.role === "Sales Agent") {
+        } else if (req.user.role === "Sales agent") {
             return res.redirect("/sales");
         } else {
             return res.render("noneuser");
         }
     }
 );
+
+
 
 //LOGGING OUT
 router.get("/logout", (req, res) => {

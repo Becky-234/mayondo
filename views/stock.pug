@@ -86,32 +86,32 @@ main.main-content
         thead.row-one
           th Product Name
           th Product Type
-          th Cost Price
           th Quantity
           th Product Price
+          th Cost Price
+          th Quality
           th Supplier Name
           th Date
-          th Quality
           th Actions 
-          th Delete 
       tbody.row-others
         if items.length 
           each item in items 
             tr 
               td #{item.pdtname}
               td #{item.pdttype}
-              td #{item.cprice}
               td #{item.pdtquantity}
               td #{item.pdtprice}
+              td #{item.cprice}
+              td #{item.quality}
               td #{item.supplier}
               td #{item.date}
-              td #{item.quality}
               td 
-                a.btn(href=`/editStock/${item._id}`) Edit 
-              td 
-                form(method='post' action='/deleteStock') 
-                  input(type='hidden' name='id' value= item._id)
-                  button.btn(type='submit') Delete 
+                a.btn-icon(href=`/editStock/${item._id}` title='Edit')
+                  i.fas.fa-edit
+                form(method='post', action='/deleteStock', style='display:inline')
+                  input(type='hidden', name='id', value=item._id)
+                  button.btn-icon(type='submit', title='Delete')
+                    i.fas.fa-trash
     h5#notFound Not Found
 script(src='/javascript/stock.js')
 //  SheetJS
