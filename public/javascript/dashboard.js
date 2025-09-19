@@ -7,18 +7,6 @@ toggleBtn.addEventListener('click', () => {
     console.log("Sidebar toggled"); // debug check
 });
 
-//Search
-const searchInput = document.getElementById('dashSearch');
-const dashboardItems = document.querySelectorAll('.dash-card');
-
-searchInput.addEventListener('input', () => {
-    const query = searchInput.value.toLowerCase();
-    dashboardItems.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(query) ? '' : 'none';
-    });
-});
-
 
 // Sales Chart (bar)
 const ctx1 = document.getElementById('salesChart').getContext('2d');

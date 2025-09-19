@@ -41,9 +41,6 @@ main.main-content
   nav.navbar.bg-body-tertiary.dashboard-header
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
-        form.d-flex.me-3(role='search')
-          input.form-control.me-2(type='search' placeholder='Search' aria-label='Search')
-          button.btn.btn-outline-success(type='submit') Search
         a.logoutBtn(href='/index') Logout
   section#dash-top.dash
     .row
@@ -87,7 +84,9 @@ main.main-content
           th Product Name
           th Product Type
           th Quantity
-          th Price
+          th Unit Price
+          th Transport Check 
+          th Total Price
           th Type of Payment
           th Date
           th Sales Agent Name
@@ -100,7 +99,9 @@ main.main-content
               td #{item.nproduct}
               td #{item.tproduct}
               td #{item.quantity}
-              td #{item.price}
+              td #{item.unitPrice}
+              td #{item.transportCheck}
+              td #{item.totalPrice}
               td #{item.payment}
               td #{item.date}
               td #{item.agent}

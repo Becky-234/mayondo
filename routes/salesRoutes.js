@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const SalesModel = require("../models/salesModel");
+const { ensureAuthenticated, ensureAgent } = require("../middleware/auth")
 
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", async (req, res) => {
@@ -26,11 +27,12 @@ router.get("/addSale", (req, res) => {
   res.render("addSale", { title: "Add sales page" });
 });
 //Only if you are logged in as a sales agent, you will be able to make a sale
+//ensureAuthenticated, ensureAgent,
 router.post("/addSale", async (req, res) => {
   try {
     const { name, tproduct, nproduct, quantity, unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
-    const userId = req.session.user._Id;
+    const userId = req.session.user._id;
     const sale = new SalesModel({
       name,
       tproduct,

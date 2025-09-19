@@ -13,7 +13,7 @@ const signupSchema = new mongoose.Schema({
         unique: true
     },
     tel: {
-        type: Number,
+        type: String,
         required: true
     },
     username: {

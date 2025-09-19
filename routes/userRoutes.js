@@ -29,4 +29,22 @@ router.post("/add", async (req, res) => {
   }
 });
 
+//UPDATING A USER
+router.get("/editUser/:id", async (req, res) => {
+  let user = await UserModel.findById(req.params.id);
+  res.render(`editUser`, { user });
+});
+
+router.post("/editUser/:id", async (req, res) => {
+  try {
+    const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!user) {
+      return res.status(404).send("User not Found");
+    }
+    res.redirect("/usersList");
+  } catch (error) {}
+});
+
 module.exports = router;

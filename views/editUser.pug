@@ -7,7 +7,7 @@ head
   link(rel='stylesheet' href='css/style.css')
   link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
   link(rel='stylesheet' href='../css/add-user.css')
-  title Add New User
+  title Edit User
 aside.side-menu-container
   .logo-menu
     h2.logo MWF
@@ -41,34 +41,37 @@ main.main-content
   nav.navbar.bg-body-tertiary.dashboard-header
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
-        form.d-flex.me-3(role='search')
-          input.form-control.me-2(type='search' placeholder='Search' aria-label='Search')
-          button.btn.btn-outline-success(type='submit') Search
         a.logoutBtn(href='/index') Logout
   .user-form-container
-    form(action='/adduser' method='post')
-      label(for='fname') First Name
+    form(action=`/editUser/${user._id}` method='post')
+      label(for='name') Full Name
       br
-      input#fname(type='text')
-      br
-      br
-      label(for='lname') Last Name
-      br
-      input#lname(type='text')
+      input#name(type='text' value=`${user.name}`)
       br
       br
       label(for='email') Email
       br
-      input#email(type='text')
+      input#email(type='text' value=`${user.email}`)
       br
       br
-      label(for='contact') Contact
+      label(for='tel') Phone Number 
       br
-      input#contact(type='text')
+      input#tel(type='text' value=`${user.tel}`)
+      br
+      br
+      label(for='username') Username
+      br
+      input#username(type='text' value=`${user.username}`)
+      br
+      br
+      select#role(name="role", required)
+        option(value=`${user.role}`) #{user.role}
+        option(value="Manager") Manager
+        option(value="Sales agent") Sales agent
       br
       br
       .buttons
-        a#save.btns(href='/html/users.html') Save
-        a#cancel.btns(href='/html/users.html') Cancel
+         button.btns(type='submit') Update User 
+         button.btns(type='reset') Cancel
 script(src='../javascript/user.js')
 script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')

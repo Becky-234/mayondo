@@ -3,7 +3,7 @@ meta(name="viewport", content="width=device-width,initial-scale=1")
 title Users
 link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB", crossorigin="anonymous")
 link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css", integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==", crossorigin="anonymous", referrerpolicy="no-referrer")
-link(rel="stylesheet", href="../css/user.css")
+link(rel="stylesheet", href="/css/user.css")
 style.
   
   
@@ -41,9 +41,6 @@ main.main-content
   nav.navbar.bg-body-tertiary.dashboard-header
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
-        form.d-flex.me-3(role="search")
-          input#userSearch.form-control.me-2(type="search", placeholder="Search", aria-label="Search")
-          button.btn.btn-outline-success(type="submit") Search
         a.logoutBtn(href="/index") Logout
   .to-do
     a#newUser.btns(href="/add-new-user") Add New User
@@ -58,15 +55,24 @@ main.main-content
         th Contact
         th Username 
         th Role 
+        th Actions 
     tbody.row-others#others
-      if users.length 
-        each user in users 
-          tr 
+      if users.length
+        each user in users
+          tr
             td #{user.name}
             td #{user.email}
             td #{user.tel}
             td #{user.username}
             td #{user.role}
+            td
+              a.btn-icon(href=`/editUser/${user._id}` title='Edit')
+                i.fas.fa-edit
+              form(method='post', action='/deleteUser', style='display:inline')
+                input(type='hidden', name='id', value=user._id)
+                button.btn-icon(type='submit', title='Delete')
+                  i.fas.fa-trash
+    br
   h5#notFound Not Found
   //  SheetJS
   script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")

@@ -305,3 +305,16 @@ button.export:hover {
 .table-content td:last-child {
   text-align: center;
 }
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 18px;
+}
+.btn-icon:hover {
+  color: #d9534f; /* red tint on hover */
+}
+
