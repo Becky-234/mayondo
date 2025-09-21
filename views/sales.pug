@@ -90,7 +90,8 @@ main.main-content
           th Type of Payment
           th Date
           th Sales Agent Name
-          th Actions
+          if currentUser.role === "Manager"
+            th Actions
       tbody.row-others
         if items.length 
           each item in items 
@@ -105,13 +106,14 @@ main.main-content
               td #{item.payment}
               td #{item.date}
               td #{item.agent.name}
-              td
-                a.btn-icon(href=`/editSales/${item._id}` title='Edit')
-                  i.fas.fa-edit
-                form(method='post', action='/deleteSale', style='display:inline')
-                  input(type='hidden', name='id', value=item._id)
-                  button.btn-icon(type='submit', title='Delete')
-                    i.fas.fa-trash
+              if currentUser.role === "Manager"
+                td
+                  a.btn-icon(href=`/editSales/${item._id}` title='Edit')
+                    i.fas.fa-edit
+                  form(method='post', action='/deleteSale', style='display:inline')
+                    input(type='hidden', name='id', value=item._id)
+                    button.btn-icon(type='submit', title='Delete')
+                      i.fas.fa-trash
     br
     br
     h5#notFound Not Found!

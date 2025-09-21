@@ -10,11 +10,10 @@ router.get("/sales", async (req, res) => {
       .find()
       .sort({ $natural: -1 })
       .populate("agent", "name");
+      const currentUser = req.session.user
+      res.render('sales', {items, currentUser})
     console.log(items);
-    res.render("sales", {
-      items,
-      currentUser: req.user
-    });
+    
   } catch (error) {
     console.error(error);
     res.status(400).send("Unable to get sales");
