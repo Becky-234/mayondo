@@ -82,43 +82,55 @@
                 <input type="text" id="fname" name="name" required>
                 <br><br>
 
-                <label for="tproduct">Type of Product</label><br>
-                <input type="text" id="tproduct" name="tproduct" required>
-                <br><br>
-
                 <label for="nproduct">Name of Product</label><br>
                 <input type="text" id="nproduct" name="nproduct" required>
                 <br><br>
 
-                <label for="quantity">Quantity</label><br>
-                <input type="number" id="quantity" name="quantity" required>
-                <br><br>
+                <label for="tproduct">Type of Product</label><br>
+                <select id="tproduct" name="tproduct" required>
+                    <option value="" disabled selected>Select Product Type</option>
+                    <option value="Raw Material">Raw Material</option>
+                    <option value="Furniture">Furniture</option>
+                    <br><br>
 
-                <label for="price">Price</label><br>
-                <input type="number" id="price" name="price" required>
-                <br><br>
+                    <label for="quantity">Quantity</label><br>
+                    <input type="number" id="quantity" name="quantity" required>
+                    <br><br>
 
-                <label for="payment">Select Payment Method</label><br />
-                <select id="payment" name="payment" required>
-                    <option value="" disabled selected>Select your Payment Method</option>
-                    <option value="Bank">Bank</option>
-                    <option value="Mobile Money">Mobile Money</option>
-                    <option value="Cheque">Cheque</option>
-                </select>
-                <br><br>
+                    <label for="unitPrice">Unit Price</label><br>
+                    <input type="text" id="unitPrice" name="unitPrice" required>
+                    <br><br>
 
-                <label for="date">Date</label><br>
-                <input type="date" id="date" name="date" required>
-                <br><br>
+                    <label for="transportCheck">Transport Check</label><br>
+                    <input type="hidden" id="transportCheck" name="transportCheck" value="false">
+                    <input type="checkbox" id="transportCheck" name="transportCheck" value="true">
+                    <br><br>
 
-                <label for="agent">Sales Agent Name</label><br>
-                <input type="text" id="agent" name="agent" required>
-                <br><br>
+                    <label for="totalPrice">Total Price</label><br>
+                    <input type="text" id="totalPrice" name="totalPrice" required>
+                    <br><br>
 
-                <div class="add">
-                    <button type="submit" class="btns">Save</button>
-                    <button type="reset" class="btns">Cancel</button>
-                </div>
+                    <label for="payment">Select Payment Method</label><br />
+                    <select id="payment" name="payment" required>
+                        <option value="" disabled selected>Select your Payment Method</option>
+                        <option value="Bank">Bank</option>
+                        <option value="Mobile Money">Mobile Money</option>
+                        <option value="Cheque">Cheque</option>
+                    </select>
+                    <br><br>
+
+                    <label for="date">Date</label><br>
+                    <input type="date" id="date" name="date" required>
+                    <br><br>
+
+                    <label for="agent">Sales Agent Name</label><br>
+                    <input type="text" id="agent" name="agent" required>
+                    <br><br>
+
+                    <div class="add">
+                        <button type="submit" class="btns">Save</button>
+                        <button type="reset" class="btns">Cancel</button>
+                    </div>
             </form>
         </div>
     </main>

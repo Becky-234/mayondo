@@ -7,7 +7,6 @@ const salesSchema = new mongoose.Schema({
   },
   tproduct: {
     type: String,
-    trim: true,
     required: true
   },
   nproduct: {
@@ -20,14 +19,15 @@ const salesSchema = new mongoose.Schema({
     required: true
   },
   unitPrice: {
-    type: Number,
+    type: String,
     required: true
   },
   transportCheck: {
-    type: Boolean
+    type: Boolean,
+    set: v => v === 'on' || v === true
   },
   totalPrice: {
-    type: Number,
+    type: String,
     required: true
   },
   payment: {

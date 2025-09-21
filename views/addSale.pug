@@ -44,7 +44,7 @@ main.main-content
       h2 Add Sale Here! 
       label(for="name") Name of Customer
       br
-      input#fname(type="text", name="name", required)
+      input#name(type="text", name="name", required)
       br
       br
       label(for="nproduct") Name of Product
@@ -54,7 +54,10 @@ main.main-content
       br
       label(for="tproduct") Type of Product
       br
-      input#tproduct(type="text", name="tproduct", required)
+      select#tproduct(name="tproduct", required)
+        option(value, disabled, selected) Select Type of Product 
+        option(value="Raw Material") Raw Material
+        option(value="Furniture") Furniture 
       br
       br
       label(for="quantity") Quantity
@@ -64,16 +67,17 @@ main.main-content
       br
       label(for="unitPrice") Unit Price
       br
-      input#price(type="number", name="unitPrice", required)
+      input#unitPrice(type="text", name="unitPrice", required)
       br
       br
       label(for="transportCheck") Transport Check
-      input#price(type="checkbox", name="transportCheck", required)
+      input#transportCheck(type="hidden" name="transportCheck" value="false")
+      input#transportCheck(type="checkbox" name="transportCheck" value="true")
       br
       br
       label(for="totalPrice") Total Price
       br
-      input#price(type="number", name="totalPrice", required)
+      input#totalPrice(type="text", name="totalPrice", required)
       br
       br
       label(for="payment") Select Payment Method

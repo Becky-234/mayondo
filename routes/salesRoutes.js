@@ -6,7 +6,10 @@ const { ensureAuthenticated, ensureAgent } = require("../middleware/auth")
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", async (req, res) => {
   try {
-    const items = await SalesModel.find().sort({ $natural: -1 });
+    const items = await SalesModel
+      .find()
+      .sort({ $natural: -1 })
+      .populate("agent", "name");
     console.log(items);
     res.render("sales", {
       items,
@@ -28,7 +31,7 @@ router.get("/addSale", (req, res) => {
 });
 //Only if you are logged in as a sales agent, you will be able to make a sale
 //ensureAuthenticated, ensureAgent,
-router.post("/addSale", async (req, res) => {
+router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
   try {
     const { name, tproduct, nproduct, quantity, unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
@@ -53,6 +56,7 @@ router.post("/addSale", async (req, res) => {
     res.redirect("/addSale");
   }
 });
+
 
 //UPDATING SALES
 router.get("/editSales/:id", async (req, res) => {

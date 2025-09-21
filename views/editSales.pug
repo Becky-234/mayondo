@@ -44,17 +44,20 @@ main.main-content
       h2 Edit Sale Here!
       label(for="name") Name of Customer
       br
-      input#fname(type="text", name="name", required value=`${item.name}`)
-      br
-      br
-      label(for="tproduct") Type of Product
-      br
-      input#tproduct(type="text", name="tproduct", required value=`${item.tproduct}`)
+      input#name(type="text", name="name", required value=`${item.name}`)
       br
       br
       label(for="nproduct") Name of Product
       br
       input#nproduct(type="text", name="nproduct", required value=`${item.nproduct}`)
+      br
+      br
+      label(for="tproduct") Type of Product
+      br
+      select#tproduct(name="tproduct", required)
+        option(value=`${item.tproduct}`) #{item.tproduct}
+        option(value="Raw Material") Raw Material
+        option(value="Furniture") Furniture
       br
       br
       label(for="quantity") Quantity
@@ -64,17 +67,19 @@ main.main-content
       br
       label(for="unitPrice") Unit Price
       br
-      input#price(type="number", name="unitPrice", required value=`${item.unitPrice}`)
+      input#unitPrice(type="text", name="unitPrice", required value=`${item.unitPrice}`)
       br
       br
       label(for="transportCheck") Transport Check
       br
-      input#price(type="checkbox", name="transportCheck", required value=`${item.transportCheck}`)
+      label(for="transportCheck") Transport Check
+      input#transportCheck(type="hidden" name="transportCheck" value="false")
+      input#transportCheck(type="checkbox" name="transportCheck" value="true")
       br
       br
       label(for="totalPrice") Total Price
       br
-      input#price(type="number", name="totalPrice", required value=`${item.totalPrice}`)
+      input#totalPrice(type="text", name="totalPrice", required value=`${item.totalPrice}`)
       br
       br
       label(for="payment") Select Payment Method

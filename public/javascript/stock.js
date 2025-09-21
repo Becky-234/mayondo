@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
     pdfBtn.addEventListener("click", () => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
+
       doc.text("Stock Report", 14, 20);
+
       doc.autoTable({
         html: "#newStock",
         startY: 30,
@@ -32,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const table = document.getElementById("newStock");
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.table_to_sheet(table);
+      
       XLSX.utils.book_append_sheet(wb, ws, "stock");
       XLSX.writeFile(wb, "Stock_Report.xlsx");
     });
