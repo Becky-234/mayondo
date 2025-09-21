@@ -8,38 +8,37 @@ toggleBtn.addEventListener("click", () => {
 });
 
 //PDF Export
-document.addEventListener("DOMContentLoaded", () => {
-  const pdfBtn = document.getElementById("downloadPdf");
-  if (pdfBtn) {
-    pdfBtn.addEventListener("click", () => {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+const pdfBtn = document.getElementById("downloadPdf");
+if (pdfBtn) {
+  pdfBtn.addEventListener("click", () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-      doc.text("Stock Report", 14, 20);
+    doc.text("Stock Report", 14, 20);
 
-      doc.autoTable({
-        html: "#newStock",
-        startY: 30,
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [0, 119, 204] },
-      });
-      doc.save("Stock_Report.pdf");
+    doc.autoTable({
+      html: "#newStock",
+      startY: 30,
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [0, 119, 204] },
     });
-  }
+    doc.save("Stock_Report.pdf");
+  });
+}
 
-  //EXcel export
-  const excelBtn = document.getElementById("downloadExcel");
-  if (excelBtn) {
-    excelBtn.addEventListener("click", () => {
-      const table = document.getElementById("newStock");
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.table_to_sheet(table);
-      
-      XLSX.utils.book_append_sheet(wb, ws, "stock");
-      XLSX.writeFile(wb, "Stock_Report.xlsx");
-    });
-  }
-});
+//Excel Export
+const excelBtn = document.getElementById("downloadExcel");
+if (excelBtn) {
+  excelBtn.addEventListener("click", () => {
+    const table = document.getElementById("newStock");
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.table_to_sheet(table);
+
+    XLSX.utils.book_append_sheet(wb, ws, "stock");
+    XLSX.writeFile(wb, "Stock_Report.xlsx");
+  });
+}
+ 
 
 
 //Search on the User Table
