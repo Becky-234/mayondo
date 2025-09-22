@@ -42,37 +42,43 @@ main.main-content
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
         a.logoutBtn(href='index') Logout
-  section#dash-top.dash
-    .row
-      .col-md-3
-        .dash-card
-          .card-body
-            i.fa-solid.fa-file-lines
-            h5.card-title Invoices
-            p.card-text Shs.500,000
-      .col-md-3
-        .dash-card
-          .card-body
-            i.fa-solid.fa-money-check-dollar
-            h5.card-title Profit
-            p.card-text 70%
-      .col-md-3
-        .dash-card
-          .card-body
-            i.fa-solid.fa-coins
-            h5.card-title Revenue
-            p.card-text Shs. 50,000
-      .col-md-3
-        .dash-card
-          .card-body
-            i.fa-solid.fa-users-line
-            h5.card-title Customers
-            p.card-text 15
-    br
-    br
-    br
+  //- .dashboarBody
+  //-   h3 Dashboard
+  //-   h4 Mayondo Wood & Furniture ltd
+  //-   h1 Welcome #{currentUser.username}!
+  //-   p You’re now logged in.
+  //-   br      
+  //- section#dash-top.dash
+  //-   .row
+  //-     .col-md-3
+  //-       .dash-card
+  //-         .card-body
+  //-           i.fa-solid.fa-file-lines
+  //-           h5.card-title Invoices
+  //-           p.card-text Shs.500,000
+  //-     .col-md-3
+  //-       .dash-card
+  //-         .card-body
+  //-           i.fa-solid.fa-money-check-dollar
+  //-           h5.card-title Profit
+  //-           p.card-text 70%
+  //-     .col-md-3
+  //-       .dash-card
+  //-         .card-body
+  //-           i.fa-solid.fa-coins
+  //-           h5.card-title Revenue
+  //-           p.card-text Shs. 50,000
+  //-     .col-md-3
+  //-       .dash-card
+  //-         .card-body
+  //-           i.fa-solid.fa-users-line
+  //-           h5.card-title Customers
+  //-           p.card-text 15
+  //-   br
+  //-   br
+  //-   br
   .include
-    a.btns(href='/addStock') Add Product
+    a.btns(href='/addStock') Add Stock
     a#downloadExcel.btns Download Excel
     a#downloadPdf.btns Download PDF
     input#searchStock(type='search' placeholder='Search...')

@@ -1,12 +1,10 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
-  link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
-  link(rel='stylesheet' href='../css/products.css')
-  title Products
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB", crossorigin="anonymous")
+link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css", integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==", crossorigin="anonymous", referrerpolicy="no-referrer")
+link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap", rel="stylesheet")
+link(rel="stylesheet", href="../css/products.css")
+title Products
 header
   aside.side-menu-container.active
     .logo-menu
@@ -14,194 +12,205 @@ header
       i.fa-solid.fa-bars
     ul.list
       li.list-item
-        a(href='/dashboard')
+        a(href="/html/dashboard.html")
           i.fa-solid.fa-house
           span.link-name Dashboard
       li.list-item
-        a(href='/usersList')
+        a(href="/html/users.html")
           i.fa-solid.fa-users
           span.link-name Users
       li.list-item
-        a(href='/sales')
+        a(href="/html/sales.html")
           i.fa-solid.fa-cart-shopping
           span.link-name Sales
       li.list-item
-        a(href='/stock')
+        a(href="/html/stock.html")
           i.fa-solid.fa-truck
           span.link-name Stock
       li.list-item.active
-        a(href='/products')
+        a(href="/html/products.html")
           i.fa-solid.fa-couch
           span.link-name Products
       li.list-item
-        a(href='#')
+        a(href="#")
           i.fa-solid.fa-gear
           span.link-name Settings
   .navvv
     nav.navbar.bg-body-tertiary.dashboard-header
       .container-fluid.d-flex.justify-content-end.align-items-center
         .d-flex.align-items-center
-          form.d-flex.me-3(role='search')
-            input.form-control.me-2(type='search' placeholder='Search' aria-label='Search')
-            button.btn.btn-outline-success(type='submit') Search
-          a.logoutBtn(href='/index') Logout
-main.main-content
+          form.d-flex.me-3(role="search", onsubmit="return false;")
+            input.form-control.me-2#searchProduct(type="search", placeholder="Search", aria-label="Search")
+            button.btn.btn-outline-success(type="submit") Search
+          a.logoutBtn(href="/html/index.html") Logout
+main.main-content#allProducts
   section
-    .pdt
+    .pdt-section(data-name="Raw Materials")
       h1 Raw Materials
       br
       br
-      .card-group
+      .card-group(data-name="Raw Materials")
         .card
-          img.card-img-top(src='../images/poles-two.jpeg' alt='...')
+          img.card-img-top(src="../images/poles-two.jpeg", alt="...")
           .card-body
-            p.card-text Poles 
+            p.card-text Poles
         .card
-          img.card-img-top(src='../images/hardwood-two.jpeg' alt='...')
+          img.card-img-top(src="../images/hardwood-two.jpeg", alt="...")
           .card-body
             p.card-text Hard wood
         .card
-          img.card-img-top(src='../images/hardwood-three.jpeg' alt='...')
+          img.card-img-top(src="../images/hardwood-three.jpeg", alt="...")
           .card-body
             p.card-text Timber
+    .pdt-section(data-name="Furniture")
       br
       br
-      h1 Finished Products
+      h1 Furniture Products
       br
       br
-      h2 Closets
+      .subcategory-section(data-name="Closets")
+        h2 Closets
+        br
+        .card-group(data-name="Closets")
+          .card
+            img.card-img-top(src="../images/closet-one.jpeg", alt="...")
+            .card-body
+              p.card-text One side full closet in black
+          .card
+            img.card-img-top(src="../images/closet-two.jpeg", alt="...")
+            .card-body
+              p.card-text Half closet in white
+          .card
+            img.card-img-top(src="../images/closet-three.jpeg", alt="...")
+            .card-body
+              p.card-text All full side closet in white
       br
-      .card-group
-        .card
-          img.card-img-top(src='../images/closet-one.jpeg' alt='...')
-          .card-body
-            p.card-text One side full closet in black
-        .card
-          img.card-img-top(src='../images/closet-two.jpeg' alt='...')
-          .card-body
-            p.card-text Half closet in white
-        .card
-          img.card-img-top(src='../images/closet-three.jpeg' alt='...')
-          .card-body
-            p.card-text All full side closet in white
-    br
-    br
-    h2 Drawers
-    br
-    .card-group
-      .card
-        img.card-img-top(src='../images/bedroom-dr-one.jpeg' alt='...')
-        .card-body
-          p.card-text Bedroom dresser with white drawers
-      .card
-        img.card-img-top(src='../images/bedroom-dr-two.jpeg' alt='...')
-        .card-body
-          p.card-text Bedroom dresser in jet black
-      .card
-        img.card-img-top(src='../images/bedroom-dr-three.jpeg' alt='...')
-        .card-body
-          p.card-text Bedroom dresser in grey
-    br
-    br
-    h2 Entrance Furniture
-    br
-    .card-group
-      .card
-        img.card-img-top(src='../images/corridal-one.jpeg' alt='...')
-        .card-body
-          p.card-text Corridal furniure in white
-      .card
-        img.card-img-top(src='../images/corridal-two.jpeg' alt='...')
-        .card-body
-          p.card-text Corridal furniture in cream
-      .card
-        img.card-img-top(src='../images/corridal-three.jpeg' alt='...')
-        .card-body
-          p.card-text Stirs in light brown with smooth texture
-    br
-    br
-    h2 Dinning
-    br
-    .card-group
-      .card
-        img.card-img-top(src='../images/dinning-one.jpeg' alt='...')
-        .card-body
-          p.card-text Dinning table in white with leather seats in white
-      .card
-        img.card-img-top(src='../images/dinning-two.jpeg' alt='...')
-        .card-body
-          p.card-text Light brown dinning table with smooth texture and cream cussioned seats
-      .card
-        img.card-img-top(src='../images/dinning-three.jpeg' alt='...')
-        .card-body
-          p.card-text Grey dinning table with white seats
-    br
-    br
-    h2 Living Room 
-    br
-    .card-group
-      .card
-        img.card-img-top(src='../images/living-one.jpeg' alt='...')
-        .card-body
-          p.card-text White five seater leather couch with white furniture
-      .card
-        img.card-img-top(src='../images/living-two.jpeg' alt='...')
-        .card-body
-          p.card-text Large L-couch in grey wth black furniture
-      .card
-        img.card-img-top(src='../images/living-three.jpeg' alt='...')
-        .card-body
-          p.card-text Cream L-cussioned five seater couch with cream furniture
-    br
-    br
-    h2 Kitchen Furniture
-    br
-    .card-group
-      .card
-        img.card-img-top(src='../images/kitchen-dr-one.jpeg' alt='...')
-        .card-body
-          p.card-text Grey kitchen drawers withe white counters
-      .card
-        img.card-img-top(src='../images/kitchen-dr-two.jpeg' alt='...')
-        .card-body
-          p.card-text Brown kitchen drawers with white counters
-      .card
-        img.card-img-top(src='../images/kitchen-three.jpeg' alt='...')
-        .card-body
-          p.card-text White kitchen drawers with black counters
-    br
-    br
-    h2 Office Furniture
-    br
-    .card-group
-      .card
-        img.card-img-top(src='../images/office-one.jpeg' alt='...')
-        .card-body
-          p.card-text Grey office drawers with brown furniture
-      .card
-        img.card-img-top(src='../images/office-two.jpeg' alt='...')
-        .card-body
-          p.card-text Simple white and brown office furniture
-      .card
-        img.card-img-top(src='../images/office-three.jpeg' alt='...')
-        .card-body
-          p.card-text light brown office furniture
-    br
-    br
-    h2 Beds
-    br
-    .card-group
-      .card
-        img.card-img-top(src='../images/bed-one.jpeg' alt='...')
-        .card-body
-          p.card-text Cream cussioned bed with cream furniture
-      .card
-        img.card-img-top(src='../images/bed-two.jpeg' alt='...')
-        .card-body
-          p.card-text Royal blue cussioned bed
-      .card
-        img.card-img-top(src='../images/bed-three.jpeg' alt='...')
-        .card-body
-          p.card-text Grey cussioned bed
-script(src='../javascript/products.js')
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
+      br
+      .subcategory-section(data-name="Drawers")
+        h2 Drawers
+        br
+        .card-group(data-name="Drawers")
+          .card
+            img.card-img-top(src="../images/bedroom-dr-one.jpeg", alt="...")
+            .card-body
+              p.card-text Bedroom dresser with white drawers
+          .card
+            img.card-img-top(src="../images/bedroom-dr-two.jpeg", alt="...")
+            .card-body
+              p.card-text Bedroom dresser in jet black
+          .card
+            img.card-img-top(src="../images/bedroom-dr-three.jpeg", alt="...")
+            .card-body
+              p.card-text Bedroom dresser in grey
+      br
+      br
+      .subcategory-section(data-name="Entrance Furniture")
+        h2 Entrance Furniture
+        br
+        .card-group(data-name="Entrance Furniture")
+          .card
+            img.card-img-top(src="../images/corridal-one.jpeg", alt="...")
+            .card-body
+              p.card-text Corridal furniure in white
+          .card
+            img.card-img-top(src="../images/corridal-two.jpeg", alt="...")
+            .card-body
+              p.card-text Corridal furniture in cream
+          .card
+            img.card-img-top(src="../images/corridal-three.jpeg", alt="...")
+            .card-body
+              p.card-text Stirs in light brown with smooth texture
+      br
+      br
+      .subcategory-section(data-name="Dinning")
+        h2 Dinning
+        br
+        .card-group(data-name="Dinning")
+          .card
+            img.card-img-top(src="../images/dinning-one.jpeg", alt="...")
+            .card-body
+              p.card-text Dinning table in white with leather seats in white
+          .card
+            img.card-img-top(src="../images/dinning-two.jpeg", alt="...")
+            .card-body
+              p.card-text.
+                Light brown dinning table with smooth texture and cream cussioned seats
+                
+          .card
+            img.card-img-top(src="../images/dinning-three.jpeg", alt="...")
+            .card-body
+              p.card-text Grey dinning table with white seats
+      br
+      br
+      .subcategory-section(data-name="Living Room")
+        h2 Living Room
+        br
+        .card-group(data-name="Living Room")
+          .card
+            img.card-img-top(src="../images/living-one.jpeg", alt="...")
+            .card-body
+              p.card-text White five seater leather couch with white furniture
+          .card
+            img.card-img-top(src="../images/living-two.jpeg", alt="...")
+            .card-body
+              p.card-text Large L-couch in grey wth black furniture
+          .card
+            img.card-img-top(src="../images/living-three.jpeg", alt="...")
+            .card-body
+              p.card-text Cream L-cussioned five seater couch with cream furniture
+      br
+      br
+      .subcategory-section(data-name="Kitchen")
+        h2 Kitchen Furniture
+        br
+        .card-group(data-name="Kitchen")
+          .card
+            img.card-img-top(src="../images/kitchen-dr-one.jpeg", alt="...")
+            .card-body
+              p.card-text Grey kitchen drawers withe white counters
+          .card
+            img.card-img-top(src="../images/kitchen-dr-two.jpeg", alt="...")
+            .card-body
+              p.card-text Brown kitchen drawers with white counters
+          .card
+            img.card-img-top(src="../images/kitchen-three.jpeg", alt="...")
+            .card-body
+              p.card-text White kitchen drawers with black counters
+      br
+      br
+      .subcategory-section(data-name="Office")
+        h2 Office Furniture
+        br
+        .card-group(data-name="Office")
+          .card
+            img.card-img-top(src="../images/office-one.jpeg", alt="...")
+            .card-body
+              p.card-text Grey office drawers with brown furniture
+          .card
+            img.card-img-top(src="../images/office-two.jpeg", alt="...")
+            .card-body
+              p.card-text Simple white and brown office furniture
+          .card
+            img.card-img-top(src="../images/office-three.jpeg", alt="...")
+            .card-body
+              p.card-text light brown office furniture
+      br
+      br
+      .subcategory-section(data-name="Beds")
+        h2 Beds
+        br
+        .card-group(data-name="Beds")
+          .card
+            img.card-img-top(src="../images/bed-one.jpeg", alt="...")
+            .card-body
+              p.card-text Cream cussioned bed with cream furniture
+          .card
+            img.card-img-top(src="../images/bed-two.jpeg", alt="...")
+            .card-body
+              p.card-text Royal blue cussioned bed
+          .card
+            img.card-img-top(src="../images/bed-three.jpeg", alt="...")
+            .card-body
+              p.card-text Grey cussioned bed
+script(src="../javascript/products.js")
+script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js", integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI", crossorigin="anonymous")

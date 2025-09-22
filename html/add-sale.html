@@ -17,6 +17,7 @@
 
 <body>
     <aside class="side-menu-container">
+
         <div class="logo-menu">
             <h2 class="logo">MWF</h2>
             <i class="fa-solid fa-bars"></i>
@@ -62,6 +63,7 @@
     </aside>
 
     <main class="main-content">
+
         <nav class="navbar bg-body-tertiary dashboard-header">
             <div class="container-fluid d-flex justify-content-end align-items-center">
                 <div class="d-flex align-items-center">
@@ -74,12 +76,13 @@
             </div>
         </nav>
 
-        <div class="user-form-container">
+        <div class="sales-form-container">
+
             <form id="addSale" action="/addSale" method="post">
                 <h2>Add Sale</h2>
 
-                <label for="fname">Name of Customer</label><br>
-                <input type="text" id="fname" name="name" required>
+                <label for="name">Name of Customer</label><br>
+                <input type="text" id="name" name="name" required>
                 <br><br>
 
                 <label for="nproduct">Name of Product</label><br>
@@ -91,50 +94,54 @@
                     <option value="" disabled selected>Select Product Type</option>
                     <option value="Raw Material">Raw Material</option>
                     <option value="Furniture">Furniture</option>
-                    <br><br>
+                </select>
+                <br><br>
 
-                    <label for="quantity">Quantity</label><br>
-                    <input type="number" id="quantity" name="quantity" required>
-                    <br><br>
+                <label for="quantity">Quantity</label><br>
+                <input type="number" id="quantity" name="quantity" required>
+                <br><br>
 
-                    <label for="unitPrice">Unit Price</label><br>
-                    <input type="text" id="unitPrice" name="unitPrice" required>
-                    <br><br>
+                <label for="unitPrice">Unit Price</label><br>
+                <input type="text" id="unitPrice" name="unitPrice" required>
+                <br><br>
 
-                    <label for="transportCheck">Transport Check</label><br>
-                    <input type="hidden" id="transportCheck" name="transportCheck" value="false">
-                    <input type="checkbox" id="transportCheck" name="transportCheck" value="true">
-                    <br><br>
+                <label for="transportCheck">Transport Check</label><br>
+                <input type="hidden" id="transportCheck" name="transportCheck" value="false">
+                <input type="checkbox" id="transportCheck" name="transportCheck" value="true">
+                <br><br>
 
-                    <label for="totalPrice">Total Price</label><br>
-                    <input type="text" id="totalPrice" name="totalPrice" required>
-                    <br><br>
+                <label for="totalPrice">Total Price</label><br>
+                <input type="text" id="totalPrice" name="totalPrice" required>
+                <br><br>
 
-                    <label for="payment">Select Payment Method</label><br />
-                    <select id="payment" name="payment" required>
-                        <option value="" disabled selected>Select your Payment Method</option>
-                        <option value="Bank">Bank</option>
-                        <option value="Mobile Money">Mobile Money</option>
-                        <option value="Cheque">Cheque</option>
-                    </select>
-                    <br><br>
+                <label for="payment">Select Payment Method</label><br />
+                <select id="payment" name="payment" required>
+                    <option value="" disabled selected>Select your Payment Method</option>
+                    <option value="Bank">Bank</option>
+                    <option value="Mobile Money">Mobile Money</option>
+                    <option value="Cheque">Cheque</option>
+                </select>
+                <br><br>
 
-                    <label for="date">Date</label><br>
-                    <input type="date" id="date" name="date" required>
-                    <br><br>
+                <label for="date">Date</label><br>
+                <input type="date" id="date" name="date" required>
+                <br><br>
 
-                    <label for="agent">Sales Agent Name</label><br>
-                    <input type="text" id="agent" name="agent" required>
-                    <br><br>
+                <label for="agent">Sales Agent Name</label><br>
+                <input type="text" id="agent" name="agent" required>
+                <br><br>
 
-                    <div class="add">
-                        <button type="submit" class="btns">Save</button>
-                        <button type="reset" class="btns">Cancel</button>
-                    </div>
+                <div class="add">
+                    <button type="submit" class="btns">Save</button>
+                    <button type="reset" class="btns">Cancel</button>
+                </div>
             </form>
+
         </div>
+
     </main>
-    <script src="/javascript/sales.js"></script>
+
+    <script src="../javascript/sales.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>

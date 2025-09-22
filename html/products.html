@@ -68,8 +68,9 @@
             <nav class="navbar bg-body-tertiary dashboard-header">
                 <div class="container-fluid d-flex justify-content-end align-items-center">
                     <div class="d-flex align-items-center">
-                        <form class="d-flex me-3" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <form class="d-flex me-3" role="search" onsubmit="return false;">
+                            <input class="form-control me-2" id="searchProduct" type="search" placeholder="Search"
+                                aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                         <a class="logoutBtn" href="/html/index.html">Logout</a>
@@ -78,12 +79,15 @@
             </nav>
         </div>
     </header>
-    <main class="main-content">
+
+    <main class="main-content" id="allProducts">
+        
         <section>
-            <div class="pdt">
+
+            <div class="pdt-section" data-name="Raw Materials">
                 <h1>Raw Materials</h1>
                 <br><br>
-                <div class="card-group">
+                <div class="card-group" data-name="Raw Materials">
 
                     <div class="card">
                         <img src="../images/poles-two.jpeg" class="card-img-top" alt="...">
@@ -107,243 +111,272 @@
                     </div>
 
                 </div>
+            </div>
+
+            <div class="pdt-section" data-name="Furniture">
+                <br><br>
+                <h1>Furniture Products</h1>
+                <br><br>
+
+                <div class="subcategory-section" data-name="Closets">
+                    <h2>Closets</h2>
+                    <br>
+                    <div class="card-group" data-name="Closets">
+                        <div class="card">
+                            <img src="../images/closet-one.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">One side full closet in black</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/closet-two.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Half closet in white</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/closet-three.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">All full side closet in white</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <br><br>
-                <h1>Finished Products</h1>
+                <div class="subcategory-section" data-name="Drawers">
+                    <h2>Drawers</h2>
+                    <br>
+                    <div class="card-group" data-name="Drawers">
+                        <div class="card">
+                            <img src="../images/bedroom-dr-one.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Bedroom dresser with white drawers</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/bedroom-dr-two.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Bedroom dresser in jet black</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/bedroom-dr-three.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Bedroom dresser in grey</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <br><br>
-                <h2>Closets</h2>
-                <br>
-                <div class="card-group">
-                    <div class="card">
-                        <img src="../images/closet-one.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
+                <div class="subcategory-section" data-name="Entrance Furniture">
+                    <h2>Entrance Furniture</h2>
+                    <br>
+                    <div class="card-group" data-name="Entrance Furniture">
+                        <div class="card">
+                            <img src="../images/corridal-one.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
 
-                            <p class="card-text">One side full closet in black</p>
+                                <p class="card-text">Corridal furniure in white</p>
 
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/corridal-two.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Corridal furniture in cream</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/corridal-three.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Stirs in light brown with smooth texture</p>
+
+                            </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <img src="../images/closet-two.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
+                </div>
 
-                            <p class="card-text">Half closet in white</p>
+                <br><br>
+                <div class="subcategory-section" data-name="Dinning">
+                    <h2>Dinning</h2>
+                    <br>
+                    <div class="card-group" data-name="Dinning">
+                        <div class="card">
+                            <img src="../images/dinning-one.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
 
+                                <p class="card-text">Dinning table in white with leather seats in white</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/dinning-two.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Light brown dinning table with smooth texture and cream cussioned
+                                    seats
+                                </p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/dinning-three.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Grey dinning table with white seats</p>
+
+                            </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <img src="../images/closet-three.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
+                </div>
 
-                            <p class="card-text">All full side closet in white</p>
+                <br><br>
+                <div class="subcategory-section" data-name="Living Room">
+                    <h2>Living Room </h2>
+                    <br>
+                    <div class="card-group" data-name="Living Room">
+                        <div class="card">
+                            <img src="../images/living-one.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">White five seater leather couch with white furniture</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/living-two.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Large L-couch in grey wth black furniture</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/living-three.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Cream L-cussioned five seater couch with cream furniture</p>
+
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <br><br>
+                <div class="subcategory-section" data-name="Kitchen">
+                    <h2>Kitchen Furniture</h2>
+                    <br>
+                    <div class="card-group" data-name="Kitchen">
+                        <div class="card">
+                            <img src="../images/kitchen-dr-one.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Grey kitchen drawers withe white counters</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/kitchen-dr-two.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Brown kitchen drawers with white counters</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/kitchen-three.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">White kitchen drawers with black counters</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br><br>
+                <div class="subcategory-section" data-name="Office">
+                    <h2>Office Furniture</h2>
+                    <br>
+                    <div class="card-group" data-name="Office">
+                        <div class="card">
+                            <img src="../images/office-one.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Grey office drawers with brown furniture</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/office-two.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Simple white and brown office furniture</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/office-three.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">light brown office furniture</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br><br>
+                <div class="subcategory-section" data-name="Beds">
+                    <h2>Beds</h2>
+                    <br>
+                    <div class="card-group" data-name="Beds">
+                        <div class="card">
+                            <img src="../images/bed-one.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Cream cussioned bed with cream furniture</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/bed-two.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Royal blue cussioned bed</p>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="../images/bed-three.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+
+                                <p class="card-text">Grey cussioned bed</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <br><br>
 
-            <h2>Drawers</h2>
-            <br>
-            <div class="card-group">
-                <div class="card">
-                    <img src="../images/bedroom-dr-one.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Bedroom dresser with white drawers</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/bedroom-dr-two.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Bedroom dresser in jet black</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/bedroom-dr-three.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Bedroom dresser in grey</p>
-
-                    </div>
-                </div>
-            </div>
-            <br><br>
-
-            <h2>Entrance Furniture</h2>
-            <br>
-            <div class="card-group">
-                <div class="card">
-                    <img src="../images/corridal-one.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Corridal furniure in white</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/corridal-two.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Corridal furniture in cream</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/corridal-three.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Stirs in light brown with smooth texture</p>
-
-                    </div>
-                </div>
-            </div>
-            <br><br>
-            <h2>Dinning</h2>
-            <br>
-            <div class="card-group">
-                <div class="card">
-                    <img src="../images/dinning-one.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Dinning table in white with leather seats in white</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/dinning-two.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Light brown dinning table with smooth texture and cream cussioned seats</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/dinning-three.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Grey dinning table with white seats</p>
-
-                    </div>
-                </div>
-            </div>
-            <br><br>
-            <h2>Living Room </h2>
-            <br>
-            <div class="card-group">
-                <div class="card">
-                    <img src="../images/living-one.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">White five seater leather couch with white furniture</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/living-two.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Large L-couch in grey wth black furniture</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/living-three.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Cream L-cussioned five seater couch with cream furniture</p>
-
-                    </div>
-                </div>
-            </div>
-            <br><br>
-            <h2>Kitchen Furniture</h2>
-            <br>
-            <div class="card-group">
-                <div class="card">
-                    <img src="../images/kitchen-dr-one.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Grey kitchen drawers withe white counters</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/kitchen-dr-two.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Brown kitchen drawers with white counters</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/kitchen-three.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">White kitchen drawers with black counters</p>
-
-                    </div>
-                </div>
-            </div>
-            <br><br>
-            <h2>Office Furniture</h2>
-            <br>
-            <div class="card-group">
-                <div class="card">
-                    <img src="../images/office-one.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Grey office drawers with brown furniture</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/office-two.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Simple white and brown office furniture</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/office-three.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">light brown office furniture</p>
-
-                    </div>
-                </div>
-            </div>
-            <br><br>
-            <h2>Beds</h2>
-            <br>
-            <div class="card-group">
-                <div class="card">
-                    <img src="../images/bed-one.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Cream cussioned bed with cream furniture</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/bed-two.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Royal blue cussioned bed</p>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="../images/bed-three.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-
-                        <p class="card-text">Grey cussioned bed</p>
-
-                    </div>
-                </div>
-            </div>
         </section>
+
     </main>
     <script src="../javascript/products.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"

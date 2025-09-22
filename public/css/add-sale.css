@@ -1,3 +1,4 @@
+/* Universal Box-Sizing */
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +12,7 @@ body {
   /* Makes direct children (aside and main) flex items */
   min-height: 100vh;
   /* Ensures body takes full viewport height */
-  background: white;
+  background: #fff;
   /* Overall page background */
   overflow-x: hidden;
   /* Prevents horizontal scrollbar if content overflows */
@@ -24,13 +25,13 @@ body {
   left: 0;
   width: 260px;
   height: 100vh;
-  min-height: 100vh;
   background: #4c6444;
   padding: 6px 50px 0 0;
   overflow: hidden;
   transition: width 0.5s;
   flex-shrink: 0;
   z-index: 1000;
+  position: fixed
 }
 
 /* Use only .collapsed (drop .active for clarity) */
@@ -182,19 +183,6 @@ body.sidebar-active {
   }
 }
 
-/* MAIN CONTENT AREA */
-.main-content {
-  flex-grow: 1;
-  /* Allows main content to take up all available space */
-  background-color: #fff;
-  position: relative;
-  /* Crucial: Establishes a positioning context for absolute children */
-  padding: 20px;
-  /* General padding inside the main content area */
-  padding-top: 80px;
-  /* Space for the absolutely positioned navbar */
-}
-
 /* TOP RIGHT NAVBAR AND LOGOUT */
 .dashboard-header {
   position: absolute;
@@ -215,7 +203,31 @@ body.sidebar-active {
   /* Ensure it's above other content if needed */
 }
 
-/*ADD NEW USER*/
+.dashboard-header .container-fluid {
+  padding: 10;
+  /* Remove padding from container-fluid if it's adding unwanted space */
+}
+
+/* General styles for content within the dashboard body */
+.dashboard-body {
+  padding-top: 1px;
+  /* Add a bit more padding if needed below the header */
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+  flex-grow: 1;
+  /* Allows main content to take up all available space */
+  background-color: #fff;
+  position: relative;
+  /* Crucial: Establishes a positioning context for absolute children */
+  padding: 20px;
+  /* General padding inside the main content area */
+  padding-top: 80px;
+  /* Space for the absolutely positioned navbar */
+}
+
+/*Add Sale Form*/
 h2 {
   text-align: center;
 }
@@ -226,8 +238,7 @@ h2 {
   color: #fff;
   border-radius: 40px;
   padding: 30px 40px;
-  margin-left: 200px;
-  margin-top: 30px;
+  margin: 30px 0 0 400px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -238,7 +249,14 @@ input {
   border-style: none;
 }
 
+#transportCheck {
+  margin-right: 500px;
+  width: 35px;
+  padding: auto;
+}
+
 label {
+  text-align: justify;
   font-size: 19px;
 }
 
