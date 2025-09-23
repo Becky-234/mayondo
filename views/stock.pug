@@ -104,7 +104,7 @@ main.main-content
               td #{item.pdttype}
               td #{item.pdtquantity}
               td #{item.pdtprice}
-              td #{item.cprice}
+              td #{Math.round(item.pdtquantity * item.pdtprice)}
               td #{item.supplier}
               td #{item.supplierContact}
               td #{item.quality}
@@ -116,8 +116,12 @@ main.main-content
                   input(type='hidden', name='id', value=item._id)
                   button.btn-icon(type='submit', title='Delete')
                     i.fas.fa-trash
+                form(method='post', action='/generateReceipt', style='display:inline')
+                  input(type='hidden', name='id', value=item._id)
+                  button.btn-icon(type='submit', title='Receipt')
+                    i.fa-file-invoice
     h5#notFound Not Found
-script(src='/javascript/stock.js')
+script(src='../javascript/stock.js')
 //  SheetJS
 script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
 // jsPDF + AutoTable

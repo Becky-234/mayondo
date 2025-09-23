@@ -7,7 +7,7 @@ const StockModel = require("../models/stockModel");
 //Stock page
 //GETTING THE STOCK FROM THE DATABASE
 //ensureAuthenticated, ensureManager,
-router.get("/stock",  async (req, res) => {
+router.get("/stock", async (req, res) => {
   try {
     let items = await StockModel.find().sort({ $natural: -1 });
     console.log(items);
@@ -17,7 +17,7 @@ router.get("/stock",  async (req, res) => {
   }
 });
 //ensureAuthenticated, ensureManager,
-router.post("/stock",  (req, res) => {
+router.post("/stock", (req, res) => {
   console.log(req.body);
 });
 

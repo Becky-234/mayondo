@@ -41,7 +41,7 @@ router.post("/addSale", async (req, res) => {
   console.log("POST /addSale hit", req.body);
   try {
     const {
-      name, tproduct, nproduct, quantity,
+      name, contact, tproduct, nproduct, quantity,
       unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
     const userId = req.session.user._id;
@@ -58,18 +58,46 @@ router.post("/addSale", async (req, res) => {
     let total = Number(totalPrice);
     if (transportCheck) total *= 1.05;
 
-    const sale = new SalesModel({
-      name,
-      tproduct,
-      nproduct,
-      quantity,
-      unitPrice,
-      transportCheck: !!transportCheck,
-      totalPrice: total,
-      payment,
-      date,
-      agent: userId
-    });
+    // const sale = new SalesModel({
+    //   name,
+    //   contact,
+    //   tproduct,
+    //   nproduct,
+    //   quantity,
+    //   unitPrice,
+    //   transportCheck: !!transportCheck,
+    //   totalPrice: total,
+    //   payment,
+    //   date,
+    //   agent: userId
+    // });
+
+    if (stock && stock.pdtquantity > 0) {
+      const sale = new SalesModel({
+        name,
+        contact,
+        tproduct,
+        nproduct,
+        quantity,
+        unitPrice,
+        transportCheck: !!transportCheck,
+        totalPrice: total,
+        payment,
+        date,
+        agent: userId,
+      });
+      console.log('Saving sale', sale);
+      console.log(userId);
+      await sale.save();
+
+      //Decrease Qantity from the stock collection
+      stock.pdtquantity -= quantity
+      console.log('New quantity after sale', stock.pdtquantity);
+      await stock.save();
+      res.redirect("/sales");
+    } else {
+      return res.status(400).send('Product sold out')
+    }
 
     await sale.save();
     res.redirect("/sales");

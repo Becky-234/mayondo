@@ -72,3 +72,23 @@ document.addEventListener("DOMContentLoaded", () => {
     notFound.style.display = hasResult ? "none" : "block";
   });
 });
+
+
+
+// Calculating Cost Price
+// const unitField = document.getElementById('pdtprice');
+// const qtyField = document.getElementById('pdtquantity');
+// const totalField = document.getElementById('cprice');
+
+// function updateTotal() {
+//   const pdtprice = parseFloat(unitField.value);
+//   const pdtquantity = parseFloat(qtyField.value);
+//   if (!isNaN(pdtquantity) && !isNaN(pdtprice)) {
+//     totalField.value = (pdtquantity * pdtprice).toFixed(2);
+//   } else {
+//     totalField.value = "";
+//   }
+// }
+
+// unitField.addEventListener('input', updateTotal);
+// qtyField.addEventListener('input', updateTotal);

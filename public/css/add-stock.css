@@ -31,7 +31,7 @@ body {
   transition: width 0.5s;
   flex-shrink: 0;
   z-index: 1000;
-  position: fixed
+  position: fixed;
 }
 
 /* Use only .collapsed (drop .active for clarity) */
@@ -249,9 +249,14 @@ label {
 
 input {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   border-radius: 4px;
   border-style: none;
+}
+
+select {
+  width: 70%;
+  padding: 7px;
 }
 
 .logoutBtn {

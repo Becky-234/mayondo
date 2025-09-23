@@ -249,6 +249,11 @@ input {
   border-style: none;
 }
 
+select {
+  width: 70%;
+  padding: 7px;
+}
+
 #transportCheck {
   margin-right: 500px;
   width: 35px;
