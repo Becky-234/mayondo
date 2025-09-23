@@ -32,7 +32,7 @@ router.get("/addSale", async (req, res) => {
     const stocks = await StockModel.find()
     res.render("addSale", { stocks });
   } catch (error) {
-console.error(error.message)
+    console.error(error.message)
   }
 });
 //Only if you are logged in as a sales agent, you will be able to make a sale
@@ -46,7 +46,7 @@ router.post("/addSale", async (req, res) => {
     } = req.body;
     const userId = req.session.user._id;
 
-    const stock = await StockModel.findOne({ pdttype: tproduct, pdtname: nproduct });
+    const stock = await StockModel.findOne({ pdtname: nproduct, pdttype: tproduct });
     if (!stock) {
       return res.status(400).send('Stock not Found!');
     }
@@ -82,9 +82,22 @@ router.post("/addSale", async (req, res) => {
 
 //UPDATING SALES
 router.get("/editSales/:id", async (req, res) => {
-  let item = await SalesModel.findById(req.params.id);
-  res.render(`editSales`, { item });
+  try {
+    const item = await SalesModel
+      .findById(req.params.id)
+      .populate("agent", "name"); // populate the agent name
+
+    if (!item) {
+      return res.status(404).send("Sale not found");
+    }
+
+    res.render("editSales", { item });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error loading sale");
+  }
 });
+
 
 router.post("/editSales/:id", async (req, res) => {
   try {

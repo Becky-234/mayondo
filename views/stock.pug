@@ -91,8 +91,9 @@ main.main-content
           th Quantity
           th Product Price
           th Cost Price
-          th Quality
           th Supplier Name
+          th Supplier Contact
+          th Quality
           th Date
           th Actions 
       tbody.row-others
@@ -104,8 +105,9 @@ main.main-content
               td #{item.pdtquantity}
               td #{item.pdtprice}
               td #{item.cprice}
-              td #{item.quality}
               td #{item.supplier}
+              td #{item.supplierContact}
+              td #{item.quality}
               td #{item.date}
               td 
                 a.btn-icon(href=`/editStock/${item._id}` title='Edit')

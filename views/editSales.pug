@@ -70,11 +70,8 @@ main.main-content
       input#unitPrice(type="text", name="unitPrice", required value=`${item.unitPrice}`)
       br
       br
-      label(for="transportCheck") Transport Check
-      br
-      label(for="transportCheck") Transport Check
-      input#transportCheck(type="hidden" name="transportCheck" value="false")
-      input#transportCheck(type="checkbox" name="transportCheck" value="true")
+      label(for="transportCheck") Add 5% Transport Fee 
+      input#transportCheck(type="checkbox" name="transportCheck" value=`${item.transportCheck}`)
       br
       br
       label(for="totalPrice") Total Price
@@ -98,7 +95,7 @@ main.main-content
       br
       label(for="agent") Sales Agent Name
       br
-      input#agent(type="text", name="agent", required value=`${item.agent}`)
+      input#agent(type="text", name="agent", required value=`${item.agent ? item.agent.name : '', readonly}`)
       br
       br
       .add

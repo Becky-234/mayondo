@@ -27,11 +27,15 @@ const stockSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    date: {
+    supplierContact: {
         type: String,
         required: true
     },
     quality: {
+        type: String,
+        required: true
+    },
+    date: {
         type: String,
         required: true
     }
