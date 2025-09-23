@@ -76,3 +76,36 @@ document.addEventListener("DOMContentLoaded", () => {
     notFound.style.display = hasResult ? "none" : "block";
   });
 });
+
+
+// Calculating Total
+const unitField = document.getElementById('unitPrice');
+const qtyField = document.getElementById('quantity');
+const totalField = document.getElementById('totalPrice');
+
+function updateTotal() {
+  const unitPrice = parseFloat(unitField.value);
+  const quantity = parseFloat(qtyField.value);
+  if (!isNaN(quantity) && !isNaN(unitPrice)) {
+    totalField.value = (quantity * unitPrice).toFixed(2);
+  } else {
+    totalField.value = "";
+  }
+}
+
+unitField.addEventListener('input', updateTotal);
+qtyField.addEventListener('input', updateTotal);
+
+
+
+// document.getElementById('unitPrice').addEventListener('change', function () {
+//   const unitPrice = parseFloat(document.getElementById('unitPrice').value);
+//   const quantity = parseFloat(document.getElementById('quantity').value);
+//   const totalPrice = document.getElementById('totalPrice');
+//   if (!isNaN(quantity) && !isNaN(unitPrice)) {
+//     const totalCost = (quantity * unitPrice).toFixed(0);
+//     totalPrice.value = totalCost
+//   } else {
+//     totalPrice.value = ""
+//   }
+// })

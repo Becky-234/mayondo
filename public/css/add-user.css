@@ -245,6 +245,10 @@ label {
   border-radius: 10px;
 }
 
+.logoutBtn :hover {
+  background: #8a6420;
+}
+
 .buttons {
   display: flex;
   gap: 150px;
@@ -259,4 +263,8 @@ label {
   background-color: #caba9c;
   border: 1px solid #fff;
   width: 25%;
+}
+
+.btns:hover {
+  background: #8a6420;
 }

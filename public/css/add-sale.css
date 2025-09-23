@@ -31,7 +31,7 @@ body {
   transition: width 0.5s;
   flex-shrink: 0;
   z-index: 1000;
-  position: fixed
+  position: fixed;
 }
 
 /* Use only .collapsed (drop .active for clarity) */
@@ -269,6 +269,10 @@ label {
   border-radius: 10px;
 }
 
+.logoutBtn:hover {
+  background: #8a6420;
+}
+
 .add {
   display: flex;
   gap: 150px;
@@ -283,4 +287,8 @@ label {
   border: 1px solid #fff;
   border-radius: 5px;
   width: 30%;
+}
+
+.btns:hover {
+  background: #8a6420;
 }

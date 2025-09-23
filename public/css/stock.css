@@ -275,6 +275,10 @@ body.sidebar-active {
   cursor: pointer;
 }
 
+.btns :hover {
+  background: #8a6420;
+}
+
 #notFound {
   color: red;
   display: none;
@@ -337,6 +341,10 @@ body.sidebar-active {
   color: #fff;
   border: 2px;
   border-radius: 10px;
+}
+
+.logoutBtn :hover {
+  background: #8a6420;
 }
 
 .btn-icon {

@@ -263,3 +263,7 @@ h2 {
   border: 2px;
   border-radius: 10px;
 }
+
+.logoutBtn :hover {
+  background: #8a6420;
+}

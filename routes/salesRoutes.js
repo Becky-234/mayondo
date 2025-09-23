@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const SalesModel = require("../models/salesModel");
+const StockModel = require("../models/stockModel");
 const { ensureAuthenticated, ensureAgent } = require("../middleware/auth")
 
 // GET /sales – fetch sales from DB and render the page
@@ -26,29 +27,50 @@ router.post("/sales", (req, res) => {
 });
 
 // GET add-sale form
-router.get("/addSale", (req, res) => {
-  res.render("addSale", { title: "Add sales page" });
+router.get("/addSale", async (req, res) => {
+  try {
+    const stocks = await StockModel.find()
+    res.render("addSale", { stocks });
+  } catch (error) {
+console.error(error.message)
+  }
 });
 //Only if you are logged in as a sales agent, you will be able to make a sale
 //ensureAuthenticated, ensureAgent,
-router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
+router.post("/addSale", async (req, res) => {
+  console.log("POST /addSale hit", req.body);
   try {
-    const { name, tproduct, nproduct, quantity, unitPrice, transportCheck, totalPrice, payment, date
+    const {
+      name, tproduct, nproduct, quantity,
+      unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
     const userId = req.session.user._id;
+
+    const stock = await StockModel.findOne({ pdttype: tproduct, pdtname: nproduct });
+    if (!stock) {
+      return res.status(400).send('Stock not Found!');
+    }
+
+    if (stock.pdtquantity < Number(quantity)) {
+      return res.status(400).send('Low Stock!');
+    }
+
+    let total = Number(totalPrice);
+    if (transportCheck) total *= 1.05;
+
     const sale = new SalesModel({
       name,
       tproduct,
       nproduct,
       quantity,
       unitPrice,
-      transportCheck,
-      totalPrice,
+      transportCheck: !!transportCheck,
+      totalPrice: total,
       payment,
       date,
       agent: userId
     });
-    console.log(req.body);
+
     await sale.save();
     res.redirect("/sales");
   } catch (error) {
@@ -82,7 +104,7 @@ router.post("/editSales/:id", async (req, res) => {
 router.post("/deleteSale", async (req, res) => {
   try {
     await SalesModel.deleteOne({ _id: req.body.id });
-    res.redirect("sales");
+    res.redirect("/sales");
   } catch (error) {
     res.status(400).send("Unable to delete item from the database");
   }

@@ -295,6 +295,11 @@ body.sidebar-active {
   border-radius: 10px;
 }
 
+.logoutBtn :hover {
+  background: #8a6420;
+}
+
+
 .include {
   display: flex;
   gap: 30px;
@@ -321,6 +326,11 @@ body.sidebar-active {
   text-decoration: none;
   cursor: pointer;
 }
+
+.btns :hover {
+  background: #8a6420;
+}
+
 
 #notFound {
   color: red;

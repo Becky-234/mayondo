@@ -24,7 +24,7 @@ const salesSchema = new mongoose.Schema({
   },
   transportCheck: {
     type: Boolean,
-    set: v => v === 'on' || v === true
+    default: false
   },
   totalPrice: {
     type: String,

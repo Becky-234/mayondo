@@ -32,7 +32,7 @@
 
             <div class="input-box">
                 <input id="username" type="text" placeholder="Username" name="username" required>
-                <span id="username" class="error"></span>
+                <span id="usernameError" class="error"></span>
             </div>
 
             <div class="input-box">
@@ -44,14 +44,18 @@
             <select id="role" name="role" required>
                 <option value="" disabled selected>Select your role</option>
                 <option value="Manager">Manager</option>
-                <option value="Sales Agent">Sales Agent</option>
+                <option value="Sales agent">Sales agent</option>
             </select>
             <br><br>
             <button type="submit" class="button" id="signup-btn">Signup</button>
             <br>
+            <div id="successMessage" class="success-message">
+                Registration successful! Redirecting...
+            </div>
         </div>
 
     </form>
+    <script src="../javascript/signup.js"></script>
 </body>
 
 </html>

@@ -40,8 +40,8 @@ main.main-content
       .d-flex.align-items-center
         a.logoutBtn(href="/index") Logout
   .user-form-container
-    form#addSale(action="/addSale", method="post")
-      h2 Add Sale Here! 
+    form#addSale(action="/addSale", method="post")  
+      h2 Add Sale Here!   
       label(for="name") Name of Customer
       br
       input#name(type="text", name="name", required)
@@ -49,7 +49,10 @@ main.main-content
       br
       label(for="nproduct") Name of Product
       br
-      input#nproduct(type="text", name="nproduct", required)
+      select#nproduct(name="nproduct", required)
+        if stocks.length
+          each stock in stocks
+            option(value=stock.pdtname)= stock.pdtname
       br
       br
       label(for="tproduct") Type of Product
@@ -70,14 +73,13 @@ main.main-content
       input#unitPrice(type="text", name="unitPrice", required)
       br
       br
-      label(for="transportCheck") Transport Check
-      input#transportCheck(type="hidden" name="transportCheck" value="false")
-      input#transportCheck(type="checkbox" name="transportCheck" value="true")
+      label(for="transportCheck") Add 5% Transport Fee 
+      input#transportCheck(type="checkbox" name="transportCheck")
       br
       br
       label(for="totalPrice") Total Price
       br
-      input#totalPrice(type="text", name="totalPrice", required)
+      input#totalPrice(type="text", name="totalPrice", required readonly)
       br
       br
       label(for="payment") Select Payment Method
@@ -102,5 +104,5 @@ main.main-content
       .add
         button.btns(type="submit") Save
         button.btns(type="reset") Cancel
-script(src="/javascript/sales.js")
+script(src="../javascript/sales.js")
 script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js", integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI", crossorigin="anonymous")
