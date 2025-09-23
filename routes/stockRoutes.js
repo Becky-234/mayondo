@@ -72,4 +72,17 @@ router.post("/deleteStock", async (req, res) => {
   }
 });
 
+//GENERATING RECEIPT
+router.post("/generateReceipt/:id", async (req, res) => {
+  try {
+    const item = await StockModel.findOne({ _id: req.params.id });
+    res.render("receipt", { item });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).send('Uable to find stock')
+  }
+});
+
+
+
 module.exports = router;
