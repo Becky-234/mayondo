@@ -79,33 +79,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // Calculating Total
-const unitField = document.getElementById('unitPrice');
-const qtyField = document.getElementById('quantity');
-const totalField = document.getElementById('totalPrice');
+// const unitField = document.getElementById('unitPrice');
+// const qtyField = document.getElementById('quantity');
+// const totalField = document.getElementById('totalPrice');
 
-function updateTotal() {
-  const unitPrice = parseFloat(unitField.value);
-  const quantity = parseFloat(qtyField.value);
-  if (!isNaN(quantity) && !isNaN(unitPrice)) {
-    totalField.value = (quantity * unitPrice).toFixed(2);
-  } else {
-    totalField.value = "";
-  }
-}
-
-unitField.addEventListener('input', updateTotal);
-qtyField.addEventListener('input', updateTotal);
-
-
-
-// document.getElementById('unitPrice').addEventListener('change', function () {
-//   const unitPrice = parseFloat(document.getElementById('unitPrice').value);
-//   const quantity = parseFloat(document.getElementById('quantity').value);
-//   const totalPrice = document.getElementById('totalPrice');
+// function updateTotal() {
+//   const unitPrice = parseFloat(unitField.value);
+//   const quantity = parseFloat(qtyField.value);
 //   if (!isNaN(quantity) && !isNaN(unitPrice)) {
-//     const totalCost = (quantity * unitPrice).toFixed(0);
-//     totalPrice.value = totalCost
+//     totalField.value = (quantity * unitPrice).toFixed(2);
 //   } else {
-//     totalPrice.value = ""
+//     totalField.value = "";
 //   }
-// })
+// }
+
+// unitField.addEventListener('input', updateTotal);
+// qtyField.addEventListener('input', updateTotal);
+
+
+// Wait for DOM to load
+document.addEventListener('DOMContentLoaded', function () {
+  const unitprice = document.getElementById('unitPrice');
+  const qty = document.getElementById('quantity');
+  const totalprice = document.getElementById('totalPrice');
+
+  // Only run if elements exist
+  if (unitprice && qty && totalprice) {
+    function updateTotal() {
+      const unitPrice = parseFloat(unitprice.value) || 0;
+      const quantity = parseFloat(qty.value) || 0;
+      if (!isNaN(quantity) && !isNaN(unitPrice)) {
+        totalprice.value = (quantity * unitPrice).toFixed(2);
+      } else {
+        totalprice.value = "";
+      }
+    }
+
+    unitprice.addEventListener('input', updateTotal);
+    qty.addEventListener('input', updateTotal);
+  }
+});
+ 

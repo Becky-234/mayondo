@@ -115,6 +115,10 @@ main.main-content
                     input(type='hidden', name='id', value=item._id)
                     button.btn-icon(type='submit', title='Delete')
                       i.fas.fa-trash
+                  form(method='post', action=`/getReceipt/${item._id}`, style='display:inline')
+                    input(type='hidden', name='id', value=item._id)
+                    button.btn-icon(type='submit', title='Receipt')
+                      i.fas.fa-file-invoice
     br
     br
     h5#notFound Not Found!

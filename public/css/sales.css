@@ -15,6 +15,8 @@ body {
   /* Overall page background */
   overflow-x: hidden;
   /* Prevents horizontal scrollbar if content overflows */
+  width: 100%;
+  overflow-x: auto;
 }
 
 /* SIDE BAR */
@@ -193,6 +195,8 @@ body.sidebar-active {
   /* General padding inside the main content area */
   padding-top: 80px;
   /* Space for the absolutely positioned navbar */
+  width: 100%;
+  min-height: 100vh;
 }
 
 /* TOP RIGHT NAVBAR AND LOGOUT */
@@ -213,6 +217,11 @@ body.sidebar-active {
   /* Allow content to dictate width */
   z-index: 100;
   /* Ensure it's above other content if needed */
+}
+
+.container-fluid {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .dash-card {
@@ -238,6 +247,27 @@ body.sidebar-active {
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* adds a shadow for depth */
 }
 
+.dash-card i {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.dash-card .card-title {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.dash-card .card-text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
 .table-content {
   margin-top: 30px;
   background: white;
@@ -248,6 +278,7 @@ body.sidebar-active {
   /* This is crucial for single, well-defined borders */
   width: 100%;
   /* Make the table take up available width */
+  min-width: 1200px; /* Or whatever minimum works */
 }
 
 .table-content th,
@@ -299,19 +330,22 @@ body.sidebar-active {
   background: #8a6420;
 }
 
-
 .include {
   display: flex;
-  gap: 30px;
+  gap: 15px;
+  align-items: center;
   border-radius: 10px;
   background: #4c6444;
   padding: 15px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  margin-bottom: 20px;
 }
 
 .include input {
   border-radius: 10px;
   border: 2px solid #fff;
-  width: 30%;
+  width: 250px; /* Fixed width instead of percentage */
+  margin-left: auto; /* Push search to the right */
   text-align: center;
   background: #caba9c;
 }
@@ -331,7 +365,6 @@ body.sidebar-active {
   background: #8a6420;
 }
 
-
 #notFound {
   color: red;
   display: none;
@@ -349,4 +382,16 @@ body.sidebar-active {
 }
 .btn-icon:hover {
   color: #d9534f; /* red tint on hover */
+}
+
+/* Ensure proper row spacing */
+.row {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.col-md-3 {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 20px;
 }

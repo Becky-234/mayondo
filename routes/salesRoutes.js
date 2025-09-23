@@ -4,6 +4,7 @@ const SalesModel = require("../models/salesModel");
 const StockModel = require("../models/stockModel");
 const { ensureAuthenticated, ensureAgent } = require("../middleware/auth")
 
+
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", async (req, res) => {
   try {
@@ -25,6 +26,7 @@ router.get("/sales", async (req, res) => {
 router.post("/sales", (req, res) => {
   console.log(req.body);
 });
+
 
 // GET add-sale form
 router.get("/addSale", async (req, res) => {
@@ -57,20 +59,6 @@ router.post("/addSale", async (req, res) => {
 
     let total = Number(totalPrice);
     if (transportCheck) total *= 1.05;
-
-    // const sale = new SalesModel({
-    //   name,
-    //   contact,
-    //   tproduct,
-    //   nproduct,
-    //   quantity,
-    //   unitPrice,
-    //   transportCheck: !!transportCheck,
-    //   totalPrice: total,
-    //   payment,
-    //   date,
-    //   agent: userId
-    // });
 
     if (stock && stock.pdtquantity > 0) {
       const sale = new SalesModel({
@@ -141,6 +129,7 @@ router.post("/editSales/:id", async (req, res) => {
   } catch (error) { }
 });
 
+
 //DELETING SALES
 router.post("/deleteSale", async (req, res) => {
   try {
@@ -148,6 +137,20 @@ router.post("/deleteSale", async (req, res) => {
     res.redirect("/sales");
   } catch (error) {
     res.status(400).send("Unable to delete item from the database");
+  }
+});
+
+
+//GENERATING RECEIPT
+router.post("/getReceipt/:id", async (req, res) => {
+  // console.log('Receipt route hit with ID:', req.params.id);
+  try {
+    const item = await SalesModel.findOne({ _id: req.params.id });
+    // console.log('Item found:', item);
+    res.render("salesReceipt", { item });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).send('Uable to find sale')
   }
 });
 

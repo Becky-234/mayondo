@@ -250,8 +250,10 @@ body.sidebar-active {
 
 .include {
   display: flex;
-  gap: 30px;
+  gap: 15px;
   background: #4c6444;
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
   padding: 15px;
   border-radius: 10px;
 }
@@ -259,7 +261,8 @@ body.sidebar-active {
 .include input {
   border-radius: 10px;
   border: 2px solid #fff;
-  width: 30%;
+  width: 250px; /* Fixed width instead of percentage */
+  margin-left: auto; /* Push search to the right */
   text-align: center;
   background: #caba9c;
 }
@@ -357,4 +360,16 @@ body.sidebar-active {
 }
 .btn-icon:hover {
   color: #d9534f; /* red tint on hover */
+}
+
+/* Ensure proper row spacing */
+.row {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.col-md-3 {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 20px;
 }
