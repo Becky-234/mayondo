@@ -5,6 +5,10 @@ const salesSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  contact: {
+    type: String,
+    required: true
+  },
   tproduct: {
     type: String,
     required: true
