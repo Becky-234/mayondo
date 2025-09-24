@@ -12,7 +12,7 @@ aside.side-menu-container
     h2.logo MWF
     i.fa-solid.fa-bars
   ul.list
-    li.list-item.active
+    li.list-item
       a(href='/dashboard')
         i.fa-solid.fa-house
         span.link-name Dashboard
@@ -24,7 +24,7 @@ aside.side-menu-container
       a(href='/sales')
         i.fa-solid.fa-cart-shopping
         span.link-name Sales
-    li.list-item
+    li.list-item.active
       a(href='/stock')
         i.fa-solid.fa-truck
         span.link-name Stock
@@ -62,14 +62,14 @@ main.main-content
       input#pdtquantity(type='number' name='pdtquantity' required='')
       br
       br
-      label(for='pdtprice') Product Price
-      br
-      input#pdtprice(type='number' name='pdtprice' required='')
-      br
-      br
       label(for='cprice') Cost Price
       br
-      input#cprice(type='number' name='cprice' required='')
+      input#cprice(type='text' name='cprice' required='')
+      br
+      br
+      label(for='pdtprice') Product Price
+      br
+      input#pdtprice(type='text' name='pdtprice' required='')
       br
       br
       label(for='supplier') Supplier Name

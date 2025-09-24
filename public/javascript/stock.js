@@ -92,3 +92,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // unitField.addEventListener('input', updateTotal);
 // qtyField.addEventListener('input', updateTotal);
+
+
+//Filter
+document.addEventListener('DOMContentLoaded', function () {
+  const productFilter = document.getElementById('productFilter');
+  const productItems = document.querySelectorAll('.product-item');
+
+  productFilter.addEventListener('change', function () {
+    const filterValue = this.value;
+
+    productItems.forEach(item => {
+      const productType = item.getAttribute('data-product-type');
+      let shouldShow = false;
+
+      switch (filterValue) {
+        case 'all':
+          shouldShow = true;
+          break;
+        case 'raw':
+          shouldShow = productType === 'raw';
+          break;
+        case 'furniture':
+          shouldShow = productType === 'furniture';
+          break;
+      }
+
+      // Smooth transition
+      if (shouldShow) {
+        item.style.opacity = '0';
+        item.style.display = 'block'; // or your preferred display value
+        setTimeout(() => {
+          item.style.opacity = '1';
+        }, 50);
+      } else {
+        item.style.opacity = '0';
+        setTimeout(() => {
+          item.style.display = 'none';
+        }, 300);
+      }
+    });
+  });
+});

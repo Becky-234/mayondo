@@ -54,27 +54,113 @@ main.main-content
           .dash-card
             .card-body
               i.fa-solid.fa-sack-dollar
-              h5.card-title Today&apos;s Sale
-              p.card-text Shs.500,000
+              h5.card-title Total Revenue
+              p.card-text Shs. #{dashboardData.totalRevenue}
+              small.text-muted Combined potential revenue
         .col-md-3
           .dash-card
             .card-body
               i.fa-solid.fa-credit-card
-              h5.card-title Today&apos;s Purchase
-              p.card-text 15
+              h5.card-title Total Profit
+              p.card-text Shs. #{dashboardData.totalProfit}
+              small.text-muted Combined potential profit
         .col-md-3
           .dash-card
             .card-body
               i.fa-solid.fa-users-line
-              h5.card-title Customers
-              p.card-text 5
+              h5.card-title Total Inventory Items 
+              p.card-text #{dashboardData.totalInventory}
+              small.text-muted Unique products in stock
         .col-md-3
           .dash-card
             .card-body
               i.fa-solid.fa-truck-ramp-box
-              h5.card-title Deliveries
-              p.card-text 5
-      br
+              h5.card-title Stock Warnings 
+              p.card-text #{dashboardData.stockWarnings}
+              small.text-muted Items with low stock
+    //- Raw Materials Section
+    section#raw-materials.dash.mt-5
+      h5.mb-4 Raw Materials Overview
+      .row
+        .col-md-2
+          .dash-card.raw-card
+            .card-body
+              i.fa-solid.fa-tree
+              h6.card-title Raw Revenue
+              p.card-text Shs. #{dashboardData.rawRevenue}
+        .col-md-2
+          .dash-card.raw-card
+            .card-body
+              i.fa-solid.fa-coins
+              h6.card-title Raw Profit
+              p.card-text Shs. #{dashboardData.rawProfit}
+        .col-md-2
+          .dash-card.raw-card
+            .card-body
+              i.fa-solid.fa-box
+              h6.card-title Raw Items
+              p.card-text #{dashboardData.rawInventory}
+      .row
+        .col-md-2
+          .dash-card.raw-card
+            .card-body
+              i.fa-solid.fa-exclamation
+              h6.card-title Raw Warnings
+              p.card-text #{dashboardData.rawStockWarnings}
+        .col-md-2
+          .dash-card.raw-card
+            .card-body
+              i.fa-solid.fa-cubes
+              h6.card-title Total Units
+              p.card-text #{dashboardData.rawItems}
+        .col-md-2
+          .dash-card.raw-card
+            .card-body
+              i.fa-solid.fa-dollar-sign
+              h6.card-title Inventory Value
+              p.card-text Shs. #{dashboardData.rawInventoryValue}
+    
+    //- Furniture Section
+    section#furniture.dash.mt-5
+      h5.mb-4 Furniture Overview
+      .row
+        .col-md-2
+          .dash-card.furniture-card
+            .card-body
+              i.fa-solid.fa-couch
+              h6.card-title Furniture Revenue
+              p.card-text Shs. #{dashboardData.furnitureRevenue}
+        .col-md-2
+          .dash-card.furniture-card
+            .card-body
+              i.fa-solid.fa-money-bill
+              h6.card-title Furniture Profit
+              p.card-text Shs. #{dashboardData.furnitureProfit}
+        .col-md-2
+          .dash-card.furniture-card
+            .card-body
+              i.fa-solid.fa-box-open
+              h6.card-title Furniture Items
+              p.card-text #{dashboardData.furnitureInventory}
+      .row
+        .col-md-2
+          .dash-card.furniture-card
+            .card-body
+              i.fa-solid.fa-exclamation-triangle
+              h6.card-title Furniture Warnings
+              p.card-text #{dashboardData.furnitureStockWarnings}
+        .col-md-2
+          .dash-card.furniture-card
+            .card-body
+              i.fa-solid.fa-layer-group
+              h6.card-title Total Units
+              p.card-text #{dashboardData.furnitureItems}
+        .col-md-2
+          .dash-card.furniture-card
+            .card-body
+              i.fa-solid.fa-tag
+              h6.card-title Inventory Value
+              p.card-text Shs. #{dashboardData.furnitureInventoryValue}
       br
       br
     section.charts

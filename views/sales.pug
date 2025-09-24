@@ -50,9 +50,9 @@ main.main-content
             h5.card-title Total Sales
             p.card-text Shs. #{dashboardMetrics ? (dashboardMetrics.totalSalesRaw + dashboardMetrics.totalSalesFurniture).toLocaleString() : '0'}
                     .breakdown
-                        small.text-muted Raw: Shs. #{dashboardMetrics ? dashboardMetrics.totalSalesRaw.toLocaleString() : '0'}
+                        small Raw: Shs. #{dashboardMetrics ? dashboardMetrics.totalSalesRaw.toLocaleString() : '0'}
                         br
-                        small.text-muted Furniture: Shs. #{dashboardMetrics ? dashboardMetrics.totalSalesFurniture.toLocaleString() : '0'}
+                        small Furniture: Shs. #{dashboardMetrics ? dashboardMetrics.totalSalesFurniture.toLocaleString() : '0'}
         
       .col-md-3
         .dash-card
@@ -67,9 +67,9 @@ main.main-content
             h5.card-title Total Sold Products
             p.card-text #{dashboardMetrics ? (dashboardMetrics.totalSoldRaw + dashboardMetrics.totalSoldFurniture) : '0'} units
                     .breakdown
-                        small.text-muted Raw: #{dashboardMetrics ? dashboardMetrics.totalSoldRaw : '0'}
+                        small Raw: #{dashboardMetrics ? dashboardMetrics.totalSoldRaw : '0'}
                         br
-                        small.text-muted Furniture: #{dashboardMetrics ? dashboardMetrics.totalSoldFurniture : '0'}
+                        small Furniture: #{dashboardMetrics ? dashboardMetrics.totalSoldFurniture : '0'}
       .col-md-3
         .dash-card
           .card-body
@@ -105,9 +105,9 @@ main.main-content
           th Product Name
           th Product Type
           th Quantity
-          th Unit Price
+          th Unit Price UGX
           th Transport Check 
-          th Total Price
+          th Total Price UGX
           th Type of Payment
           th Date
           th Sales Agent Name
@@ -122,14 +122,14 @@ main.main-content
               td #{item.nproduct}
               td #{item.tproduct}
               td #{item.quantity}
-              td #{item.unitPrice}
+              td #{item.unitPrice.toLocaleString()}
               td #{item.transportCheck ? 'Yes' : 'No'}
-              td #{Math.round(item.totalPrice)}
+              td #{Math.round(item.totalPrice).toLocaleString()}
               td #{item.payment}
               td #{new Date(item.date).toLocaleDateString()}
               td #{item.agent.name}
               if currentUser.role === "Manager"
-                td
+                td.actions
                   a.btn-icon(href=`/editSales/${item._id}` title='Edit')
                     i.fas.fa-edit
                   form(method='post', action='/deleteSale', style='display:inline')

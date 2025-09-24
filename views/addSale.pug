@@ -10,7 +10,7 @@ aside.side-menu-container
     h2.logo MWF
     i.fa-solid.fa-bars
   ul.list
-    li.list-item.active
+    li.list-item
       a(href="/dashboard")
         i.fa-solid.fa-house
         span.link-name Dashboard
@@ -18,7 +18,7 @@ aside.side-menu-container
       a(href="/usersList")
         i.fa-solid.fa-users
         span.link-name Users
-    li.list-item
+    li.list-item.active
       a(href="/sales")
         i.fa-solid.fa-cart-shopping
         span.link-name Sales
@@ -92,7 +92,7 @@ main.main-content
       select#payment(name="payment", required)
         option(value, disabled, selected) Select Payment Method
         option(value="Bank Overdraft") Bank Overdraft 
-        option(value="Mobile Money") Mobile Money
+        option(value="Cash") Cash
         option(value="Cheque") Cheque
       br
       br

@@ -6,7 +6,6 @@ const { ensureAuthenticated, ensureAgent } = require("../middleware/auth")
 
 
 // GET /sales – fetch sales from DB and render the page
-// GET /sales – fetch sales from DB and render the page
 router.get("/sales", async (req, res) => {
   try {
     const items = await SalesModel
@@ -16,7 +15,7 @@ router.get("/sales", async (req, res) => {
 
     // Calculate dashboard metrics from actual data - SEPARATED BY TYPE
     const totalSalesRaw = items
-      .filter(item => item.tproduct === "Raw Material")
+      .filter(item => item.tproduct === "Raw")
       .reduce((sum, item) => sum + item.totalPrice, 0);
 
     const totalSalesFurniture = items
@@ -27,15 +26,12 @@ router.get("/sales", async (req, res) => {
 
     // Calculate total sold products by type
     const totalSoldRaw = items
-      .filter(item => item.tproduct === "Raw Material")
+      .filter(item => item.tproduct === "Raw")
       .reduce((sum, item) => sum + item.quantity, 0);
 
     const totalSoldFurniture = items
       .filter(item => item.tproduct === "Furniture")
       .reduce((sum, item) => sum + item.quantity, 0);
-
-    // Count discounts (you might need to add a discount field to your model)
-    const totalDiscounts = items.filter(item => item.discount > 0).length;
 
     const currentUser = req.session.user;
 
@@ -50,7 +46,6 @@ router.get("/sales", async (req, res) => {
         totalSoldRaw,
         totalSoldFurniture,
         totalSoldAll: totalSoldRaw + totalSoldFurniture, // Optional: keep total
-        totalDiscounts
       }
     });
 
@@ -96,12 +91,18 @@ router.post("/addSale", async (req, res) => {
 
     let total = Number(totalPrice);
     if (transportCheck) total *= 1.05;
-    if (discount) total -= Number(discount);
+
+    // Ensure the contact starts with +256
+    let formattedContact = contact.trim();
+    if (!formattedContact.startsWith("+256")) {
+      // remove any leading zeros or existing country code before adding +256
+      formattedContact = "+256" + formattedContact.replace(/^0+/, "");
+    }
 
     if (stock && stock.pdtquantity > 0) {
       const sale = new SalesModel({
         name,
-        contact,
+        contact: formattedContact,   // <---- use the formatted value
         tproduct,
         nproduct,
         quantity,

@@ -247,24 +247,14 @@ body.sidebar-active {
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* adds a shadow for depth */
 }
 
+.card-text .text-muted {
+  color: #fff;
+}
+
 .dash-card i {
   font-size: 24px;
   margin-bottom: 10px;
 }
-
-/* Color coding by product type */
-.dash-card:nth-child(1) {
-  border-left-color: #28a745;
-} /* Raw Materials - Green */
-.dash-card:nth-child(2) {
-  border-left-color: #ffc107;
-} /* Furniture - Yellow */
-.dash-card:nth-child(3) {
-  border-left-color: #007bff;
-} /* Orders - Blue */
-.dash-card:nth-child(4) {
-  border-left-color: #dc3545;
-} /* Distribution - Red */
 
 .breakdown {
   margin-top: 10px;
@@ -273,19 +263,21 @@ body.sidebar-active {
 }
 
 .distribution .raw-material {
-  color: #28a745;
+  /* color: #28a745; */
+  color: #fff;
   font-weight: 600;
 }
 
 .distribution .furniture {
-  color: #ffc107;
+  /* color: #ffc107; */
+  color: #fff;
   font-weight: 600;
 }
 
 /* Icon colors by type */
-.fa-money-bill-trend-up {
-  color: #28a745;
-} /* Raw */
+/* .fa-money-bill-trend-up {
+  color: #28a745; */
+/* Raw */
 /* .fa-couch {
   color: #ffc107; */
 /* Furniture */
@@ -427,7 +419,7 @@ body.sidebar-active {
 }
 
 .filter-dropdown {
-  padding: 10px 15px;
+  padding: 5px;
   border: 2px solid #e9ecef;
   border-radius: 8px;
   background: white;
@@ -504,4 +496,26 @@ body.sidebar-active {
   padding-left: 10px;
   padding-right: 10px;
   margin-bottom: 20px;
+}
+
+/* Make all icons sit in a single row */
+td.actions {
+  display: flex;
+  align-items: center; /* vertical centering */
+  justify-content: center; /* or flex-start / flex-end as you prefer */
+  gap: 0.3rem; /* space between each icon */
+  padding: 0.25rem 0.5rem; /* optional: tighter padding */
+}
+
+/* Basic styling for the icon buttons/links */
+td.actions .btn-icon {
+  background: none;
+  border: none;
+  color: #333; /* or your preferred color */
+  cursor: pointer;
+  padding: 0; /* remove default button padding */
+}
+
+td.actions .btn-icon:hover {
+  color: #007bff; /* hover color */
 }

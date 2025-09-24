@@ -10,17 +10,17 @@ const stockSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    cprice: {
-        type: Number,
-        required: true
-    },
     pdtquantity: {
         type: Number,
         trim: true,
         required: true
     },
+    cprice: {
+        type: String,
+        required: true
+    },
     pdtprice: {
-        type: Number,
+        type: String,
         required: true
     },
     supplier: {

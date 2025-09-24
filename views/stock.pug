@@ -81,6 +81,14 @@ main.main-content
     a.btns(href='/addStock') Add Stock
     a#downloadExcel.btns Download Excel
     a#downloadPdf.btns Download PDF
+    
+    .table-filter(style="display: inline-block; margin-left: 20px;")
+        label.filter-label(for="productFilter") Filter by:
+        select#productFilter.filter-dropdown
+            option(value="all") All Products
+            option(value="raw") Raw Only
+            option(value="furniture") Furniture Only
+
     input#searchStock(type='search' placeholder='Search...')
   section
     table#newStock.table-content
@@ -89,8 +97,8 @@ main.main-content
           th Product Name
           th Product Type
           th Quantity
-          th Product Price
-          th Cost Price
+          th Cost Price UGX
+          th Product Price UGX
           th Supplier Name
           th Supplier Contact
           th Quality
@@ -103,13 +111,13 @@ main.main-content
               td #{item.pdtname}
               td #{item.pdttype}
               td #{item.pdtquantity}
-              td #{item.pdtprice}
-              td #{Math.round(item.pdtquantity * item.pdtprice)}
+              td #{item.cprice.toLocaleString()}
+              td #{Math.round(item.cprice * 1.5).toLocaleString()}
               td #{item.supplier}
-              td #{item.supplierContact}
+              td +256#{item.supplierContact}
               td #{item.quality}
-              td #{item.date}
-              td 
+              td #{new Date(item.date).toLocaleDateString()}
+              td.actions
                 a.btn-icon(href=`/editStock/${item._id}` title='Edit')
                   i.fas.fa-edit
                 form(method='post', action='/deleteStock', style='display:inline')

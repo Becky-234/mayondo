@@ -150,8 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Check if row matches both filter and search criteria
       const matchesFilter = selectedFilter === 'all' ||
-        (selectedFilter === 'raw' && productType.includes('raw')) ||
-        (selectedFilter === 'furniture' && productType.includes('furniture'));
+        selectedFilter === productType;
 
       const matchesSearch = searchTerm === '' || rowText.includes(searchTerm);
 
