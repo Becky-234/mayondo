@@ -24,7 +24,7 @@ body {
   position: sticky;
   top: 0;
   left: 0;
-  width: 260px;
+  width: 210px;
   height: 100vh;
   background: #4c6444;
   padding: 6px 50px 0 0;
@@ -36,7 +36,7 @@ body {
 
 /* Use only .collapsed (drop .active for clarity) */
 .side-menu-container.collapsed {
-  width: 80px;
+  width: 70px;
 }
 
 /* --- Logo --- */
@@ -278,7 +278,7 @@ body.sidebar-active {
   /* This is crucial for single, well-defined borders */
   width: 100%;
   /* Make the table take up available width */
-  min-width: 1200px; /* Or whatever minimum works */
+  min-width: 1100px; /* Or whatever minimum works */
 }
 
 .table-content th,
@@ -287,6 +287,7 @@ body.sidebar-active {
   padding: 12px 15px;
   text-align: left;
   /* Align text to the left */
+  font-size: 15px;
 }
 
 .table-content thead {

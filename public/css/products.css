@@ -23,7 +23,7 @@ body {
   top: 0;
   left: 0;
   width: 260px;
-  height: 100vh;
+  height: 100%;
   background: #4c6444;
   padding: 6px 50px 0 0;
   overflow: hidden;
