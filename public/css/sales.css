@@ -227,14 +227,14 @@ body.sidebar-active {
 .dash-card {
   flex: 1;
   min-width: 200px;
+  min-height: 160px;
   border: solid 1px white;
   background: #4c6444;
   color: #fff;
-  border-radius: 10px;
-  padding: 5px;
-  height: 100px;
+  border-radius: 12px;
+  padding: 25px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   gap: 5px;
   flex-wrap: nowrap; /* prevent wrapping */
@@ -252,8 +252,53 @@ body.sidebar-active {
   margin-bottom: 10px;
 }
 
+/* Color coding by product type */
+.dash-card:nth-child(1) {
+  border-left-color: #28a745;
+} /* Raw Materials - Green */
+.dash-card:nth-child(2) {
+  border-left-color: #ffc107;
+} /* Furniture - Yellow */
+.dash-card:nth-child(3) {
+  border-left-color: #007bff;
+} /* Orders - Blue */
+.dash-card:nth-child(4) {
+  border-left-color: #dc3545;
+} /* Distribution - Red */
+
+.breakdown {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.distribution .raw-material {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.distribution .furniture {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+/* Icon colors by type */
+.fa-money-bill-trend-up {
+  color: #28a745;
+} /* Raw */
+/* .fa-couch {
+  color: #ffc107; */
+/* Furniture */
+.fa-boxes {
+  color: #28a745;
+} /* Raw units */
+.fa-chair {
+  color: #ffc107;
+} /* Furniture units */
+
 .dash-card .card-title {
   font-size: 14px;
+  text-align: center;
   margin-bottom: 5px;
 }
 
@@ -366,6 +411,70 @@ body.sidebar-active {
   background: #8a6420;
 }
 
+/* Table Filter Styles */
+.table-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.filter-dropdown {
+  padding: 10px 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  background: white;
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.filter-dropdown:hover {
+  border-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.filter-dropdown:focus {
+  outline: none;
+  border-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.filter-dropdown option {
+  padding: 10px;
+  font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .table-filter {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .filter-dropdown {
+    min-width: 150px;
+    flex-grow: 1;
+  }
+}
+
 #notFound {
   color: red;
   display: none;
@@ -387,12 +496,12 @@ body.sidebar-active {
 
 /* Ensure proper row spacing */
 .row {
-    margin-left: -10px;
-    margin-right: -10px;
+  margin-left: -10px;
+  margin-right: -10px;
 }
 
 .col-md-3 {
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 20px;
 }

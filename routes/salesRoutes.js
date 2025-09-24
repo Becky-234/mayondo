@@ -6,6 +6,7 @@ const { ensureAuthenticated, ensureAgent } = require("../middleware/auth")
 
 
 // GET /sales – fetch sales from DB and render the page
+// GET /sales – fetch sales from DB and render the page
 router.get("/sales", async (req, res) => {
   try {
     const items = await SalesModel
@@ -13,9 +14,45 @@ router.get("/sales", async (req, res) => {
       .sort({ $natural: -1 })
       .populate("agent", "name");
 
-    const currentUser = req.session.user
-    res.render('sales', { items, currentUser })
-    console.log(items);
+    // Calculate dashboard metrics from actual data - SEPARATED BY TYPE
+    const totalSalesRaw = items
+      .filter(item => item.tproduct === "Raw Material")
+      .reduce((sum, item) => sum + item.totalPrice, 0);
+
+    const totalSalesFurniture = items
+      .filter(item => item.tproduct === "Furniture")
+      .reduce((sum, item) => sum + item.totalPrice, 0);
+
+    const totalOrders = items.length;
+
+    // Calculate total sold products by type
+    const totalSoldRaw = items
+      .filter(item => item.tproduct === "Raw Material")
+      .reduce((sum, item) => sum + item.quantity, 0);
+
+    const totalSoldFurniture = items
+      .filter(item => item.tproduct === "Furniture")
+      .reduce((sum, item) => sum + item.quantity, 0);
+
+    // Count discounts (you might need to add a discount field to your model)
+    const totalDiscounts = items.filter(item => item.discount > 0).length;
+
+    const currentUser = req.session.user;
+
+    res.render('sales', {
+      items,
+      currentUser,
+      dashboardMetrics: {
+        totalSalesRaw: Math.round(totalSalesRaw),
+        totalSalesFurniture: Math.round(totalSalesFurniture),
+        totalSalesAll: Math.round(totalSalesRaw + totalSalesFurniture), // Optional: keep total
+        totalOrders,
+        totalSoldRaw,
+        totalSoldFurniture,
+        totalSoldAll: totalSoldRaw + totalSoldFurniture, // Optional: keep total
+        totalDiscounts
+      }
+    });
 
   } catch (error) {
     console.error(error);
@@ -59,6 +96,7 @@ router.post("/addSale", async (req, res) => {
 
     let total = Number(totalPrice);
     if (transportCheck) total *= 1.05;
+    if (discount) total -= Number(discount);
 
     if (stock && stock.pdtquantity > 0) {
       const sale = new SalesModel({

@@ -120,3 +120,79 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
  
+
+
+// Table filtering functionality
+document.addEventListener('DOMContentLoaded', function () {
+  const productFilter = document.getElementById('productFilter');
+  const searchInput = document.getElementById('searchSale');
+  const notFoundMessage = document.getElementById('notFound');
+  const tableRows = document.querySelectorAll('#salesTable tbody tr');
+
+  // Filter table based on dropdown selection
+  productFilter.addEventListener('change', function () {
+    filterTable();
+  });
+
+  // Search functionality
+  searchInput.addEventListener('input', function () {
+    filterTable();
+  });
+
+  function filterTable() {
+    const selectedFilter = productFilter.value;
+    const searchTerm = searchInput.value.toLowerCase();
+    let visibleRows = 0;
+
+    tableRows.forEach(row => {
+      const productType = row.getAttribute('data-type');
+      const rowText = row.textContent.toLowerCase();
+
+      // Check if row matches both filter and search criteria
+      const matchesFilter = selectedFilter === 'all' ||
+        (selectedFilter === 'raw' && productType.includes('raw')) ||
+        (selectedFilter === 'furniture' && productType.includes('furniture'));
+
+      const matchesSearch = searchTerm === '' || rowText.includes(searchTerm);
+
+      if (matchesFilter && matchesSearch) {
+        row.style.display = '';
+        visibleRows++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    // Show/hide "Not Found" message
+    if (notFoundMessage) {
+      if (visibleRows === 0) {
+        notFoundMessage.style.display = 'block';
+        notFoundMessage.textContent = 'No sales found matching your criteria.';
+      } else {
+        notFoundMessage.style.display = 'none';
+      }
+    }
+
+    // Update results count
+    updateResultsCount(visibleRows);
+  }
+
+  function updateResultsCount(count) {
+    // Remove existing count if any
+    const existingCount = document.querySelector('.results-count');
+    if (existingCount) {
+      existingCount.remove();
+    }
+
+    // Add results count next to filter
+    if (count >= 0) {
+      const resultsCount = document.createElement('span');
+      resultsCount.className = 'results-count';
+      resultsCount.innerHTML = ` <span class="badge bg-secondary">${count} results</span>`;
+      productFilter.parentNode.appendChild(resultsCount);
+    }
+  }
+
+  // Initialize table on page load
+  filterTable();
+});

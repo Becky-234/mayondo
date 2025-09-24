@@ -48,25 +48,38 @@ main.main-content
           .card-body
             i.fa-solid.fa-money-bill-trend-up
             h5.card-title Total Sales
-            p.card-text Shs.950000
+            p.card-text Shs. #{dashboardMetrics ? (dashboardMetrics.totalSalesRaw + dashboardMetrics.totalSalesFurniture).toLocaleString() : '0'}
+                    .breakdown
+                        small.text-muted Raw: Shs. #{dashboardMetrics ? dashboardMetrics.totalSalesRaw.toLocaleString() : '0'}
+                        br
+                        small.text-muted Furniture: Shs. #{dashboardMetrics ? dashboardMetrics.totalSalesFurniture.toLocaleString() : '0'}
+        
       .col-md-3
         .dash-card
           .card-body
             i.fa-solid.fa-phone-volume
             h5.card-title Total Orders
-            p.card-text 15
+            p.card-text  #{dashboardMetrics ? dashboardMetrics.totalOrders : '0'}
       .col-md-3
         .dash-card
           .card-body
             i.fa-solid.fa-scale-balanced
             h5.card-title Total Sold Products
-            p.card-text 10
+            p.card-text #{dashboardMetrics ? (dashboardMetrics.totalSoldRaw + dashboardMetrics.totalSoldFurniture) : '0'} units
+                    .breakdown
+                        small.text-muted Raw: #{dashboardMetrics ? dashboardMetrics.totalSoldRaw : '0'}
+                        br
+                        small.text-muted Furniture: #{dashboardMetrics ? dashboardMetrics.totalSoldFurniture : '0'}
       .col-md-3
         .dash-card
           .card-body
-            i.fa-solid.fa-tags
-            h5.card-title Discounts
-            p.card-text 3
+              i.fa-solid.fa-chart-pie
+              h5.card-title Sales Distribution
+              .distribution
+                  .raw-material
+                      small Raw: #{dashboardMetrics ? Math.round((dashboardMetrics.totalSalesRaw / (dashboardMetrics.totalSalesRaw + dashboardMetrics.totalSalesFurniture)) * 100) || 0 : '0'}%
+                  .furniture
+                      small Furniture: #{dashboardMetrics ? Math.round((dashboardMetrics.totalSalesFurniture / (dashboardMetrics.totalSalesRaw + dashboardMetrics.totalSalesFurniture)) * 100) || 0 : '0'}%
     br
     br
     br  
@@ -74,6 +87,14 @@ main.main-content
     a.btns(href='addSale') Add Sale
     a#downloadExcel.btns Download Excel
     a#downloadPdf.btns Download PDF
+    
+    .table-filter(style="display: inline-block; margin-left: 20px;")
+        label.filter-label(for="productFilter") Filter by:
+        select#productFilter.filter-dropdown
+            option(value="all") All Products
+            option(value="raw") Raw Materials Only
+            option(value="furniture") Furniture Only
+    
     input#searchSale(type='search' placeholder='Search...')
   section
     table#salesTable.table-content
@@ -102,10 +123,10 @@ main.main-content
               td #{item.tproduct}
               td #{item.quantity}
               td #{item.unitPrice}
-              td #{item.transportCheck}
+              td #{item.transportCheck ? 'Yes' : 'No'}
               td #{Math.round(item.totalPrice)}
               td #{item.payment}
-              td #{item.date}
+              td #{new Date(item.date).toLocaleDateString()}
               td #{item.agent.name}
               if currentUser.role === "Manager"
                 td
@@ -119,6 +140,9 @@ main.main-content
                     input(type='hidden', name='id', value=item._id)
                     button.btn-icon(type='submit', title='Receipt')
                       i.fas.fa-file-invoice
+        else
+          tr
+            td(colspan=currentUser && currentUser.role === "Manager" ? 12 : 11 style="text-align: center;") No sales records found
     br
     br
     h5#notFound Not Found!
