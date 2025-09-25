@@ -464,7 +464,7 @@ progress {
 }
 
 /* Chart Cards */
-.card.shadow-sm {
+/* .card.shadow-sm {
   border: none;
   border-radius: 20px;
   background: #f8f9fa;
@@ -486,10 +486,10 @@ progress {
   font-weight: 600;
   margin-bottom: 20px;
   font-size: 1.1rem;
-}
+} */
 
 /* Progress Bars */
-progress {
+/* progress {
   width: 100%;
   height: 12px;
   border-radius: 10px;
@@ -510,7 +510,7 @@ progress::-webkit-progress-value {
 progress::-moz-progress-bar {
   background: linear-gradient(90deg, #4c6444, #caba9c);
   border-radius: 10px;
-}
+} */
 
 /* Responsive Design */
 @media (max-width: 768px) {

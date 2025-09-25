@@ -519,3 +519,84 @@ td.actions .btn-icon {
 td.actions .btn-icon:hover {
   color: #007bff; /* hover color */
 }
+
+
+
+/* Main Dashboard Cards */
+.dash-card {
+  flex: 1;
+  min-width: 200px;
+  border: none;
+  background: #4c6444;
+  color: #fff;
+  border-radius: 15px;
+  padding: 25px 15px;
+  height: auto;
+  min-height: 180px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(76, 100, 68, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dash-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #caba9c;
+}
+
+.dash-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(76, 100, 68, 0.4);
+}
+
+.dash-card .card-body {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card Text (Numbers) */
+.dash-card p.card-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 8px 0;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Subtitles */
+.dash-card small.text-muted {
+  font-size: 0.75rem;
+  color: #e0e0e0 !important;
+  display: block;
+  margin-top: 5px;
+  opacity: 0.9;
+}
+
+
+/* Card Icons */
+.dash-card i {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  color: #caba9c;
+  transition: transform 0.3s ease;
+}
+
+.dash-card:hover i {
+  transform: scale(1.1);
+}
