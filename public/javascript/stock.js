@@ -38,7 +38,7 @@ if (excelBtn) {
     XLSX.writeFile(wb, "Stock_Report.xlsx");
   });
 }
- 
+
 
 
 //Search on the User Table

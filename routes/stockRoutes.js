@@ -10,7 +10,10 @@ const StockModel = require("../models/stockModel");
 // Stock page - GET with success/error messages
 router.get("/stock", async (req, res) => {
   try {
-    let items = await StockModel.find().sort({ $natural: -1 });
+    let items = await StockModel
+    .find()
+    .sort({ $natural: -1 });
+    
     const success = req.query.success;
     const error = req.query.error;
 
@@ -18,7 +21,8 @@ router.get("/stock", async (req, res) => {
     res.render("stock", {
       items,
       success,
-      error
+      error,
+      currentUser: req.user
     });
   } catch (error) {
     res.status(400).send("Unable to get data from the database");
@@ -105,7 +109,7 @@ router.post("/editStock/:id", async (req, res) => {
   } catch (error) {
     res.redirect(`/editStock/${req.params.id}?error=Error updating stock item`);
   }
-}); 
+});
 
 
 //DELETING STOCK

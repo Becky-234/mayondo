@@ -43,12 +43,12 @@ main.main-content
       .d-flex.align-items-center
         a.logoutBtn(href='/index') Logout
         if success
-        .container.mt-3
-          .alert.alert-success.alert-dismissible.fade.show(role="alert")
-            i.fas.fa-check-circle.me-2
-            strong Success! 
-            | #{success}
-            button.btn-close(type="button" data-bs-dismiss="alert")
+          .container.mt-3
+            .alert.alert-success.alert-dismissible.fade.show(role="alert")
+              i.fas.fa-check-circle.me-2
+              strong Success! 
+              | #{success}
+              button.btn-close(type="button" data-bs-dismiss="alert")
         if error
           .container.mt-3
             .alert.alert-danger.alert-dismissible.fade.show(role="alert")
@@ -132,16 +132,19 @@ main.main-content
               td #{item.quality}
               td #{new Date(item.date).toLocaleDateString()}
               td.actions
-                a.btn-icon(href=`/editStock/${item._id}` title='Edit')
-                  i.fas.fa-edit
-                form(method='post', action='/deleteStock', style='display:inline')
-                  input(type='hidden', name='id', value=item._id)
-                  button.btn-icon(type='submit', title='Delete')
-                    i.fas.fa-trash
-                form(method='post', action=`/generateReceipt/${item._id}`, style='display:inline')
-                  input(type='hidden', name='id', value=item._id)
-                  button.btn-icon(type='submit', title='Receipt')
-                    i.fas.fa-file-invoice
+                if currentUser && currentUser.role === "Manager"
+                  a.btn-icon(href=`/editStock/${item._id}` title='Edit')
+                    i.fas.fa-edit
+                  form(method='post', action='/deleteStock', style='display:inline')
+                    input(type='hidden', name='id', value=item._id)
+                    button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this item?')")
+                      i.fas.fa-trash
+                  form(method='post', action=`/generateReceipt/${item._id}`, style='display:inline')
+                    input(type='hidden', name='id', value=item._id)
+                    button.btn-icon(type='submit', title='Receipt')
+                      i.fas.fa-file-invoice
+                else
+                  span.text-muted N/A
     h5#notFound Not Found
 script(src='../javascript/stock.js')
 //  SheetJS

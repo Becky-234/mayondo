@@ -149,7 +149,7 @@ main.main-content
                     i.fas.fa-edit
                   form(method='post', action='/deleteSale', style='display:inline')
                     input(type='hidden', name='id', value=item._id)
-                    button.btn-icon(type='submit', title='Delete')
+                    button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this item?')")
                       i.fas.fa-trash
                   form(method='post', action=`/getReceipt/${item._id}`, style='display:inline')
                     input(type='hidden', name='id', value=item._id)

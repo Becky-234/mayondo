@@ -119,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
     qty.addEventListener('input', updateTotal);
   }
 });
- 
 
 
 // Table filtering functionality
