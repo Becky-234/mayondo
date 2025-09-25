@@ -1,4 +1,4 @@
-express = require("express");
+const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/userModel");
 const passport = require("passport");
@@ -13,17 +13,29 @@ router.post("/signup", async (req, res) => {
         const user = new UserModel(req.body);
         const existingUser = await UserModel.findOne({ email: req.body.email });
         if (existingUser) {
-            return res.status(400).send("Email exists");
+            return res.render("signup", { 
+                title: "signup page", 
+                error: "Email already exists. Please use a different email." 
+            });
         }
-        await UserModel.register(user, req.body.password, (err) => {
+        
+        UserModel.register(user, req.body.password, (err) => {
             if (err) {
-                throw err;
+                console.error("Registration error:", err);
+                return res.render("signup", { 
+                    title: "signup page", 
+                    error: "Registration failed: " + err.message 
+                });
             }
+            console.log("User registered successfully:", user.email);
             res.redirect("/login");
         });
     } catch (error) {
-        console.error(error);
-        res.status(400).send("Try again");
+        console.error("Signup error:", error);
+        res.render("signup", { 
+            title: "signup page", 
+            error: "Registration failed. Please try again." 
+        });
     }
 });
  
@@ -33,20 +45,46 @@ router.get("/login", (req, res) => {
     res.render("login", { title: "Login page" });
 });
 
-router.post(
-    "/login",
-    passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
-        console.log("Logged-in user:", req.user);  
-        req.session.user = req.user;
-        if (req.user.role === "Manager") {
-            return res.redirect("/dashboard");
-        } else if (req.user.role === "Sales agent") {
-            return res.redirect("/sales");
-        } else {
-            return res.render("noneuser");
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) {
+            console.error("Login error:", err);
+            return res.status(500).render("login", { 
+                title: "Login page", 
+                error: "An error occurred during login" 
+            });
         }
-    }
-);
+        
+        if (!user) {
+            console.log("Login failed:", info);
+            return res.status(401).render("login", { 
+                title: "Login page", 
+                error: "Invalid email or password" 
+            });
+        }
+        
+        req.logIn(user, (err) => {
+            if (err) {
+                console.error("Session login error:", err);
+                return res.status(500).render("login", { 
+                    title: "Login page", 
+                    error: "Session error" 
+                });
+            }
+            
+            console.log("Logged-in user:", user);
+            req.session.user = user;
+            
+            if (user.role === "Manager") {
+                return res.redirect("/dashboard");
+            } else if (user.role === "Sales agent") {
+                return res.redirect("/sales");
+            } else {
+                return res.render("noneuser", { title: "Access Denied" });
+            }
+        });
+    })(req, res, next);
+});
 
 
 
