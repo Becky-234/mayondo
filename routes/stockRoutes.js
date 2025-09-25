@@ -6,8 +6,7 @@ const StockModel = require("../models/stockModel");
 
 //Stock page
 //GETTING THE STOCK FROM THE DATABASE
-//ensureAuthenticated, ensureManager,
-router.get("/stock", async (req, res) => {
+router.get("/stock", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     let items = await StockModel.find().sort({ $natural: -1 });
     console.log(items);
@@ -16,18 +15,15 @@ router.get("/stock", async (req, res) => {
     res.status(400).send("Unable to get data from the database");
   }
 });
-//ensureAuthenticated, ensureManager,
-router.post("/stock", (req, res) => {
+router.post("/stock", ensureAuthenticated, ensureManager, (req, res) => {
   console.log(req.body);
 });
 
 //Add stock page
-//ensureAuthenticated, ensureManager,
-router.get("/addStock", (req, res) => {
+router.get("/addStock", ensureAuthenticated, ensureManager, (req, res) => {
   res.render("addStock", { title: "Stock page" });
 });
-//ensureAuthenticated, ensureManager,
-router.post("/addStock", async (req, res) => {
+router.post("/addStock", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const stock = new StockModel(req.body);
     console.log(req.body);
@@ -40,14 +36,12 @@ router.post("/addStock", async (req, res) => {
 });
 
 //UPDATING STOCK
-//ensureAuthenticated, ensureManager,
-router.get("/editStock/:id", async (req, res) => {
+router.get("/editStock/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   let item = await StockModel.findById(req.params.id);
   //console.log(item)
   res.render(`editStock`, { item });
 });
-//ensureAuthenticated, ensureManager,
-router.post("/editStock/:id", async (req, res) => {
+router.post("/editStock/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const product = await StockModel.findByIdAndUpdate(
       req.params.id,
@@ -62,8 +56,7 @@ router.post("/editStock/:id", async (req, res) => {
 });
 
 //DELETING STOCK
-//ensureAuthenticated, ensureManager,
-router.post("/deleteStock", async (req, res) => {
+router.post("/deleteStock", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     await StockModel.deleteOne({ _id: req.body.id });
     res.redirect("/stock");
@@ -79,7 +72,7 @@ router.post("/generateReceipt/:id", async (req, res) => {
     res.render("stockReceipt", { item });
   } catch (error) {
     console.error(error.message);
-    res.status(400).send('Uable to find stock')
+    res.status(400).send('Unable to find stock')
   }
 });
 
