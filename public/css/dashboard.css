@@ -303,6 +303,260 @@ progress {
   width: 100%;
 }
 
+/* Enhanced Dashboard Card Styles */
+.dashboarBody {
+  height: 100%;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 35px;
+}
+
+.dashboarBody h3 {
+  color: #4c6444;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.dashboarBody h4 {
+  color: #7f8c8d;
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.dashboarBody h1 {
+  color: #4c6444;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.dashboarBody p {
+  color: #7f8c8d;
+  margin-bottom: 30px;
+}
+
+/* Section Headers */
+.dash h5 {
+  color: #4c6444;
+  font-weight: 600;
+  border-left: 4px solid #caba9c;
+  padding-left: 15px;
+  margin: 30px 0 20px 0;
+}
+
+/* Main Dashboard Cards */
+.dash-card {
+  flex: 1;
+  min-width: 200px;
+  border: none;
+  background: #4c6444;
+  color: #fff;
+  border-radius: 15px;
+  padding: 25px 15px;
+  height: auto;
+  min-height: 180px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(76, 100, 68, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dash-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #caba9c;
+}
+
+.dash-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(76, 100, 68, 0.4);
+}
+
+.dash-card .card-body {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card Icons */
+.dash-card i {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  color: #caba9c;
+  transition: transform 0.3s ease;
+}
+
+.dash-card:hover i {
+  transform: scale(1.1);
+}
+
+/* Card Titles */
+.dash-card h5.card-title,
+.dash-card h6.card-title {
+  font-weight: 600;
+  margin: 5px 0;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.dash-card h5.card-title {
+  font-size: 1rem;
+}
+
+/* Card Text (Numbers) */
+.dash-card p.card-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 8px 0;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Subtitles */
+.dash-card small.text-muted {
+  font-size: 0.75rem;
+  color: #e0e0e0 !important;
+  display: block;
+  margin-top: 5px;
+  opacity: 0.9;
+}
+
+/* Raw Materials Cards Specific Styles */
+.dash-card.raw-card {
+  background: linear-gradient(135deg, #4c6444 0%, #5a7a50 100%);
+  border-left: 4px solid #8a6420;
+}
+
+.dash-card.raw-card::before {
+  background: #8a6420;
+}
+
+.dash-card.raw-card i {
+  color: #caba9c;
+}
+
+/* Furniture Cards Specific Styles */
+.dash-card.furniture-card {
+  background: linear-gradient(135deg, #5a7a50 0%, #6b8a5c 100%);
+  border-left: 4px solid #caba9c;
+}
+
+.dash-card.furniture-card::before {
+  background: #caba9c;
+}
+
+.dash-card.furniture-card i {
+  color: #e8d9b9;
+}
+
+/* Chart Cards */
+.card.shadow-sm {
+  border: none;
+  border-radius: 20px;
+  background: #f8f9fa;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease;
+}
+
+.card.shadow-sm:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card.shadow-sm .card-body {
+  padding: 25px;
+}
+
+.card.shadow-sm .card-title {
+  color: #4c6444;
+  font-weight: 600;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+/* Progress Bars */
+progress {
+  width: 100%;
+  height: 12px;
+  border-radius: 10px;
+  margin: 8px 0;
+  border: none;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+}
+
+progress::-webkit-progress-value {
+  background: linear-gradient(90deg, #4c6444, #caba9c);
+  border-radius: 10px;
+}
+
+progress::-moz-progress-bar {
+  background: linear-gradient(90deg, #4c6444, #caba9c);
+  border-radius: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dash-card {
+    margin-bottom: 20px;
+    min-height: 160px;
+    padding: 20px 10px;
+  }
+
+  .dash-card p.card-text {
+    font-size: 1.5rem;
+  }
+
+  .dash-card i {
+    font-size: 1.8rem;
+  }
+
+  .col-md-2,
+  .col-md-3 {
+    margin-bottom: 15px;
+  }
+}
+
+/* Section Spacing */
+.dash {
+  margin-bottom: 40px;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Grid Layout Improvements */
+.row {
+  margin: 0 -10px;
+}
+
+.row > [class*="col-"] {
+  padding: 0 10px;
+  margin-bottom: 20px;
+}
+
 .logoutBtn {
   text-decoration: none;
   padding: 10px;

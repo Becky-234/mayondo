@@ -82,38 +82,39 @@ main.main-content
     section#raw-materials.dash.mt-5
       h5.mb-4 Raw Materials Overview
       .row
-        .col-md-2
+        .col
           .dash-card.raw-card
             .card-body
               i.fa-solid.fa-tree
               h6.card-title Raw Revenue
               p.card-text Shs. #{dashboardData.rawRevenue}
-        .col-md-2
+        .col
           .dash-card.raw-card
             .card-body
               i.fa-solid.fa-coins
               h6.card-title Raw Profit
               p.card-text Shs. #{dashboardData.rawProfit}
-        .col-md-2
+        .col
           .dash-card.raw-card
             .card-body
               i.fa-solid.fa-box
               h6.card-title Raw Items
               p.card-text #{dashboardData.rawInventory}
+    section#raw-materials-two.dash.mt-5
       .row
-        .col-md-2
+        .col
           .dash-card.raw-card
             .card-body
               i.fa-solid.fa-exclamation
               h6.card-title Raw Warnings
               p.card-text #{dashboardData.rawStockWarnings}
-        .col-md-2
+        .col
           .dash-card.raw-card
             .card-body
               i.fa-solid.fa-cubes
               h6.card-title Total Units
               p.card-text #{dashboardData.rawItems}
-        .col-md-2
+        .col
           .dash-card.raw-card
             .card-body
               i.fa-solid.fa-dollar-sign
@@ -124,38 +125,39 @@ main.main-content
     section#furniture.dash.mt-5
       h5.mb-4 Furniture Overview
       .row
-        .col-md-2
+        .col
           .dash-card.furniture-card
             .card-body
               i.fa-solid.fa-couch
               h6.card-title Furniture Revenue
               p.card-text Shs. #{dashboardData.furnitureRevenue}
-        .col-md-2
+        .col
           .dash-card.furniture-card
             .card-body
               i.fa-solid.fa-money-bill
               h6.card-title Furniture Profit
               p.card-text Shs. #{dashboardData.furnitureProfit}
-        .col-md-2
+        .col
           .dash-card.furniture-card
             .card-body
               i.fa-solid.fa-box-open
               h6.card-title Furniture Items
               p.card-text #{dashboardData.furnitureInventory}
+    section#furniture.dash-two.mt-5
       .row
-        .col-md-2
+        .col
           .dash-card.furniture-card
             .card-body
               i.fa-solid.fa-exclamation-triangle
               h6.card-title Furniture Warnings
               p.card-text #{dashboardData.furnitureStockWarnings}
-        .col-md-2
+        .col
           .dash-card.furniture-card
             .card-body
               i.fa-solid.fa-layer-group
               h6.card-title Total Units
               p.card-text #{dashboardData.furnitureItems}
-        .col-md-2
+        .col
           .dash-card.furniture-card
             .card-body
               i.fa-solid.fa-tag

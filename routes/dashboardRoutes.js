@@ -6,11 +6,11 @@ const SalesModel = require("../models/salesModel");
 // Dashboard Page with Product Type Separation
 router.get('/dashboard', async (req, res) => {
     if (!req.user) return res.redirect('/login');
-
+    
     try {
         // Fetch all stock items
         const stockItems = await StockModel.find({});
-
+        
         // Initialize metrics for different product types
         let metrics = {
             total: {
@@ -40,28 +40,28 @@ router.get('/dashboard', async (req, res) => {
                 items: []
             }
         };
-
+        
         stockItems.forEach(item => {
             const sellingPrice = item.cprice * 1.5;
             const itemRevenue = sellingPrice * item.pdtquantity;
             const itemCost = item.cprice * item.pdtquantity;
             const itemProfit = itemRevenue - itemCost;
-
+            
             // Determine product type
-            const productType = item.pdttype.toLowerCase().includes('raw') ? 'rawMaterials' :
-                item.pdttype.toLowerCase().includes('furniture') ? 'furniture' : 'other';
-
+            const productType = item.pdttype.toLowerCase().includes('raw') ? 'rawMaterials' : 
+                              item.pdttype.toLowerCase().includes('furniture') ? 'furniture' : 'other';
+            
             // Update total metrics
             metrics.total.revenue += itemRevenue;
             metrics.total.profit += itemProfit;
             metrics.total.inventoryCount++;
             metrics.total.totalItems += item.pdtquantity;
             metrics.total.inventoryValue += itemCost;
-
+            
             if (item.pdtquantity < 10) {
                 metrics.total.stockWarnings++;
             }
-
+            
             // Update specific product type metrics
             if (metrics[productType]) {
                 metrics[productType].revenue += itemRevenue;
@@ -70,13 +70,13 @@ router.get('/dashboard', async (req, res) => {
                 metrics[productType].totalItems += item.pdtquantity;
                 metrics[productType].inventoryValue += itemCost;
                 metrics[productType].items.push(item);
-
+                
                 if (item.pdtquantity < 10) {
                     metrics[productType].stockWarnings++;
                 }
             }
         });
-
+        
         // Format the data for the template
         const dashboardData = {
             // Total metrics
@@ -86,7 +86,7 @@ router.get('/dashboard', async (req, res) => {
             totalStockWarnings: metrics.total.stockWarnings,
             totalItems: metrics.total.totalItems,
             totalInventoryValue: Math.round(metrics.total.inventoryValue).toLocaleString(),
-
+            
             // Raw Materials metrics
             rawRevenue: Math.round(metrics.rawMaterials.revenue).toLocaleString(),
             rawProfit: Math.round(metrics.rawMaterials.profit).toLocaleString(),
@@ -94,7 +94,7 @@ router.get('/dashboard', async (req, res) => {
             rawStockWarnings: metrics.rawMaterials.stockWarnings,
             rawItems: metrics.rawMaterials.totalItems,
             rawInventoryValue: Math.round(metrics.rawMaterials.inventoryValue).toLocaleString(),
-
+            
             // Furniture metrics
             furnitureRevenue: Math.round(metrics.furniture.revenue).toLocaleString(),
             furnitureProfit: Math.round(metrics.furniture.profit).toLocaleString(),
@@ -102,22 +102,22 @@ router.get('/dashboard', async (req, res) => {
             furnitureStockWarnings: metrics.furniture.stockWarnings,
             furnitureItems: metrics.furniture.totalItems,
             furnitureInventoryValue: Math.round(metrics.furniture.inventoryValue).toLocaleString(),
-
+            
             // Percentages
-            rawPercentage: metrics.total.inventoryCount > 0 ?
+            rawPercentage: metrics.total.inventoryCount > 0 ? 
                 Math.round((metrics.rawMaterials.inventoryCount / metrics.total.inventoryCount) * 100) : 0,
-            furniturePercentage: metrics.total.inventoryCount > 0 ?
+            furniturePercentage: metrics.total.inventoryCount > 0 ? 
                 Math.round((metrics.furniture.inventoryCount / metrics.total.inventoryCount) * 100) : 0
         };
-
-        res.render('dashboard', {
+        
+        res.render('dashboard', { 
             currentUser: req.user,
             dashboardData: dashboardData
         });
-
+        
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
-        res.render('dashboard', {
+        res.render('dashboard', { 
             currentUser: req.user,
             dashboardData: getDefaultDashboardData()
         });
