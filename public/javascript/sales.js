@@ -270,3 +270,12 @@ function validateQuantity() {
 document.addEventListener('DOMContentLoaded', function () {
   updateStockAlert();
 });
+
+
+setTimeout(() => {
+  const alerts = document.querySelectorAll('.alert');
+  alerts.forEach(alert => {
+    const bsAlert = new bootstrap.Alert(alert);
+    bsAlert.close();
+  });
+}, 5000);
