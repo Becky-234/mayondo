@@ -24,8 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Username error span:", usernameError);
 
     form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
         // Clear previous errors and styles
         [nameError, emailError, telError, usernameError, passwordError, roleError].forEach(e => {
             if (e) e.textContent = "";
@@ -96,25 +94,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // If invalid, focus first invalid input and halt submission
         if (!valid) {
+            event.preventDefault();
             const firstInvalid = document.querySelector(".invalid");
             if (firstInvalid) firstInvalid.focus();
             return;
         }
 
-        // Show success message
-        if (successMessage) successMessage.style.display = "block";
-
-        // Simulate form submission and redirection
-        setTimeout(function () {
-            // Redirect based on role
-            if (role.value === "Manager") {
-                alert("Redirecting to Manager Dashboard...");
-                // window.location.href = "/html/dashboard.html";
-            } else if (role.value === "Sales Agent") {
-                alert("Redirecting to Sales Agent Portal...");
-                // window.location.href = "/html/sales.html";
-            }
-        }, 1500);
+        // If valid, let the form submit to the server normally
+        // The server will handle redirection after successful registration
     });
 
     // Real-time validation for better UX
