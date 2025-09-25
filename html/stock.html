@@ -130,6 +130,16 @@
             <a class="btns" href="add-stock.html">Add Product</a>
             <a class="btns" id="downloadExcel">Download Excel</a>
             <a class="btns" id="downloadPdf">Download PDF</a>
+            
+            <div class="table-filter" style="display: inline-block; margin-left: 20px;">
+                <label class="filter-label" for="productFilter">Filter by:</label>
+                <select id="productFilter" class="filter-dropdown">
+                    <option value="all">All Products</option>
+                    <option value="raw">Raw Only</option>
+                    <option value="furniture">Furniture Only</option>
+                </select>
+            </div>
+
             <input type="search" id="searchStock" placeholder="Search...">
         </div>
 

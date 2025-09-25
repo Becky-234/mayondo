@@ -95,41 +95,80 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 //Filter
+// document.addEventListener('DOMContentLoaded', function () {
+//   const productFilter = document.getElementById('productFilter');
+//   const productItems = document.querySelectorAll('.product-item');
+
+//   productFilter.addEventListener('change', function () {
+//     const filterValue = this.value;
+
+//     productItems.forEach(item => {
+//       const productType = item.getAttribute('data-product-type');
+//       let shouldShow = false;
+
+//       switch (filterValue) {
+//         case 'all':
+//           shouldShow = true;
+//           break;
+//         case 'raw':
+//           shouldShow = productType === 'raw';
+//           break;
+//         case 'furniture':
+//           shouldShow = productType === 'furniture';
+//           break;
+//       }
+
+//       // Smooth transition
+//       if (shouldShow) {
+//         item.style.opacity = '0';
+//         item.style.display = 'block'; // or your preferred display value
+//         setTimeout(() => {
+//           item.style.opacity = '1';
+//         }, 50);
+//       } else {
+//         item.style.opacity = '0';
+//         setTimeout(() => {
+//           item.style.display = 'none';
+//         }, 300);
+//       }
+//     });
+//   });
+// });
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const productFilter = document.getElementById('productFilter');
-  const productItems = document.querySelectorAll('.product-item');
+  const tableBody = document.querySelector('#newStock tbody.row-others');
+
+  if (!productFilter || !tableBody) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  const rows = tableBody.querySelectorAll('tr');
 
   productFilter.addEventListener('change', function () {
     const filterValue = this.value;
 
-    productItems.forEach(item => {
-      const productType = item.getAttribute('data-product-type');
-      let shouldShow = false;
+    rows.forEach(row => {
+      // Get the product type from the second table cell (index 1)
+      const productTypeCell = row.cells[1]; // Second column (Product Type)
+      const productType = productTypeCell.textContent.toLowerCase().trim();
 
       switch (filterValue) {
         case 'all':
-          shouldShow = true;
+          row.style.display = '';
           break;
         case 'raw':
-          shouldShow = productType === 'raw';
+          // Show rows where product type contains "raw"
+          row.style.display = productType.includes('raw') ? '' : 'none';
           break;
         case 'furniture':
-          shouldShow = productType === 'furniture';
+          // Show rows where product type contains "furniture"
+          row.style.display = productType.includes('furniture') ? '' : 'none';
           break;
-      }
-
-      // Smooth transition
-      if (shouldShow) {
-        item.style.opacity = '0';
-        item.style.display = 'block'; // or your preferred display value
-        setTimeout(() => {
-          item.style.opacity = '1';
-        }, 50);
-      } else {
-        item.style.opacity = '0';
-        setTimeout(() => {
-          item.style.display = 'none';
-        }, 300);
+        default:
+          row.style.display = '';
       }
     });
   });
