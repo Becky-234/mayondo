@@ -7,24 +7,27 @@
 
 /* Main Body Layout: Flexbox for Sidebar and Main Content */
 body {
-  /* Ensures body takes full viewport height */
+  min-height: 100vh;
   background: url(../images/back.jpeg);
-  /* Overall page background */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh; /* makes sure body takes full viewport height */
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* SIGNUP PAGE */
 .form-container {
   width: 500px;
-  background-color: rgba(255, 255, 255, 0.3); /* white with 50% transparency */
+  max-width: 90vw;
+  background-color: rgba(255, 255, 255, 0.3);
   color: #000;
   border-radius: 40px;
   padding: 30px 40px;
-  margin: auto;
+  margin: 20px auto;
+  box-shadow: 5px 20px 5px rgba(0, 0, 0, 0.3);
 }
 
 .head {
@@ -119,4 +122,81 @@ input.invalid {
   margin-top: 20px;
   font-weight: 500;
   display: none;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.register-link p {
+  color: #000;
+  font-size: 14px;
+}
+
+.register-link p a {
+  color: #4c6444;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+.register-link p a:hover {
+  text-decoration: underline;
+}
+
+label {
+  color: white;
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Responsive design for signup form */
+@media (max-width: 768px) {
+  .form-container {
+    width: 450px;
+    padding: 25px 30px;
+  }
+  
+  .head {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    width: 350px;
+    padding: 20px 25px;
+    border-radius: 30px;
+  }
+  
+  .head {
+    font-size: 26px;
+  }
+  
+  .input-box {
+    margin: 20px 0;
+  }
+  
+  .input-box input {
+    padding: 15px;
+    font-size: 14px;
+  }
+  
+  select {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .form-container {
+    width: 300px;
+    padding: 20px;
+  }
+  
+  .head {
+    font-size: 24px;
+  }
 }

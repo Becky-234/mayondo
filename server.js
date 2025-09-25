@@ -45,9 +45,10 @@ app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
 //4.MIDDLEWARE
-app.use(express.static("public"));
-app.use("/html", express.static(path.join(__dirname, "html"))); // Serve everything in "html"
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/html", express.static(path.join(__dirname, "html"))); // Serve HTML files at /html
+app.use("/css", express.static(path.join(__dirname, "public/css"))); // CSS files
+app.use("/images", express.static(path.join(__dirname, "public/images"))); // Images
 app.use(express.urlencoded({ extended: true })); //helps to pass data from forms
 app.use(
   expressSession({

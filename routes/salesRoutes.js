@@ -6,7 +6,7 @@ const { ensureAuthenticated, ensureAgent } = require("../middleware/auth")
 
 
 // GET /sales – fetch sales from DB and render the page
-router.get("/sales", async (req, res) => {
+router.get("/sales", ensureAuthenticated, async (req, res) => {
   try {
     const items = await SalesModel
       .find()
@@ -70,8 +70,7 @@ router.get("/addSale", async (req, res) => {
   }
 });
 //Only if you are logged in as a sales agent, you will be able to make a sale
-//ensureAuthenticated, ensureAgent,
-router.post("/addSale", async (req, res) => {
+router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
   console.log("POST /addSale hit", req.body);
   try {
     const {
@@ -126,8 +125,6 @@ router.post("/addSale", async (req, res) => {
       return res.status(400).send('Product sold out')
     }
 
-    await sale.save();
-    res.redirect("/sales");
   } catch (error) {
     console.error(error);
     res.redirect("/addSale");
@@ -189,7 +186,7 @@ router.post("/getReceipt/:id", async (req, res) => {
     res.render("salesReceipt", { item });
   } catch (error) {
     console.error(error.message);
-    res.status(400).send('Uable to find sale')
+    res.status(400).send('Unable to find sale')
   }
 });
 

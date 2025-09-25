@@ -16,11 +16,11 @@ const stockSchema = new mongoose.Schema({
         required: true
     },
     cprice: {
-        type: String,
+        type: Number,
         required: true
     },
     pdtprice: {
-        type: String,
+        type: Number,
         required: true
     },
     supplier: {
@@ -36,8 +36,8 @@ const stockSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: String,
-        required: true
+        type: Date,
+        default: Date.now
     }
 });
 

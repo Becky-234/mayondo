@@ -1,6 +1,6 @@
 //ENSURE USER IS AUTHENTICATED
 exports.ensureAuthenticated = (req,res,next) => {
-    if(req.session.user) {
+    if(req.session.user || req.user) {
         return next()
     }
     res.redirect('/login')
@@ -8,16 +8,18 @@ exports.ensureAuthenticated = (req,res,next) => {
 
 //ENSURE USER IS A SALES AGENT
 exports.ensureAgent = (req, res, next) => {
-    if (req.session.user && req.session.user.role === "Sales agent") {
+    const user = req.session.user || req.user;
+    if (user && user.role === "Sales agent") {
         return next()
     }
-    res.redirect('/index')
+    res.redirect('/')
 }
 
 //ENSURE USER IS A MANAGER
 exports.ensureManager = (req, res, next) => {
-    if (req.session.user && req.session.user.role === "Manager") {
+    const user = req.session.user || req.user;
+    if (user && user.role === "Manager") {
         return next()
     }
-    res.redirect('/index')
+    res.redirect('/')
 }

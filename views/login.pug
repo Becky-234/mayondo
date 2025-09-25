@@ -1,28 +1,34 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Login
-link(rel="stylesheet", href="../css/login.css")
-form#loginForm( action="/login", method="post")
-  .form-container
-    h1.head Login
-    br
-    .input-box
-      input#email(type="email", placeholder="Email", name="email", required)
-      span#emailError.error
-    .input-box
-      input#password(type="password", placeholder="Password", name="password", required, minlength="6")
-      span#passwordError.error
-    .remember-forgot
-      label
-        input(type="checkbox")
-        | Remember Me
-      a(href="#") Forgot Password?
-    br
-    br
-    button.button#login-btn(type="submit") Login
-    br
-    .register-link
-      p
-        | Don't have an account?
-        a(href="/signup") Register
-//- script(src="../javascript/login.js")
+doctype html
+html(lang='en')
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width,initial-scale=1")
+    title Login
+    link(rel="stylesheet", href="/css/login.css")
+  body
+    form#loginForm(action="/login", method="post")
+      .form-container
+        h1.head Login
+        if error
+          .error-message(style="color: red; text-align: center; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 5px;") #{error}
+        br
+        .input-box
+          input#email(type="email", placeholder="Email", name="email", required)
+          span#emailError.error
+        .input-box
+          input#password(type="password", placeholder="Password", name="password", required, minlength="6")
+          span#passwordError.error
+        .remember-forgot
+          label
+            input(type="checkbox")
+            | Remember Me
+          a(href="#") Forgot Password?
+        br
+        br
+        button.button#login-btn(type="submit") Login
+        br
+        .register-link
+          p
+            | Don't have an account?
+            a(href="/signup") Register
+    script(src="/javascript/login.js")
