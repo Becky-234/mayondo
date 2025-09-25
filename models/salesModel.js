@@ -23,7 +23,7 @@ const salesSchema = new mongoose.Schema({
     required: true
   },
   unitPrice: {
-    type: String,
+    type: Number,
     required: true
   },
   transportCheck: {
@@ -31,7 +31,7 @@ const salesSchema = new mongoose.Schema({
     default: false
   },
   totalPrice: {
-    type: String,
+    type: Number,
     required: true
   },
   payment: {
@@ -39,8 +39,8 @@ const salesSchema = new mongoose.Schema({
     required: true
   },
   date: {
-    type: String,
-    required: true
+    type: Date,
+    default: Date.now
   },
   agent: {
     type: mongoose.Schema.Types.ObjectId,
