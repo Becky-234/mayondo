@@ -125,76 +125,47 @@ document.addEventListener('DOMContentLoaded', function () {
 // Table filtering functionality
 document.addEventListener('DOMContentLoaded', function () {
   const productFilter = document.getElementById('productFilter');
-  const searchInput = document.getElementById('searchSale');
-  const notFoundMessage = document.getElementById('notFound');
-  const tableRows = document.querySelectorAll('#salesTable tbody tr');
+  const tableBody = document.querySelector('#salesTable tbody.row-others');
 
-  // Filter table based on dropdown selection
+  if (!productFilter || !tableBody) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  const rows = tableBody.querySelectorAll('tr');
+
   productFilter.addEventListener('change', function () {
-    filterTable();
-  });
+    const filterValue = this.value;
 
-  // Search functionality
-  searchInput.addEventListener('input', function () {
-    filterTable();
-  });
+    rows.forEach(row => {
+      // Check if this is the "No sales records found" row
+      if (row.cells.length <= 1) {
+        return; // Skip this row
+      }
 
-  function filterTable() {
-    const selectedFilter = productFilter.value;
-    const searchTerm = searchInput.value.toLowerCase();
-    let visibleRows = 0;
+      // Get the product type from the FOURTH table cell (index 3) - Product Type column
+      const productTypeCell = row.cells[3]; // Fourth column (Product Type)
+      const productType = productTypeCell.textContent.toLowerCase().trim();
 
-    tableRows.forEach(row => {
-      const productType = row.getAttribute('data-type');
-      const rowText = row.textContent.toLowerCase();
-
-      // Check if row matches both filter and search criteria
-      const matchesFilter = selectedFilter === 'all' ||
-        selectedFilter === productType;
-
-      const matchesSearch = searchTerm === '' || rowText.includes(searchTerm);
-
-      if (matchesFilter && matchesSearch) {
-        row.style.display = '';
-        visibleRows++;
-      } else {
-        row.style.display = 'none';
+      switch (filterValue) {
+        case 'all':
+          row.style.display = '';
+          break;
+        case 'raw':
+          // Show rows where product type contains "raw"
+          row.style.display = productType.includes('raw') ? '' : 'none';
+          break;
+        case 'furniture':
+          // Show rows where product type contains "furniture"
+          row.style.display = productType.includes('furniture') ? '' : 'none';
+          break;
+        default:
+          row.style.display = '';
       }
     });
-
-    // Show/hide "Not Found" message
-    if (notFoundMessage) {
-      if (visibleRows === 0) {
-        notFoundMessage.style.display = 'block';
-        notFoundMessage.textContent = 'No sales found matching your criteria.';
-      } else {
-        notFoundMessage.style.display = 'none';
-      }
-    }
-
-    // Update results count
-    updateResultsCount(visibleRows);
-  }
-
-  function updateResultsCount(count) {
-    // Remove existing count if any
-    const existingCount = document.querySelector('.results-count');
-    if (existingCount) {
-      existingCount.remove();
-    }
-
-    // Add results count next to filter
-    if (count >= 0) {
-      const resultsCount = document.createElement('span');
-      resultsCount.className = 'results-count';
-      resultsCount.innerHTML = ` <span class="badge bg-secondary">${count} results</span>`;
-      productFilter.parentNode.appendChild(resultsCount);
-    }
-  }
-
-  // Initialize table on page load
-  filterTable();
+  });
 });
+
 
 
 //STOCK ALEART
