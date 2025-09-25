@@ -297,3 +297,33 @@ label {
 .btns:hover {
   background: #8a6420;
 }
+
+/*Stock alert   */
+.stock-alert {
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 5px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+.stock-alert.low-stock {
+  background-color: #fff3cd;
+  border: 1px solid #ffecb5;
+  color: #856404;
+}
+.stock-alert.out-of-stock {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+.stock-alert.medium-stock {
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+}
+.stock-status {
+  margin-left: 10px;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 3px;
+}

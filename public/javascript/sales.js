@@ -195,3 +195,78 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initialize table on page load
   filterTable();
 });
+
+
+//STOCK ALEART
+function updateStockAlert() {
+  const productSelect = document.getElementById('nproduct');
+  const selectedOption = productSelect.options[productSelect.selectedIndex];
+  const alertContainer = document.getElementById('stockAlertContainer');
+  const alertDiv = document.getElementById('stockAlert');
+  const quantityInput = document.getElementById('quantity');
+  const quantityAlert = document.getElementById('quantityAlert');
+
+  if (selectedOption && selectedOption.dataset.stockStatus) {
+    const status = selectedOption.dataset.stockStatus;
+    const message = selectedOption.dataset.alertMessage;
+    const availableStock = parseInt(selectedOption.dataset.stockQuantity);
+
+    // Set max quantity to available stock
+    quantityInput.max = availableStock;
+
+    if (status !== 'normal') {
+      alertDiv.className = 'stock-alert ' + status;
+      alertDiv.innerHTML = `
+          <i class="fas fa-exclamation-triangle"></i>
+          <strong>${message}</strong>
+          ${status === 'out-of-stock' ? ' - Cannot be sold' : ''}
+        `;
+      alertContainer.style.display = 'block';
+
+      // Disable quantity input if out of stock
+      if (status === 'out-of-stock') {
+        quantityInput.disabled = true;
+        quantityInput.value = '';
+      } else {
+        quantityInput.disabled = false;
+      }
+    } else {
+      alertContainer.style.display = 'none';
+      quantityInput.disabled = false;
+    }
+  } else {
+    alertContainer.style.display = 'none';
+    quantityInput.disabled = false;
+  }
+
+  validateQuantity();
+}
+
+function validateQuantity() {
+  const productSelect = document.getElementById('nproduct');
+  const selectedOption = productSelect.options[productSelect.selectedIndex];
+  const quantityInput = document.getElementById('quantity');
+  const quantityAlert = document.getElementById('quantityAlert');
+  const availableStock = parseInt(selectedOption.dataset.stockQuantity);
+  const requestedQuantity = parseInt(quantityInput.value) || 0;
+
+  if (selectedOption && !selectedOption.disabled) {
+    if (requestedQuantity > availableStock) {
+      quantityAlert.textContent = `Cannot exceed available stock (${availableStock} units)`;
+      quantityAlert.style.display = 'block';
+      quantityInput.setCustomValidity('Quantity exceeds available stock');
+    } else if (availableStock - requestedQuantity <= 5 && requestedQuantity > 0) {
+      quantityAlert.textContent = `Warning: This sale will leave only ${availableStock - requestedQuantity} units in stock`;
+      quantityAlert.style.display = 'block';
+      quantityInput.setCustomValidity('');
+    } else {
+      quantityAlert.style.display = 'none';
+      quantityInput.setCustomValidity('');
+    }
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function () {
+  updateStockAlert();
+});

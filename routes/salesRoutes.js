@@ -61,14 +61,47 @@ router.post("/sales", (req, res) => {
 
 
 // GET add-sale form
+//STOCK ALERTS
+// GET add-sale form
 router.get("/addSale", async (req, res) => {
   try {
-    const stocks = await StockModel.find()
-    res.render("addSale", { stocks });
+    const stocks = await StockModel.find();
+
+    // Add stock level information to each product
+    const stocksWithAlerts = stocks.map(stock => {
+      let status = "normal";
+      let alertMessage = "";
+
+      if (stock.pdtquantity === 0) {
+        status = "out-of-stock";
+        alertMessage = "Out of Stock";
+      } else if (stock.pdtquantity <= 5) {
+        status = "low-stock";
+        alertMessage = `Low Stock (${stock.pdtquantity} left)`;
+      } else if (stock.pdtquantity <= 10) {
+        status = "medium-stock";
+        alertMessage = `Medium Stock (${stock.pdtquantity} left)`;
+      }
+
+      return {
+        ...stock.toObject(),
+        stockStatus: status,
+        alertMessage: alertMessage
+      };
+    });
+
+    res.render("addSale", {
+      stocks: stocksWithAlerts,
+      // Also pass low stock items for dashboard alerts
+      lowStockItems: stocks.filter(stock => stock.pdtquantity <= 5)
+    });
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
+    res.status(500).send("Error loading sale form");
   }
 });
+
+
 //Only if you are logged in as a sales agent, you will be able to make a sale
 //ensureAuthenticated, ensureAgent,
 router.post("/addSale", async (req, res) => {

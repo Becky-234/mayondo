@@ -459,3 +459,30 @@ td.actions .btn-icon:hover {
     flex-grow: 1;
   }
 }
+
+/*Stock alert  */
+
+.low-stock {
+  background-color: #fff3cd;
+}
+.critical-stock {
+  background-color: #f8d7da;
+}
+.stock-status {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.status-low {
+  background: #fff3cd;
+  color: #856404;
+}
+.status-critical {
+  background: #f8d7da;
+  color: #721c24;
+}
+.status-normal {
+  background: #d1edf1;
+  color: #0c5460;
+}

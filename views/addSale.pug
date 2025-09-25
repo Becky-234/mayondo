@@ -38,7 +38,14 @@ main.main-content
   nav.navbar.bg-body-tertiary.dashboard-header
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
-        a.logoutBtn(href="/index") Logout
+        a.logoutBtn(href="/index") Logout 
+         // STOCK ALERT BANNER (Top of page)
+  if lowStockItems && lowStockItems.length > 0
+    .container.mt-3
+       .alert.alert-warning.d-flex.align-items-center.w-50.mx-auto 
+        i.fas.fa-exclamation-triangle.me-2
+        strong Stock Alert: 
+        | #{lowStockItems.length} product(s) are running low on stock.
   .user-form-container
     form#addSale(action="/addSale", method="post")  
       h2 Add Sale Here!   
@@ -54,10 +61,20 @@ main.main-content
       br
       label(for="nproduct") Name of Product
       br
-      select#nproduct(name="nproduct", required)
+      select#nproduct(name="nproduct", required, onchange="updateStockAlert()")
         if stocks.length
           each stock in stocks
-            option(value=stock.pdtname)= stock.pdtname
+             option(
+              value=stock.pdtname, 
+              data-stock-quantity=stock.pdtquantity,
+              data-stock-status=stock.stockStatus,
+              data-alert-message=stock.alertMessage,
+              disabled=(stock.stockStatus === "out-of-stock")
+            )= stock.pdtname + (stock.stockStatus === "out-of-stock" ? " - OUT OF STOCK" : "")
+
+      // STOCK ALERT DISPLAY (Dynamic - appears after product selection)
+      #stockAlertContainer.mt-2(style="display: none;")
+        .stock-alert#stockAlert
       br
       br
       label(for="tproduct") Type of Product
