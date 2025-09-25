@@ -41,6 +41,21 @@ main.main-content
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
         a.logoutBtn(href='/index') Logout
+                    // SUCCESS/ERROR MESSAGES
+        if success
+          .container.mt-3
+            .alert.alert-success.alert-dismissible.fade.show(role="alert")
+              i.fas.fa-check-circle.me-2
+              strong Success! 
+              | #{success}
+              button.btn-close(type="button" data-bs-dismiss="alert")
+        if error
+          .container.mt-3
+            .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+              i.fas.fa-exclamation-circle.me-2
+              strong Error! 
+              | #{error}
+              button.btn-close(type="button" data-bs-dismiss="alert")
   section#dash-top.dash
     .row
       .col-md-3

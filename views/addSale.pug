@@ -39,6 +39,22 @@ main.main-content
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
         a.logoutBtn(href="/index") Logout 
+  // SUCCESS/ERROR MESSAGES
+  if success
+    .container.mt-3
+      .alert.alert-success.alert-dismissible.fade.show(role="alert" style="max-width: 600px; margin: 0 auto;")
+        i.fas.fa-check-circle.me-2
+        strong Success! 
+        | #{success}
+        button.btn-close(type="button" data-bs-dismiss="alert")
+  
+  if error
+    .container.mt-3
+      .alert.alert-danger.alert-dismissible.fade.show(role="alert" style="max-width: 600px; margin: 0 auto;")
+        i.fas.fa-exclamation-circle.me-2
+        strong Error! 
+        | #{error}
+        button.btn-close(type="button" data-bs-dismiss="alert")
          // STOCK ALERT BANNER (Top of page)
   if lowStockItems && lowStockItems.length > 0
     .container.mt-3

@@ -464,7 +464,7 @@ progress {
 }
 
 /* Chart Cards */
-/* .card.shadow-sm {
+.card.shadow-sm {
   border: none;
   border-radius: 20px;
   background: #f8f9fa;
@@ -486,7 +486,7 @@ progress {
   font-weight: 600;
   margin-bottom: 20px;
   font-size: 1.1rem;
-} */
+}
 
 /* Progress Bars */
 /* progress {
