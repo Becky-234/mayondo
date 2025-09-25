@@ -29,22 +29,68 @@ router.post("/add", async (req, res) => {
   }
 });
 
-//UPDATING A USER
+// Show edit user form
 router.get("/editUser/:id", async (req, res) => {
-  let user = await UserModel.findById(req.params.id);
-  res.render(`editUser`, { user });
+  try {
+    let user = await UserModel.findById(req.params.id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.render("editUser", { user });
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("Error fetching user");
+  }
 });
 
+// Handle edit user form submission
 router.post("/editUser/:id", async (req, res) => {
   try {
-    const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const { name, email, tel, username, role } = req.body;
+
+    const user = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      { name, email, tel, username, role },
+      { new: true, runValidators: true }
+    );
+
     if (!user) {
-      return res.status(404).send("User not Found");
+      return res.status(404).send("User not found");
     }
+
     res.redirect("/usersList");
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("Error updating user");
+  }
 });
+
+// DELETE user route
+router.delete("/deleteUser/:id", async (req, res) => {
+  try {
+    const user = await UserModel.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.send("User deleted successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("Error deleting user");
+  }
+});
+
+// Alternative GET route for delete (if you prefer using links instead of forms)
+// router.get("/deleteUser/:id", async (req, res) => {
+//   try {
+//     const user = await UserModel.findByIdAndDelete(req.params.id);
+//     if (!user) {
+//       return res.status(404).send("User not found");
+//     }
+//     res.redirect("/usersList");
+//   } catch (error) {
+//     console.error(error);
+//     res.status(400).send("Error deleting user");
+//   }
+// });
 
 module.exports = router;

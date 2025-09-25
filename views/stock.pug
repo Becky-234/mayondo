@@ -117,7 +117,8 @@ main.main-content
           th Supplier Contact
           th Quality
           th Date
-          th Actions 
+          if currentUser.role === "Manager"
+            th Actions 
       tbody.row-others
         if items.length 
           each item in items 
@@ -143,8 +144,6 @@ main.main-content
                     input(type='hidden', name='id', value=item._id)
                     button.btn-icon(type='submit', title='Receipt')
                       i.fas.fa-file-invoice
-                else
-                  span.text-muted N/A
     h5#notFound Not Found
 script(src='../javascript/stock.js')
 //  SheetJS

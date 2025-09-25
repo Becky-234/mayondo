@@ -155,9 +155,9 @@ main.main-content
                     input(type='hidden', name='id', value=item._id)
                     button.btn-icon(type='submit', title='Receipt')
                       i.fas.fa-file-invoice
-        else
-          tr
-            td(colspan=currentUser && currentUser.role === "Manager" ? 12 : 11 style="text-align: center;") No sales records found
+        //- else
+        //-   tr
+        //-     td(colspan=currentUser && currentUser.role === "Manager" ? 12 : 11 style="text-align: center;") No sales records found
     br
     br
     h5#notFound Not Found!

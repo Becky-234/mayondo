@@ -1,77 +1,80 @@
 doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
-  link(rel='stylesheet' href='css/style.css')
-  link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
-  link(rel='stylesheet' href='../css/add-user.css')
-  title Edit User
-aside.side-menu-container
-  .logo-menu
-    h2.logo MWF
-    i.fa-solid.fa-bars
-  ul.list
-    li.list-item
-      a(href='/dashboard')
-        i.fa-solid.fa-house
-        span.link-name Dashboard
-    li.list-item.active
-      a(href='/usersList')
-        i.fa-solid.fa-users
-        span.link-name Users
-    li.list-item
-      a(href='/sales')
-        i.fa-solid.fa-cart-shopping
-        span.link-name Sales
-    li.list-item
-      a(href='/stock')
-        i.fa-solid.fa-truck
-        span.link-name Stock
-    li.list-item
-      a(href='/products')
-        i.fa-solid.fa-couch
-        span.link-name Products
-    li.list-item
-      a(href='#')
-        i.fa-solid.fa-gear
-        span.link-name Settings
-main.main-content
-  nav.navbar.bg-body-tertiary.dashboard-header
-    .container-fluid.d-flex.justify-content-end.align-items-center
-      .d-flex.align-items-center
-        a.logoutBtn(href='/index') Logout
-  .user-form-container
-    form(action=`/editUser/${user._id}` method='post')
-      label(for='name') Full Name
-      br
-      input#name(type='text' value=`${user.name}`)
-      br
-      br
-      label(for='email') Email
-      br
-      input#email(type='text' value=`${user.email}`)
-      br
-      br
-      label(for='tel') Phone Number 
-      br
-      input#tel(type='text' value=`${user.tel}`)
-      br
-      br
-      label(for='username') Username
-      br
-      input#username(type='text' value=`${user.username}`)
-      br
-      br
-      select#role(name="role", required)
-        option(value=`${user.role}`) #{user.role}
-        option(value="Manager") Manager
-        option(value="Sales agent") Sales agent
-      br
-      br
-      .buttons
-         button.btns(type='submit') Update User 
-         button.btns(type='reset') Cancel
-script(src='../javascript/user.js')
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
+html
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
+    link(rel='stylesheet' href='css/style.css')
+    link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
+    link(rel='stylesheet' href='../css/add-user.css')
+    title Edit User
+  body
+    aside.side-menu-container
+      .logo-menu
+        h2.logo MWF
+        i.fa-solid.fa-bars
+      ul.list
+        li.list-item
+          a(href='/dashboard')
+            i.fa-solid.fa-house
+            span.link-name Dashboard
+        li.list-item.active
+          a(href='/usersList')
+            i.fa-solid.fa-users
+            span.link-name Users
+        li.list-item
+          a(href='/sales')
+            i.fa-solid.fa-cart-shopping
+            span.link-name Sales
+        li.list-item
+          a(href='/stock')
+            i.fa-solid.fa-truck
+            span.link-name Stock
+        li.list-item
+          a(href='/products')
+            i.fa-solid.fa-couch
+            span.link-name Products
+        li.list-item
+          a(href='#')
+            i.fa-solid.fa-gear
+            span.link-name Settings
+    main.main-content
+      nav.navbar.bg-body-tertiary.dashboard-header
+        .container-fluid.d-flex.justify-content-end.align-items-center
+          .d-flex.align-items-center
+            a.logoutBtn(href='/index') Logout
+      .user-form-container
+        form(action=`/editUser/${user._id}` method='post')
+          label(for='name') Full Name
+          br
+          input#name(type='text' name='name' value=user.name required)
+          br
+          br
+          label(for='email') Email
+          br
+          input#email(type='email' name='email' value=user.email required)
+          br
+          br
+          label(for='tel') Phone Number 
+          br
+          input#tel(type='tel' name='tel' value=user.tel required)
+          br
+          br
+          label(for='username') Username
+          br
+          input#username(type='text' name='username' value=user.username required)
+          br
+          br
+          label(for='role') Role
+          br
+          select#role(name='role' required)
+            option(value='Manager' selected=user.role === 'Manager') Manager
+            option(value='Sales agent' selected=user.role === 'Sales agent') Sales agent
+          br
+          br
+          .buttons
+            button.btns(type='submit') Update User 
+            a.btns(href='/usersList' style='text-decoration: none;') Cancel
+    script(src='../javascript/user.js')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM7/D2scQbITxI' crossorigin='anonymous')
