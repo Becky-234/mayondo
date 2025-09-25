@@ -79,8 +79,10 @@ main.main-content
               p.card-text #{dashboardData.stockWarnings}
               small.text-muted Items with low stock
     //- Raw Materials Section
-    section#raw-materials.dash.mt-5
-      h5 Raw Materials Overview
+    br
+    section#raw-materials
+      h2 Raw Materials Overview
+      br
       .row
         .col
           .dash-card.raw-card
@@ -120,10 +122,12 @@ main.main-content
               i.fa-solid.fa-dollar-sign
               h6.card-title Inventory Value
               p.card-text Shs. #{dashboardData.rawInventoryValue}
-    
     //- Furniture Section
-    section#furniture.dash.mt-5
-      h5 Furniture Overview
+    br
+    br
+    section#furniture
+      h2 Furniture Overview
+      br
       .row
         .col
           .dash-card.furniture-card
