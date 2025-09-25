@@ -5,7 +5,9 @@ const SalesModel = require("../models/salesModel");
 
 // Dashboard Page with Product Type Separation
 router.get('/dashboard', async (req, res) => {
-    if (!req.user) return res.redirect('/login');
+    if (!req.session.user && !req.user) return res.redirect('/login');
+    
+    const currentUser = req.session.user || req.user;
     
     try {
         // Fetch all stock items
@@ -111,14 +113,14 @@ router.get('/dashboard', async (req, res) => {
         };
         
         res.render('dashboard', { 
-            currentUser: req.user,
+            currentUser: currentUser,
             dashboardData: dashboardData
         });
         
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
         res.render('dashboard', { 
-            currentUser: req.user,
+            currentUser: currentUser,
             dashboardData: getDefaultDashboardData()
         });
     }
