@@ -1,33 +1,43 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-link(rel="stylesheet", href="/css/signup.css")
-title Signup
-form#signupForm(action="/signup", method="post")
-  .form-container
-    h1.head Signup
-    .input-box
-      input#name(type="text", placeholder="Fullname", name="name", required)
-      span#nameError.error
-    .input-box
-      input#email(type="email", placeholder="Email", name="email", required)
-      span#emailError.error
-    .input-box
-      input#tel(type="text", placeholder="Phone Number", name="tel", required)
-      span#telError.error
-    .input-box
-      input#username(type="text", placeholder="Username", name="username", required)
-      span#usernameError.error
-    .input-box
-      input#password(type="password", placeholder="Password", name="password", required, minlength="6")
-      span#passwordError.error
-    label(for="role") Select Role:
-    br
-    select#role(name="role", required)
-      option(value, disabled, selected) Select your role
-      option(value="Manager") Manager
-      option(value="Sales agent") Sales agent
-    br
-    br
-    button.button#signup-btn(type="submit") Signup
-    br
-  script(src="../javascript/signup.js")
+doctype html
+html(lang='en')
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width,initial-scale=1")
+    title Signup
+    link(rel="stylesheet", href="/css/signup.css")
+  body
+    form#signupForm(action="/signup", method="post")
+      .form-container
+        h1.head Signup
+        if error
+          .error-message(style="color: red; text-align: center; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 5px;") #{error}
+        .input-box
+          input#name(type="text", placeholder="Full Name", name="name", required)
+          span#nameError.error
+        .input-box
+          input#email(type="email", placeholder="Email", name="email", required)
+          span#emailError.error
+        .input-box
+          input#tel(type="text", placeholder="Phone Number", name="tel", required)
+          span#telError.error
+        .input-box
+          input#username(type="text", placeholder="Username", name="username", required)
+          span#usernameError.error
+        .input-box
+          input#password(type="password", placeholder="Password", name="password", required, minlength="6")
+          span#passwordError.error
+        label(for="role") Select Role:
+        br
+        select#role(name="role", required)
+          option(value="", disabled, selected) Select your role
+          option(value="Manager") Manager
+          option(value="Sales agent") Sales agent
+        br
+        br
+        button.button#signup-btn(type="submit") Signup
+        br
+        .register-link
+          p
+            | Already have an account?
+            a(href="/login") Login
+    script(src="/javascript/signup.js")
