@@ -5,7 +5,6 @@ const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 
 form.addEventListener("submit", function (event) {
-  event.preventDefault();
   let valid = true;
 
   // Clear previous errors
@@ -19,18 +18,23 @@ form.addEventListener("submit", function (event) {
     } else if (email.validity.typeMismatch) {
       emailError.textContent = "Please enter a valid email address.";
     }
-    valid = true;
+    valid = false;
   }
 
   // Password validation
   if (password.value === "") {
     passwordError.textContent = "Password is required.";
-    valid = true;
+    valid = false;
   } else if (password.value.length < 6) {
     passwordError.textContent = "Password must be at least 6 characters.";
-    valid = true;
+    valid = false;
   }
 
-  // Stop here if invalid
-  if (!valid) return;
+  // Stop form submission if invalid
+  if (!valid) {
+    event.preventDefault();
+    return;
+  }
+  
+  // If valid, form will submit normally
 });
