@@ -1,10 +1,10 @@
 meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 link(rel="stylesheet", href="/css/signup.css")
-title Register Account
-form#signupForm(action="/signup", method="post")
+title Add New User
+form#signupForm(action="/add", method="post")
   .form-container
-    h1.head Register 
+    h1.head Add New User
     .input-box
       input#name(type="text", placeholder="Fullname", name="name", required)
       span#nameError.error
@@ -15,19 +15,25 @@ form#signupForm(action="/signup", method="post")
       input#tel(type="text", placeholder="Phone Number", name="tel", required)
       span#telError.error
     .input-box
+      input#nin(type="text", placeholder="NIN", name="nin", required)
+      span#ninError.error
+    .input-box
+      input#address(type="text", placeholder="Address", name="address", required)
+      span#addressError.error
+    .input-box
       input#username(type="text", placeholder="Username", name="username", required)
       span#usernameError.error
     .input-box
       input#password(type="password", placeholder="Password", name="password", required, minlength="6")
       span#passwordError.error
-    //- label(for="role") Select Role:
-    //- br
-    //- select#role(name="role", required)
-    //-   option(value, disabled, selected) Select your role
-    //-   option(value="Manager") Manager
-    //-   option(value="Sales agent") Sales agent
+    label(for="role") Select Role:
+    br
+    select#role(name="role", required)
+      option(value, disabled, selected) Select User Role
+      option(value="Manager") Manager
+      option(value="Sales agent") Sales agent
     br
     br
-    button.button#signup-btn(type="submit") Register 
+    button.button#signup-btn(type="submit") Add User
     br
   script(src="../javascript/signup.js")

@@ -16,7 +16,19 @@ const signupSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    nin: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
     username: {
+        type: String,
+        required: true
+    },
+    password: {
         type: String,
         required: true
     },
@@ -30,4 +42,5 @@ const signupSchema = new mongoose.Schema({
 signupSchema.plugin(passportLocalMongoose, {
     usernameField: 'email'
 });
+
 module.exports = mongoose.model('UserModel', signupSchema);

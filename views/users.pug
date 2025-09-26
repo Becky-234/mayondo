@@ -43,7 +43,7 @@ main.main-content
       .d-flex.align-items-center
         a.logoutBtn(href="/index") Logout
   .to-do
-    //- a#newUser.btns(href="/add-new-user") Add New User
+    a#newUser.btns(href="/add-new-user") Add New User
     a#downloadExcel.btns Download Excel
     a#downloadPdf.btns Download PDF
     input#searchUser(type="search", placeholder="Search...")
@@ -53,6 +53,8 @@ main.main-content
         th Full Name
         th Email
         th Contact
+        th NIN
+        th Address
         th Username 
         th Role 
         th Actions 
@@ -63,12 +65,14 @@ main.main-content
             td #{user.name}
             td #{user.email}
             td +256#{user.tel}
+            td #{user.nin}
+            td #{user.address}
             td #{user.username}
             td #{user.role}
             td
               a.btn-icon(href=`/editUser/${user._id}` title='Edit')
                 i.fas.fa-edit
-              form(method='post', action='/deleteUser', style='display:inline')
+              form(method='post', action='/deleteUser/${user._id}', style='display:inline')
                 input(type='hidden', name='id', value=user._id)
                 button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this User?')")
                   i.fas.fa-trash
