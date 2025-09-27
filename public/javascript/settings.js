@@ -367,7 +367,6 @@ function showAgentCredentials(username, password) {
 
     agentCredentialsDiv.innerHTML = `
         <h3>
-            <i class="icon">🔑</i>
             Sales Agent Credentials
         </h3>
         <div class="credentials-info">
@@ -381,7 +380,6 @@ function showAgentCredentials(username, password) {
             </div>
         </div>
         <button class="btn btn-secondary" onclick="copyAgentCredentials()">
-            <i class="icon">📋</i>
             Copy Credentials
         </button>
     `;
@@ -398,9 +396,9 @@ function copyCredentialsToClipboard() {
 
     navigator.clipboard.writeText(text).then(() => {
         showAlert('Credentials copied to clipboard!', 'success');
-        copyCredentialsBtn.innerHTML = '<i class="icon">✓</i> Copied!';
+        copyCredentialsBtn.innerHTML = ' Copied!';
         setTimeout(() => {
-            copyCredentialsBtn.innerHTML = '<i class="icon">📋</i> Copy All Credentials';
+            copyCredentialsBtn.innerHTML = ' Copy All Credentials';
         }, 2000);
     }).catch(err => {
         showAlert('Failed to copy credentials. Please copy manually.', 'error');
@@ -421,7 +419,6 @@ function displayManagers() {
     if (managers.length === 0) {
         managersList.innerHTML = `
             <div class="empty-state">
-                <i class="icon">👥</i>
                 <p>No managers created yet</p>
             </div>
         `;
@@ -439,7 +436,6 @@ function displayManagers() {
             </div>
             <div class="user-actions">
                 <button class="btn btn-secondary" onclick="resendCredentials(${manager.id})">
-                    <i class="icon">📨</i>
                     Resend
                 </button>
                 <button class="btn ${manager.status === 'active' ? 'btn-secondary' : 'btn-primary'}" 
@@ -477,7 +473,6 @@ function displayAgents() {
     if (managerAgents.length === 0) {
         agentsList.innerHTML = `
             <div class="empty-state">
-                <i class="icon">👥</i>
                 <p>No sales agents registered yet</p>
             </div>
         `;
@@ -495,7 +490,6 @@ function displayAgents() {
             </div>
             <div class="user-actions">
                 <button class="btn btn-secondary" onclick="resendAgentCredentials(${agent.id})">
-                    <i class="icon">📨</i>
                     Resend
                 </button>
                 <button class="btn ${agent.status === 'active' ? 'btn-secondary' : 'btn-primary'}" 
@@ -537,7 +531,6 @@ function updateUserInfo() {
 
     if (currentManager) {
         userInfo.innerHTML = `
-            <i class="icon">👤</i>
             Logged in as: <strong>${currentManager.name}</strong> 
             | <a href="#" onclick="logout()" style="color: white; text-decoration: underline;">Logout</a>
         `;

@@ -14,7 +14,6 @@
         <header class="settings-header">
             <div class="header-content">
                 <h1>
-                    <i class="icon">👥</i>
                     User Account Management
                 </h1>
                 <p>Create and manage manager accounts for your team</p>
@@ -27,15 +26,12 @@
         <!-- Navigation Tabs -->
         <nav class="settings-tabs">
             <button class="tab-btn active" data-tab="admin">
-                <i class="icon">👨‍💼</i>
                 Admin Panel
             </button>
             <button class="tab-btn" data-tab="manager-login">
-                <i class="icon">🔐</i>
                 Manager Login
             </button>
             <button class="tab-btn" data-tab="manager-panel">
-                <i class="icon">📊</i>
                 Manager Panel
             </button>
         </nav>
@@ -47,7 +43,6 @@
         <div id="admin" class="tab-content active">
             <div class="card">
                 <h2>
-                    <i class="icon">➕</i>
                     Create New Manager Account
                 </h2>
 
@@ -55,7 +50,6 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="manager-name">
-                                <i class="icon">👤</i>
                                 Full Name
                             </label>
                             <input type="text" id="manager-name" required placeholder="Enter manager's full name">
@@ -63,17 +57,16 @@
 
                         <div class="form-group">
                             <label for="manager-email">
-                                <i class="icon">📧</i>
                                 Email Address
                             </label>
                             <input type="email" id="manager-email" required placeholder="manager@mayondo.com">
                         </div>
                     </div>
 
-                    <div class="form-row">
+                    <!-- <div class="form-row">
                         <div class="form-group">
                             <label for="manager-department">
-                                <i class="icon">🏢</i>
+                                
                                 Department
                             </label>
                             <select id="manager-department" required>
@@ -84,188 +77,173 @@
                                 <option value="Logistics">Logistics</option>
                                 <option value="Finance">Finance</option>
                             </select>
-                        </div>
+                        </div> -->
 
-                        <div class="form-group">
-                            <label for="manager-phone">
-                                <i class="icon">📱</i>
-                                Phone Number
-                            </label>
-                            <input type="tel" id="manager-phone" placeholder="+256 XXX XXX XXX">
-                        </div>
+                    <div class="form-group">
+                        <label for="manager-phone">
+                            Phone Number
+                        </label>
+                        <input type="tel" id="manager-phone" placeholder="+256 XXX XXX XXX">
+                    </div>
+            </div>
+
+            <div class="form-group">
+                <label for="send-method">
+                    Send Credentials Via
+                </label>
+                <select id="send-method" required>
+                    <option value="email">Email Only</option>
+                    <option value="sms">SMS Only</option>
+                    <option value="both">Email and SMS</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Create Manager Account
+            </button>
+            </form>
+
+            <!-- Credentials Display -->
+            <div id="credentials-display" class="credentials-card" style="display: none;">
+                <h3>
+                    Account Credentials
+                </h3>
+                <div class="credentials-info">
+                    <div class="credential-item">
+                        <span class="label">Username:</span>
+                        <span id="display-username" class="value"></span>
+                    </div>
+                    <div class="credential-item">
+                        <span class="label">Password:</span>
+                        <span id="display-password" class="value"></span>
+                    </div>
+                    <div class="credential-item">
+                        <span class="label">Login URL:</span>
+                        <span id="display-url" class="value url"></span>
+                    </div>
+                </div>
+                <button id="copy-credentials" class="btn btn-secondary">
+                    Copy All Credentials
+                </button>
+            </div>
+        </div>
+
+        <!-- Existing Managers List -->
+        <div class="card">
+            <h2>
+                Existing Managers
+            </h2>
+            <div id="managers-list" class="user-list">
+                <div class="empty-state">
+                    <p>No managers created yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager Login Tab -->
+    <div id="manager-login" class="tab-content">
+        <div class="card login-card">
+            <h2>
+                Manager Portal Login
+            </h2>
+            <p class="login-subtitle">Enter your credentials to access the manager panel</p>
+
+            <form id="manager-login-form" class="login-form">
+                <div class="form-group">
+                    <label for="login-username">
+                        Username
+                    </label>
+                    <input type="text" id="login-username" required placeholder="Enter your username">
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">
+                        Password
+                    </label>
+                    <input type="password" id="login-password" required placeholder="Enter your password">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-login">
+                    Sign In to Manager Panel
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Manager Panel Tab -->
+    <div id="manager-panel" class="tab-content">
+        <div class="card">
+            <div class="manager-welcome">
+                <h2>
+
+                    Welcome, <span id="manager-name-display">Manager</span>!
+                </h2>
+                <p>Create and manage sales agent accounts for your team</p>
+            </div>
+
+            <form id="create-agent-form" class="settings-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="agent-name">
+
+                            Agent Full Name
+                        </label>
+                        <input type="text" id="agent-name" required placeholder="Enter agent's full name">
                     </div>
 
                     <div class="form-group">
-                        <label for="send-method">
-                            <i class="icon">📨</i>
-                            Send Credentials Via
+                        <label for="agent-email">
+
+                            Email Address
                         </label>
-                        <select id="send-method" required>
-                            <option value="email">Email Only</option>
-                            <option value="sms">SMS Only</option>
-                            <option value="both">Email and SMS</option>
+                        <input type="email" id="agent-email" required placeholder="agent@mayondo.com">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="agent-region">
+                            Sales Region
+                        </label>
+                        <select id="agent-region" required>
+                            <option value="">Select Region</option>
+                            <option value="Kampala">Kampala Central</option>
+                            <option value="Entebbe">Entebbe & Wakiso</option>
+                            <option value="Jinja">Jinja & Eastern</option>
+                            <option value="Mbarara">Mbarara & Western</option>
+                            <option value="Gulu">Gulu & Northern</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">
-                        <i class="icon">✅</i>
-                        Create Manager Account
-                    </button>
-                </form>
-
-                <!-- Credentials Display -->
-                <div id="credentials-display" class="credentials-card" style="display: none;">
-                    <h3>
-                        <i class="icon">🔑</i>
-                        Account Credentials
-                    </h3>
-                    <div class="credentials-info">
-                        <div class="credential-item">
-                            <span class="label">Username:</span>
-                            <span id="display-username" class="value"></span>
-                        </div>
-                        <div class="credential-item">
-                            <span class="label">Password:</span>
-                            <span id="display-password" class="value"></span>
-                        </div>
-                        <div class="credential-item">
-                            <span class="label">Login URL:</span>
-                            <span id="display-url" class="value url"></span>
-                        </div>
-                    </div>
-                    <button id="copy-credentials" class="btn btn-secondary">
-                        <i class="icon">📋</i>
-                        Copy All Credentials
-                    </button>
-                </div>
-            </div>
-
-            <!-- Existing Managers List -->
-            <div class="card">
-                <h2>
-                    <i class="icon">📋</i>
-                    Existing Managers
-                </h2>
-                <div id="managers-list" class="user-list">
-                    <div class="empty-state">
-                        <i class="icon">👥</i>
-                        <p>No managers created yet</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Manager Login Tab -->
-        <div id="manager-login" class="tab-content">
-            <div class="card login-card">
-                <h2>
-                    <i class="icon">🔐</i>
-                    Manager Portal Login
-                </h2>
-                <p class="login-subtitle">Enter your credentials to access the manager panel</p>
-
-                <form id="manager-login-form" class="login-form">
                     <div class="form-group">
-                        <label for="login-username">
-                            <i class="icon">👤</i>
-                            Username
+                        <label for="agent-phone">
+
+                            Phone Number
                         </label>
-                        <input type="text" id="login-username" required placeholder="Enter your username">
+                        <input type="tel" id="agent-phone" required placeholder="+256 XXX XXX XXX">
                     </div>
-
-                    <div class="form-group">
-                        <label for="login-password">
-                            <i class="icon">🔒</i>
-                            Password
-                        </label>
-                        <input type="password" id="login-password" required placeholder="Enter your password">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-login">
-                        <i class="icon">🚪</i>
-                        Sign In to Manager Panel
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Manager Panel Tab -->
-        <div id="manager-panel" class="tab-content">
-            <div class="card">
-                <div class="manager-welcome">
-                    <h2>
-                        <i class="icon">👋</i>
-                        Welcome, <span id="manager-name-display">Manager</span>!
-                    </h2>
-                    <p>Create and manage sales agent accounts for your team</p>
                 </div>
 
-                <form id="create-agent-form" class="settings-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="agent-name">
-                                <i class="icon">👤</i>
-                                Agent Full Name
-                            </label>
-                            <input type="text" id="agent-name" required placeholder="Enter agent's full name">
-                        </div>
+                <button type="submit" class="btn btn-primary">
+                    Create Sales Agent Account
+                </button>
 
-                        <div class="form-group">
-                            <label for="agent-email">
-                                <i class="icon">📧</i>
-                                Email Address
-                            </label>
-                            <input type="email" id="agent-email" required placeholder="agent@mayondo.com">
-                        </div>
-                    </div>
+            </form>
+        </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="agent-region">
-                                <i class="icon">🗺️</i>
-                                Sales Region
-                            </label>
-                            <select id="agent-region" required>
-                                <option value="">Select Region</option>
-                                <option value="Kampala">Kampala Central</option>
-                                <option value="Entebbe">Entebbe & Wakiso</option>
-                                <option value="Jinja">Jinja & Eastern</option>
-                                <option value="Mbarara">Mbarara & Western</option>
-                                <option value="Gulu">Gulu & Northern</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="agent-phone">
-                                <i class="icon">📱</i>
-                                Phone Number
-                            </label>
-                            <input type="tel" id="agent-phone" required placeholder="+256 XXX XXX XXX">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="icon">➕</i>
-                        Create Sales Agent Account
-                    </button>
-                    
-                </form>
-            </div>
-
-            <!-- Sales Agents List -->
-            <div class="card">
-                <h2>
-                    <i class="icon">👨‍💼</i>
-                    My Sales Agents
-                </h2>
-                <div id="agents-list" class="user-list">
-                    <div class="empty-state">
-                        <i class="icon">👥</i>
-                        <p>No sales agents registered yet</p>
-                    </div>
+        <!-- Sales Agents List -->
+        <div class="card">
+            <h2>
+                My Sales Agents
+            </h2>
+            <div id="agents-list" class="user-list">
+                <div class="empty-state">
+                    <p>No sales agents registered yet</p>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="../javascript/settings.js"></script>
