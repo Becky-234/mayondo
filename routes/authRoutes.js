@@ -26,7 +26,7 @@ router.post("/signup", async (req, res) => {
         res.status(400).send("Try again");
     }
 });
- 
+
 
 //Getting the Login form
 router.get("/login", (req, res) => {
@@ -36,15 +36,15 @@ router.get("/login", (req, res) => {
 router.post(
     "/login",
     passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
-        console.log("Logged-in user:", req.user);  
-        req.session.user = req.user;
-        if (req.user.role === "Manager") {
-            return res.redirect("/dashboard");
-        } else if (req.user.role === "Sales agent") {
-            return res.redirect("/sales");
-        } else {
-            return res.render("noneuser");
-        }
+        console.log("Logged-in user:", req.user);
+        // req.session.user = req.user;
+        // if (req.user.role === "Manager") {
+        //     return res.redirect("/dashboard");
+        // } else if (req.user.role === "Sales agent") {
+        //     return res.redirect("/sales");
+        // } else {
+        //     return res.render("noneuser");
+        // }
     }
 );
 

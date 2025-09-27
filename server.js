@@ -6,6 +6,7 @@ const passport = require("passport");
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
 const moment = require("moment");
+const methodOverride = require('method-override');
 
 
 require("dotenv").config();
@@ -19,6 +20,7 @@ const productRoutes = require("./routes/productRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const indexRoutes = require("./routes/indexRoutes");
 const userRoutes = require("./routes/userRoutes");
+const settingsRoutes = require("./routes/settingsRoutes");
 
 //2.INSTANTIATIONS
 const app = express();
@@ -77,5 +79,8 @@ app.use("/", productRoutes);
 app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
 app.use("/", userRoutes);
+app.use("/", settingsRoutes);
+app.use(methodOverride('_method'));
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -34,7 +34,7 @@ header
           i.fa-solid.fa-couch
           span.link-name Products
       li.list-item
-        a(href="#")
+        a(href="settings")
           i.fa-solid.fa-gear
           span.link-name Settings
 main.main-content
@@ -43,7 +43,7 @@ main.main-content
       .d-flex.align-items-center
         a.logoutBtn(href="/index") Logout
   .to-do
-    a#newUser.btns(href="/add-new-user") Add New User
+    a#newUser.btns(href="/add") Add New User
     a#downloadExcel.btns Download Excel
     a#downloadPdf.btns Download PDF
     input#searchUser(type="search", placeholder="Search...")
@@ -73,7 +73,7 @@ main.main-content
               a.btn-icon(href=`/editUser/${user._id}` title='Edit')
                 i.fas.fa-edit
               form(method='post', action='/deleteUser/${user._id}', style='display:inline')
-                input(type='hidden', name='id', value=user._id)
+                input(type='hidden', name='id', value='DELETE')
                 button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this User?')")
                   i.fas.fa-trash
     br

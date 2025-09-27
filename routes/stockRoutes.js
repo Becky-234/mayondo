@@ -11,9 +11,9 @@ const StockModel = require("../models/stockModel");
 router.get("/stock", async (req, res) => {
   try {
     let items = await StockModel
-    .find()
-    .sort({ $natural: -1 });
-    
+      .find()
+      .sort({ $natural: -1 });
+
     const success = req.query.success;
     const error = req.query.error;
 
@@ -29,11 +29,11 @@ router.get("/stock", async (req, res) => {
   }
 });
 
-
 //ensureAuthenticated, ensureManager,
 router.post("/stock", (req, res) => {
   console.log(req.body);
 });
+
 
 // Add stock page - GET with messages
 router.get("/addStock", (req, res) => {
@@ -47,18 +47,6 @@ router.get("/addStock", (req, res) => {
   });
 });
 
-
-//Add stock page
-//ensureAuthenticated, ensureManager,
-router.get("/addStock", (req, res) => {
-  const success = req.query.success;
-  const error = req.query.error;
-
-  res.render("addStock", { title: "Stock page" });
-  title: "Stock page",
-    success,
-    error
-});
 
 //ensureAuthenticated, ensureManager,
 router.post("/addStock", async (req, res) => {

@@ -1,0 +1,186 @@
+doctype html
+html(lang="en")
+head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title User Management - Mayondo Wood & Furniture
+    link(rel="stylesheet", href="/css/settings.css")
+body
+    .settings-container
+        //- Header Section
+        header.settings-header
+            .header-content
+                h1
+                    | User Account Management
+                p Create and manage manager accounts for your team
+            .user-info#user-info
+
+        //- Navigation Tabs
+        nav.settings-tabs
+            button.tab-btn.active(data-tab="admin")
+                | Admin Panel
+            button.tab-btn(data-tab="manager-login")
+                | Manager Login
+            button.tab-btn(data-tab="manager-panel")
+                | Manager Panel
+
+        //- Alert Container
+        #global-alert
+
+        //- Admin Panel Tab
+        #admin.tab-content.active
+            .card
+                h2
+                    | Create New Manager Account
+                
+                form#create-manager-form.settings-form
+                    .form-row
+                        .form-group
+                            label(for="manager-name")
+                                | Full Name
+                            input#manager-name(type="text", required, placeholder="Enter manager's full name", autocomplete="name")
+                        
+                        .form-group
+                            label(for="manager-email")
+                                | Email Address
+                            input#manager-email(type="email", required, placeholder="manager@mayondo.com", autocomplete="email")
+                    
+                    .form-row
+                        //- .form-group
+                        //-     label(for="manager-department")
+                        //-         i.icon 🏢
+                        //-         | Department
+                        //-     select#manager-department(required)
+                        //-         option(value="") Select Department
+                        //-         option(value="Sales") Sales & Showroom
+                        //-         option(value="Production") Production
+                        //-         option(value="Design") Design Studio
+                        //-         option(value="Logistics") Logistics
+                        //-         option(value="Finance") Finance
+                        
+                        .form-group
+                            label(for="manager-phone")
+                                | Phone Number
+                            input#manager-phone(type="tel", placeholder="+256 XXX XXX XXX", autocomplete="tel")
+                    
+                    .form-group
+                        label(for="send-method")
+                            | Send Credentials Via
+                        select#send-method(required)
+                            option(value="email") Email Only
+                            option(value="sms") SMS Only
+                            option(value="both") Email and SMS
+                    
+                    button.btn.btn-primary(type="submit")
+                        | Create Manager Account
+
+                //- Credentials Display
+                #credentials-display.credentials-card
+                    h3
+                        | Account Credentials
+                    .credentials-info
+                        .credential-item
+                            span.label Username:
+                            span#display-username.value
+                        .credential-item
+                            span.label Password:
+                            span#display-password.value
+                        .credential-item
+                            span.label Login URL:
+                            span#display-url.value.url
+                    button#copy-credentials.btn.btn-secondary
+                        | Copy All Credentials
+
+            //- Existing Managers List
+            .card
+                h2
+                    | Existing Managers
+                #managers-list.user-list
+                    .empty-state
+                        p No managers created yet
+
+        //- Manager Login Tab
+        #manager-login.tab-content
+            .card.login-card
+                h2
+                    | Manager Portal Login
+                p.login-subtitle Enter your credentials to access the manager panel
+                
+                form#manager-login-form.login-form
+                    .form-group
+                        label(for="login-username")
+                            | Username
+                        input#login-username(type="text", required, placeholder="Enter your username", autocomplete="username")
+                    
+                    .form-group
+                        label(for="login-password")
+                            | Password
+                        input#login-password(type="password", required, placeholder="Enter your password", autocomplete="current-password")
+                    
+                    button.btn.btn-primary.btn-login(type="submit")
+                        | Sign In to Manager Panel
+
+        //- Manager Panel Tab
+        #manager-panel.tab-content
+            .card
+                .manager-welcome
+                    h2
+                        | Welcome, 
+                        span#manager-name-display Manager
+                        | !
+                    p Create and manage sales agent accounts for your team
+
+                form#create-agent-form.settings-form
+                    .form-row
+                        .form-group
+                            label(for="agent-name")
+                                | Agent Full Name
+                            input#agent-name(type="text", required, placeholder="Enter agent's full name", autocomplete="name")
+                        
+                        .form-group
+                            label(for="agent-email")
+                                | Email Address
+                            input#agent-email(type="email", required, placeholder="agent@mayondo.com", autocomplete="email")
+                    
+                    .form-row
+                        .form-group
+                            label(for="agent-region")
+                                | Sales Region
+                            select#agent-region(required)
+                                option(value="") Select Region
+                                option(value="Kampala") Kampala Central
+                                option(value="Entebbe") Entebbe & Wakiso
+                                option(value="Jinja") Jinja & Eastern
+                                option(value="Mbarara") Mbarara & Western
+                                option(value="Gulu") Gulu & Northern
+                        
+                        .form-group
+                            label(for="agent-phone")
+                                | Phone Number
+                            input#agent-phone(type="tel", required, placeholder="+256 XXX XXX XXX", autocomplete="tel")
+                    
+                    button.btn.btn-primary(type="submit")
+                        | Create Sales Agent Account
+                    //- h3
+                    //-     | Account Credentials
+                    //- .credentials-info
+                    //-     .credential-item
+                    //-         span.label Username:
+                    //-         span#display-username.value
+                    //-     .credential-item
+                    //-         span.label Password:
+                    //-         span#display-password.value
+                    //-     .credential-item
+                    //-         span.label Login URL:
+                    //-         span#display-url.value.url
+                    //- button#copy-credentials.btn.btn-secondary
+                    //-     | Copy All Credentials
+            //- Sales Agents List
+            .card
+                h2
+                    | My Sales Agents
+                #agents-list.user-list
+                    .empty-state
+                        p No sales agents registered yet
+
+    script(src="/javascript/settings.js")

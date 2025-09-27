@@ -1,7 +1,7 @@
 meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 link(rel="stylesheet", href="/css/signup.css")
-title Register Account
+title Register Manager
 form#signupForm(action="/signup", method="post")
   .form-container
     h1.head Register 
@@ -14,6 +14,12 @@ form#signupForm(action="/signup", method="post")
     .input-box
       input#tel(type="text", placeholder="Phone Number", name="tel", required)
       span#telError.error
+    .input-box
+      input#nin(type="text", placeholder="NIN", name="nin", required)
+      span#ninError.error
+    .input-box
+      input#address(type="text", placeholder="Address", name="address", required)
+      span#addressError.error
     .input-box
       input#username(type="text", placeholder="Username", name="username", required)
       span#usernameError.error

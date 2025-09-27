@@ -13,10 +13,6 @@ router.get("/usersList", async (req, res) => {
   }
 });
 
-router.post("/usersList", (req, res) => {
-  res.render("users");
-})
-
 // Show add-user form
 router.get("/add", (req, res) => {
   res.render("adduser", { title: "Add user page" });
@@ -70,13 +66,13 @@ router.post("/editUser/:id", async (req, res) => {
 });
 
 // DELETE user route
-router.post("/deleteUser/:id", async (req, res) => {
+router.delete("/deleteUser/:id", async (req, res) => {
   try {
     const user = await UserModel.findByIdAndDelete(req.params.id);
     if (!user) {
       return res.status(404).send("User not found");
     }
-    res.redirect("/usersList");  // Redirect after deletion
+    res.send("User deleted successfully");
   } catch (error) {
     console.error(error);
     res.status(400).send("Error deleting user");

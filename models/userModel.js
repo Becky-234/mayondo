@@ -28,17 +28,17 @@ const signupSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        required: true,
-        enum: ["Manager", "Sales agent"]
-    }
+    // password: {
+    //     type: String,
+    //     required: true
+    // },
+    // role: {
+    //     type: String,
+    //     required: true,
+    //     enum: ["Manager", "Sales agent"]
+    // }
 });
-
+ 
 signupSchema.plugin(passportLocalMongoose, {
     usernameField: 'email'
 });
