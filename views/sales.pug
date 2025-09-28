@@ -126,7 +126,7 @@ main.main-content
           th Type of Payment
           th Date
           th Sales Agent Name
-          if currentUser.role === "Manager" 
+          if currentUser.role === "manager" 
             th Actions
       tbody.row-others
         if items.length 
@@ -143,7 +143,7 @@ main.main-content
               td #{item.payment}
               td #{new Date(item.date).toLocaleDateString()}
               td #{item.agent.name}
-              if currentUser.role === "Manager" 
+              if currentUser.role === "manager" 
                 td.actions
                   a.btn-icon(href=`/editSales/${item._id}` title='Edit')
                     i.fas.fa-edit

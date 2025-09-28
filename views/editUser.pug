@@ -48,9 +48,9 @@ html
         form(action=`/editUser/${user._id}` method='post')
           if error
             .alert.alert-danger #{error}
-          label(for='fname') Full Name
+          label(for='name') Full Name
           br
-          input#fname(type='text' name='fname' value=user.fname required)
+          input#name(type='text' name='name' value=user.name required)
           br
           br
           label(for='email') Email

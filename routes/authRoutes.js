@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
                         }
 
                         console.log("Sales Agent login successful - session saved");
-                        return res.redirect('/dashboard');
+                        return res.redirect('/sales');
                     });
                 } else {
                     console.log("Sales Agent login failed - password incorrect");

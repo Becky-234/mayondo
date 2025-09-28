@@ -48,13 +48,13 @@ const stockSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Supplier contact is required'],
         trim: true,
-        validate: {
-            validator: function (v) {
-                // Basic phone number validation for Uganda
-                return /^\+256\d{9}$/.test(v) || /^0\d{9}$/.test(v);
-            },
-            message: 'Please provide a valid Ugandan phone number'
-        }
+        // validate: {
+        //     validator: function (v) {
+        //         // Basic phone number validation for Uganda
+        //         return /^\+256\d{9}$/.test(v) || /^0\d{9}$/.test(v);
+        //     },
+        //     message: 'Please provide a valid Ugandan phone number'
+        // }
     },
     quality: {
         type: String,

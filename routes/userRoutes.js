@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/userModel");
+const methodOverride = require('method-override');
 
 
 // List users (only sales agents)
@@ -26,10 +27,10 @@ router.post("/add", async (req, res) => {
   try {
     console.log("Received form data:", req.body);
 
-    const { fname, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
+    const { name, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
 
     // Validate required fields
-    if (!fname || !email || !tel || !nin || !address || !username || !password || !confirmPassword || !date) {
+    if (!name || !email || !tel || !nin || !address || !username || !password || !confirmPassword || !date) {
       console.log("Missing fields detected");
       return res.status(400).render("adduser", {
         error: "All fields are required",
@@ -61,14 +62,13 @@ router.post("/add", async (req, res) => {
 
     // Create new sales agent - password will be hashed by the model
     const newUser = new UserModel({
-      name: fname,
+      name,
       email,
       tel,
       nin,
       address,
       username,
       password, // Store plain password - model will hash it
-      // displayPassword: password,  //password will remain plain text
       role: 'sales_agent',
       date: date
     });
@@ -103,6 +103,7 @@ router.post("/add", async (req, res) => {
   }
 });
 
+
 // Show edit user form
 router.get("/editUser/:id", async (req, res) => {
   try {
@@ -121,15 +122,19 @@ router.get("/editUser/:id", async (req, res) => {
 // Handle edit user form submission
 router.post("/editUser/:id", async (req, res) => {
   try {
-    const { fname, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
+    const { name, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
 
     // Check if passwords are provided and match
     if (password && password !== confirmPassword) {
-      return res.status(400).send("Passwords do not match");
+      const user = await UserModel.findById(req.params.id);
+      return res.render("editUser", {
+        user,
+        error: "Passwords do not match"
+      });
     }
 
     const updateData = {
-      fname,
+      name,
       email,
       tel,
       nin,
@@ -137,9 +142,10 @@ router.post("/editUser/:id", async (req, res) => {
       username,
       date
     };
+
     // Only update password if provided
     if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
+      updateData.password = password;
     }
 
     const user = await UserModel.findByIdAndUpdate(
@@ -155,19 +161,23 @@ router.post("/editUser/:id", async (req, res) => {
     res.redirect("/usersList");
   } catch (error) {
     console.error(error);
-    res.status(400).send("Error updating user");
+    const user = await UserModel.findById(req.params.id);
+    res.render("editUser", {
+      user,
+      error: "Error updating user: " + error.message
+    });
   }
 });
 
 
 // DELETE user route
-router.delete("/deleteUser/:id", async (req, res) => {
+router.post("/deleteUser/:id", async (req, res) => {
   try {
     const user = await UserModel.findByIdAndDelete(req.params.id);
     if (!user) {
       return res.status(404).send("User not found");
     }
-    res.send("User deleted successfully");
+    res.redirect("/usersList");
   } catch (error) {
     console.error(error);
     res.status(400).send("Error deleting user");
