@@ -46,9 +46,11 @@ html
             a.logoutBtn(href='/index') Logout
       .user-form-container
         form(action=`/editUser/${user._id}` method='post')
-          label(for='name') Full Name
+          if error
+            .alert.alert-danger #{error}
+          label(for='fname') Full Name
           br
-          input#name(type='text' name='name' value=user.name required)
+          input#fname(type='text' name='fname' value=user.name required)
           br
           br
           label(for='email') Email
@@ -61,16 +63,34 @@ html
           input#tel(type='tel' name='tel' value=user.tel required)
           br
           br
+          label(for='nin') NIN Number
+          br
+          input#nin(type='text' name='nin' value=user.nin required)
+          br
+          br
+          label(for='address') Address
+          br
+          input#address(type='text' name='address' value=user.address required)
+          br
+          br
           label(for='username') Username
           br
           input#username(type='text' name='username' value=user.username required)
           br
           br
-          label(for='role') Role
+          label(for='password') Password
           br
-          select#role(name='role' required)
-            option(value='Manager' selected=user.role === 'Manager') Manager
-            option(value='Sales agent' selected=user.role === 'Sales agent') Sales agent
+          input#password(type='text' name='password' value=user.password required='')
+          br
+          br
+          label(for='confirmPassword') Confirm Password
+          br
+          input#password(type='text' name='confirmPassword' value=user.confirmPassword required='')
+          br
+          br
+          label(for='date') Date 
+          br
+          input#date(type='date' name='date' value=user.date.toISOString().split('T')[0] required)
           br
           br
           .buttons

@@ -3,27 +3,24 @@ const mongoose = require('mongoose');
 const stockSchema = new mongoose.Schema({
     pdtname: {
         type: String,
-        required: [true, 'Product name is required'],
-        trim: true,
-        maxlength: [100, 'Product name cannot exceed 100 characters']
+        required: true
     },
     pdttype: {
         type: String,
         trim: true,
-        required: [true, 'Product type is required'],
-        enum: {
-            values: ['Raw', 'Furniture'],
-            message: 'Product type must be either "Raw" or "Furniture"'
-        }
+        required: true
+        // enum: {
+        //     values: ['Raw', 'Furniture']
+        // }
     },
     pdtquantity: {
         type: Number,
         required: [true, 'Product quantity is required'],
         min: [0, 'Quantity cannot be negative'],
-        validate: {
-            validator: Number.isInteger,
-            message: 'Quantity must be a whole number'
-        }
+        // validate: {
+        //     validator: Number.isInteger,
+        //     message: 'Quantity must be a whole number'
+        // }
     },
     cprice: {
         type: Number,
@@ -76,52 +73,15 @@ const stockSchema = new mongoose.Schema({
             },
             message: 'Date cannot be in the future'
         }
-    },
-    addedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserModel',
-        required: true
     }
-}, {
-    timestamps: true // Adds createdAt and updatedAt automatically
+    //     addedBy: {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'UserModel',
+    //         required: true
+    //     }
+    // }, {
+    //     timestamps: true // Adds createdAt and updatedAt automatically
 });
 
-// Add index for better performance
-stockSchema.index({ pdtname: 1 });
-stockSchema.index({ pdttype: 1 });
-stockSchema.index({ supplier: 1 });
-stockSchema.index({ date: -1 });
-
-// Virtual for profit margin
-stockSchema.virtual('profitMargin').get(function () {
-    return this.pdtprice - this.cprice;
-});
-
-// Virtual for profit percentage
-stockSchema.virtual('profitPercentage').get(function () {
-    return ((this.pdtprice - this.cprice) / this.cprice * 100).toFixed(2);
-});
-
-// Instance method to check if stock is low
-stockSchema.methods.isLowStock = function () {
-    return this.pdtquantity <= 10; // Define your low stock threshold
-};
-
-// Static method to find low stock items
-stockSchema.statics.findLowStock = function () {
-    return this.find({ pdtquantity: { $lte: 10 } });
-};
-
-// Transform to JSON to include virtuals
-stockSchema.set('toJSON', { virtuals: true });
-stockSchema.set('toObject', { virtuals: true });
-
-// Pre-save middleware to format supplier contact
-stockSchema.pre('save', function (next) {
-    if (this.supplierContact && this.supplierContact.startsWith('0')) {
-        this.supplierContact = '+256' + this.supplierContact.substring(1);
-    }
-    next();
-});
 
 module.exports = mongoose.model('StockModel', stockSchema); // Changed to 'Stock' for consistency

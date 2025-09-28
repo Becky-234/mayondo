@@ -57,6 +57,7 @@ main.main-content
         th Address
         th Username 
         th Password 
+        th date
         th Actions 
     tbody.row-others#others
       if users.length
@@ -68,7 +69,8 @@ main.main-content
             td #{user.nin}
             td #{user.address}
             td #{user.username}
-            td #{user.role}
+            td #{user.password}
+            td #{user.date}
             td
               a.btn-icon(href=`/editUser/${user._id}` title='Edit')
                 i.fas.fa-edit

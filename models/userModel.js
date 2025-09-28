@@ -2,15 +2,30 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: {
+    fname: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     email: {
         type: String,
         required: true,
         unique: true
+    },
+    tel: {
+        type: String,
+        required: true
+    },
+    tel: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    username: {
+        type: String,
+        required: true
     },
     password: {
         type: String,
@@ -18,32 +33,15 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['Manager', 'Sales Agent'],
-        required: true
+        enum: ['manager', 'sales_agent'],
+        default: 'sales_agent'
     },
-    fullName: {
-        type: String,
-        required: true
-    },
-    phone: String,
-    department: String,
-    region: String,
-    managerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    status: {
-        type: String,
-        enum: ['active', 'inactive'],
-        default: 'active'
-    },
-    lastLogin: {
-        type: Date
-    },
-    createdAt: {
+    date: {
         type: Date,
         default: Date.now
     }
 });
+
+
 
 module.exports = mongoose.model('UserModel', userSchema);

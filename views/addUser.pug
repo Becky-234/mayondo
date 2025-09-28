@@ -2,7 +2,7 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Add Agent
+  title Add Sales Agent
   link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
   link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
@@ -43,7 +43,9 @@ main.main-content
         a.logoutBtn(href='/index') Logout
   .stock-form-container
     form#addStock(action='/add' method='post')
-      h2 Register New Sales Agent 
+      h2 Register New Sales Agent
+      if error
+        .alert.alert-danger #{error} 
       label(for='fname') Full Name
       br
       input#fname(type='text' name='fname' required='')
@@ -82,6 +84,11 @@ main.main-content
       label(for='confirmPassword') Confirm Password
       br
       input#password(type='text' name='confirmPassword' required='')
+      br
+      br
+      label(for='date') Date 
+      br
+      input#date(type='date' name='date' required='')
       br
       br
       .add
