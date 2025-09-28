@@ -30,13 +30,13 @@ const stockSchema = new mongoose.Schema({
     pdtprice: {
         type: Number,
         required: [true, 'Product price is required'],
-        min: [0, 'Product price cannot be negative'],
-        validate: {
-            validator: function (value) {
-                return value >= this.cprice;
-            },
-            message: 'Product price should be greater than or equal to cost price'
-        }
+        // min: [0, 'Product price cannot be negative'],
+        // validate: {
+        //     validator: function (value) {
+        //         return value >= this.cprice;
+        //     },
+        //     message: 'Product price should be greater than or equal to cost price'
+        // }
     },
     supplier: {
         type: String,

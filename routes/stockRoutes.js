@@ -62,6 +62,7 @@ router.post("/addStock", ensureManager, async (req, res) => {
   }
 });
 
+
 // Updating stock - GET with messages
 router.get("/editStock/:id", ensureManager, async (req, res) => {
   try {
@@ -73,16 +74,18 @@ router.get("/editStock/:id", ensureManager, async (req, res) => {
       return res.redirect("/stock?error=Stock item not found");
     }
 
-    res.render(`editStock`, {
+    res.render("editStock", { // Make sure this matches your .pug filename
       item,
       success,
       error,
-      currentUser: req.user // Pass current user to template
+      currentUser: req.user
     });
   } catch (error) {
+    console.error("Error in editStock GET:", error);
     res.redirect("/stock?error=Stock item not found");
   }
 });
+
 
 // Updating stock - POST with messages
 router.post("/editStock/:id", ensureManager, async (req, res) => {
