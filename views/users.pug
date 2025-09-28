@@ -70,7 +70,7 @@ main.main-content
             td #{user.address}
             td #{user.username}
             td #{user.password}
-            td #{user.date}
+            td #{new Date(user.date).toLocaleDateString()}
             td
               a.btn-icon(href=`/editUser/${user._id}` title='Edit')
                 i.fas.fa-edit

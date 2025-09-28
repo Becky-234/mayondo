@@ -1,35 +1,35 @@
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
 
 const userSchema = new mongoose.Schema({
-    fname: {
+    name: {
         type: String,
-        required: true
+        required: [true, 'Name is required']
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Email is required'],
         unique: true
     },
     tel: {
         type: String,
-        required: true
+        required: [true, 'Phone number is required']
     },
-    tel: {
+    nin: {
         type: String,
-        required: true
+        required: [true, 'NIN is required']
     },
     address: {
         type: String,
-        required: true
+        required: [true, 'Address is required']
     },
     username: {
         type: String,
-        required: true
+        required: [true, 'Username is required'],
+        unique: true
     },
     password: {
         type: String,
-        required: true
+        required: [true, 'Password is required']
     },
     role: {
         type: String,
@@ -38,8 +38,10 @@ const userSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now
+        required: [true, 'Date is required']
     }
+}, {
+    timestamps: true
 });
 
 

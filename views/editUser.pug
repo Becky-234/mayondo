@@ -50,7 +50,7 @@ html
             .alert.alert-danger #{error}
           label(for='fname') Full Name
           br
-          input#fname(type='text' name='fname' value=user.name required)
+          input#fname(type='text' name='fname' value=user.fname required)
           br
           br
           label(for='email') Email
@@ -80,12 +80,12 @@ html
           br
           label(for='password') Password
           br
-          input#password(type='text' name='password' value=user.password required='')
+          input#password(type='password' name='password' value=user.password required='')
           br
           br
           label(for='confirmPassword') Confirm Password
           br
-          input#password(type='text' name='confirmPassword' value=user.confirmPassword required='')
+          input#confirmPassword(type='password' name='confirmPassword' value=user.confirmPassword required='')
           br
           br
           label(for='date') Date 

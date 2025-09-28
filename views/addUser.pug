@@ -45,7 +45,8 @@ main.main-content
     form#addStock(action='/add' method='post')
       h2 Register New Sales Agent
       if error
-        .alert.alert-danger #{error} 
+        .alert.alert-danger(style="color: red; padding: 10px; margin-bottom: 15px; border: 1px solid red; background-color: #f8d7da;") 
+        | #{error} 
       label(for='fname') Full Name
       br
       input#fname(type='text' name='fname' required='')
@@ -78,12 +79,12 @@ main.main-content
       br
       label(for='password') Password
       br
-      input#password(type='text' name='password' required='')
+      input#password(type='password' name='password' required='')
       br
       br
       label(for='confirmPassword') Confirm Password
       br
-      input#password(type='text' name='confirmPassword' required='')
+      input#confirmPassword(type='password' name='confirmPassword' required='')
       br
       br
       label(for='date') Date 

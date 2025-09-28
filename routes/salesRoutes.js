@@ -8,17 +8,21 @@ const { ensureAuthenticated, ensureAgent, ensureManager } = require("../middlewa
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", ensureAuthenticated, async (req, res) => {
   try {
+
+    console.log("User role in sales route:", req.user.role);
+    console.log("User data:", req.user);
+
     let items;
 
     // If user is Sales Agent, only show their sales
-    if (req.user.role === 'Sales Agent') {
+    if (req.user.role === 'Sales_agent') {
       items = await SalesModel
         .find({ agent: req.user._id })
         .sort({ $natural: -1 })
         .populate("agent", "fullName");
     }
     // If user is Manager, show sales from their agents
-    else if (req.user.role === 'Manager') {
+    else if (req.user.role === 'manager') {
       // Get all sales agents managed by this manager
       const managedAgents = await UserModel.find({
         managerId: req.user._id
@@ -31,6 +35,15 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
         .find({ agent: { $in: agentIds } })
         .sort({ $natural: -1 })
         .populate("agent", "fullName");
+    }
+    // Fallback for any other cases
+    else {
+      items = []; // Initialize as empty array to prevent undefined errors
+    }
+
+    // Safety check before using items
+    if (!items) {
+      items = [];
     }
 
     // Calculate dashboard metrics from actual data
@@ -182,6 +195,7 @@ router.post("/addSale", ensureAgent, async (req, res) => {
   }
 });
 
+
 // UPDATING SALES with messages - Only managers can edit
 router.get("/editSales/:id", ensureManager, async (req, res) => {
   try {
@@ -260,11 +274,11 @@ router.post("/getReceipt/:id", ensureAuthenticated, async (req, res) => {
     const item = await SalesModel.findOne({ _id: req.params.id });
 
     // Check permissions for receipt access
-    if (req.user.role === 'Sales Agent' && item.agent.toString() !== req.user._id.toString()) {
+    if (req.user.role === 'sales_agent' && item.agent.toString() !== req.user._id.toString()) {
       return res.status(403).send("You can only view receipts for your own sales");
     }
 
-    if (req.user.role === 'Manager') {
+    if (req.user.role === 'manager') {
       const agent = await UserModel.findById(item.agent);
       if (agent.managerId.toString() !== req.user._id.toString() && item.agent.toString() !== req.user._id.toString()) {
         return res.status(403).send("You can only view receipts for your agents' sales");

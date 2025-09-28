@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/userModel");
-//const bcrypt = require("bcryptjs");
 
 
 // List users (only sales agents)
@@ -16,28 +15,35 @@ router.get("/usersList", async (req, res) => {
 });
 
 
-
 // Show add-user form
-// router.get("/add", (req, res) => {
-//   res.render("adduser", { title: "Add user page" });
-// });
 router.get("/add", (req, res) => {
   res.render("adduser", { title: "Add Sales Agent" });
 });
 
+
 // Handle add-user form
 router.post("/add", async (req, res) => {
   try {
-    const { name, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
+    console.log("Received form data:", req.body);
+
+    const { fname, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
 
     // Validate required fields
-    if (!name || !email || !tel || !nin || !address || !username || !password || !confirmPassword) {
-      return res.status(400).send("All fields are required");
+    if (!fname || !email || !tel || !nin || !address || !username || !password || !confirmPassword || !date) {
+      console.log("Missing fields detected");
+      return res.status(400).render("adduser", {
+        error: "All fields are required",
+        title: "Add Sales Agent"
+      });
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
-      return res.status(400).send("Passwords do not match");
+      console.log("Passwords don't match");
+      return res.status(400).render("adduser", {
+        error: "Passwords do not match",
+        title: "Add Sales Agent"
+      });
     }
 
     // Check if user already exists
@@ -46,44 +52,56 @@ router.post("/add", async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(400).send("User with this email or username already exists");
+      console.log("User already exists:", existingUser);
+      return res.status(400).render("adduser", {
+        error: "User with this email or username already exists",
+        title: "Add Sales Agent"
+      });
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new sales agent
+    // Create new sales agent - password will be hashed by the model
     const newUser = new UserModel({
-      name,
+      name: fname,
       email,
       tel,
       nin,
       address,
       username,
-      password: hashedPassword,
+      password, // Store plain password - model will hash it
+      // displayPassword: password,  //password will remain plain text
       role: 'sales_agent',
-      date: date || new Date()
+      date: date
     });
 
+    console.log("Attempting to save user:", newUser);
     await newUser.save();
+    console.log("User saved successfully");
+
     res.redirect("/usersList");
   } catch (err) {
-    console.error(err);
-    res.status(400).send("Failed to create user account");
+    console.error("Detailed error:", err);
+
+    if (err.code === 11000) {
+      return res.status(400).render("adduser", {
+        error: "User with this email or username already exists",
+        title: "Add Sales Agent"
+      });
+    }
+
+    if (err.name === 'ValidationError') {
+      const errors = Object.values(err.errors).map(error => error.message);
+      return res.status(400).render("adduser", {
+        error: errors.join(', '),
+        title: "Add Sales Agent"
+      });
+    }
+
+    res.status(400).render("adduser", {
+      error: "Failed to create user account: " + err.message,
+      title: "Add Sales Agent"
+    });
   }
 });
-
-// Handle add-user form
-router.post("/add", async (req, res) => {
-  try {
-    await UserModel.create(req.body);
-    res.redirect("/usersList");
-  } catch (err) {
-    console.error(err);
-    res.status(400).send("Failed to save user");
-  }
-});
-
 
 // Show edit user form
 router.get("/editUser/:id", async (req, res) => {
@@ -103,7 +121,7 @@ router.get("/editUser/:id", async (req, res) => {
 // Handle edit user form submission
 router.post("/editUser/:id", async (req, res) => {
   try {
-    const { name, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
+    const { fname, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
 
     // Check if passwords are provided and match
     if (password && password !== confirmPassword) {
@@ -111,7 +129,7 @@ router.post("/editUser/:id", async (req, res) => {
     }
 
     const updateData = {
-      name,
+      fname,
       email,
       tel,
       nin,
