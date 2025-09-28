@@ -1,85 +1,85 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Manager Panel - Mayondo Wood & Furniture
-link(rel="stylesheet", href="../css/settings.css")
-.manager-container
-  //  Header Section 
-  header.manager-header
-    .header-content
-      h1 Manager Panel
-      p Create and manage sales agent accounts
-    .user-info
-      .user-name#manager-name Manager
-      .user-role Manager
-  //  Alert Container 
-  #global-alert
-  //  Create Agent Card 
-  .card
-    h2 Create New Sales Agent
-    form#create-agent-form.settings-form
-      .form-row
-        .form-group
-          label(for="agent-name") Full Name *
-          input#agent-name(type="text", required, placeholder="Enter agent\'s full name")
-        .form-group
-          label(for="agent-email") Email Address *
-          input#agent-email(type="email", required, placeholder="agent@mayondo.com")
-      .form-row
-        .form-group
-          label(for="agent-region") Sales Region *
-          select#agent-region(required)
-            option(value) Select Region
-            option(value="Kampala") Kampala Central
-            option(value="Entebbe") Entebbe & Wakiso
-            option(value="Jinja") Jinja & Eastern
-            option(value="Mbarara") Mbarara & Western
-            option(value="Gulu") Gulu & Northern
-        .form-group
-          label(for="agent-phone") Phone Number *
-          input#agent-phone(type="tel", required, placeholder="+256 XXX XXX XXX")
-      .form-row
-        .form-group
-          label(for="agent-password") Password *
-          .password-input-container
-            input#agent-password(type="password", required, placeholder="Create a password")
-            button#generate-password.btn-generate(type="button") Generate
-          .password-strength
-            .strength-bar
-            span.strength-text Password strength
-        .form-group
-          label(for="confirm-password") Confirm Password *
-          input#confirm-password(type="password", required, placeholder="Confirm the password")
-          #password-match.validation-message
-      .form-actions
-        button.btn.btn-primary(type="submit") Create Sales Agent Account
-        button.btn.btn-secondary#reset-form(type="button") Reset Form
-    //  Credentials Display 
-    #credentials-display.credentials-card
-      h3 Agent Account Credentials
-      .credentials-info
-        .credential-item
-          span.label Full Name:
-          span#display-name.value
-        .credential-item
-          span.label Email:
-          span#display-email.value
-        .credential-item
-          span.label Password:
-          span#display-password.value
-        .credential-item
-          span.label Region:
-          span#display-region.value
-      .credentials-actions
-        button#copy-credentials.btn.btn-secondary Copy Credentials
-        button#print-credentials.btn.btn-secondary Print Credentials
-        button#close-credentials.btn.btn-secondary Close
-  //  Existing Agents List 
-  .card
-    .card-header
-      h2 My Sales Agents
-      .search-box
-        input#search-agents(type="text", placeholder="Search agents...")
-    #agents-list.user-list
-      .empty-state
-        p No sales agents registered yet
-script(src="..javascript/settings.js")
+//- meta(charset="UTF-8")
+//- meta(name="viewport", content="width=device-width,initial-scale=1")
+//- title Manager Panel - Mayondo Wood & Furniture
+//- link(rel="stylesheet", href="../css/settings.css")
+//- .manager-container
+//-   //  Header Section 
+//-   header.manager-header
+//-     .header-content
+//-       h1 Manager Panel
+//-       p Create and manage sales agent accounts
+//-     .user-info
+//-       .user-name#manager-name Manager
+//-       .user-role Manager
+//-   //  Alert Container 
+//-   #global-alert
+//-   //  Create Agent Card 
+//-   .card
+//-     h2 Create New Sales Agent
+//-     form#create-agent-form.settings-form
+//-       .form-row
+//-         .form-group
+//-           label(for="agent-name") Full Name *
+//-           input#agent-name(type="text", required, placeholder="Enter agent\'s full name")
+//-         .form-group
+//-           label(for="agent-email") Email Address *
+//-           input#agent-email(type="email", required, placeholder="agent@mayondo.com")
+//-       .form-row
+//-         .form-group
+//-           label(for="agent-region") Sales Region *
+//-           select#agent-region(required)
+//-             option(value) Select Region
+//-             option(value="Kampala") Kampala Central
+//-             option(value="Entebbe") Entebbe & Wakiso
+//-             option(value="Jinja") Jinja & Eastern
+//-             option(value="Mbarara") Mbarara & Western
+//-             option(value="Gulu") Gulu & Northern
+//-         .form-group
+//-           label(for="agent-phone") Phone Number *
+//-           input#agent-phone(type="tel", required, placeholder="+256 XXX XXX XXX")
+//-       .form-row
+//-         .form-group
+//-           label(for="agent-password") Password *
+//-           .password-input-container
+//-             input#agent-password(type="password", required, placeholder="Create a password")
+//-             button#generate-password.btn-generate(type="button") Generate
+//-           .password-strength
+//-             .strength-bar
+//-             span.strength-text Password strength
+//-         .form-group
+//-           label(for="confirm-password") Confirm Password *
+//-           input#confirm-password(type="password", required, placeholder="Confirm the password")
+//-           #password-match.validation-message
+//-       .form-actions
+//-         button.btn.btn-primary(type="submit") Create Sales Agent Account
+//-         button.btn.btn-secondary#reset-form(type="button") Reset Form
+//-     //  Credentials Display 
+//-     #credentials-display.credentials-card
+//-       h3 Agent Account Credentials
+//-       .credentials-info
+//-         .credential-item
+//-           span.label Full Name:
+//-           span#display-name.value
+//-         .credential-item
+//-           span.label Email:
+//-           span#display-email.value
+//-         .credential-item
+//-           span.label Password:
+//-           span#display-password.value
+//-         .credential-item
+//-           span.label Region:
+//-           span#display-region.value
+//-       .credentials-actions
+//-         button#copy-credentials.btn.btn-secondary Copy Credentials
+//-         button#print-credentials.btn.btn-secondary Print Credentials
+//-         button#close-credentials.btn.btn-secondary Close
+//-   //  Existing Agents List 
+//-   .card
+//-     .card-header
+//-       h2 My Sales Agents
+//-       .search-box
+//-         input#search-agents(type="text", placeholder="Search agents...")
+//-     #agents-list.user-list
+//-       .empty-state
+//-         p No sales agents registered yet
+//- script(src="..javascript/settings.js")

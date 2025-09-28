@@ -15,7 +15,7 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
     let items;
 
     // If user is Sales Agent, only show their sales
-    if (req.user.role === 'Sales_agent') {
+    if (req.user.role === 'sales_agent') {
       items = await SalesModel
         .find({ agent: req.user._id })
         .sort({ $natural: -1 })
@@ -92,7 +92,8 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
 });
 
 // GET add-sale form
-router.get("/addSale", ensureAgent, async (req, res) => {
+router.get("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
+
   try {
     const stocks = await StockModel.find();
     const success = req.query.success;
@@ -135,69 +136,148 @@ router.get("/addSale", ensureAgent, async (req, res) => {
 });
 
 // POST add-sale with success/error handling
-router.post("/addSale", ensureAgent, async (req, res) => {
+router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
+  console.log("=== START ADD SALE PROCESS ===");
   console.log("POST /addSale hit", req.body);
+
+  // DEBUG: Check if req.user exists
+  console.log("DEBUG - req.user:", req.user);
+  console.log("DEBUG - req.session:", req.session);
+
   try {
     const {
       name, contact, tproduct, nproduct, quantity,
       unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
 
-    const userId = req.user._id;
+    console.log("1. Parsed request body:", {
+      name, contact, tproduct, nproduct, quantity,
+      unitPrice, transportCheck, totalPrice, payment, date
+    });
 
+    // Check if req.user exists - ADD THIS SAFETY CHECK
+    if (!req.user || !req.user._id) {
+      console.error("ERROR: req.user is undefined or missing _id");
+      console.error("req.user:", req.user);
+      return res.redirect("/addSale?error=User authentication failed. Please login again.");
+    }
+
+    const userId = req.user._id;
+    console.log("2. User ID:", userId);
+
+    // Validate required fields
+    if (!name || !contact || !tproduct || !nproduct || !quantity || !unitPrice || !payment || !date) {
+      const missingFields = [];
+      if (!name) missingFields.push('name');
+      if (!contact) missingFields.push('contact');
+      if (!tproduct) missingFields.push('tproduct');
+      if (!nproduct) missingFields.push('nproduct');
+      if (!quantity) missingFields.push('quantity');
+      if (!unitPrice) missingFields.push('unitPrice');
+      if (!payment) missingFields.push('payment');
+      if (!date) missingFields.push('date');
+
+      console.log("Missing fields:", missingFields);
+      return res.redirect("/addSale?error=Missing required fields: " + missingFields.join(', '));
+    }
+
+    // Check if stock exists
+    console.log("3. Looking for stock:", { pdtname: nproduct, pdttype: tproduct });
     const stock = await StockModel.findOne({ pdtname: nproduct, pdttype: tproduct });
+    console.log("4. Found stock:", stock ? stock.pdtname : "NOT FOUND");
+
     if (!stock) {
+      console.log("Stock not found for:", nproduct, tproduct);
       return res.redirect("/addSale?error=Stock not found for the selected product!");
     }
 
+    console.log("5. Stock quantity check:", { available: stock.pdtquantity, requested: quantity });
     if (stock.pdtquantity < Number(quantity)) {
+      console.log("Insufficient stock. Available:", stock.pdtquantity, "Requested:", quantity);
       return res.redirect(`/addSale?error=Insufficient stock! Only ${stock.pdtquantity} units available.`);
     }
 
     let total = Number(totalPrice);
-    if (transportCheck) total *= 1.05;
+    console.log("6. Price calculation:", { initialTotal: total, transportCheck: !!transportCheck });
+
+    // Fix transportCheck - it's coming as undefined, so check the actual value
+    const hasTransport = transportCheck === 'on' || transportCheck === true;
+    if (hasTransport) {
+      total *= 1.05;
+      console.log("Total with transport:", total);
+    }
 
     // Ensure the contact starts with +256
     let formattedContact = contact.trim();
+    console.log("7. Contact formatting:", { original: contact, formatted: formattedContact });
+
     if (!formattedContact.startsWith("+256")) {
-      formattedContact = "+256" + formattedContact.replace(/^0+/, "");
+      // Remove any spaces and ensure proper format
+      formattedContact = "+256" + formattedContact.replace(/^0+/, "").replace(/\s/g, "");
+      console.log("Formatted contact:", formattedContact);
     }
 
-    if (stock && stock.pdtquantity > 0) {
-      const sale = new SalesModel({
-        name,
-        contact: formattedContact,
-        tproduct,
-        nproduct,
-        quantity,
-        unitPrice,
-        transportCheck: !!transportCheck,
-        totalPrice: total,
-        payment,
-        date,
-        agent: userId,
-      });
+    console.log("8. Creating sale object...");
+    const saleData = {
+      name: name.trim(),
+      contact: formattedContact,
+      tproduct: tproduct.trim(),
+      nproduct: nproduct.trim(),
+      quantity: Number(quantity),
+      unitPrice: Number(unitPrice),
+      transportCheck: hasTransport,
+      totalPrice: total,
+      payment: payment.trim(),
+      date: new Date(date),
+      agent: userId,
+    };
 
-      await sale.save();
+    console.log("9. Sale data to be saved:", saleData);
 
-      // Decrease Quantity from the stock collection
-      stock.pdtquantity -= quantity;
-      await stock.save();
+    const sale = new SalesModel(saleData);
 
-      res.redirect("/sales?success=Sale completed successfully!");
-    } else {
-      return res.redirect("/addSale?error=Product is currently out of stock!");
+    console.log("10. Validating sale...");
+    try {
+      await sale.validate();
+      console.log("Sale validation passed");
+    } catch (validationError) {
+      console.error("Sale validation failed:", validationError);
+      return res.redirect("/addSale?error=Validation: " + encodeURIComponent(validationError.message));
     }
+
+    console.log("11. Saving sale to database...");
+    await sale.save();
+    console.log("12. Sale saved successfully with ID:", sale._id);
+
+    console.log("13. Updating stock quantity...");
+    // Decrease Quantity from the stock collection
+    stock.pdtquantity -= Number(quantity);
+    await stock.save();
+    console.log("14. Stock updated successfully. New quantity:", stock.pdtquantity);
+
+    console.log("=== SALE PROCESS COMPLETED SUCCESSFULLY ===");
+    res.redirect("/sales?success=Sale completed successfully!");
 
   } catch (error) {
-    console.error(error);
-    res.redirect("/addSale?error=Error processing sale. Please try again.");
+    console.error("=== ERROR IN SALE PROCESS ===");
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Error stack:", error.stack);
+
+    // Handle specific error types
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      console.error("Mongoose validation errors:", errors);
+      return res.redirect("/addSale?error=" + encodeURIComponent("Validation: " + errors.join(', ')));
+    }
+
+    res.redirect("/addSale?error=Error processing sale: " + encodeURIComponent(error.message));
   }
 });
 
 
 // UPDATING SALES with messages - Only managers can edit
-router.get("/editSales/:id", ensureManager, async (req, res) => {
+router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const item = await SalesModel
       .findById(req.params.id)
@@ -228,7 +308,7 @@ router.get("/editSales/:id", ensureManager, async (req, res) => {
   }
 });
 
-router.post("/editSales/:id", ensureManager, async (req, res) => {
+router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     // Check permissions before updating
     const existingSale = await SalesModel.findById(req.params.id);
@@ -252,7 +332,7 @@ router.post("/editSales/:id", ensureManager, async (req, res) => {
 });
 
 // DELETING SALES - Only managers can delete
-router.post("/deleteSale", ensureManager, async (req, res) => {
+router.post("/deleteSale", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     // Check permissions before deleting
     const sale = await SalesModel.findById(req.body.id);

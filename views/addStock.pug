@@ -84,7 +84,12 @@ main.main-content
       br
       label(for='quality') Quality
       br
-      input#quality(type='text' name='quality' required='')
+      select#quality(name="quality" required)
+        option(value, disabled, required) Select Quality
+        option(value="Premium") Premium
+        option(value="Good") Good
+        option(value="Fair") Fair
+        option(value="Poor") Poor
       br
       br
       label(for='date') Date

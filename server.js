@@ -4,12 +4,13 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const session = require('express-session');
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
 const moment = require("moment");
 const methodOverride = require('method-override');
 const LocalStrategy = require('passport-local').Strategy;
-const session = require('express-session');
+
 
 
 const UserModel = require("./models/userModel");
@@ -22,7 +23,7 @@ const productRoutes = require("./routes/productRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const indexRoutes = require("./routes/indexRoutes");
 const userRoutes = require("./routes/userRoutes");
-const settingsRoutes = require("./routes/settingsRoutes");
+//const settingsRoutes = require("./routes/settingsRoutes");
 
 //2.INSTANTIATIONS
 const app = express();
@@ -52,6 +53,7 @@ app.use(express.json());
 // Session configuration
 app.use(
   expressSession({
+    name: 'mwf.sid', // Give session a specific name
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -109,7 +111,7 @@ app.use("/", productRoutes);
 app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
 app.use("/", userRoutes);
-app.use("/", settingsRoutes);
+// app.use("/", settingsRoutes);
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
