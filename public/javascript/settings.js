@@ -1,665 +1,426 @@
-// Data storage (in a real app, this would be a database)
-let managers = JSON.parse(localStorage.getItem('mayondo_managers')) || [];
-let salesAgents = JSON.parse(localStorage.getItem('mayondo_sales_agents')) || [];
-let currentManager = null;
+// Manager Panel JavaScript
+class ManagerPanel {
+    constructor() {
+        this.agents = JSON.parse(localStorage.getItem('salesAgents')) || [];
+        this.init();
+    }
 
-// DOM Elements
-let tabs, tabContents, createManagerForm, managerLoginForm, createAgentForm;
-let credentialsDisplay, managersList, agentsList, userInfo, copyCredentialsBtn, globalAlert;
+    init() {
+        this.loadManagerInfo();
+        this.setupEventListeners();
+        this.renderAgentsList();
+    }
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('Settings.js loaded successfully');
-    initializeApp();
-});
+    loadManagerInfo() {
+        // In a real app, this would come from authentication
+        const managerName = localStorage.getItem('managerName') || 'Manager';
+        document.getElementById('manager-name').textContent = managerName;
+    }
 
-function initializeApp() {
-    console.log('Initializing app...');
-
-    // Initialize DOM elements
-    initializeDOMElements();
-
-    // Set up tab switching
-    setupTabs();
-
-    // Set up form event listeners
-    setupForms();
-
-    // Load initial data
-    loadInitialData();
-
-    // Check URL hash for tab navigation
-    checkUrlHash();
-}
-
-function initializeDOMElements() {
-    tabs = document.querySelectorAll('.tab-btn');
-    tabContents = document.querySelectorAll('.tab-content');
-    createManagerForm = document.getElementById('create-manager-form');
-    managerLoginForm = document.getElementById('manager-login-form');
-    createAgentForm = document.getElementById('create-agent-form');
-    credentialsDisplay = document.getElementById('credentials-display');
-    managersList = document.getElementById('managers-list');
-    agentsList = document.getElementById('agents-list');
-    userInfo = document.getElementById('user-info');
-    copyCredentialsBtn = document.getElementById('copy-credentials');
-    globalAlert = document.getElementById('global-alert');
-
-    console.log('DOM Elements initialized:');
-    console.log('- agentsList:', agentsList);
-    console.log('- managersList:', managersList);
-}
-
-function setupTabs() {
-    console.log('Setting up tabs...', tabs.length);
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function (e) {
+    setupEventListeners() {
+        // Form submission
+        document.getElementById('create-agent-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            console.log('Tab clicked:', this.getAttribute('data-tab'));
-
-            const tabId = this.getAttribute('data-tab');
-            switchTab(tabId);
+            this.createAgent();
         });
-    });
-}
 
-function switchTab(tabId) {
-    console.log('Switching to tab:', tabId);
+        // Password generation
+        document.getElementById('generate-password').addEventListener('click', () => {
+            this.generatePassword();
+        });
 
-    // Update active tab
-    tabs.forEach(tab => {
-        if (tab.getAttribute('data-tab') === tabId) {
-            tab.classList.add('active');
-        } else {
-            tab.classList.remove('active');
-        }
-    });
+        // Password confirmation check
+        document.getElementById('confirm-password').addEventListener('input', () => {
+            this.checkPasswordMatch();
+        });
 
-    // Show corresponding content
-    tabContents.forEach(content => {
-        if (content.id === tabId) {
-            content.classList.add('active');
-            console.log('Showing content:', content.id);
+        // Password strength check
+        document.getElementById('agent-password').addEventListener('input', () => {
+            this.checkPasswordStrength();
+        });
 
-            // Refresh the data when switching to these tabs
-            if (tabId === 'admin') {
-                displayManagers();
-            } else if (tabId === 'manager-panel' && currentManager) {
-                displayAgents();
-            }
-        } else {
-            content.classList.remove('active');
-        }
-    });
+        // Form reset
+        document.getElementById('reset-form').addEventListener('click', () => {
+            this.resetForm();
+        });
 
-    // Update URL hash
-    window.location.hash = tabId;
+        // Credentials actions
+        document.getElementById('copy-credentials').addEventListener('click', () => {
+            this.copyCredentials();
+        });
 
-    // Update user info display
-    updateUserInfo();
+        document.getElementById('print-credentials').addEventListener('click', () => {
+            this.printCredentials();
+        });
 
-    // If switching to manager panel without login, redirect to login
-    if (tabId === 'manager-panel' && !currentManager) {
-        setTimeout(() => {
-            showAlert('Please login first to access the manager panel', 'error');
-            switchTab('manager-login');
-        }, 100);
-    }
-}
+        document.getElementById('close-credentials').addEventListener('click', () => {
+            this.hideCredentials();
+        });
 
-function setupForms() {
-    console.log('Setting up forms...');
-
-    // Create manager form
-    if (createManagerForm) {
-        createManagerForm.addEventListener('submit', handleCreateManager);
-    }
-
-    // Manager login form
-    if (managerLoginForm) {
-        managerLoginForm.addEventListener('submit', handleManagerLogin);
-    }
-
-    // Create agent form
-    if (createAgentForm) {
-        createAgentForm.addEventListener('submit', handleCreateAgent);
-    }
-
-    // Copy credentials button
-    if (copyCredentialsBtn) {
-        copyCredentialsBtn.addEventListener('click', function () {
-            copyCredentialsToClipboard();
+        // Search functionality
+        document.getElementById('search-agents').addEventListener('input', (e) => {
+            this.searchAgents(e.target.value);
         });
     }
-}
 
-function loadInitialData() {
-    console.log('Loading initial data...');
-    displayManagers();
-    updateUserInfo();
-}
+    createAgent() {
+        const formData = this.getFormData();
 
-function checkUrlHash() {
-    const hash = window.location.hash.replace('#', '');
-    console.log('URL hash:', hash);
-
-    if (hash && document.getElementById(hash)) {
-        console.log('Switching to tab from URL hash:', hash);
-        switchTab(hash);
-    } else {
-        // Default to admin tab
-        switchTab('admin');
-    }
-}
-
-// Generate random password
-function generatePassword() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%';
-    let password = '';
-    for (let i = 0; i < 12; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return password;
-}
-
-// Create manager account
-function handleCreateManager(e) {
-    e.preventDefault();
-    console.log('Creating manager account...');
-
-    const name = document.getElementById('manager-name').value;
-    const email = document.getElementById('manager-email').value;
-    const department = document.getElementById('manager-department').value;
-    const sendMethod = document.getElementById('send-method').value;
-    const phone = document.getElementById('manager-phone').value;
-
-    // Validate email format
-    if (!isValidEmail(email)) {
-        showAlert('Please enter a valid email address', 'error');
-        return;
-    }
-
-    // Check if email already exists
-    if (managers.some(manager => manager.email === email)) {
-        showAlert('A manager with this email already exists', 'error');
-        return;
-    }
-
-    // Generate credentials
-    const username = email.split('@')[0] + Math.floor(Math.random() * 100);
-    const password = generatePassword();
-    const loginUrl = window.location.href.split('#')[0] + '#manager-login';
-
-    // Create manager object
-    const manager = {
-        id: Date.now(),
-        name,
-        email,
-        department,
-        phone,
-        username,
-        password,
-        status: 'active',
-        createdAt: new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        })
-    };
-
-    // Save to storage
-    managers.push(manager);
-    localStorage.setItem('mayondo_managers', JSON.stringify(managers));
-
-    // Clear previous credentials and display new ones
-    clearCredentialsDisplay();
-    document.getElementById('display-username').textContent = username;
-    document.getElementById('display-password').textContent = password;
-    document.getElementById('display-url').textContent = loginUrl;
-    credentialsDisplay.style.display = 'block';
-
-    // Show success message
-    showAlert(`Manager account created successfully! Credentials sent via ${sendMethod}.`, 'success');
-
-    // Update managers list
-    displayManagers();
-
-    // Reset form
-    createManagerForm.reset();
-
-    // Scroll to credentials
-    credentialsDisplay.scrollIntoView({ behavior: 'smooth' });
-}
-
-// Manager login
-function handleManagerLogin(e) {
-    e.preventDefault();
-    console.log('Manager login attempt...');
-
-    const username = document.getElementById('login-username').value;
-    const password = document.getElementById('login-password').value;
-
-    // Find manager with matching credentials
-    const manager = managers.find(m => m.username === username && m.password === password);
-
-    if (manager) {
-        if (manager.status === 'inactive') {
-            showAlert('This account has been deactivated. Please contact an administrator.', 'error');
+        if (!this.validateForm(formData)) {
             return;
         }
 
-        currentManager = manager;
-        console.log('Login successful:', manager.name);
+        const agent = {
+            id: Date.now().toString(),
+            name: formData.name,
+            email: formData.email,
+            region: formData.region,
+            phone: formData.phone,
+            password: formData.password,
+            createdAt: new Date().toISOString(),
+            createdBy: document.getElementById('manager-name').textContent
+        };
 
-        // Show success and switch to manager panel
-        showAlert('Login successful! Redirecting to manager panel...', 'success');
+        this.agents.push(agent);
+        this.saveAgents();
+        this.showCredentials(agent);
+        this.renderAgentsList();
+        this.resetForm();
 
-        // Update UI
-        document.getElementById('manager-name-display').textContent = manager.name;
-        displayAgents();
-
-        // Switch to manager panel after a delay
-        setTimeout(() => {
-            switchTab('manager-panel');
-        }, 1500);
-    } else {
-        console.log('Login failed - invalid credentials');
-        showAlert('Invalid username or password. Please try again.', 'error');
+        this.showAlert('Sales agent account created successfully!', 'success');
     }
 
-    // Reset form
-    managerLoginForm.reset();
-}
-
-// Create sales agent account
-function handleCreateAgent(e) {
-    e.preventDefault();
-    console.log('Creating sales agent account...');
-
-    if (!currentManager) {
-        showAlert('Please login to the manager panel first.', 'error');
-        switchTab('manager-login');
-        return;
+    getFormData() {
+        return {
+            name: document.getElementById('agent-name').value.trim(),
+            email: document.getElementById('agent-email').value.trim(),
+            region: document.getElementById('agent-region').value,
+            phone: document.getElementById('agent-phone').value.trim(),
+            password: document.getElementById('agent-password').value
+        };
     }
 
-    const name = document.getElementById('agent-name').value;
-    const email = document.getElementById('agent-email').value;
-    const region = document.getElementById('agent-region').value;
-    const phone = document.getElementById('agent-phone').value;
+    validateForm(data) {
+        if (!data.name) {
+            this.showAlert('Please enter the agent\'s full name', 'error');
+            return false;
+        }
 
-    // Validate email format
-    if (!isValidEmail(email)) {
-        showAlert('Please enter a valid email address', 'error');
-        return;
+        if (!data.email || !this.isValidEmail(data.email)) {
+            this.showAlert('Please enter a valid email address', 'error');
+            return false;
+        }
+
+        if (!data.region) {
+            this.showAlert('Please select a sales region', 'error');
+            return false;
+        }
+
+        if (!data.phone) {
+            this.showAlert('Please enter a phone number', 'error');
+            return false;
+        }
+
+        if (!data.password) {
+            this.showAlert('Please create a password', 'error');
+            return false;
+        }
+
+        if (data.password.length < 6) {
+            this.showAlert('Password must be at least 6 characters long', 'error');
+            return false;
+        }
+
+        if (data.password !== document.getElementById('confirm-password').value) {
+            this.showAlert('Passwords do not match', 'error');
+            return false;
+        }
+
+        // Check if email already exists
+        if (this.agents.some(agent => agent.email === data.email)) {
+            this.showAlert('An agent with this email already exists', 'error');
+            return false;
+        }
+
+        return true;
     }
 
-    // Check if email already exists
-    if (salesAgents.some(agent => agent.email === email)) {
-        showAlert('A sales agent with this email already exists', 'error');
-        return;
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     }
 
-    // Generate credentials
-    const username = email.split('@')[0] + Math.floor(Math.random() * 100);
-    const password = generatePassword();
+    generatePassword() {
+        const length = 12;
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+        let password = "";
 
-    // Create agent object
-    const agent = {
-        id: Date.now(),
-        name,
-        email,
-        region,
-        phone,
-        username,
-        password,
-        managerId: currentManager.id,
-        managerName: currentManager.name,
-        status: 'active',
-        createdAt: new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        })
-    };
+        for (let i = 0; i < length; i++) {
+            password += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
 
-    // Save to storage
-    salesAgents.push(agent);
-    localStorage.setItem('mayondo_sales_agents', JSON.stringify(salesAgents));
-
-    // Show credentials in alert
-    showAlert(`Sales agent account created successfully! 
-    
-    CREDENTIALS:
-    Username: ${username}
-    Password: ${password}
-    
-    Please save these credentials immediately!`, 'success');
-
-    // Also show in a permanent box (like manager credentials)
-    showAgentCredentials(username, password);
-
-    // Update agents list
-    displayAgents();
-
-    // Reset form
-    createAgentForm.reset();
-}
-
-// Function to show agent credentials permanently
-function showAgentCredentials(username, password) {
-    // Create or update credentials display for agents
-    let agentCredentialsDiv = document.getElementById('agent-credentials-display');
-
-    if (!agentCredentialsDiv) {
-        agentCredentialsDiv = document.createElement('div');
-        agentCredentialsDiv.id = 'agent-credentials-display';
-        agentCredentialsDiv.className = 'credentials-card';
-        agentCredentialsDiv.style.marginTop = '20px';
-
-        // Insert after the create agent form
-        createAgentForm.parentNode.insertBefore(agentCredentialsDiv, createAgentForm.nextSibling);
+        document.getElementById('agent-password').value = password;
+        document.getElementById('confirm-password').value = password;
+        this.checkPasswordStrength();
+        this.checkPasswordMatch();
     }
 
-    agentCredentialsDiv.innerHTML = `
-        <h3>
-            Sales Agent Credentials
-        </h3>
-        <div class="credentials-info">
-            <div class="credential-item">
-                <span class="label">Username:</span>
-                <span class="value">${username}</span>
-            </div>
-            <div class="credential-item">
-                <span class="label">Password:</span>
-                <span class="value">${password}</span>
-            </div>
-        </div>
-        <button class="btn btn-secondary" onclick="copyAgentCredentials()">
-            Copy Credentials
-        </button>
-    `;
-    agentCredentialsDiv.style.display = 'block';
-}
+    checkPasswordStrength() {
+        const password = document.getElementById('agent-password').value;
+        const strengthBar = document.querySelector('.strength-bar');
+        const strengthText = document.querySelector('.strength-text');
 
-// Copy credentials to clipboard
-function copyCredentialsToClipboard() {
-    const username = document.getElementById('display-username').textContent;
-    const password = document.getElementById('display-password').textContent;
-    const url = document.getElementById('display-url').textContent;
+        let strength = 0;
+        let color = '#dc3545';
+        let text = 'Weak';
 
-    const text = `Mayondo Wood & Furniture - Manager Account Credentials\n\nUsername: ${username}\nPassword: ${password}\nLogin URL: ${url}\n\nPlease keep these credentials secure.`;
+        if (password.length >= 8) strength += 25;
+        if (/[A-Z]/.test(password)) strength += 25;
+        if (/[0-9]/.test(password)) strength += 25;
+        if (/[^A-Za-z0-9]/.test(password)) strength += 25;
 
-    navigator.clipboard.writeText(text).then(() => {
-        showAlert('Credentials copied to clipboard!', 'success');
-        copyCredentialsBtn.innerHTML = ' Copied!';
-        setTimeout(() => {
-            copyCredentialsBtn.innerHTML = ' Copy All Credentials';
-        }, 2000);
-    }).catch(err => {
-        showAlert('Failed to copy credentials. Please copy manually.', 'error');
-    });
-}
+        if (strength >= 75) {
+            color = '#28a745';
+            text = 'Strong';
+        } else if (strength >= 50) {
+            color = '#ffc107';
+            text = 'Medium';
+        }
 
-// Display managers list
-function displayManagers() {
-    if (!managersList) {
-        console.error('managersList element not found');
-        return;
+        strengthBar.style.setProperty('--strength-color', color);
+        strengthBar.querySelector('::after').style.width = strength + '%';
+        strengthBar.style.background = `linear-gradient(to right, ${color} ${strength}%, #e9ecef ${strength}%)`;
+        strengthText.textContent = text + ' password';
+        strengthText.style.color = color;
     }
 
-    console.log('Displaying managers:', managers);
+    checkPasswordMatch() {
+        const password = document.getElementById('agent-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const matchElement = document.getElementById('password-match');
 
-    managersList.innerHTML = '';
-
-    if (managers.length === 0) {
-        managersList.innerHTML = `
-            <div class="empty-state">
-                <p>No managers created yet</p>
-            </div>
-        `;
-        return;
-    }
-
-    managers.forEach(manager => {
-        const managerItem = document.createElement('div');
-        managerItem.className = 'user-item';
-        managerItem.innerHTML = `
-            <div class="user-info">
-                <h4>${manager.name}</h4>
-                <p>${manager.email} | ${manager.department} Department</p>
-                <p>Created: ${manager.createdAt} | Status: <span class="status-badge status-${manager.status}">${manager.status}</span></p>
-            </div>
-            <div class="user-actions">
-                <button class="btn btn-secondary" onclick="resendCredentials(${manager.id})">
-                    Resend
-                </button>
-                <button class="btn ${manager.status === 'active' ? 'btn-secondary' : 'btn-primary'}" 
-                        onclick="toggleManagerStatus(${manager.id})">
-                    <i class="icon">${manager.status === 'active' ? '⏸️' : '▶️'}</i>
-                    ${manager.status === 'active' ? 'Deactivate' : 'Activate'}
-                </button>
-            </div>
-        `;
-        managersList.appendChild(managerItem);
-    });
-}
-
-// Display sales agents list
-function displayAgents() {
-    if (!agentsList) {
-        console.error('agentsList element not found');
-        // Try to find it again
-        agentsList = document.getElementById('agents-list');
-        if (!agentsList) {
-            console.error('Still cannot find agents-list element');
+        if (!confirmPassword) {
+            matchElement.textContent = '';
             return;
         }
-    }
 
-    console.log('Displaying agents for manager:', currentManager?.id);
-
-    // Filter agents by current manager
-    const managerAgents = salesAgents.filter(agent => agent.managerId === currentManager?.id);
-
-    console.log('Found agents:', managerAgents);
-
-    agentsList.innerHTML = '';
-
-    if (managerAgents.length === 0) {
-        agentsList.innerHTML = `
-            <div class="empty-state">
-                <p>No sales agents registered yet</p>
-            </div>
-        `;
-        return;
-    }
-
-    managerAgents.forEach(agent => {
-        const agentItem = document.createElement('div');
-        agentItem.className = 'user-item';
-        agentItem.innerHTML = `
-            <div class="user-info">
-                <h4>${agent.name}</h4>
-                <p>${agent.email} | ${agent.region} Region</p>
-                <p>Created: ${agent.createdAt} | Status: <span class="status-badge status-${agent.status}">${agent.status}</span></p>
-            </div>
-            <div class="user-actions">
-                <button class="btn btn-secondary" onclick="resendAgentCredentials(${agent.id})">
-                    Resend
-                </button>
-                <button class="btn ${agent.status === 'active' ? 'btn-secondary' : 'btn-primary'}" 
-                        onclick="toggleAgentStatus(${agent.id})">
-                    <i class="icon">${agent.status === 'active' ? '⏸️' : '▶️'}</i>
-                    ${agent.status === 'active' ? 'Deactivate' : 'Activate'}
-                </button>
-            </div>
-        `;
-        agentsList.appendChild(agentItem);
-    });
-
-    console.log('Agents list updated with', managerAgents.length, 'agents');
-}
-
-// Show alert message
-function showAlert(message, type) {
-    if (!globalAlert) return;
-
-    const typeClass = type === 'error' ? 'alert-error' : type === 'success' ? 'alert-success' : 'alert-info';
-
-    globalAlert.innerHTML = `
-        <div class="alert ${typeClass}">
-            ${message}
-        </div>
-    `;
-
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-        if (globalAlert) {
-            globalAlert.innerHTML = '';
+        if (password === confirmPassword) {
+            matchElement.textContent = '✓ Passwords match';
+            matchElement.style.color = '#28a745';
+        } else {
+            matchElement.textContent = '✗ Passwords do not match';
+            matchElement.style.color = '#dc3545';
         }
-    }, 5000);
-}
-
-// Update user info display
-function updateUserInfo() {
-    if (!userInfo) return;
-
-    if (currentManager) {
-        userInfo.innerHTML = `
-            Logged in as: <strong>${currentManager.name}</strong> 
-            | <a href="#" onclick="logout()" style="color: white; text-decoration: underline;">Logout</a>
-        `;
-    } else {
-        userInfo.innerHTML = '';
     }
-}
 
-// Utility function to validate email
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
+    showCredentials(agent) {
+        document.getElementById('display-name').textContent = agent.name;
+        document.getElementById('display-email').textContent = agent.email;
+        document.getElementById('display-password').textContent = agent.password;
+        document.getElementById('display-region').textContent = agent.region;
 
-// Function to copy agent credentials
-window.copyAgentCredentials = function () {
-    const agentCredentialsDiv = document.getElementById('agent-credentials-display');
-    if (agentCredentialsDiv) {
-        const username = agentCredentialsDiv.querySelector('.credential-item .value').textContent;
-        const password = agentCredentialsDiv.querySelectorAll('.credential-item .value')[1].textContent;
+        document.getElementById('credentials-display').style.display = 'block';
+    }
 
-        const text = `Sales Agent Credentials:\nUsername: ${username}\nPassword: ${password}`;
+    hideCredentials() {
+        document.getElementById('credentials-display').style.display = 'none';
+    }
 
-        navigator.clipboard.writeText(text).then(() => {
-            showAlert('Agent credentials copied to clipboard!', 'success');
+    copyCredentials() {
+        const credentials = `
+Full Name: ${document.getElementById('display-name').textContent}
+Email: ${document.getElementById('display-email').textContent}
+Password: ${document.getElementById('display-password').textContent}
+Region: ${document.getElementById('display-region').textContent}
+        `.trim();
+
+        navigator.clipboard.writeText(credentials).then(() => {
+            this.showAlert('Credentials copied to clipboard!', 'success');
+        }).catch(() => {
+            this.showAlert('Failed to copy credentials', 'error');
         });
     }
-};
 
-// Function to clear credentials display
-function clearCredentialsDisplay() {
-    document.getElementById('display-username').textContent = '';
-    document.getElementById('display-password').textContent = '';
-    document.getElementById('display-url').textContent = '';
-    if (credentialsDisplay) {
-        credentialsDisplay.style.display = 'none';
+    printCredentials() {
+        window.print();
+    }
+
+    resetForm() {
+        document.getElementById('create-agent-form').reset();
+        document.querySelector('.strength-bar').style.background = '#e9ecef';
+        document.querySelector('.strength-text').textContent = 'Password strength';
+        document.querySelector('.strength-text').style.color = '#6c757d';
+        document.getElementById('password-match').textContent = '';
+        this.hideCredentials();
+    }
+
+    renderAgentsList() {
+        const agentsList = document.getElementById('agents-list');
+        const emptyState = agentsList.querySelector('.empty-state');
+
+        if (this.agents.length === 0) {
+            emptyState.style.display = 'block';
+            agentsList.innerHTML = '';
+            agentsList.appendChild(emptyState);
+            return;
+        }
+
+        emptyState.style.display = 'none';
+
+        agentsList.innerHTML = this.agents.map(agent => `
+            <div class="user-item" data-agent-id="${agent.id}">
+                <div class="user-details">
+                    <h4>${agent.name}</h4>
+                    <p>${agent.region} • ${agent.email} • ${agent.phone}</p>
+                    <div class="user-credentials">
+                        <strong>Password:</strong> ${this.maskPassword(agent.password)}
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-view" onclick="managerPanel.viewCredentials('${agent.id}')">
+                        View Credentials
+                    </button>
+                    <button class="btn-reset" onclick="managerPanel.resetPassword('${agent.id}')">
+                        Reset Password
+                    </button>
+                    <button class="btn-delete" onclick="managerPanel.deleteAgent('${agent.id}')">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    maskPassword(password) {
+        return '•'.repeat(8);
+    }
+
+    viewCredentials(agentId) {
+        const agent = this.agents.find(a => a.id === agentId);
+        if (agent) {
+            this.showCredentials(agent);
+            this.showAlert('Agent credentials displayed', 'success');
+        }
+    }
+
+    resetPassword(agentId) {
+        const agent = this.agents.find(a => a.id === agentId);
+        if (agent) {
+            const newPassword = this.generateStrongPassword();
+            agent.password = newPassword;
+            this.saveAgents();
+
+            // Show new credentials
+            this.showCredentials(agent);
+            this.showAlert('Password reset successfully! New credentials displayed.', 'success');
+        }
+    }
+
+    generateStrongPassword() {
+        const length = 12;
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+        let password = "";
+
+        for (let i = 0; i < length; i++) {
+            password += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+
+        return password;
+    }
+
+    deleteAgent(agentId) {
+        if (confirm('Are you sure you want to delete this sales agent? This action cannot be undone.')) {
+            this.agents = this.agents.filter(agent => agent.id !== agentId);
+            this.saveAgents();
+            this.renderAgentsList();
+            this.showAlert('Sales agent deleted successfully', 'success');
+        }
+    }
+
+    searchAgents(query) {
+        const filteredAgents = this.agents.filter(agent =>
+            agent.name.toLowerCase().includes(query.toLowerCase()) ||
+            agent.email.toLowerCase().includes(query.toLowerCase()) ||
+            agent.region.toLowerCase().includes(query.toLowerCase())
+        );
+
+        this.renderFilteredAgents(filteredAgents);
+    }
+
+    renderFilteredAgents(agents) {
+        const agentsList = document.getElementById('agents-list');
+
+        if (agents.length === 0) {
+            agentsList.innerHTML = '<div class="empty-state"><p>No agents found matching your search</p></div>';
+            return;
+        }
+
+        agentsList.innerHTML = agents.map(agent => `
+            <div class="user-item" data-agent-id="${agent.id}">
+                <div class="user-details">
+                    <h4>${agent.name}</h4>
+                    <p>${agent.region} • ${agent.email} • ${agent.phone}</p>
+                    <div class="user-credentials">
+                        <strong>Password:</strong> ${this.maskPassword(agent.password)}
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-view" onclick="managerPanel.viewCredentials('${agent.id}')">
+                        View Credentials
+                    </button>
+                    <button class="btn-reset" onclick="managerPanel.resetPassword('${agent.id}')">
+                        Reset Password
+                    </button>
+                    <button class="btn-delete" onclick="managerPanel.deleteAgent('${agent.id}')">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    saveAgents() {
+        localStorage.setItem('salesAgents', JSON.stringify(this.agents));
+    }
+
+    showAlert(message, type) {
+        const alertContainer = document.getElementById('global-alert');
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.innerHTML = `
+            <span>${message}</span>
+            <button class="close-alert">&times;</button>
+        `;
+
+        alertContainer.appendChild(alert);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
+            }
+        }, 5000);
+
+        // Close button functionality
+        alert.querySelector('.close-alert').addEventListener('click', () => {
+            alert.parentNode.removeChild(alert);
+        });
     }
 }
 
-// Manager functions (called from HTML)
-window.resendCredentials = function (managerId) {
-    const manager = managers.find(m => m.id === managerId);
-    if (manager) {
-        // Switch to admin tab first (in case we're on another tab)
-        switchTab('admin');
+// Initialize the manager panel when the page loads
+const managerPanel = new ManagerPanel();
 
-        // Wait a bit for the tab switch to complete, then display credentials
-        setTimeout(() => {
-            // Fill the credentials display form
-            document.getElementById('display-username').textContent = manager.username;
-            document.getElementById('display-password').textContent = manager.password;
-            document.getElementById('display-url').textContent = window.location.href.split('#')[0] + '#manager-login';
-
-            // Show the credentials display
-            credentialsDisplay.style.display = 'block';
-
-            // Scroll to the credentials section
-            credentialsDisplay.scrollIntoView({ behavior: 'smooth' });
-
-            // Show success message
-            showAlert(`Credentials for ${manager.name} displayed above. You can now copy them.`, 'success');
-        }, 300);
+// Add CSS for strength bar
+const style = document.createElement('style');
+style.textContent = `
+    .strength-bar::after {
+        content: '';
+        display: block;
+        height: 100%;
+        width: var(--strength-width, 0%);
+        background: var(--strength-color, #dc3545);
+        transition: all 0.3s;
     }
-};
-
-window.resendAgentCredentials = function (agentId) {
-    const agent = salesAgents.find(a => a.id === agentId);
-    if (agent) {
-        // Switch to manager panel first
-        switchTab('manager-panel');
-
-        // Wait a bit for the tab switch to complete, then display credentials
-        setTimeout(() => {
-            // Show credentials in the agent credentials display
-            showAgentCredentials(agent.username, agent.password);
-
-            // Scroll to the credentials section
-            const agentCredentialsDiv = document.getElementById('agent-credentials-display');
-            if (agentCredentialsDiv) {
-                agentCredentialsDiv.scrollIntoView({ behavior: 'smooth' });
-            }
-
-            // Show success message
-            showAlert(`Credentials for ${agent.name} displayed above. You can now copy them.`, 'success');
-        }, 300);
-    }
-};
-
-window.toggleManagerStatus = function (managerId) {
-    const manager = managers.find(m => m.id === managerId);
-    if (manager) {
-        manager.status = manager.status === 'active' ? 'inactive' : 'active';
-        localStorage.setItem('mayondo_managers', JSON.stringify(managers));
-        displayManagers();
-
-        showAlert(`Manager ${manager.name} has been ${manager.status === 'active' ? 'activated' : 'deactivated'}`, 'success');
-    }
-};
-
-window.toggleAgentStatus = function (agentId) {
-    const agent = salesAgents.find(a => a.id === agentId);
-    if (agent) {
-        agent.status = agent.status === 'active' ? 'inactive' : 'active';
-        localStorage.setItem('mayondo_sales_agents', JSON.stringify(salesAgents));
-        displayAgents();
-
-        showAlert(`Sales agent ${agent.name} has been ${agent.status === 'active' ? 'activated' : 'deactivated'}`, 'success');
-    }
-};
-
-window.logout = function () {
-    currentManager = null;
-    updateUserInfo();
-    showAlert('You have been logged out successfully', 'success');
-    switchTab('admin');
-    return false;
-};
-
-// Debug function
-window.debugState = function () {
-    console.log('Current Manager:', currentManager);
-    console.log('All Managers:', managers);
-    console.log('All Agents:', salesAgents);
-    console.log('Active Tab:', document.querySelector('.tab-btn.active')?.getAttribute('data-tab'));
-    console.log('agentsList element:', document.getElementById('agents-list'));
-};
-
-// Force refresh agents display
-window.refreshAgents = function () {
-    console.log('Forcing agents refresh...');
-    displayAgents();
-};
+`;
+document.head.appendChild(style);

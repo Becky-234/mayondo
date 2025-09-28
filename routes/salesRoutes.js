@@ -2,18 +2,38 @@ const express = require("express");
 const router = express.Router();
 const SalesModel = require("../models/salesModel");
 const StockModel = require("../models/stockModel");
-const { ensureAuthenticated, ensureAgent } = require("../middleware/auth")
-
+const UserModel = require("../models/userModel");
+const { ensureAuthenticated, ensureAgent, ensureManager } = require("../middleware/auth");
 
 // GET /sales – fetch sales from DB and render the page
-router.get("/sales", async (req, res) => {
+router.get("/sales", ensureAuthenticated, async (req, res) => {
   try {
-    const items = await SalesModel
-      .find()
-      .sort({ $natural: -1 })
-      .populate("agent", "name");
+    let items;
 
-    // Calculate dashboard metrics from actual data - SEPARATED BY TYPE
+    // If user is Sales Agent, only show their sales
+    if (req.user.role === 'Sales Agent') {
+      items = await SalesModel
+        .find({ agent: req.user._id })
+        .sort({ $natural: -1 })
+        .populate("agent", "fullName");
+    }
+    // If user is Manager, show sales from their agents
+    else if (req.user.role === 'Manager') {
+      // Get all sales agents managed by this manager
+      const managedAgents = await UserModel.find({
+        managerId: req.user._id
+      }).select('_id');
+
+      const agentIds = managedAgents.map(agent => agent._id);
+      agentIds.push(req.user._id); // Include manager's own sales if any
+
+      items = await SalesModel
+        .find({ agent: { $in: agentIds } })
+        .sort({ $natural: -1 })
+        .populate("agent", "fullName");
+    }
+
+    // Calculate dashboard metrics from actual data
     const totalSalesRaw = items
       .filter(item => item.tproduct === "Raw")
       .reduce((sum, item) => sum + item.totalPrice, 0);
@@ -33,13 +53,12 @@ router.get("/sales", async (req, res) => {
       .filter(item => item.tproduct === "Furniture")
       .reduce((sum, item) => sum + item.quantity, 0);
 
-    const currentUser = req.session.user;
     const success = req.query.success;
     const error = req.query.error;
 
     res.render('sales', {
       items,
-      currentUser,
+      currentUser: req.user,
       success,
       error,
       dashboardMetrics: {
@@ -59,16 +78,8 @@ router.get("/sales", async (req, res) => {
   }
 });
 
-router.post("/sales", (req, res) => {
-  console.log(req.body);
-});
-
-
 // GET add-sale form
-//STOCK ALERTS
-// GET add-sale form
-// GET add-sale form with success/error messages
-router.get("/addSale", async (req, res) => {
+router.get("/addSale", ensureAgent, async (req, res) => {
   try {
     const stocks = await StockModel.find();
     const success = req.query.success;
@@ -101,7 +112,8 @@ router.get("/addSale", async (req, res) => {
       stocks: stocksWithAlerts,
       lowStockItems: stocks.filter(stock => stock.pdtquantity <= 5),
       success,
-      error
+      error,
+      currentUser: req.user
     });
   } catch (error) {
     console.error(error.message);
@@ -109,18 +121,16 @@ router.get("/addSale", async (req, res) => {
   }
 });
 
-
-//Only if you are logged in as a sales agent, you will be able to make a sale
-//ensureAuthenticated, ensureAgent,
 // POST add-sale with success/error handling
-router.post("/addSale", async (req, res) => {
+router.post("/addSale", ensureAgent, async (req, res) => {
   console.log("POST /addSale hit", req.body);
   try {
     const {
       name, contact, tproduct, nproduct, quantity,
       unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
-    const userId = req.session.user._id;
+
+    const userId = req.user._id;
 
     const stock = await StockModel.findOne({ pdtname: nproduct, pdttype: tproduct });
     if (!stock) {
@@ -172,25 +182,31 @@ router.post("/addSale", async (req, res) => {
   }
 });
 
-
-//UPDATING SALES
-// UPDATING SALES with messages
-router.get("/editSales/:id", async (req, res) => {
+// UPDATING SALES with messages - Only managers can edit
+router.get("/editSales/:id", ensureManager, async (req, res) => {
   try {
     const item = await SalesModel
       .findById(req.params.id)
-      .populate("agent", "name");
-    const success = req.query.success;
-    const error = req.query.error;
+      .populate("agent", "fullName");
 
     if (!item) {
       return res.status(404).send("Sale not found");
     }
 
+    // Check if manager can edit this sale (only their agents' sales)
+    const agent = await UserModel.findById(item.agent);
+    if (agent.managerId.toString() !== req.user._id.toString() && item.agent.toString() !== req.user._id.toString()) {
+      return res.status(403).send("You can only edit sales from your agents");
+    }
+
+    const success = req.query.success;
+    const error = req.query.error;
+
     res.render("editSales", {
       item,
       success,
-      error
+      error,
+      currentUser: req.user
     });
   } catch (error) {
     console.error(error);
@@ -198,8 +214,15 @@ router.get("/editSales/:id", async (req, res) => {
   }
 });
 
-router.post("/editSales/:id", async (req, res) => {
+router.post("/editSales/:id", ensureManager, async (req, res) => {
   try {
+    // Check permissions before updating
+    const existingSale = await SalesModel.findById(req.params.id);
+    const agent = await UserModel.findById(existingSale.agent);
+    if (agent.managerId.toString() !== req.user._id.toString() && existingSale.agent.toString() !== req.user._id.toString()) {
+      return res.redirect(`/editSales/${req.params.id}?error=You can only edit sales from your agents`);
+    }
+
     const product = await SalesModel.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -214,28 +237,47 @@ router.post("/editSales/:id", async (req, res) => {
   }
 });
 
-
-//DELETING SALES
-router.post("/deleteSale", async (req, res) => {
+// DELETING SALES - Only managers can delete
+router.post("/deleteSale", ensureManager, async (req, res) => {
   try {
+    // Check permissions before deleting
+    const sale = await SalesModel.findById(req.body.id);
+    const agent = await UserModel.findById(sale.agent);
+    if (agent.managerId.toString() !== req.user._id.toString() && sale.agent.toString() !== req.user._id.toString()) {
+      return res.status(403).send("You can only delete sales from your agents");
+    }
+
     await SalesModel.deleteOne({ _id: req.body.id });
-    res.redirect("/sales");
+    res.redirect("/sales?success=Sale deleted successfully!");
   } catch (error) {
-    res.status(400).send("Unable to delete item from the database");
+    res.redirect("/sales?error=Unable to delete sale");
   }
 });
 
-
-//GENERATING RECEIPT
-router.post("/getReceipt/:id", async (req, res) => {
-  // console.log('Receipt route hit with ID:', req.params.id);
+// GENERATING RECEIPT
+router.post("/getReceipt/:id", ensureAuthenticated, async (req, res) => {
   try {
     const item = await SalesModel.findOne({ _id: req.params.id });
-    // console.log('Item found:', item);
-    res.render("salesReceipt", { item });
+
+    // Check permissions for receipt access
+    if (req.user.role === 'Sales Agent' && item.agent.toString() !== req.user._id.toString()) {
+      return res.status(403).send("You can only view receipts for your own sales");
+    }
+
+    if (req.user.role === 'Manager') {
+      const agent = await UserModel.findById(item.agent);
+      if (agent.managerId.toString() !== req.user._id.toString() && item.agent.toString() !== req.user._id.toString()) {
+        return res.status(403).send("You can only view receipts for your agents' sales");
+      }
+    }
+
+    res.render("salesReceipt", {
+      item,
+      currentUser: req.user
+    });
   } catch (error) {
     console.error(error.message);
-    res.status(400).send('Uable to find sale')
+    res.status(400).send('Unable to find sale');
   }
 });
 

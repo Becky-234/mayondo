@@ -1,14 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
-
 const StockModel = require("../models/stockModel");
 
-//Stock page
-//GETTING THE STOCK FROM THE DATABASE
-//ensureAuthenticated, ensureManager,
 // Stock page - GET with success/error messages
-router.get("/stock", async (req, res) => {
+router.get("/stock", ensureAuthenticated, async (req, res) => {
   try {
     let items = await StockModel
       .find()
@@ -22,34 +18,32 @@ router.get("/stock", async (req, res) => {
       items,
       success,
       error,
-      currentUser: req.user
+      currentUser: req.user // Pass current user to template
     });
   } catch (error) {
     res.status(400).send("Unable to get data from the database");
   }
 });
 
-//ensureAuthenticated, ensureManager,
-router.post("/stock", (req, res) => {
+router.post("/stock", ensureAuthenticated, (req, res) => {
   console.log(req.body);
 });
 
-
 // Add stock page - GET with messages
-router.get("/addStock", (req, res) => {
+router.get("/addStock", ensureManager, (req, res) => {
   const success = req.query.success;
   const error = req.query.error;
 
   res.render("addStock", {
     title: "Stock page",
     success,
-    error
+    error,
+    currentUser: req.user // Pass current user to template
   });
 });
 
-
-//ensureAuthenticated, ensureManager,
-router.post("/addStock", async (req, res) => {
+// Add stock - POST
+router.post("/addStock", ensureManager, async (req, res) => {
   try {
     const stock = new StockModel(req.body);
     console.log(req.body);
@@ -57,73 +51,99 @@ router.post("/addStock", async (req, res) => {
     res.redirect("/stock?success=Stock item added successfully!");
   } catch (error) {
     console.error(error);
+
+    // Handle specific validation errors
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.redirect(`/addStock?error=${encodeURIComponent(errors.join(', '))}`);
+    }
+
     res.redirect("/addStock?error=Unable to add stock item. Please try again.");
   }
 });
 
-
-//UPDATING STOCK
-//ensureAuthenticated, ensureManager,
 // Updating stock - GET with messages
-router.get("/editStock/:id", async (req, res) => {
+router.get("/editStock/:id", ensureManager, async (req, res) => {
   try {
     let item = await StockModel.findById(req.params.id);
     const success = req.query.success;
     const error = req.query.error;
 
+    if (!item) {
+      return res.redirect("/stock?error=Stock item not found");
+    }
+
     res.render(`editStock`, {
       item,
       success,
-      error
+      error,
+      currentUser: req.user // Pass current user to template
     });
   } catch (error) {
     res.redirect("/stock?error=Stock item not found");
   }
 });
 
-//ensureAuthenticated, ensureManager,
 // Updating stock - POST with messages
-router.post("/editStock/:id", async (req, res) => {
+router.post("/editStock/:id", ensureManager, async (req, res) => {
   try {
     const product = await StockModel.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true, runValidators: true } // Added runValidators
     );
+
     if (!product) {
       return res.redirect("/stock?error=Stock item not found");
     }
+
     res.redirect("/stock?success=Stock item updated successfully!");
   } catch (error) {
+    console.error(error);
+
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.redirect(`/editStock/${req.params.id}?error=${encodeURIComponent(errors.join(', '))}`);
+    }
+
     res.redirect(`/editStock/${req.params.id}?error=Error updating stock item`);
   }
 });
 
-
-//DELETING STOCK
-//ensureAuthenticated, ensureManager,
 // Deleting stock with messages
-router.post("/deleteStock", async (req, res) => {
+router.post("/deleteStock", ensureManager, async (req, res) => {
   try {
-    await StockModel.deleteOne({ _id: req.body.id });
+    const result = await StockModel.deleteOne({ _id: req.body.id });
+
+    if (result.deletedCount === 0) {
+      return res.redirect("/stock?error=Stock item not found");
+    }
+
     res.redirect("/stock?success=Stock item deleted successfully!");
   } catch (error) {
+    console.error(error);
     res.redirect("/stock?error=Unable to delete stock item from the database");
   }
 });
 
-
-//GENERATING RECEIPT
-router.post("/generateReceipt/:id", async (req, res) => {
+// Generating receipt - Only authenticated users
+router.post("/generateReceipt/:id", ensureAuthenticated, async (req, res) => {
   try {
     const item = await StockModel.findOne({ _id: req.params.id });
-    res.render("stockReceipt", { item });
+
+    if (!item) {
+      return res.status(404).send('Stock item not found');
+    }
+
+    res.render("stockReceipt", {
+      item,
+      currentUser: req.user // Pass current user to template
+    });
   } catch (error) {
     console.error(error.message);
-    res.status(400).send('Uable to find stock')
+    res.status(400).send('Unable to find stock item');
   }
 });
-
-
 
 module.exports = router;

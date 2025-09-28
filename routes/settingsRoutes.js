@@ -1,21 +1,15 @@
-express = require("express");
+const express = require("express");
 const router = express.Router();
-//const UserModel = require("../models/userModel");
-const passport = require("passport");
-
-
+const UserModel = require("../models/userModel");
 
 router.get('/settings', (req, res) => {
-    res.render('settings', { title: 'Settings page' });
+    res.render('settings')
 });
 
 
 router.post('/settings', (req, res) => {
-    console.log(req.body);
-    res.redirect('/settings');
+    res.redirect('/settings')
 });
-
-
 
 
 module.exports = router;

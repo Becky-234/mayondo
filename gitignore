@@ -1,2 +1,7 @@
 node_modules/
 .vscode
+# .gitignore
+.env
+.env.local
+.env.production
+*.env
