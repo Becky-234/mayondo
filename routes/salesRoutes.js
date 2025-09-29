@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const SalesModel = require("../models/salesModel");
 const StockModel = require("../models/stockModel");
@@ -200,7 +201,7 @@ router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
     let total = Number(totalPrice);
     console.log("6. Price calculation:", { initialTotal: total, transportCheck: !!transportCheck });
 
-    // Fix transportCheck - it's coming as undefined, so check the actual value
+    // TransportCheck
     const hasTransport = transportCheck === 'on' || transportCheck === true;
     if (hasTransport) {
       total *= 1.05;
@@ -276,37 +277,29 @@ router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
 });
 
 
-// UPDATING SALES with messages - Only managers can edit
+ 
 router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
-    const item = await SalesModel
-      .findById(req.params.id)
-      .populate("agent", "fullName");
-
-    if (!item) {
-      return res.status(404).send("Sale not found");
-    }
-
-    // Check if manager can edit this sale (only their agents' sales)
-    const agent = await UserModel.findById(item.agent);
-    if (agent.managerId.toString() !== req.user._id.toString() && item.agent.toString() !== req.user._id.toString()) {
-      return res.status(403).send("You can only edit sales from your agents");
-    }
-
+    let item = await SalesModel.findById(req.params.id);
     const success = req.query.success;
     const error = req.query.error;
 
-    res.render("editSales", {
+    if (!item) {
+      return res.redirect("/sales?error=Sale not found");
+    }
+
+    res.render("editSales", { // Make sure this matches your .pug filename
       item,
       success,
       error,
       currentUser: req.user
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error loading sale");
+    console.error("Error in editSales GET:", error);
+    res.redirect("/sales?error=Sale not found");
   }
 });
+
 
 router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
@@ -331,38 +324,33 @@ router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, re
   }
 });
 
+
+
+
 // DELETING SALES - Only managers can delete
-router.post("/deleteSale", ensureAuthenticated, ensureManager, async (req, res) => {
+router.post("/deleteSale", ensureManager, async (req, res) => {
   try {
-    // Check permissions before deleting
-    const sale = await SalesModel.findById(req.body.id);
-    const agent = await UserModel.findById(sale.agent);
-    if (agent.managerId.toString() !== req.user._id.toString() && sale.agent.toString() !== req.user._id.toString()) {
-      return res.status(403).send("You can only delete sales from your agents");
+    const result = await SalesModel.deleteOne({ _id: req.body.id });
+
+    if (result.deletedCount === 0) {
+      return res.redirect("/sales?error=Sale not found");
     }
 
-    await SalesModel.deleteOne({ _id: req.body.id });
     res.redirect("/sales?success=Sale deleted successfully!");
   } catch (error) {
-    res.redirect("/sales?error=Unable to delete sale");
+    console.error(error);
+    res.redirect("/sales?error=Unable to delete sale from the database");
   }
 });
+
 
 // GENERATING RECEIPT
 router.post("/getReceipt/:id", ensureAuthenticated, async (req, res) => {
   try {
     const item = await SalesModel.findOne({ _id: req.params.id });
 
-    // Check permissions for receipt access
-    if (req.user.role === 'sales_agent' && item.agent.toString() !== req.user._id.toString()) {
-      return res.status(403).send("You can only view receipts for your own sales");
-    }
-
-    if (req.user.role === 'manager') {
-      const agent = await UserModel.findById(item.agent);
-      if (agent.managerId.toString() !== req.user._id.toString() && item.agent.toString() !== req.user._id.toString()) {
-        return res.status(403).send("You can only view receipts for your agents' sales");
-      }
+    if (!item) {
+      return res.status(404).send('Sale not found');
     }
 
     res.render("salesReceipt", {

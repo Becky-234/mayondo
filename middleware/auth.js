@@ -1,4 +1,3 @@
-// middleware/auth.js
 const ensureAuthenticated = (req, res, next) => {
   console.log("Authentication Check:");
   console.log("   req.session.user:", req.session.user);
