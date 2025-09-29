@@ -6,10 +6,10 @@ const StockModel = require("../models/stockModel");
 const UserModel = require("../models/userModel");
 const { ensureAuthenticated, ensureAgent, ensureManager } = require("../middleware/auth");
 
+ 
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", ensureAuthenticated, async (req, res) => {
   try {
-
     console.log("User role in sales route:", req.user.role);
     console.log("User data:", req.user);
 
@@ -19,8 +19,7 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
     if (req.user.role === 'sales_agent') {
       items = await SalesModel
         .find({ agent: req.user._id })
-        .sort({ $natural: -1 })
-        .populate("agent", "fullName");
+        .sort({ date: -1 }); // Changed from $natural to date for proper sorting
     }
     // If user is Manager, show sales from their agents
     else if (req.user.role === 'manager') {
@@ -34,12 +33,11 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
 
       items = await SalesModel
         .find({ agent: { $in: agentIds } })
-        .sort({ $natural: -1 })
-        .populate("agent", "fullName");
+        .sort({ date: -1 }); // Changed from $natural to date
     }
     // Fallback for any other cases
     else {
-      items = []; // Initialize as empty array to prevent undefined errors
+      items = [];
     }
 
     // Safety check before using items
@@ -50,11 +48,11 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
     // Calculate dashboard metrics from actual data
     const totalSalesRaw = items
       .filter(item => item.tproduct === "Raw")
-      .reduce((sum, item) => sum + item.totalPrice, 0);
+      .reduce((sum, item) => sum + parseFloat(item.totalPrice), 0);
 
     const totalSalesFurniture = items
       .filter(item => item.tproduct === "Furniture")
-      .reduce((sum, item) => sum + item.totalPrice, 0);
+      .reduce((sum, item) => sum + parseFloat(item.totalPrice), 0);
 
     const totalOrders = items.length;
 
@@ -69,6 +67,15 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
 
     const success = req.query.success;
     const error = req.query.error;
+
+    // DEBUG: Check what data is being sent to template
+    console.log("=== SALES DATA SENT TO TEMPLATE ===");
+    console.log("Number of sales:", items.length);
+    if (items.length > 0) {
+      console.log("First sale agentName:", items[0].agentName);
+      console.log("First sale full data:", JSON.stringify(items[0], null, 2));
+    }
+    console.log("===================================");
 
     res.render('sales', {
       items,
@@ -90,10 +97,16 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
     console.error(error);
     res.status(400).send("Unable to get sales");
   }
+}); 
+
+//POST sales
+router.post("/sales", (req, res) => {
+  res.render("sales")
 });
 
+
 // GET add-sale form
-router.get("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
+router.get("/addSale", ensureAuthenticated, async (req, res) => {
 
   try {
     const stocks = await StockModel.find();
@@ -137,13 +150,8 @@ router.get("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
 });
 
 // POST add-sale with success/error handling
-router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
-  console.log("=== START ADD SALE PROCESS ===");
+router.post("/addSale", ensureAuthenticated, async (req, res) => {
   console.log("POST /addSale hit", req.body);
-
-  // DEBUG: Check if req.user exists
-  console.log("DEBUG - req.user:", req.user);
-  console.log("DEBUG - req.session:", req.session);
 
   try {
     const {
@@ -151,20 +159,18 @@ router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
       unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
 
-    console.log("1. Parsed request body:", {
-      name, contact, tproduct, nproduct, quantity,
-      unitPrice, transportCheck, totalPrice, payment, date
-    });
-
-    // Check if req.user exists - ADD THIS SAFETY CHECK
+    // Check if req.user exists
     if (!req.user || !req.user._id) {
-      console.error("ERROR: req.user is undefined or missing _id");
       console.error("req.user:", req.user);
       return res.redirect("/addSale?error=User authentication failed. Please login again.");
     }
 
     const userId = req.user._id;
-    console.log("2. User ID:", userId);
+
+    // USE req.user.name - This is the field from your UserModel
+    const userName = req.user.name || 'Unknown Agent';
+
+    console.log("2. User ID:", userId, "User Name:", userName);
 
     // Validate required fields
     if (!name || !contact || !tproduct || !nproduct || !quantity || !unitPrice || !payment || !date) {
@@ -231,6 +237,7 @@ router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
       payment: payment.trim(),
       date: new Date(date),
       agent: userId,
+      agentName: userName // This will now use req.user.name
     };
 
     console.log("9. Sale data to be saved:", saleData);
@@ -277,7 +284,7 @@ router.post("/addSale", ensureAuthenticated, ensureAgent, async (req, res) => {
 });
 
 
- 
+//UPDATING SALES
 router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     let item = await SalesModel.findById(req.params.id);
@@ -299,7 +306,6 @@ router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res
     res.redirect("/sales?error=Sale not found");
   }
 });
-
 
 router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
@@ -323,7 +329,6 @@ router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, re
     res.redirect(`/editSales/${req.params.id}?error=Error updating sale`);
   }
 });
-
 
 
 

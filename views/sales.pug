@@ -144,7 +144,7 @@ html
               th Total Price UGX
               th Type of Payment
               th Date
-              th Sales Agent Name
+              th Sales Agent 
               if currentUser && currentUser.role === 'manager'
                 th Actions
           tbody.row-others
@@ -161,7 +161,7 @@ html
                   td #{Math.round(item.totalPrice).toLocaleString()}
                   td #{item.payment}
                   td #{new Date(item.date).toLocaleDateString()}
-                  td #{item.agent.name}
+                  td #{item.agentName}
                   if currentUser && currentUser.role === 'manager'
                     td.actions
                       a.btn-icon(href=`/editSales/${item._id}`, title='Edit')

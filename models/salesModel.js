@@ -9,11 +9,11 @@ const salesSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  tproduct: {
+  nproduct: {
     type: String,
     required: true
   },
-  nproduct: {
+  tproduct: {
     type: String,
     required: true
   },
@@ -45,6 +45,10 @@ const salesSchema = new mongoose.Schema({
   agent: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserModel",
+    required: true
+  },
+  agentName: {
+    type: String,
     required: true
   }
 });
