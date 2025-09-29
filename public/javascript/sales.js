@@ -79,24 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // Calculating Total
-// const unitField = document.getElementById('unitPrice');
-// const qtyField = document.getElementById('quantity');
-// const totalField = document.getElementById('totalPrice');
-
-// function updateTotal() {
-//   const unitPrice = parseFloat(unitField.value);
-//   const quantity = parseFloat(qtyField.value);
-//   if (!isNaN(quantity) && !isNaN(unitPrice)) {
-//     totalField.value = (quantity * unitPrice).toFixed(2);
-//   } else {
-//     totalField.value = "";
-//   }
-// }
-
-// unitField.addEventListener('input', updateTotal);
-// qtyField.addEventListener('input', updateTotal);
-
-
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', function () {
   const unitprice = document.getElementById('unitPrice');

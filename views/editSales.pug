@@ -81,7 +81,7 @@ main.main-content
       br
       label(for="totalPrice") Total Price
       br
-      input#totalPrice(type="text", name="totalPrice", required value=`${item.totalPrice}`)
+      input#totalPrice(type="text", name="totalPrice", required value=`${item.totalPrice}` readonly)
       br
       br
       label(for="payment") Select Payment Method
@@ -95,7 +95,7 @@ main.main-content
       br
       label(for="date") Date
       br
-      input#date(type="date", name="date", required value=`${item.date}`)
+      input#date(type="date", name="date", required value=item.date ? new Date(item.date).toISOString().split('T')[0] : '')
       br
       br
       label(for="agent") Sales Agent Name

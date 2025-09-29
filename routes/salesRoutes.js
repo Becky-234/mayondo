@@ -6,6 +6,7 @@ const StockModel = require("../models/stockModel");
 const UserModel = require("../models/userModel");
 const { ensureAuthenticated, ensureAgent, ensureManager } = require("../middleware/auth");
 
+
  
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", ensureAuthenticated, async (req, res) => {
@@ -103,6 +104,8 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
 router.post("/sales", (req, res) => {
   res.render("sales")
 });
+
+
 
 
 // GET add-sale form
@@ -284,6 +287,8 @@ router.post("/addSale", ensureAuthenticated, async (req, res) => {
 });
 
 
+
+
 //UPDATING SALES
 router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
@@ -307,29 +312,69 @@ router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res
   }
 });
 
+
 router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     // Check permissions before updating
     const existingSale = await SalesModel.findById(req.params.id);
+    if (!existingSale) {
+      return res.redirect("/sales?error=Sale not found");
+    }
+
+    // Check if user has permission to edit this sale
     const agent = await UserModel.findById(existingSale.agent);
-    if (agent.managerId.toString() !== req.user._id.toString() && existingSale.agent.toString() !== req.user._id.toString()) {
+    if (agent.managerId && agent.managerId.toString() !== req.user._id.toString() && existingSale.agent.toString() !== req.user._id.toString()) {
       return res.redirect(`/editSales/${req.params.id}?error=You can only edit sales from your agents`);
     }
 
+    // Prepare update data - convert types as needed
+    const updateData = {
+      name: req.body.name,
+      contact: req.body.contact,
+      nproduct: req.body.nproduct,
+      tproduct: req.body.tproduct,
+      quantity: Number(req.body.quantity),
+      unitPrice: req.body.unitPrice, // Keep as string if your schema expects string
+      transportCheck: req.body.transportCheck === 'on',
+      totalPrice: req.body.totalPrice, // Keep as string if your schema expects string
+      payment: req.body.payment,
+      date: req.body.date
+      // Don't update agent or agentName - keep original values
+    };
+
+    console.log("Update data:", updateData);
+
     const product = await SalesModel.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true }
+      updateData,
+      {
+        new: true,
+        runValidators: true
+      }
     );
+
     if (!product) {
-      return res.redirect(`/editSales/${req.params.id}?error=Sale not found`);
+      return res.redirect("/sales?error=Sale not found");
     }
+
     res.redirect("/sales?success=Sale updated successfully!");
   } catch (error) {
-    res.redirect(`/editSales/${req.params.id}?error=Error updating sale`);
+    console.error("Edit sale error:", error);
+
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.redirect(`/editSales/${req.params.id}?error=${encodeURIComponent("Validation: " + errors.join(', '))}`);
+    }
+
+    // Handle cast errors
+    if (error.name === 'CastError') {
+      return res.redirect(`/editSales/${req.params.id}?error=Invalid sale ID`);
+    }
+
+    res.redirect(`/editSales/${req.params.id}?error=Error updating sale: ${encodeURIComponent(error.message)}`);
   }
 });
-
 
 
 // DELETING SALES - Only managers can delete
@@ -347,6 +392,8 @@ router.post("/deleteSale", ensureManager, async (req, res) => {
     res.redirect("/sales?error=Unable to delete sale from the database");
   }
 });
+
+
 
 
 // GENERATING RECEIPT
