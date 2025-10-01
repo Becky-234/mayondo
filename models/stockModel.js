@@ -49,13 +49,13 @@ const stockSchema = new mongoose.Schema({
     },
     supplier: {
         type: String,
-        required: [true, 'Supplier name is required'],
+        required: false,
         trim: true,
         maxlength: [100, 'Supplier name cannot exceed 100 characters']
     },
     supplierContact: {
         type: String,
-        required: [true, 'Supplier contact is required'],
+        required: false,
         trim: true,
         // validate: {
         //     validator: function (v) {

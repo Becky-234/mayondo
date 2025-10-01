@@ -301,7 +301,7 @@ body.sidebar-active {
   color: #fff;
   border-radius: 15px;
   padding: 25px 15px;
-  height: auto;
+  height: 290px;
   min-height: 180px;
   text-align: center;
   box-shadow: 0 6px 15px rgba(76, 100, 68, 0.3);

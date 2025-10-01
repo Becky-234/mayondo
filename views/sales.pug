@@ -3,23 +3,9 @@ html
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(
-      href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css',
-      rel='stylesheet',
-      integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB',
-      crossorigin='anonymous'
-    )
-    link(
-      rel='stylesheet',
-      href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css',
-      integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==',
-      crossorigin='anonymous',
-      referrerpolicy='no-referrer'
-    )
-    link(
-      href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
-      rel='stylesheet'
-    )
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css')
+    link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap', rel='stylesheet')
     link(rel='stylesheet', href='../css/sales.css')
     title Sales
 
@@ -59,21 +45,54 @@ html
         .container-fluid.d-flex.justify-content-end.align-items-center
           .d-flex.align-items-center
             a.logoutBtn(href='/index') Logout
-      // SUCCESS/ERROR MESSAGES
+
+      // SUCCESS MODAL
       if success
-        .container.mt-3
-          .alert.alert-success.alert-dismissible.fade.show(role='alert')
-            i.fas.fa-check-circle.me-2
-            strong Success! 
-            | #{success}
-            button.btn-close(type='button', data-bs-dismiss='alert')
+        .modal.fade.show(tabindex='-1', style='display: block; background-color: rgba(0,0,0,0.5);')
+          .modal-dialog.modal-dialog-centered
+            .modal-content
+              .modal-header.bg-success.text-white
+                h5.modal-title
+                  i.fas.fa-check-circle.me-2
+                  | Success!
+                button.btn-close(type='button', onclick="closeMessageModal()")
+              .modal-body
+                p #{success}
+              .modal-footer
+                button.btn.btn-success(type='button', onclick="closeMessageModal()") OK
+
+      // ERROR MODAL
       if error
-        .container.mt-3
-          .alert.alert-danger.alert-dismissible.fade.show(role='alert')
-            i.fas.fa-exclamation-circle.me-2
-            strong Error! 
-            | #{error}
-            button.btn-close(type='button', data-bs-dismiss='alert')
+        .modal.fade.show(tabindex='-1', style='display: block; background-color: rgba(0,0,0,0.5);')
+          .modal-dialog.modal-dialog-centered
+            .modal-content
+              .modal-header.bg-danger.text-white
+                h5.modal-title
+                  i.fas.fa-exclamation-circle.me-2
+                  | Error!
+                button.btn-close(type='button', onclick="closeMessageModal()")
+              .modal-body
+                p #{error}
+              .modal-footer
+                button.btn.btn-danger(type='button', onclick="closeMessageModal()") OK
+
+      // DELETE CONFIRMATION MODAL
+      #deleteConfirmationModal.modal.fade(tabindex='-1', aria-labelledby='deleteConfirmationModalLabel', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered
+          .modal-content
+            .modal-header.bg-warning.text-dark
+              h5.modal-title
+                i.fas.fa-exclamation-triangle.me-2
+                | Confirm Deletion
+              button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+            .modal-body
+              p Are you sure you want to delete this sale record?
+              p.text-muted.small This action cannot be undone.
+            .modal-footer
+              button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Cancel
+              form#deleteForm(method='post', action='/deleteSale', style='display: inline;')
+                input(type='hidden', name='id', id='deleteSaleId')
+                button.btn.btn-danger(type='submit') Delete
 
       section#dash-top.dash
         .row
@@ -82,11 +101,11 @@ html
               .card-body
                 i.fa-solid.fa-money-bill-trend-up
                 h5.card-title Total Sales
-                p.card-text Shs. #{dashboardMetrics ? (dashboardMetrics.totalSalesRaw + dashboardMetrics.totalSalesFurniture).toLocaleString() : '0'}
+                p.card-text Shs. #{dashboardMetrics && !isNaN(dashboardMetrics.totalSalesAll) ? dashboardMetrics.totalSalesAll.toLocaleString() : '0'}
                 .breakdown
-                  small Raw: Shs. #{dashboardMetrics ? dashboardMetrics.totalSalesRaw.toLocaleString() : '0'}
+                  small Raw: Shs. #{dashboardMetrics && !isNaN(dashboardMetrics.totalSalesRaw) ? dashboardMetrics.totalSalesRaw.toLocaleString() : '0'}
                   br
-                  small Furniture: Shs. #{dashboardMetrics ? dashboardMetrics.totalSalesFurniture.toLocaleString() : '0'}
+                  small Furniture: Shs. #{dashboardMetrics && !isNaN(dashboardMetrics.totalSalesFurniture) ? dashboardMetrics.totalSalesFurniture.toLocaleString() : '0'}
           .col-md-3
             .dash-card
               .card-body
@@ -98,11 +117,11 @@ html
               .card-body
                 i.fa-solid.fa-scale-balanced
                 h5.card-title Total Sold Products
-                p.card-text #{dashboardMetrics ? (dashboardMetrics.totalSoldRaw + dashboardMetrics.totalSoldFurniture) : '0'} units
+                p.card-text #{dashboardMetrics && !isNaN(dashboardMetrics.totalSoldAll) ? dashboardMetrics.totalSoldAll : '0'} units
                 .breakdown
-                  small Raw: #{dashboardMetrics ? dashboardMetrics.totalSoldRaw : '0'}
+                  small Raw: #{dashboardMetrics && !isNaN(dashboardMetrics.totalSoldRaw) ? dashboardMetrics.totalSoldRaw : '0'}
                   br
-                  small Furniture: #{dashboardMetrics ? dashboardMetrics.totalSoldFurniture : '0'}
+                  small Furniture: #{dashboardMetrics && !isNaN(dashboardMetrics.totalSoldFurniture) ? dashboardMetrics.totalSoldFurniture : '0'}
           .col-md-3
             .dash-card
               .card-body
@@ -110,9 +129,9 @@ html
                 h5.card-title Sales Distribution
                 .distribution
                   .raw-material
-                    small Raw: #{dashboardMetrics ? Math.round((dashboardMetrics.totalSalesRaw / (dashboardMetrics.totalSalesRaw + dashboardMetrics.totalSalesFurniture)) * 100) || 0 : '0'}%
+                    small Raw: #{dashboardMetrics && !isNaN(dashboardMetrics.rawPercentage) ? dashboardMetrics.rawPercentage : '0'}%
                   .furniture
-                    small Furniture: #{dashboardMetrics ? Math.round((dashboardMetrics.totalSalesFurniture / (dashboardMetrics.totalSalesRaw + dashboardMetrics.totalSalesFurniture)) * 100) || 0 : '0'}%
+                    small Furniture: #{dashboardMetrics && !isNaN(dashboardMetrics.furniturePercentage) ? dashboardMetrics.furniturePercentage : '0'}%
 
         br
         br
@@ -148,7 +167,7 @@ html
               if currentUser && currentUser.role === 'manager'
                 th Actions
           tbody.row-others
-            if items.length
+            if items && items.length
               each item in items
                 tr
                   td #{item.name}
@@ -156,9 +175,9 @@ html
                   td #{item.nproduct}
                   td #{item.tproduct}
                   td #{item.quantity}
-                  td #{item.unitPrice.toLocaleString()}
+                  td #{(item.unitPrice && !isNaN(item.unitPrice)) ? item.unitPrice.toLocaleString() : '0'}
                   td #{item.transportCheck ? 'Yes' : 'No'}
-                  td #{Math.round(item.totalPrice).toLocaleString()}
+                  td #{(item.totalPrice && !isNaN(item.totalPrice)) ? Math.round(item.totalPrice).toLocaleString() : '0'}
                   td #{item.payment}
                   td #{new Date(item.date).toLocaleDateString()}
                   td #{item.agentName}
@@ -166,10 +185,8 @@ html
                     td.actions
                       a.btn-icon(href=`/editSales/${item._id}`, title='Edit')
                         i.fas.fa-edit
-                      form(method='post', action='/deleteSale', style='display:inline')
-                        input(type='hidden', name='id', value=item._id)
-                        button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this item?')")
-                          i.fas.fa-trash
+                      button.btn-icon(type='button', title='Delete', onclick=`showDeleteConfirmation('${item._id}')`)
+                        i.fas.fa-trash
                       form(method='post', action=`/getReceipt/${item._id}`, style='display:inline')
                         input(type='hidden', name='id', value=item._id)
                         button.btn-icon(type='submit', title='Receipt')
@@ -182,15 +199,42 @@ html
         br
         h5#notFound Not Found!
 
-    // SheetJS
+    script.
+      function closeMessageModal() {
+        // Remove the query parameters from URL
+        const url = new URL(window.location);
+        url.searchParams.delete('success');
+        url.searchParams.delete('error');
+        window.history.replaceState({}, '', url);
+        
+        // Hide the modal
+        const modals = document.querySelectorAll('.modal.show');
+        modals.forEach(modal => {
+          modal.style.display = 'none';
+        });
+      }
+
+      // Function to show delete confirmation modal
+      function showDeleteConfirmation(saleId) {
+        // Set the sale ID in the hidden input
+        document.getElementById('deleteSaleId').value = saleId;
+        
+        // Show the modal
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+        deleteModal.show();
+      }
+
+      // Auto-close success/error modals after 5 seconds
+      document.addEventListener('DOMContentLoaded', function() {
+        if (document.querySelector('.modal.show')) {
+          setTimeout(() => {
+            closeMessageModal();
+          }, 5000);
+        }
+      });
+
     script(src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js')
-    // jsPDF + AutoTable
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js')
-    // Load Bootstrap JS before your own script
-    script(
-      src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js',
-      integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI',
-      crossorigin='anonymous'
-    )
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js')
     script(src='/javascript/sales.js')
