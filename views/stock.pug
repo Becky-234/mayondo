@@ -1,4 +1,5 @@
 doctype html
+html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
@@ -7,148 +8,148 @@ head
   link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
   link(rel='stylesheet' href='/css/stock.css')
   title Stock
-header
-  aside.side-menu-container.active
-    .logo-menu
-      h2.logo MWF
-      i.fa-solid.fa-bars
-    ul.list
-      li.list-item
-        a(href='dashboard')
-          i.fa-solid.fa-house
-          span.link-name Dashboard
-      li.list-item
-        a(href='usersList')
-          i.fa-solid.fa-users
-          span.link-name Users
-      li.list-item
-        a(href='sales')
-          i.fa-solid.fa-cart-shopping
-          span.link-name Sales
-      li.list-item.active
-        a(href='stock')
-          i.fa-solid.fa-truck
-          span.link-name Stock
-      li.list-item
-        a(href='products')
-          i.fa-solid.fa-couch
-          span.link-name Products
-      li.list-item
-        a(href='settings')
-          i.fa-solid.fa-gear
-          span.link-name Settings
-main.main-content
-  nav.navbar.bg-body-tertiary.dashboard-header
-    .container-fluid.d-flex.justify-content-end.align-items-center
-      .d-flex.align-items-center
-        a.logoutBtn(href='/index') Logout
-        if success
-          .container.mt-3
-            .alert.alert-success.alert-dismissible.fade.show(role="alert")
-              i.fas.fa-check-circle.me-2
-              strong Success! 
-              | #{success}
-              button.btn-close(type="button" data-bs-dismiss="alert")
-        if error
-          .container.mt-3
-            .alert.alert-danger.alert-dismissible.fade.show(role="alert")
-              i.fas.fa-exclamation-circle.me-2
-              strong Error! 
-              | #{error}
-              button.btn-close(type="button" data-bs-dismiss="alert")
-  //- .dashboarBody
-  //-   h3 Dashboard
-  //-   h4 Mayondo Wood & Furniture ltd
-  //-   h1 Welcome #{currentUser.username}!
-  //-   p You’re now logged in.
-  //-   br      
-  //- section#dash-top.dash
-  //-   .row
-  //-     .col-md-3
-  //-       .dash-card
-  //-         .card-body
-  //-           i.fa-solid.fa-file-lines
-  //-           h5.card-title Invoices
-  //-           p.card-text Shs.500,000
-  //-     .col-md-3
-  //-       .dash-card
-  //-         .card-body
-  //-           i.fa-solid.fa-money-check-dollar
-  //-           h5.card-title Profit
-  //-           p.card-text 70%
-  //-     .col-md-3
-  //-       .dash-card
-  //-         .card-body
-  //-           i.fa-solid.fa-coins
-  //-           h5.card-title Revenue
-  //-           p.card-text Shs. 50,000
-  //-     .col-md-3
-  //-       .dash-card
-  //-         .card-body
-  //-           i.fa-solid.fa-users-line
-  //-           h5.card-title Customers
-  //-           p.card-text 15
-  //-   br
-  //-   br
-  //-   br
-  .include
-    a.btns(href='/addStock') Add Stock
-    a#downloadExcel.btns Download Excel
-    a#downloadPdf.btns Download PDF
+body
+  header
+    aside.side-menu-container.active
+      .logo-menu
+        h2.logo MWF
+        i.fa-solid.fa-bars
+      ul.list
+        li.list-item
+          a(href='dashboard')
+            i.fa-solid.fa-house
+            span.link-name Dashboard
+        li.list-item
+          a(href='usersList')
+            i.fa-solid.fa-users
+            span.link-name Users
+        li.list-item
+          a(href='sales')
+            i.fa-solid.fa-cart-shopping
+            span.link-name Sales
+        li.list-item.active
+          a(href='stock')
+            i.fa-solid.fa-truck
+            span.link-name Stock
+        li.list-item
+          a(href='products')
+            i.fa-solid.fa-couch
+            span.link-name Products
+        li.list-item
+          a(href='settings')
+            i.fa-solid.fa-gear
+            span.link-name Settings
+  main.main-content
+    nav.navbar.bg-body-tertiary.dashboard-header
+      .container-fluid.d-flex.justify-content-end.align-items-center
+        .d-flex.align-items-center
+          a.logoutBtn(href='/index') Logout
+          if success
+            .container.mt-3
+              .alert.alert-success.alert-dismissible.fade.show(role="alert")
+                i.fas.fa-check-circle.me-2
+                strong Success! 
+                | #{success}
+                button.btn-close(type="button" data-bs-dismiss="alert")
+          if error
+            .container.mt-3
+              .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+                i.fas.fa-exclamation-circle.me-2
+                strong Error! 
+                | #{error}
+                button.btn-close(type="button" data-bs-dismiss="alert")
     
-    .table-filter(style="display: inline-block; margin-left: 20px;")
+    .include
+      a.btns(href='/addStock') Add Stock
+      a#downloadExcel.btns Download Excel
+      a#downloadPdf.btns Download PDF
+      
+      .table-filter(style="display: inline-block; margin-left: 20px;")
         label.filter-label(for="productFilter") Filter by:
         select#productFilter.filter-dropdown
-            option(value="all") All Products
-            option(value="raw") Raw Only
-            option(value="furniture") Furniture Only
+          option(value="all") All Products
+          option(value="raw") Raw Only
+          option(value="furniture") Furniture Only
 
-    input#searchStock(type='search' placeholder='Search...')
-  section
-    table#newStock.table-content
-     thead.row-one
-      tr
-          th Product Name
-          th Product Type
-          th Quantity
-          th Cost Price UGX
-          th Product Price UGX
-          th Supplier Name
-          th Supplier Contact
-          th Quality
-          th Date
-          if currentUser && (currentUser.role === "manager")
-            th Actions 
-      tbody.row-others
-        if items.length 
-          each item in items 
-            tr 
-              td #{item.pdtname}
-              td #{item.pdttype}
-              td #{item.pdtquantity}
-              td #{item.cprice.toLocaleString()}
-              td #{Math.round(item.cprice * 1.5).toLocaleString()}
-              td #{item.supplier}
-              td +256#{item.supplierContact}
-              td #{item.quality}
-              td #{new Date(item.date).toLocaleDateString()}
-              td.actions
-                if currentUser && currentUser.role === "manager"
-                  a.btn-icon(href=`/editStock/${item._id}` title='Edit')
-                    i.fas.fa-edit
-                  form(method='post', action='/deleteStock', style='display:inline')
-                    input(type='hidden', name='id', value=item._id)
-                    button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this item?')")
-                      i.fas.fa-trash
-                  form(method='post', action=`/generateReceipt/${item._id}`, style='display:inline')
-                    input(type='hidden', name='id', value=item._id)
-                    button.btn-icon(type='submit', title='Receipt')
-                      i.fas.fa-file-invoice
-    h5#notFound Not Found
-script(src='../javascript/stock.js')
-//  SheetJS
-script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
-// jsPDF + AutoTable
-script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
-script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js")
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
+      input#searchStock(type='search' placeholder='Search...')
+    
+    section.table-section
+        table#newStock.table-content
+          thead.row-one 
+            tr
+              th Product Name
+              th Product Type
+              th Total Quantity
+              th Available Quantity
+              th Cost Price UGX
+              th Product Price UGX
+              th Supplier Name
+              th Supplier Contact
+              th Quality
+              th Date
+              if currentUser && (currentUser.role === "manager")
+                th Actions 
+          tbody
+            if items && items.length > 0
+              //- Group items by product name for summary rows
+              - const groupedItems = {};
+              each item in items 
+                - if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
+                - groupedItems[item.pdtname].push(item);
+              
+              //- Display each product group with summary
+              each productGroup, productName in groupedItems
+                each item, index in productGroup
+                  tr(data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-'))
+                    td #{item.pdtname}
+                    td #{item.pdttype}
+                    td #{item.pdtquantity1}
+                    td #{item.pdtquantity}
+                    td #{item.cprice.toLocaleString()}
+                    td #{Math.round(item.cprice * 1.5).toLocaleString()}
+                    td #{item.supplier}
+                    td +256#{item.supplierContact}
+                    td #{item.quality}
+                    td #{new Date(item.date).toLocaleDateString()}
+                    td.actions
+                      if currentUser && currentUser.role === "manager"
+                        a.btn-icon(href=`/editStock/${item._id}` title='Edit')
+                          i.fas.fa-edit
+                        form(method='post', action='/deleteStock', style='display:inline')
+                          input(type='hidden', name='id', value=item._id)
+                          button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this item?')")
+                            i.fas.fa-trash
+                        form(method='post', action=`/generateReceipt/${item._id}`, style='display:inline')
+                          input(type='hidden', name='id', value=item._id)
+                          button.btn-icon(type='submit', title='Receipt')
+                            i.fas.fa-file-invoice
+                
+                //- Summary row for each product group
+                - 
+                  const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
+                  const availableQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity || 0), 0);
+                  const totalValue = productGroup.reduce((sum, item) => sum + (Math.round(item.cprice * 1.5) * parseInt(item.pdtquantity || 0)), 0);
+                tr.product-summary-row
+                  td(colspan="2") 
+                    strong #{productName} Total
+                  td 
+                    strong #{totalQuantity}
+                  td 
+                    strong #{availableQuantity}
+                  td 
+                  td 
+                    strong #{totalValue.toLocaleString()}
+                  td(colspan="5")
+
+            else
+              tr
+                td(colspan="11" style="text-align: center;") No stock items found
+        h5#notFound Not Found
+
+  script(src='../javascript/stock.js')
+  //- SheetJS
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
+  //- jsPDF + AutoTable
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js")
+  script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js", integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL", crossorigin="anonymous")

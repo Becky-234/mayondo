@@ -25,9 +25,12 @@ router.get("/stock", ensureAuthenticated, async (req, res) => {
   }
 });
 
+
 router.post("/stock", ensureAuthenticated, (req, res) => {
   console.log(req.body);
 });
+
+
 
 // Add stock page - GET with messages
 router.get("/addStock", ensureManager, (req, res) => {
@@ -41,6 +44,7 @@ router.get("/addStock", ensureManager, (req, res) => {
     currentUser: req.user // Pass current user to template
   });
 });
+
 
 // Add stock - POST
 router.post("/addStock", ensureManager, async (req, res) => {
@@ -61,6 +65,7 @@ router.post("/addStock", ensureManager, async (req, res) => {
     res.redirect("/addStock?error=Unable to add stock item. Please try again.");
   }
 });
+
 
 
 // Updating stock - GET with messages
@@ -114,6 +119,8 @@ router.post("/editStock/:id", ensureManager, async (req, res) => {
   }
 });
 
+
+
 // Deleting stock with messages
 router.post("/deleteStock", ensureManager, async (req, res) => {
   try {
@@ -129,6 +136,8 @@ router.post("/deleteStock", ensureManager, async (req, res) => {
     res.redirect("/stock?error=Unable to delete stock item from the database");
   }
 });
+
+
 
 // Generating receipt - Only authenticated users
 router.post("/generateReceipt/:id", ensureAuthenticated, async (req, res) => {

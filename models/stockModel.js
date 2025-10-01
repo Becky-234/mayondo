@@ -13,6 +13,15 @@ const stockSchema = new mongoose.Schema({
         //     values: ['Raw', 'Furniture']
         // }
     },
+    pdtquantity1: {
+        type: Number,
+        required: [true, 'Total Product quantity is required'],
+        min: [0, 'Quantity cannot be negative'],
+        // validate: {
+        //     validator: Number.isInteger,
+        //     message: 'Quantity must be a whole number'
+        // }
+    },
     pdtquantity: {
         type: Number,
         required: [true, 'Product quantity is required'],
@@ -67,12 +76,12 @@ const stockSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: [true, 'Date is required'],
-        validate: {
-            validator: function (date) {
-                return date <= new Date();
-            },
-            message: 'Date cannot be in the future'
-        }
+        // validate: {
+        //     validator: function (date) {
+        //         return date <= new Date();
+        //     },
+        //     message: 'Date cannot be in the future'
+        // }
     }
     //     addedBy: {
     //         type: mongoose.Schema.Types.ObjectId,

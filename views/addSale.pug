@@ -55,38 +55,46 @@ main.main-content
         strong Error! 
         | #{error}
         button.btn-close(type="button" data-bs-dismiss="alert")
-         // STOCK ALERT BANNER (Top of page)
+  
+  // STOCK ALERT BANNER (Top of page)
   if lowStockItems && lowStockItems.length > 0
     .container.mt-3
-       .alert.alert-warning.d-flex.align-items-center.w-50.mx-auto 
+      .alert.alert-warning.d-flex.align-items-center.w-50.mx-auto 
         i.fas.fa-exclamation-triangle.me-2
         strong Stock Alert: 
         | #{lowStockItems.length} product(s) are running low on stock.
+  
   .user-form-container
     form#addSale(action="/addSale", method="post")  
       h2 Add Sale Here!   
       label(for="name") Name of Customer
       br
       input#name(type="text", name="name", required)
+      .invalid-feedback Please enter a valid price.
       br
       br
       label(for="contact") Customer Contact
       br
-      input#name(type="text", name="contact", required)
+      input#contact(type="text", name="contact", required)
       br
       br
       label(for="nproduct") Name of Product
       br
       select#nproduct(name="nproduct", required, onchange="updateStockAlert()")
-        if stocks.length
-          each stock in stocks
-             option(
-              value=stock.pdtname, 
-              data-stock-quantity=stock.pdtquantity,
-              data-stock-status=stock.stockStatus,
-              data-alert-message=stock.alertMessage,
-              disabled=(stock.stockStatus === "out-of-stock")
-            )= stock.pdtname + (stock.stockStatus === "out-of-stock" ? " - OUT OF STOCK" : "")
+        option(value="", disabled, selected) Select Product
+        if products && products.length
+          each product in products
+            option(
+              value=product.pdtname, 
+              data-stock-quantity=product.availableQuantity,
+              data-stock-status=product.stockStatus,
+              data-alert-message=product.alertMessage,
+              data-product-type=product.pdttype,
+              data-unit-price=product.unitPrice,
+              disabled=(product.stockStatus === "out-of-stock")
+            )= product.pdtname + (product.stockStatus === "out-of-stock" ? " - OUT OF STOCK" : ` (Available: ${product.availableQuantity}, Price: ${Math.round(product.unitPrice).toLocaleString()} UGX)`)
+        else
+          option(value="", disabled) No products available
 
       // STOCK ALERT DISPLAY (Dynamic - appears after product selection)
       #stockAlertContainer.mt-2(style="display: none;")
@@ -96,14 +104,14 @@ main.main-content
       label(for="tproduct") Type of Product
       br
       select#tproduct(name="tproduct", required)
-        option(value, disabled, selected) Select Type of Product 
+        option(value="", disabled, selected) Select Type of Product 
         option(value="Raw") Raw 
         option(value="Furniture") Furniture 
       br
       br
       label(for="quantity") Quantity
       br
-      input#quantity(type="number", name="quantity", required)
+      input#quantity(type="number", name="quantity", required, min="1")
       br
       br
       label(for="unitPrice") Unit Price
@@ -123,7 +131,7 @@ main.main-content
       label(for="payment") Select Payment Method
       br
       select#payment(name="payment", required)
-        option(value, disabled, selected) Select Payment Method
+        option(value="", disabled, selected) Select Payment Method
         option(value="Bank Overdraft") Bank Overdraft 
         option(value="Cash") Cash
         option(value="Cheque") Cheque
@@ -137,5 +145,95 @@ main.main-content
       .add
         button.btns(type="submit") Save
         button.btns(type="reset") Cancel
+
+script.
+  function updateStockAlert() {
+    const productSelect = document.getElementById('nproduct');
+    const selectedOption = productSelect.options[productSelect.selectedIndex];
+    const alertContainer = document.getElementById('stockAlertContainer');
+    const alertElement = document.getElementById('stockAlert');
+    
+    if (selectedOption && selectedOption.value) {
+      const stockStatus = selectedOption.getAttribute('data-stock-status');
+      const alertMessage = selectedOption.getAttribute('data-alert-message');
+      const productType = selectedOption.getAttribute('data-product-type');
+      const unitPrice = selectedOption.getAttribute('data-unit-price');
+      
+      // Auto-fill product type and unit price
+      if (productType) {
+        document.getElementById('tproduct').value = productType;
+      }
+      if (unitPrice) {
+        document.getElementById('unitPrice').value = Math.round(unitPrice).toLocaleString();
+      }
+      
+      // Show stock alert if needed
+      if (stockStatus && stockStatus !== 'normal') {
+        let alertClass = '';
+        let icon = '';
+        
+        switch(stockStatus) {
+          case 'low-stock':
+            alertClass = 'alert-warning';
+            icon = 'fa-exclamation-triangle';
+            break;
+          case 'out-of-stock':
+            alertClass = 'alert-danger';
+            icon = 'fa-times-circle';
+            break;
+          case 'medium-stock':
+            alertClass = 'alert-info';
+            icon = 'fa-info-circle';
+            break;
+        }
+        
+        alertElement.className = `alert ${alertClass} alert-dismissible fade show`;
+        alertElement.innerHTML = `
+          <i class="fas ${icon} me-2"></i>
+          <strong>Stock Alert:</strong> ${alertMessage}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        alertContainer.style.display = 'block';
+      } else {
+        alertContainer.style.display = 'none';
+      }
+    } else {
+      alertContainer.style.display = 'none';
+    }
+    
+    // Recalculate total price
+    calculateTotalPrice();
+  }
+
+  function calculateTotalPrice() {
+    const quantity = document.getElementById('quantity').value;
+    const unitPrice = document.getElementById('unitPrice').value.replace(/,/g, '');
+    const transportCheck = document.getElementById('transportCheck').checked;
+    const totalPriceField = document.getElementById('totalPrice');
+    
+    if (quantity && unitPrice) {
+      let total = parseFloat(quantity) * parseFloat(unitPrice);
+      
+      if (transportCheck) {
+        total *= 1.05; // Add 5% transport fee
+      }
+      
+      totalPriceField.value = Math.round(total).toLocaleString();
+    } else {
+      totalPriceField.value = '';
+    }
+  }
+
+  // Event listeners for real-time calculations
+  document.getElementById('quantity').addEventListener('input', calculateTotalPrice);
+  document.getElementById('unitPrice').addEventListener('input', calculateTotalPrice);
+  document.getElementById('transportCheck').addEventListener('change', calculateTotalPrice);
+
+  // Set today's date as default
+  document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').value = today;
+  });
+
 script(src="../javascript/sales.js")
 script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js", integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI", crossorigin="anonymous")

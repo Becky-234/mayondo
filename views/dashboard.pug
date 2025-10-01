@@ -109,7 +109,7 @@ main.main-content
             .card-body
               i.fa-solid.fa-exclamation
               h6.card-title Raw Warnings
-              p.card-text #{dashboardData.rawStockWarnings}
+              p.card-text #{dashboardData.rawStockWarnings} 
         .col
           .dash-card.raw-card
             .card-body
@@ -169,41 +169,6 @@ main.main-content
               p.card-text Shs. #{dashboardData.furnitureInventoryValue}
       br
       br
-    //- section.charts
-    //-   .row.row-cols-1.row-cols-md-3.g-3
-    //-     // g-3 adds gutters between columns
-    //-     .col
-    //-       .card.shadow-sm.p-3.mb-4
-    //-         // mb-4 for spacing below cards
-    //-         .card-body
-    //-           h5.card-title Sales Overview
-    //-           canvas#salesChart
-    //-     .col
-    //-       .card.shadow-sm.p-3.mb-4
-    //-         .card-body
-    //-           h5.card-title Product Cartegories
-    //-           canvas#productsChart
-    //-     .col
-    //-       .card.shadow-sm.p-3.mb-4
-    //-         .card-body
-    //-           h5.card-title Stock Status
-    //-           canvas#stockChart
-    //- .col-md-6
-    //-   .card.shadow-sm.p-3.mb-4
-    //-     .card-body
-    //-       h5.card-title Top products earlier this year
-    //-       ol
-    //-         li Beds
-    //-         progress(value='80' max='100')
-    //-         br
-    //-         li Timber
-    //-         progress(value='75' max='100')
-    //-         br
-    //-         li Chairs
-    //-         progress(value='60' max='100')
-    //-         br
-    //-         li Tables
-    //-         progress(value='55' max='100')
 script(src='../javascript/dashboard.js')
 script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
 script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.min.js' integrity='sha512-n/G+dROKbKL3GVngGWmWfwK0yPctjZQM752diVYnXZtD/48agpUKLIn0xDQL9ydZ91x6BiOmTIFwWjjFi2kEFg==' crossorigin='anonymous' referrerpolicy='no-referrer')

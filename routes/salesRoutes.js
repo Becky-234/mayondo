@@ -6,8 +6,6 @@ const StockModel = require("../models/stockModel");
 const UserModel = require("../models/userModel");
 const { ensureAuthenticated, ensureAgent, ensureManager } = require("../middleware/auth");
 
-
- 
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", ensureAuthenticated, async (req, res) => {
   try {
@@ -98,61 +96,86 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
     console.error(error);
     res.status(400).send("Unable to get sales");
   }
-}); 
+});
 
 //POST sales
 router.post("/sales", (req, res) => {
-  res.render("sales")
+  console.log(req.body);
 });
 
-
-
-
-// GET add-sale form
+// GET add-sale form - FIXED: Group products to avoid duplicates
 router.get("/addSale", ensureAuthenticated, async (req, res) => {
-
   try {
-    const stocks = await StockModel.find();
-    const success = req.query.success;
-    const error = req.query.error;
+    // Use aggregation to group products and calculate totals
+    const groupedProducts = await StockModel.aggregate([
+      {
+        $group: {
+          _id: "$pdtname",
+          pdtname: { $first: "$pdtname" },
+          pdttype: { $first: "$pdttype" },
+          totalQuantity: { $sum: "$pdtquantity1" },
+          availableQuantity: { $sum: "$pdtquantity" },
+          costPrice: { $avg: "$cprice" },
+          supplier: { $first: "$supplier" },
+          quality: { $first: "$quality" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          pdtname: 1,
+          pdttype: 1,
+          totalQuantity: 1,
+          availableQuantity: 1,
+          costPrice: 1,
+          unitPrice: { $multiply: ["$costPrice", 1.5] }, // Calculate selling price
+          supplier: 1,
+          quality: 1
+        }
+      },
+      { $sort: { pdtname: 1 } }
+    ]);
 
     // Add stock level information to each product
-    const stocksWithAlerts = stocks.map(stock => {
+    const productsWithAlerts = groupedProducts.map(product => {
       let status = "normal";
       let alertMessage = "";
 
-      if (stock.pdtquantity === 0) {
+      if (product.availableQuantity === 0) {
         status = "out-of-stock";
         alertMessage = "Out of Stock";
-      } else if (stock.pdtquantity <= 5) {
+      } else if (product.availableQuantity <= 5) {
         status = "low-stock";
-        alertMessage = `Low Stock (${stock.pdtquantity} left)`;
-      } else if (stock.pdtquantity <= 10) {
+        alertMessage = `Low Stock (${product.availableQuantity} left)`;
+      } else if (product.availableQuantity <= 10) {
         status = "medium-stock";
-        alertMessage = `Medium Stock (${stock.pdtquantity} left)`;
+        alertMessage = `Medium Stock (${product.availableQuantity} left)`;
       }
 
       return {
-        ...stock.toObject(),
+        ...product,
         stockStatus: status,
         alertMessage: alertMessage
       };
     });
 
+    const success = req.query.success;
+    const error = req.query.error;
+
     res.render("addSale", {
-      stocks: stocksWithAlerts,
-      lowStockItems: stocks.filter(stock => stock.pdtquantity <= 5),
+      products: productsWithAlerts, // Changed from 'stocks' to 'products'
+      lowStockItems: productsWithAlerts.filter(product => product.availableQuantity <= 5),
       success,
       error,
       currentUser: req.user
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("Error loading sale form:", error.message);
     res.status(500).send("Error loading sale form");
   }
 });
 
-// POST add-sale with success/error handling
+// POST add-sale with success/error handling - FIXED: Handle grouped products
 router.post("/addSale", ensureAuthenticated, async (req, res) => {
   console.log("POST /addSale hit", req.body);
 
@@ -191,20 +214,33 @@ router.post("/addSale", ensureAuthenticated, async (req, res) => {
       return res.redirect("/addSale?error=Missing required fields: " + missingFields.join(', '));
     }
 
-    // Check if stock exists
-    console.log("3. Looking for stock:", { pdtname: nproduct, pdttype: tproduct });
-    const stock = await StockModel.findOne({ pdtname: nproduct, pdttype: tproduct });
-    console.log("4. Found stock:", stock ? stock.pdtname : "NOT FOUND");
+    // Check available stock using aggregation to get total available
+    console.log("3. Checking stock for:", { pdtname: nproduct });
+    const stockResult = await StockModel.aggregate([
+      { $match: { pdtname: nproduct } },
+      {
+        $group: {
+          _id: "$pdtname",
+          totalAvailable: { $sum: "$pdtquantity" },
+          stockEntries: { $push: "$$ROOT" }
+        }
+      }
+    ]);
 
-    if (!stock) {
-      console.log("Stock not found for:", nproduct, tproduct);
+    console.log("4. Stock aggregation result:", stockResult);
+
+    if (!stockResult || stockResult.length === 0) {
+      console.log("Stock not found for:", nproduct);
       return res.redirect("/addSale?error=Stock not found for the selected product!");
     }
 
-    console.log("5. Stock quantity check:", { available: stock.pdtquantity, requested: quantity });
-    if (stock.pdtquantity < Number(quantity)) {
-      console.log("Insufficient stock. Available:", stock.pdtquantity, "Requested:", quantity);
-      return res.redirect(`/addSale?error=Insufficient stock! Only ${stock.pdtquantity} units available.`);
+    const totalAvailable = stockResult[0].totalAvailable;
+    const stockEntries = stockResult[0].stockEntries;
+
+    console.log("5. Stock quantity check:", { available: totalAvailable, requested: quantity });
+    if (totalAvailable < Number(quantity)) {
+      console.log("Insufficient stock. Available:", totalAvailable, "Requested:", quantity);
+      return res.redirect(`/addSale?error=Insufficient stock! Only ${totalAvailable} units available.`);
     }
 
     let total = Number(totalPrice);
@@ -260,11 +296,30 @@ router.post("/addSale", ensureAuthenticated, async (req, res) => {
     await sale.save();
     console.log("12. Sale saved successfully with ID:", sale._id);
 
-    console.log("13. Updating stock quantity...");
-    // Decrease Quantity from the stock collection
-    stock.pdtquantity -= Number(quantity);
-    await stock.save();
-    console.log("14. Stock updated successfully. New quantity:", stock.pdtquantity);
+    console.log("13. Updating stock quantities...");
+    // Update stock quantities using FIFO (First In First Out)
+    let remainingQuantity = Number(quantity);
+
+    // Sort stock entries by date (oldest first for FIFO)
+    const sortedStockEntries = stockEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    for (const stockEntry of sortedStockEntries) {
+      if (remainingQuantity <= 0) break;
+
+      const availableInThisBatch = stockEntry.pdtquantity;
+      const quantityToDeduct = Math.min(availableInThisBatch, remainingQuantity);
+
+      if (quantityToDeduct > 0) {
+        await StockModel.findByIdAndUpdate(
+          stockEntry._id,
+          { $inc: { pdtquantity: -quantityToDeduct } }
+        );
+        console.log(`Deducted ${quantityToDeduct} from stock batch ${stockEntry._id}`);
+        remainingQuantity -= quantityToDeduct;
+      }
+    }
+
+    console.log("14. Stock updated successfully. Remaining quantity to deduct:", remainingQuantity);
 
     console.log("=== SALE PROCESS COMPLETED SUCCESSFULLY ===");
     res.redirect("/sales?success=Sale completed successfully!");
@@ -286,9 +341,6 @@ router.post("/addSale", ensureAuthenticated, async (req, res) => {
   }
 });
 
-
-
-
 //UPDATING SALES
 router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
@@ -300,7 +352,7 @@ router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res
       return res.redirect("/sales?error=Sale not found");
     }
 
-    res.render("editSales", { // Make sure this matches your .pug filename
+    res.render("editSales", { // Make sure this matches .pug filename
       item,
       success,
       error,
@@ -311,7 +363,6 @@ router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res
     res.redirect("/sales?error=Sale not found");
   }
 });
-
 
 router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
@@ -376,7 +427,6 @@ router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, re
   }
 });
 
-
 // DELETING SALES - Only managers can delete
 router.post("/deleteSale", ensureManager, async (req, res) => {
   try {
@@ -392,9 +442,6 @@ router.post("/deleteSale", ensureManager, async (req, res) => {
     res.redirect("/sales?error=Unable to delete sale from the database");
   }
 });
-
-
-
 
 // GENERATING RECEIPT
 router.post("/getReceipt/:id", ensureAuthenticated, async (req, res) => {

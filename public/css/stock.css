@@ -284,7 +284,7 @@ body.sidebar-active {
 
 #notFound {
   color: red;
-  display: none;
+  display: none !important;
   text-align: center;
   margin-top: 10px;
 }
@@ -485,4 +485,26 @@ td.actions .btn-icon:hover {
 .status-normal {
   background: #d1edf1;
   color: #0c5460;
+}
+
+
+/* Product summary rows in table */
+.product-summary-row {
+  background-color: #e8f5e8 !important;
+  border-top: 2px solid #28a745;
+  font-weight: 600;
+}
+
+.product-summary-row td {
+  color: #2d5016;
+  padding: 12px 8px;
+}
+
+.product-summary-row:hover {
+  background-color: #d4edda !important;
+}
+
+/* Optional: Add some spacing between product groups */
+tr[data-product] {
+  border-bottom: 1px solid #dee2e6;
 }
