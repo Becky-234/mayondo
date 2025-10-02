@@ -250,8 +250,9 @@ input {
 }
 
 select {
-  width: 70%;
-  padding: px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
 }
 
 #transportCheck {
@@ -326,4 +327,23 @@ label {
   font-size: 12px;
   padding: 2px 6px;
   border-radius: 3px;
+}
+
+
+.error {
+  color: #ff0000 !important;
+  font-size: 14px !important;
+  margin-top: 5px !important;
+  display: block !important;
+  font-weight: bold !important;
+  /* background: rgba(255, 0, 0, 0.1) !important; */
+  padding: 5px !important;
+  border-radius: 3px !important;
+}
+
+.error-border {
+  border: 3px solid #ff0000 !important;
+  border-radius: 5px !important;
+  background-color: #fff0f0 !important;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3) !important;
 }

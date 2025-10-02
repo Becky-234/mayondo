@@ -1,233 +1,374 @@
-// Side menu toggle
-const sidebar = document.querySelector(".side-menu-container");
-const toggleBtn = document.querySelector(".fa-bars");
+// side menu
+const sidebar = document.querySelector('.side-menu-container');
+const toggleBtn = document.querySelector('.fa-bars');
 
-toggleBtn.addEventListener("click", () => {
-  sidebar.classList.toggle("collapsed");
+toggleBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('collapsed');
   console.log("Sidebar toggled");
 });
 
+// Form validation with error messages
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('addSale');
 
-//PDF Export
+  // STOP BROWSER'S DEFAULT VALIDATION
+  form.setAttribute('novalidate', 'novalidate');
+
+  // Remove required attributes to prevent browser validation
+  const requiredFields = form.querySelectorAll('[required]');
+  requiredFields.forEach(field => {
+    field.removeAttribute('required');
+  });
+
+  // Form submit event
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Clear previous errors
+    clearAllErrors();
+
+    let isValid = true;
+    let firstErrorField = null;
+
+    // Validate all required fields
+    const fieldsToValidate = [
+      { id: 'name', name: 'Name of Customer', type: 'text' },
+      { id: 'contact', name: 'Customer Contact', type: 'text' },
+      { id: 'nproduct', name: 'Name of Product', type: 'select' },
+      { id: 'tproduct', name: 'Type of Product', type: 'select' },
+      { id: 'quantity', name: 'Quantity', type: 'number' },
+      { id: 'unitPrice', name: 'Unit Price', type: 'text' },
+      { id: 'totalPrice', name: 'Total Price', type: 'text' },
+      { id: 'payment', name: 'Payment Method', type: 'select' },
+      { id: 'date', name: 'Date', type: 'date' }
+    ];
+
+    fieldsToValidate.forEach(fieldInfo => {
+      const field = document.getElementById(fieldInfo.id);
+      if (!field) {
+        console.log('Field not found:', fieldInfo.id);
+        return;
+      }
+
+      let value = field.value;
+      if (fieldInfo.type === 'text' || fieldInfo.type === 'number') {
+        value = value.trim();
+      }
+
+      console.log('Validating field:', fieldInfo.id, 'Value:', value);
+
+      // Check if field is empty
+      if (!value || value === '') {
+        console.log('Field is empty:', fieldInfo.id);
+        showError(field, `${fieldInfo.name} is required`);
+        isValid = false;
+        if (!firstErrorField) firstErrorField = field;
+        return;
+      }
+
+      // Field-specific validations
+      switch (fieldInfo.id) {
+        case 'contact':
+          if (!isValidContact(value)) {
+            showError(field, 'Please enter a valid contact number (at least 10 digits)');
+            isValid = false;
+            if (!firstErrorField) firstErrorField = field;
+          }
+          break;
+
+        case 'quantity':
+          const quantity = parseInt(value);
+          if (isNaN(quantity) || quantity <= 0) {
+            showError(field, 'Quantity must be greater than 0');
+            isValid = false;
+            if (!firstErrorField) firstErrorField = field;
+          }
+          break;
+
+        case 'unitPrice':
+          const priceValue = parseFloat(value.replace(/,/g, ''));
+          if (isNaN(priceValue) || priceValue <= 0) {
+            showError(field, 'Unit price must be greater than 0');
+            isValid = false;
+            if (!firstErrorField) firstErrorField = field;
+          }
+          break;
+
+        case 'nproduct':
+          if (value === '' || field.options[field.selectedIndex].disabled) {
+            showError(field, 'Please select a valid product');
+            isValid = false;
+            if (!firstErrorField) firstErrorField = field;
+          }
+          break;
+
+        case 'tproduct':
+        case 'payment':
+          if (value === '') {
+            showError(field, `Please select ${fieldInfo.name.toLowerCase()}`);
+            isValid = false;
+            if (!firstErrorField) firstErrorField = field;
+          }
+          break;
+
+        case 'totalPrice':
+          const totalValue = parseFloat(value.replace(/,/g, ''));
+          if (isNaN(totalValue) || totalValue <= 0) {
+            showError(field, 'Total price must be calculated and greater than 0');
+            isValid = false;
+            if (!firstErrorField) firstErrorField = field;
+          }
+          break;
+      }
+    });
+
+    if (isValid) {
+      console.log('Form is valid, submitting...');
+      // If all validations pass, submit the form
+      form.submit();
+    } else {
+      console.log('Form has errors');
+      // Scroll to first error
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstErrorField.focus();
+      }
+    }
+  });
+
+  function showError(field, message) {
+    console.log('Showing error for field:', field.id, message);
+
+    // Add error class to field
+    field.classList.add('error-field');
+
+    // Add red border directly
+    field.style.border = '2px solid #dc3545';
+    field.style.boxShadow = '0 0 5px rgba(220, 53, 69, 0.5)';
+
+    // Find the parent container to append error message
+    let parentContainer = field.parentNode;
+
+    // Create or update error message
+    let errorElement = parentContainer.querySelector('.error-message');
+    if (!errorElement) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'error-message';
+      parentContainer.appendChild(errorElement);
+    }
+
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+    errorElement.style.color = '#dc3545';
+    errorElement.style.fontSize = '0.875rem';
+    errorElement.style.marginTop = '0.25rem';
+    errorElement.style.fontWeight = '500';
+  }
+
+  function clearAllErrors() {
+    console.log('Clearing all errors');
+
+    // Remove all error styling
+    const errorFields = document.querySelectorAll('.error-field');
+    errorFields.forEach(field => {
+      field.classList.remove('error-field');
+      field.style.border = '';
+      field.style.boxShadow = '';
+    });
+
+    // Hide all error messages
+    const errorMessages = document.querySelectorAll('.error-message');
+    errorMessages.forEach(msg => {
+      msg.style.display = 'none';
+    });
+  }
+
+  // Clear error when user starts typing or changes selection
+  const inputs = form.querySelectorAll('input, select');
+  inputs.forEach(input => {
+    input.addEventListener('input', function () {
+      clearFieldError(this);
+    });
+
+    input.addEventListener('change', function () {
+      clearFieldError(this);
+    });
+  });
+
+  function clearFieldError(field) {
+    field.classList.remove('error-field');
+    field.style.border = '';
+    field.style.boxShadow = '';
+
+    const parentContainer = field.parentNode;
+    const errorElement = parentContainer.querySelector('.error-message');
+    if (errorElement) {
+      errorElement.style.display = 'none';
+    }
+  }
+
+  function isValidContact(contact) {
+    // Remove all non-digit characters and check length
+    const digitsOnly = contact.replace(/\D/g, '');
+    return digitsOnly.length >= 10;
+  }
+});
+
+// Your existing PDF, Excel, and search functionality...
 const pdfBtn = document.getElementById("downloadPdf");
 if (pdfBtn) {
   pdfBtn.addEventListener("click", () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    doc.text("Sales Report", 14, 20);
+    doc.text("User Report", 14, 20);
 
     doc.autoTable({
-      html: "#salesTable",
+      html: '#addUser',
       startY: 30,
-      styles: { fontSize: 10 },
-      headStyles: { fillColor: [0, 119, 204] },
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [0, 119, 204] }
     });
-    doc.save("Sales_Report.pdf");
+
+    doc.save('User_Report.pdf');
   });
 }
 
-//Excel Export
 const excelBtn = document.getElementById("downloadExcel");
 if (excelBtn) {
   excelBtn.addEventListener("click", () => {
-    const table = document.getElementById("salesTable");
+    const table = document.getElementById("addUser");
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.table_to_sheet(table);
 
-    XLSX.utils.book_append_sheet(wb, ws, "sales");
-    XLSX.writeFile(wb, "Sales_Report.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, 'Users');
+    XLSX.writeFile(wb, 'User_Report.xlsx');
   });
 }
 
-
-// Search on the sales table
-document.addEventListener("DOMContentLoaded", () => {
-  const table = document.getElementById("salesTable");
-  if (!table) {
-    // We are not on sales.html, so skip the search code
-    return;
-  }
-
-  const input = document.getElementById("searchSale");
+// Search on the User Table
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('searchUser');
+  const table = document.getElementById('addUser');
   const tbody = table.tBodies[0];
-  const rows = tbody.getElementsByTagName("tr");
-  const notFound = document.getElementById("notFound");
+  const rows = tbody.getElementsByTagName('tr');
+  const notFound = document.getElementById('notFound');
 
-  input.addEventListener("keyup", () => {
-    const filter = input.value.toUpperCase();
-    let hasResult = false;
+  if (input && table) {
+    input.addEventListener('keyup', () => {
+      const filter = input.value.toUpperCase();
+      let hasResult = false;
 
-    for (let i = 0; i < rows.length; i++) {
-      const cells = rows[i].getElementsByTagName("td");
-      let found = false;
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td');
+        let found = false;
 
-      for (let j = 0; j < cells.length; j++) {
-        //Use textContent or innerText, not cellTextContent
-        const cellText = cells[j].textContent || cells[j].innerText;
-        if (cellText.toUpperCase().includes(filter)) {
-          found = true;
-          hasResult = true;
-          break;
+        for (let j = 0; j < cells.length; j++) {
+          const cellText = cells[j].textContent || cells[j].innerText;
+          if (cellText.toUpperCase().includes(filter)) {
+            found = true;
+            hasResult = true;
+            break;
+          }
         }
-      }
-      rows[i].style.display = found ? "" : "none";
-    }
-    notFound.style.display = hasResult ? "none" : "block";
-  });
-});
-
-
-// Calculating Total
-// Wait for DOM to load
-document.addEventListener('DOMContentLoaded', function () {
-  const unitprice = document.getElementById('unitPrice');
-  const qty = document.getElementById('quantity');
-  const totalprice = document.getElementById('totalPrice');
-
-  // Only run if elements exist
-  if (unitprice && qty && totalprice) {
-    function updateTotal() {
-      const unitPrice = parseFloat(unitprice.value) || 0;
-      const quantity = parseFloat(qty.value) || 0;
-      if (!isNaN(quantity) && !isNaN(unitPrice)) {
-        totalprice.value = (quantity * unitPrice).toFixed(2);
-      } else {
-        totalprice.value = "";
-      }
-    }
-
-    unitprice.addEventListener('input', updateTotal);
-    qty.addEventListener('input', updateTotal);
-  }
-});
-
-
-// Table filtering functionality
-document.addEventListener('DOMContentLoaded', function () {
-  const productFilter = document.getElementById('productFilter');
-  const tableBody = document.querySelector('#salesTable tbody.row-others');
-
-  if (!productFilter || !tableBody) {
-    console.error('Required elements not found');
-    return;
-  }
-
-  const rows = tableBody.querySelectorAll('tr');
-
-  productFilter.addEventListener('change', function () {
-    const filterValue = this.value;
-
-    rows.forEach(row => {
-      // Check if this is the "No sales records found" row
-      if (row.cells.length <= 1) {
-        return; // Skip this row
+        rows[i].style.display = found ? '' : 'none';
       }
 
-      // Get the product type from the FOURTH table cell (index 3) - Product Type column
-      const productTypeCell = row.cells[3]; // Fourth column (Product Type)
-      const productType = productTypeCell.textContent.toLowerCase().trim();
-
-      switch (filterValue) {
-        case 'all':
-          row.style.display = '';
-          break;
-        case 'raw':
-          // Show rows where product type contains "raw"
-          row.style.display = productType.includes('raw') ? '' : 'none';
-          break;
-        case 'furniture':
-          // Show rows where product type contains "furniture"
-          row.style.display = productType.includes('furniture') ? '' : 'none';
-          break;
-        default:
-          row.style.display = '';
+      if (notFound) {
+        notFound.style.display = hasResult ? 'none' : 'block';
       }
     });
-  });
+  }
 });
 
-
-
-//STOCK ALEART
+// Keep your existing functions for stock alert and calculations
 function updateStockAlert() {
   const productSelect = document.getElementById('nproduct');
   const selectedOption = productSelect.options[productSelect.selectedIndex];
   const alertContainer = document.getElementById('stockAlertContainer');
-  const alertDiv = document.getElementById('stockAlert');
-  const quantityInput = document.getElementById('quantity');
-  const quantityAlert = document.getElementById('quantityAlert');
+  const alertElement = document.getElementById('stockAlert');
 
-  if (selectedOption && selectedOption.dataset.stockStatus) {
-    const status = selectedOption.dataset.stockStatus;
-    const message = selectedOption.dataset.alertMessage;
-    const availableStock = parseInt(selectedOption.dataset.stockQuantity);
+  if (selectedOption && selectedOption.value) {
+    const stockStatus = selectedOption.getAttribute('data-stock-status');
+    const alertMessage = selectedOption.getAttribute('data-alert-message');
+    const productType = selectedOption.getAttribute('data-product-type');
+    const unitPrice = selectedOption.getAttribute('data-unit-price');
 
-    // Set max quantity to available stock
-    quantityInput.max = availableStock;
+    // Auto-fill product type and unit price
+    if (productType) {
+      document.getElementById('tproduct').value = productType;
+    }
+    if (unitPrice) {
+      document.getElementById('unitPrice').value = Math.round(unitPrice).toLocaleString();
+    }
 
-    if (status !== 'normal') {
-      alertDiv.className = 'stock-alert ' + status;
-      alertDiv.innerHTML = `
-          <i class="fas fa-exclamation-triangle"></i>
-          <strong>${message}</strong>
-          ${status === 'out-of-stock' ? ' - Cannot be sold' : ''}
-        `;
-      alertContainer.style.display = 'block';
+    // Show stock alert if needed
+    if (stockStatus && stockStatus !== 'normal') {
+      let alertClass = '';
+      let icon = '';
 
-      // Disable quantity input if out of stock
-      if (status === 'out-of-stock') {
-        quantityInput.disabled = true;
-        quantityInput.value = '';
-      } else {
-        quantityInput.disabled = false;
+      switch (stockStatus) {
+        case 'low-stock':
+          alertClass = 'alert-warning';
+          icon = 'fa-exclamation-triangle';
+          break;
+        case 'out-of-stock':
+          alertClass = 'alert-danger';
+          icon = 'fa-times-circle';
+          break;
+        case 'medium-stock':
+          alertClass = 'alert-info';
+          icon = 'fa-info-circle';
+          break;
       }
+
+      alertElement.className = `alert ${alertClass} alert-dismissible fade show`;
+      alertElement.innerHTML = `
+                <i class="fas ${icon} me-2"></i>
+                <strong>Stock Alert:</strong> ${alertMessage}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+      alertContainer.style.display = 'block';
     } else {
       alertContainer.style.display = 'none';
-      quantityInput.disabled = false;
     }
   } else {
     alertContainer.style.display = 'none';
-    quantityInput.disabled = false;
   }
 
-  validateQuantity();
+  // Recalculate total price
+  calculateTotalPrice();
 }
 
-function validateQuantity() {
-  const productSelect = document.getElementById('nproduct');
-  const selectedOption = productSelect.options[productSelect.selectedIndex];
-  const quantityInput = document.getElementById('quantity');
-  const quantityAlert = document.getElementById('quantityAlert');
-  const availableStock = parseInt(selectedOption.dataset.stockQuantity);
-  const requestedQuantity = parseInt(quantityInput.value) || 0;
+function calculateTotalPrice() {
+  const quantity = document.getElementById('quantity').value;
+  const unitPrice = document.getElementById('unitPrice').value.replace(/,/g, '');
+  const transportCheck = document.getElementById('transportCheck').checked;
+  const totalPriceField = document.getElementById('totalPrice');
 
-  if (selectedOption && !selectedOption.disabled) {
-    if (requestedQuantity > availableStock) {
-      quantityAlert.textContent = `Cannot exceed available stock (${availableStock} units)`;
-      quantityAlert.style.display = 'block';
-      quantityInput.setCustomValidity('Quantity exceeds available stock');
-    } else if (availableStock - requestedQuantity <= 5 && requestedQuantity > 0) {
-      quantityAlert.textContent = `Warning: This sale will leave only ${availableStock - requestedQuantity} units in stock`;
-      quantityAlert.style.display = 'block';
-      quantityInput.setCustomValidity('');
-    } else {
-      quantityAlert.style.display = 'none';
-      quantityInput.setCustomValidity('');
+  if (quantity && unitPrice) {
+    let total = parseFloat(quantity) * parseFloat(unitPrice);
+
+    if (transportCheck) {
+      total *= 1.05; // Add 5% transport fee
     }
+
+    totalPriceField.value = Math.round(total).toLocaleString();
+  } else {
+    totalPriceField.value = '';
   }
 }
 
-// Initialize on page load
+// Event listeners for real-time calculations
+document.getElementById('quantity').addEventListener('input', calculateTotalPrice);
+document.getElementById('unitPrice').addEventListener('input', calculateTotalPrice);
+document.getElementById('transportCheck').addEventListener('change', calculateTotalPrice);
+
+// Set today's date as default
 document.addEventListener('DOMContentLoaded', function () {
-  updateStockAlert();
+  const today = new Date().toISOString().split('T')[0];
+  const dateField = document.getElementById('date');
+  if (dateField) {
+    dateField.value = today;
+  }
 });
-
-
-setTimeout(() => {
-  const alerts = document.querySelectorAll('.alert');
-  alerts.forEach(alert => {
-    const bsAlert = new bootstrap.Alert(alert);
-    bsAlert.close();
-  });
-}, 5000);
