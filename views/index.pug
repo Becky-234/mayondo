@@ -1,36 +1,317 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title  Landing Page
-  link(rel='stylesheet' href='../bootstrap-5.3.7-dist/css/bootstrap.css')
-  link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
-  link(rel='stylesheet' href='/css/index.css')
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Mayondo Wood And Furniture Ltd
+link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap", rel="stylesheet")
+link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css", rel="stylesheet")
+style.
+  
+  * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+  
+      body {
+        background: linear-gradient(135deg, #4c6444, #1cc88a);
+        margin: 0;
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+  
+      header {
+        color: #fff;
+        text-align: center;
+        padding: 80px 20px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+  
+      .intro {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 1s ease, transform 1s ease;
+      }
+  
+      .intro.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+  
+      header h1 {
+        font-size: 3.5rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      }
+  
+      header p {
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+      }
+  
+      .btn {
+        background: #4c6444;
+        color: #fff;
+        padding: 15px 35px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      }
+  
+      .btn:hover {
+        background: #102820;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      }
+  
+      section {
+        padding: 80px 20px;
+        text-align: center;
+        max-width: 1200px;
+        margin: auto;
+        color: #fff;
+      }
+  
+      h2 {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        position: relative;
+        display: inline-block;
+      }
+  
+      h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: #fff;
+        border-radius: 2px;
+      }
+  
+      .about, .products {
+        max-width: 1000px;
+        margin: auto;
+      }
+  
+      .about p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        margin-bottom: 30px;
+      }
+  
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+  
+      .product-card {
+        background: #fff;
+        color: #000;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+  
+      .product-card.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+  
+      .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+  
+      .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+      }
+  
+      .product-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #4c6444;
+      }
+  
+      .product-card p {
+        color: #555;
+      }
+  
+      footer {
+        text-align: center;
+        padding: 30px;
+        font-size: 0.9rem;
+        color: white;
+        background-color: rgba(0,0,0,0.1);
+      }
+  
+      /* Decorative elements */
+      .decoration {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+  
+      .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+      }
+  
+      .circle:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        top: 10%;
+        left: 10%;
+      }
+  
+      .circle:nth-child(2) {
+        width: 120px;
+        height: 120px;
+        bottom: 10%;
+        right: 10%;
+      }
+  
+      .circle:nth-child(3) {
+        width: 60px;
+        height: 60px;
+        top: 60%;
+        left: 20%;
+      }
+  
+      .circle:nth-child(4) {
+        width: 100px;
+        height: 100px;
+        top: 30%;
+        right: 20%;
+      }
+  
+      /* Scroll animation for sections */
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+  
+      .animate-on-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+  
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        header h1 {
+          font-size: 2.5rem;
+        }
+        
+        header p {
+          font-size: 1.8rem;
+        }
+        
+        h2 {
+          font-size: 2rem;
+        }
+        
+        .products-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+  
 header
+  .decoration
+    .circle
+    .circle
+    .circle
+    .circle
   section.intro
     p Welcome to
     h1 Mayondo Wood And Furniture Ltd
-    a.btn(href='/login') Get Started
-section#about
+    br
+    a.btn(href="/login") Get Started
+section#about.animate-on-scroll
   h2 About Us
-  p
-    | Our mission is to deliver high-quality services and products
-    | that help businesses succeed in the digital era.
-    | We focus on innovation, efficiency, and customer satisfaction.
+  p.
+    
+    Our mission is to deliver high-quality services and products that help businesses succeed in the digital era. We focus on innovation, efficiency, and customer satisfaction.
+    
+  p.
+    
+    With over 20 years of experience in the wood and furniture industry, we pride ourselves on craftsmanship, sustainability, and attention to detail. Our team of skilled artisans transforms the finest materials into pieces that will last for generations.
+    
 section.products
-  h2 Our Products
+  h2.animate-on-scroll Our Products
   .products-grid
-    .product-card
-      img(src='../images/landing1.jpeg' alt='Wood')
+    .product-card.animate-on-scroll
+      img(src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Wood")
       h3 Premium Wood
       p High-quality timber for all your construction and carpentry needs.
-    .product-card
-      img(src='../images/landing2.jpeg' alt='Furniture')
+    .product-card.animate-on-scroll
+      img(src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Furniture")
       h3 Elegant Furniture
       p Beautiful and durable furniture pieces crafted to perfection.
-    .product-card
-      img(src='../images/landing3.jpeg' alt='Office Furniture')
+    .product-card.animate-on-scroll
+      img(src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Office Furniture")
       h3 Office Solutions
       p Stylish and ergonomic furniture designed for modern workspaces.
 footer
-  p &copy; 2025 Mayondo Wood &amp; Funiture Ltd. All rights reserved. 
+  p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
+script.
+  
+  // Animation for the intro section
+      document.addEventListener('DOMContentLoaded', function() {
+        const intro = document.querySelector('.intro');
+        setTimeout(() => {
+          intro.classList.add('visible');
+        }, 300);
+      });
+  
+      // Scroll animation for sections
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+  
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+  
+      // Observe all elements with the animate-on-scroll class
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+  
+      // Observe product cards individually for staggered animation
+      document.querySelectorAll('.product-card').forEach((card, index) => {
+        // Add a delay based on the index for staggered animation
+        card.style.transitionDelay = `${index * 0.2}s`;
+        observer.observe(card);
+      });
+  
