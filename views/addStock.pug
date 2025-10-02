@@ -7,6 +7,20 @@ head
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
   link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
   link(rel='stylesheet' href='../css/add-stock.css')
+  style.
+    .error-message {
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .is-invalid {
+      border-color: #dc3545 !important;
+    }
+    .is-valid {
+      border-color: #198754 !important;
+    }
+
 aside.side-menu-container
   .logo-menu
     h2.logo MWF
@@ -36,74 +50,99 @@ aside.side-menu-container
       a(href='/settings')
         i.fa-solid.fa-gear
         span.link-name Settings
+
 main.main-content
   nav.navbar.bg-body-tertiary.dashboard-header
     .container-fluid.d-flex.justify-content-end.align-items-center
       .d-flex.align-items-center
         a.logoutBtn(href='/index') Logout
+  
   .stock-form-container
-    form#addStock(action='/addStock' method='post')
+    form#addStock(action='/addStock' method='post' novalidate)
       h2 Add Stock Here!
-      label(for='pdtname') Product Name
-      br
-      input#pdtname(type='text' name='pdtname' required='')
-      br
-      br
-      label(for='pdttype') Type of Product
-      br
-      select#tproduct(name="pdttype", required)
-        option(value, disabled, selected) Select Type of Product 
-        option(value="Raw") Raw 
-        option(value="Furniture") Furniture 
-      br
-      br
-      label(for='pdtquantity1') Total Quantity
-      br
-      input#pdtquantity1(type='number' name='pdtquantity1' required='')
-      br
-      br
-      label(for='pdtquantity') Remaining Quantity
-      br
-      input#pdtquantity(type='number' name='pdtquantity' required='')
-      br
-      br
-      label(for='cprice') Cost Price
-      br
-      input#cprice(type='text' name='cprice' required='')
-      br
-      br
-      label(for='pdtprice') Product Price
-      br
-      input#pdtprice(type='text' name='pdtprice' required='')
-      br
-      br
-      label(for='supplier') Supplier Name
-      br
-      input#supplier(type='text' name='supplier' required='')
-      br
-      br
-      label(for='supplierContact') Supplier Contact
-      br
-      input#supplier(type='text' name='supplierContact' required='')
-      br
-      br
-      label(for='quality') Quality
-      br
-      select#quality(name="quality" required)
-        option(value, disabled, required) Select Quality
-        option(value="Premium") Premium
-        option(value="Good") Good
-        option(value="Fair") Fair
-        option(value="Poor") Poor
-      br
-      br
-      label(for='date') Date
-      br
-      input#date(type='date' name='date' required='')
-      br
-      br
+      
+      .form-group
+        label(for='pdtname') Product Name
+        br
+        input#pdtname.form-control(type='text' name='pdtname' required)
+        .error-message#pdtname-error Please enter a valid product name
+        br
+      
+      .form-group
+        label(for='pdttype') Type of Product
+        br
+        select#tproduct.form-control(name="pdttype" required)
+          option(value="" disabled selected) Select Type of Product 
+          option(value="Raw") Raw 
+          option(value="Furniture") Furniture 
+        .error-message#pdttype-error Please select a product type
+        br
+      
+      .form-group
+        label(for='pdtquantity1') Total Quantity
+        br
+        input#pdtquantity1.form-control(type='number' name='pdtquantity1' min="1" required)
+        .error-message#pdtquantity1-error Please enter a valid quantity (minimum 1)
+        br
+      
+      .form-group
+        label(for='pdtquantity') Remaining Quantity
+        br
+        input#pdtquantity.form-control(type='number' name='pdtquantity' min="0" required)
+        .error-message#pdtquantity-error Please enter a valid quantity (cannot be negative)
+        br
+      
+      .form-group
+        label(for='cprice') Cost Price
+        br
+        input#cprice.form-control(type='number' name='cprice' step="0.01" min="0" required)
+        .error-message#cprice-error Please enter a valid cost price
+        br
+      
+      .form-group
+        label(for='pdtprice') Product Price
+        br
+        input#pdtprice.form-control(type='number' name='pdtprice' step="0.01" min="0" required)
+        .error-message#pdtprice-error Please enter a valid product price
+        br
+      
+      .form-group
+        label(for='supplier') Supplier Name
+        br
+        input#supplier.form-control(type='text' name='supplier' required)
+        .error-message#supplier-error Please enter a supplier name
+        br
+      
+      .form-group
+        label(for='supplierContact') Supplier Contact
+        br
+        input#supplierContact.form-control(type='text' name='supplierContact' required pattern="[0-9+\-\s()]+" title="Please enter a valid phone number")
+        .error-message#supplierContact-error Please enter a valid supplier contact
+        br
+      
+      .form-group
+        label(for='quality') Quality
+        br
+        select#quality.form-control(name="quality" required)
+          option(value="" disabled selected) Select Quality
+          option(value="Premium") Premium
+          option(value="Good") Good
+          option(value="Fair") Fair
+          option(value="Poor") Poor
+        .error-message#quality-error Please select a quality level
+        br
+      
+      .form-group
+        label(for='date') Date
+        br
+        input#date.form-control(type='date' name='date' required)
+        .error-message#date-error Please select a date
+        br
+      
       .add
         button.btns(type='submit') Save
-        button.btns(type='reset') Cancel
-  script(src='../javascript/sales.js')
-  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous') 
+        button.btns(type='reset' id='resetBtn') Cancel
+
+  script(src='../javascript/stock.js')
+  script(src='../javascript/form-validation.js')
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcMn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
