@@ -1,26 +1,37 @@
 const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/userModel");
-const methodOverride = require('method-override');
-
 
 // List users (only sales agents)
 router.get("/usersList", async (req, res) => {
   try {
     const users = await UserModel.find({ role: 'sales_agent' }).sort({ $natural: -1 });
-    res.render("users", { users });
+
+    const success = req.query.success;
+    const error = req.query.error;
+
+    res.render("users", {
+      users,
+      success,
+      error
+    });
   } catch (err) {
     console.error(err);
     res.status(400).send("Users not found");
   }
 });
 
-
 // Show add-user form
 router.get("/add", (req, res) => {
-  res.render("adduser", { title: "Add Sales Agent" });
-});
+  const success = req.query.success;
+  const error = req.query.error;
 
+  res.render("adduser", {
+    title: "Add Sales Agent",
+    success,
+    error
+  });
+});
 
 // Handle add-user form
 router.post("/add", async (req, res) => {
@@ -32,19 +43,13 @@ router.post("/add", async (req, res) => {
     // Validate required fields
     if (!name || !email || !tel || !nin || !address || !username || !password || !confirmPassword || !date) {
       console.log("Missing fields detected");
-      return res.status(400).render("adduser", {
-        error: "All fields are required",
-        title: "Add Sales Agent"
-      });
+      return res.redirect("/add?error=" + encodeURIComponent("All fields are required"));
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
       console.log("Passwords don't match");
-      return res.status(400).render("adduser", {
-        error: "Passwords do not match",
-        title: "Add Sales Agent"
-      });
+      return res.redirect("/add?error=" + encodeURIComponent("Passwords do not match"));
     }
 
     // Check if user already exists
@@ -54,10 +59,7 @@ router.post("/add", async (req, res) => {
 
     if (existingUser) {
       console.log("User already exists:", existingUser);
-      return res.status(400).render("adduser", {
-        error: "User with this email or username already exists",
-        title: "Add Sales Agent"
-      });
+      return res.redirect("/add?error=" + encodeURIComponent("User with this email or username already exists"));
     }
 
     // Create new sales agent - password will be hashed by the model
@@ -77,47 +79,44 @@ router.post("/add", async (req, res) => {
     await newUser.save();
     console.log("User saved successfully");
 
-    res.redirect("/usersList");
+    res.redirect("/usersList?success=" + encodeURIComponent("User added successfully!"));
   } catch (err) {
     console.error("Detailed error:", err);
 
     if (err.code === 11000) {
-      return res.status(400).render("adduser", {
-        error: "User with this email or username already exists",
-        title: "Add Sales Agent"
-      });
+      return res.redirect("/add?error=" + encodeURIComponent("User with this email or username already exists"));
     }
 
     if (err.name === 'ValidationError') {
       const errors = Object.values(err.errors).map(error => error.message);
-      return res.status(400).render("adduser", {
-        error: errors.join(', '),
-        title: "Add Sales Agent"
-      });
+      return res.redirect("/add?error=" + encodeURIComponent(errors.join(', ')));
     }
 
-    res.status(400).render("adduser", {
-      error: "Failed to create user account: " + err.message,
-      title: "Add Sales Agent"
-    });
+    res.redirect("/add?error=" + encodeURIComponent("Failed to create user account: " + err.message));
   }
 });
-
 
 // Show edit user form
 router.get("/editUser/:id", async (req, res) => {
   try {
     let user = await UserModel.findById(req.params.id);
     if (!user) {
-      return res.status(404).send("User not found");
+      return res.redirect("/usersList?error=" + encodeURIComponent("User not found"));
     }
-    res.render("editUser", { user });
+
+    const success = req.query.success;
+    const error = req.query.error;
+
+    res.render("editUser", {
+      user,
+      success,
+      error
+    });
   } catch (error) {
     console.error(error);
-    res.status(400).send("Error fetching user");
+    res.redirect("/usersList?error=" + encodeURIComponent("Error fetching user"));
   }
 });
-
 
 // Handle edit user form submission
 router.post("/editUser/:id", async (req, res) => {
@@ -126,11 +125,7 @@ router.post("/editUser/:id", async (req, res) => {
 
     // Check if passwords are provided and match
     if (password && password !== confirmPassword) {
-      const user = await UserModel.findById(req.params.id);
-      return res.render("editUser", {
-        user,
-        error: "Passwords do not match"
-      });
+      return res.redirect(`/editUser/${req.params.id}?error=` + encodeURIComponent("Passwords do not match"));
     }
 
     const updateData = {
@@ -155,32 +150,33 @@ router.post("/editUser/:id", async (req, res) => {
     );
 
     if (!user) {
-      return res.status(404).send("User not found");
+      return res.redirect("/usersList?error=" + encodeURIComponent("User not found"));
     }
 
-    res.redirect("/usersList");
+    res.redirect("/usersList?success=" + encodeURIComponent("User updated successfully!"));
   } catch (error) {
     console.error(error);
-    const user = await UserModel.findById(req.params.id);
-    res.render("editUser", {
-      user,
-      error: "Error updating user: " + error.message
-    });
+
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.redirect(`/editUser/${req.params.id}?error=` + encodeURIComponent(errors.join(', ')));
+    }
+
+    res.redirect(`/editUser/${req.params.id}?error=` + encodeURIComponent("Error updating user"));
   }
 });
-
 
 // DELETE user route
 router.post("/deleteUser/:id", async (req, res) => {
   try {
     const user = await UserModel.findByIdAndDelete(req.params.id);
     if (!user) {
-      return res.status(404).send("User not found");
+      return res.redirect("/usersList?error=" + encodeURIComponent("User not found"));
     }
-    res.redirect("/usersList");
+    res.redirect("/usersList?success=" + encodeURIComponent("User deleted successfully!"));
   } catch (error) {
     console.error(error);
-    res.status(400).send("Error deleting user");
+    res.redirect("/usersList?error=" + encodeURIComponent("Error deleting user"));
   }
 });
 
