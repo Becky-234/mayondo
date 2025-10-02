@@ -13,6 +13,14 @@ router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        // Basic validation
+        if (!email || !password) {
+            return res.status(400).render('login', {
+                title: "Login page",
+                error: "Email and password are required"
+            });
+        }
+
         const managerEmail = process.env.MANAGER_EMAIL;
         const managerPassword = process.env.MANAGER_PASSWORD;
 

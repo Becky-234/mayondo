@@ -2,16 +2,18 @@ meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 title Login
 link(rel="stylesheet", href="../css/login.css")
-form#loginForm( action="/login", method="post")
+form#loginForm(action="/login", method="post")
   .form-container
     h1.head Login
     br
     .input-box
-      input#email(type="email", placeholder="Email", name="email", required)
+      input#email(type="email", placeholder="Email", name="email")
       span#emailError.error
     .input-box
-      input#password(type="password", placeholder="Password", name="password", required, minlength="6")
+      input#password(type="password", placeholder="Password", name="password")
       span#passwordError.error
+    br
+    br
     .remember-forgot
       label
         input(type="checkbox")
@@ -21,8 +23,9 @@ form#loginForm( action="/login", method="post")
     br
     button.button#login-btn(type="submit") Login
     br
-    //- .register-link
-    //-   p
-    //-     | Don't have an account?
-    //-     a(href="/signup") Register
-//- script(src="../javascript/login.js")
+
+script.
+  console.log("=== DEBUG ===");
+  console.log("Form:", document.getElementById('loginForm'));
+
+script(src="../javascript/login.js")
