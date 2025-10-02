@@ -1,79 +1,113 @@
 doctype html
 html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
-  link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
-  link(rel='stylesheet' href='/css/stock.css')
-  title Stock
-body
-  header
-    aside.side-menu-container.active
-      .logo-menu
-        h2.logo MWF
-        i.fa-solid.fa-bars
-      ul.list
-        li.list-item
-          a(href='dashboard')
-            i.fa-solid.fa-house
-            span.link-name Dashboard
-        li.list-item
-          a(href='usersList')
-            i.fa-solid.fa-users
-            span.link-name Users
-        li.list-item
-          a(href='sales')
-            i.fa-solid.fa-cart-shopping
-            span.link-name Sales
-        li.list-item.active
-          a(href='stock')
-            i.fa-solid.fa-truck
-            span.link-name Stock
-        li.list-item
-          a(href='products')
-            i.fa-solid.fa-couch
-            span.link-name Products
-        li.list-item
-          a(href='settings')
-            i.fa-solid.fa-gear
-            span.link-name Settings
-  main.main-content
-    nav.navbar.bg-body-tertiary.dashboard-header
-      .container-fluid.d-flex.justify-content-end.align-items-center
-        .d-flex.align-items-center
-          a.logoutBtn(href='/index') Logout
-          if success
-            .container.mt-3
-              .alert.alert-success.alert-dismissible.fade.show(role="alert")
-                i.fas.fa-check-circle.me-2
-                strong Success! 
-                | #{success}
-                button.btn-close(type="button" data-bs-dismiss="alert")
-          if error
-            .container.mt-3
-              .alert.alert-danger.alert-dismissible.fade.show(role="alert")
-                i.fas.fa-exclamation-circle.me-2
-                strong Error! 
-                | #{error}
-                button.btn-close(type="button" data-bs-dismiss="alert")
-    
-    .include
-      a.btns(href='/addStock') Add Stock
-      a#downloadExcel.btns Download Excel
-      a#downloadPdf.btns Download PDF
-      
-      .table-filter(style="display: inline-block; margin-left: 20px;")
-        label.filter-label(for="productFilter") Filter by:
-        select#productFilter.filter-dropdown
-          option(value="all") All Products
-          option(value="raw") Raw Only
-          option(value="furniture") Furniture Only
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
+    link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
+    link(rel='stylesheet' href='/css/stock.css')
+    title Stock
+  body
+    header
+      aside.side-menu-container.active
+        .logo-menu
+          h2.logo MWF
+          i.fa-solid.fa-bars
+        ul.list
+          li.list-item
+            a(href='dashboard')
+              i.fa-solid.fa-house
+              span.link-name Dashboard
+          li.list-item
+            a(href='usersList')
+              i.fa-solid.fa-users
+              span.link-name Users
+          li.list-item
+            a(href='sales')
+              i.fa-solid.fa-cart-shopping
+              span.link-name Sales
+          li.list-item.active
+            a(href='stock')
+              i.fa-solid.fa-truck
+              span.link-name Stock
+          li.list-item
+            a(href='products')
+              i.fa-solid.fa-couch
+              span.link-name Products
+          li.list-item
+            a(href='settings')
+              i.fa-solid.fa-gear
+              span.link-name Settings
+    main.main-content
+      nav.navbar.bg-body-tertiary.dashboard-header
+        .container-fluid.d-flex.justify-content-end.align-items-center
+          .d-flex.align-items-center
+            a.logoutBtn(href='/index') Logout
 
-      input#searchStock(type='search' placeholder='Search...')
-    
-    section.table-section
+      // SUCCESS MODAL - Move outside navbar
+      if success
+        .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
+          .modal-dialog.modal-dialog-centered
+            .modal-content
+              .modal-header.bg-success.text-white
+                h5.modal-title
+                  i.fas.fa-check-circle.me-2
+                  | Success!
+                button.btn-close(type='button' onclick="closeMessageModal()")
+              .modal-body
+                p #{success}
+              .modal-footer
+                button.btn.btn-success(type='button' onclick="closeMessageModal()") OK
+
+      // ERROR MODAL - Move outside navbar
+      if error
+        .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
+          .modal-dialog.modal-dialog-centered
+            .modal-content
+              .modal-header.bg-danger.text-white
+                h5.modal-title
+                  i.fas.fa-exclamation-circle.me-2
+                  | Error!
+                button.btn-close(type='button' onclick="closeMessageModal()")
+              .modal-body
+                p #{error}
+              .modal-footer
+                button.btn.btn-danger(type='button' onclick="closeMessageModal()") OK
+
+      // DELETE CONFIRMATION MODAL
+      #deleteConfirmationModal.modal.fade(tabindex='-1' aria-labelledby='deleteConfirmationModalLabel' aria-hidden='true')
+        .modal-dialog.modal-dialog-centered
+          .modal-content
+            .modal-header.bg-warning.text-dark
+              h5.modal-title
+                i.fas.fa-exclamation-triangle.me-2
+                | Confirm Deletion
+              button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+            .modal-body
+              p Are you sure you want to delete this stock item?
+              p.text-muted.small This action cannot be undone.
+            .modal-footer
+              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Cancel
+              form#deleteForm(method='post' action='/deleteStock' style='display: inline;')
+                input(type='hidden' name='id' id='deleteStockId')
+                button.btn.btn-danger(type='submit') Delete
+
+      .include
+        a.btns(href='/addStock') Add Stock
+        a#downloadExcel.btns Download Excel
+        a#downloadPdf.btns Download PDF
+        
+        .table-filter(style="display: inline-block; margin-left: 20px;")
+          label.filter-label(for="productFilter") Filter by:
+          select#productFilter.filter-dropdown
+            option(value="all") All Products
+            option(value="raw") Raw Only
+            option(value="furniture") Furniture Only
+
+        input#searchStock(type='search' placeholder='Search...')
+      
+      section.table-section
         table#newStock.table-content
           thead.row-one 
             tr
@@ -91,13 +125,11 @@ body
                 th Actions 
           tbody
             if items && items.length > 0
-              //- Group items by product name for summary rows
               - const groupedItems = {};
               each item in items 
                 - if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
                 - groupedItems[item.pdtname].push(item);
               
-              //- Display each product group with summary
               each productGroup, productName in groupedItems
                 each item, index in productGroup
                   tr(data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-'))
@@ -115,16 +147,17 @@ body
                       if currentUser && currentUser.role === "manager"
                         a.btn-icon(href=`/editStock/${item._id}` title='Edit')
                           i.fas.fa-edit
-                        form(method='post', action='/deleteStock', style='display:inline')
-                          input(type='hidden', name='id', value=item._id)
-                          button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this item?')")
-                            i.fas.fa-trash
-                        form(method='post', action=`/generateReceipt/${item._id}`, style='display:inline')
-                          input(type='hidden', name='id', value=item._id)
-                          button.btn-icon(type='submit', title='Receipt')
+                        button.btn-icon(
+                          type='button' 
+                          title='Delete' 
+                          onclick=`showDeleteModal('${item._id}')`
+                        )
+                          i.fas.fa-trash
+                        form(method='post' action=`/generateReceipt/${item._id}` style='display:inline')
+                          input(type='hidden' name='id' value=item._id)
+                          button.btn-icon(type='submit' title='Receipt')
                             i.fas.fa-file-invoice
                 
-                //- Summary row for each product group
                 - 
                   const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
                   const availableQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity || 0), 0);
@@ -146,10 +179,53 @@ body
                 td(colspan="11" style="text-align: center;") No stock items found
         h5#notFound Not Found
 
-  script(src='../javascript/stock.js')
-  //- SheetJS
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
-  //- jsPDF + AutoTable
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js")
-  script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js", integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL", crossorigin="anonymous")
+    script.
+      function closeMessageModal() {
+        // Remove the modal from DOM
+        const modals = document.querySelectorAll('.modal.show.d-block');
+        modals.forEach(modal => {
+          modal.classList.remove('show', 'd-block');
+          modal.classList.add('fade');
+        });
+        
+        // Remove backdrop
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => backdrop.remove());
+        
+        // Enable body scrolling
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+      }
+
+      // Close modal when clicking outside
+      document.addEventListener('click', function(event) {
+        const modals = document.querySelectorAll('.modal.show.d-block');
+        modals.forEach(modal => {
+          if (event.target === modal) {
+            closeMessageModal();
+          }
+        });
+      });
+
+      // Close modal with Escape key
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeMessageModal();
+        }
+      });
+
+      // Show delete confirmation modal
+      function showDeleteModal(stockId) {
+        document.getElementById('deleteStockId').value = stockId;
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+        deleteModal.show();
+      }
+
+    script(src='../javascript/stock.js')
+    //- SheetJS
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
+    //- jsPDF + AutoTable
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous")
