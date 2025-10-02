@@ -339,30 +339,3 @@ input {
   border-style: none;
 }
 
-.error-message {
-  color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-  display: none;
-}
-.is-invalid {
-  border-color: #dc3545 !important;
-}
-.is-valid {
-  border-color: #198754 !important;
-}
-.form-group {
-  margin-bottom: 1.5rem;
-}
-.form-control {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 0.5rem;
-  transition: all 0.3s ease;
-}
-.form-control:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}

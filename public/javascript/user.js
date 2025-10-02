@@ -248,7 +248,8 @@ function setDefaultDate() {
     }
 };
 
-// MODALS - FIXED VERSION
+
+// MODALS 
 function closeMessageModal() {
     const modals = document.querySelectorAll('.modal.show');
     modals.forEach(modal => {
@@ -380,3 +381,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+
+ 

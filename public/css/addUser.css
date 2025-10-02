@@ -344,3 +344,23 @@ input.invalid {
 .logoutBtn:hover {
   background: #8a6420;
 }
+
+
+/* Validation styles */
+.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-top: 0.25rem;
+}
+
+/* Success state for valid fields */
+.is-valid {
+    border-color: #198754 !important;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25) !important;
+}
