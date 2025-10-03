@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// Table filtering functionality
+// PRODUCT FILTERING FUNCTIONALITY
 document.addEventListener('DOMContentLoaded', function () {
   const productFilter = document.getElementById('productFilter');
   const tableBody = document.querySelector('#salesTable tbody.row-others');
@@ -116,8 +116,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const rows = tableBody.querySelectorAll('tr');
 
+  // Debug: Check what's in each product type cell
+  console.log('=== DEBUG: Product Type Values ===');
+  rows.forEach((row, index) => {
+    if (row.cells.length > 3) {
+      const productTypeCell = row.cells[3];
+      console.log(`Row ${index}: "${productTypeCell.textContent}"`);
+    }
+  });
+
   productFilter.addEventListener('change', function () {
     const filterValue = this.value;
+    console.log(`Filter changed to: ${filterValue}`);
+
+    let visibleCount = 0;
 
     rows.forEach(row => {
       // Check if this is the "No sales records found" row
@@ -129,25 +141,35 @@ document.addEventListener('DOMContentLoaded', function () {
       const productTypeCell = row.cells[3]; // Fourth column (Product Type)
       const productType = productTypeCell.textContent.toLowerCase().trim();
 
+      console.log(`Checking row with product type: "${productType}"`);
+
+      let shouldShow = false;
+
       switch (filterValue) {
         case 'all':
-          row.style.display = '';
+          shouldShow = true;
           break;
         case 'raw':
           // Show rows where product type contains "raw"
-          row.style.display = productType.includes('raw') ? '' : 'none';
+          shouldShow = productType.includes('raw');
+          console.log(`  - Raw filter: ${shouldShow} (contains 'raw': ${productType.includes('raw')})`);
           break;
         case 'furniture':
           // Show rows where product type contains "furniture"
-          row.style.display = productType.includes('furniture') ? '' : 'none';
+          shouldShow = productType.includes('furniture');
+          console.log(`  - Furniture filter: ${shouldShow} (contains 'furniture': ${productType.includes('furniture')})`);
           break;
         default:
-          row.style.display = '';
+          shouldShow = true;
       }
+
+      row.style.display = shouldShow ? '' : 'none';
+      if (shouldShow) visibleCount++;
     });
+
+    console.log(`Total visible rows: ${visibleCount}`);
   });
 });
-
 
 
 //STOCK ALEART
@@ -454,6 +476,189 @@ function calculateTotalPrice() {
   }
 }
 
-// // Make functions available globally
-// window.updateStockAlert = updateStockAlert;
-// window.calculateTotalPrice = calculateTotalPrice;
+
+//MODALS FUNCTIONALITY
+function closeMessageModal() {
+  // Remove the query parameters from URL
+  const url = new URL(window.location);
+  url.searchParams.delete('success');
+  url.searchParams.delete('error');
+  window.history.replaceState({}, '', url);
+
+  // Hide the modal
+  const modals = document.querySelectorAll('.modal.show');
+  modals.forEach(modal => {
+    modal.style.display = 'none';
+  });
+}
+
+// Function to show delete confirmation modal
+function showDeleteConfirmation(saleId) {
+  // Set the sale ID in the hidden input
+  document.getElementById('deleteSaleId').value = saleId;
+
+  // Show the modal
+  const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+  deleteModal.show();
+}
+
+// Auto-close success/error modals after 5 seconds
+document.addEventListener('DOMContentLoaded', function () {
+  if (document.querySelector('.modal.show')) {
+    setTimeout(() => {
+      closeMessageModal();
+    }, 5000);
+  }
+});
+
+
+// Date Filter Functionality
+document.addEventListener('DOMContentLoaded', function () {
+  const startDateInput = document.getElementById('startDate');
+  const endDateInput = document.getElementById('endDate');
+  const applyDateFilterBtn = document.getElementById('applyDateFilter');
+  const clearDateFilterBtn = document.getElementById('clearDateFilter');
+  const salesTable = document.getElementById('salesTable');
+  const tableRows = salesTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+  const notFoundMessage = document.getElementById('notFound');
+
+  // Function to parse table date to JavaScript Date object
+  function parseTableDate(dateString) {
+    // Handle different date formats that might appear in the table
+    if (dateString.includes('/')) {
+      // Format: DD/MM/YYYY or MM/DD/YYYY
+      const parts = dateString.split('/');
+      // Assuming format is DD/MM/YYYY
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1; // Months are 0-indexed
+      const year = parseInt(parts[2], 10);
+      return new Date(year, month, day);
+    } else if (dateString.includes('-')) {
+      // Format: YYYY-MM-DD
+      return new Date(dateString);
+    } else {
+      // Try direct parsing
+      return new Date(dateString);
+    }
+  }
+
+  // Function to compare dates (ignoring time)
+  function isDateInRange(rowDate, startDate, endDate) {
+    const rowDateObj = new Date(rowDate);
+    rowDateObj.setHours(0, 0, 0, 0); // Reset time part
+
+    const startDateObj = startDate ? new Date(startDate) : null;
+    const endDateObj = endDate ? new Date(endDate) : null;
+
+    if (startDateObj) startDateObj.setHours(0, 0, 0, 0);
+    if (endDateObj) endDateObj.setHours(23, 59, 59, 999); // End of day
+
+    let inRange = true;
+
+    if (startDateObj && rowDateObj < startDateObj) {
+      inRange = false;
+    }
+
+    if (endDateObj && rowDateObj > endDateObj) {
+      inRange = false;
+    }
+
+    return inRange;
+  }
+
+  // Apply Date Filter
+  applyDateFilterBtn.addEventListener('click', function () {
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value;
+
+    let foundRecords = false;
+
+    for (let i = 0; i < tableRows.length; i++) {
+      const row = tableRows[i];
+
+      // Skip if row is already hidden for other reasons
+      if (row.style.display === 'none' && !row.classList.contains('data-row')) {
+        continue;
+      }
+
+      const dateCell = row.cells[9]; // Date is in the 10th column (index 9)
+      const dateText = dateCell.textContent.trim();
+
+      if (!dateText) {
+        row.style.display = 'none';
+        continue;
+      }
+
+      try {
+        const rowDate = parseTableDate(dateText);
+
+        if (isDateInRange(rowDate, startDate, endDate)) {
+          row.style.display = '';
+          foundRecords = true;
+        } else {
+          row.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Error parsing date:', dateText, error);
+        row.style.display = 'none';
+      }
+    }
+
+    // Show/hide "Not Found" message
+    notFoundMessage.style.display = foundRecords ? 'none' : 'block';
+  });
+
+  // Clear Date Filter
+  clearDateFilterBtn.addEventListener('click', function () {
+    startDateInput.value = '';
+    endDateInput.value = '';
+
+    // Show all rows
+    for (let i = 0; i < tableRows.length; i++) {
+      tableRows[i].style.display = '';
+    }
+
+    // Hide "Not Found" message
+    notFoundMessage.style.display = 'none';
+  });
+
+  // Validate date range
+  startDateInput.addEventListener('change', function () {
+    if (startDateInput.value && endDateInput.value) {
+      const startDate = new Date(startDateInput.value);
+      const endDate = new Date(endDateInput.value);
+
+      if (endDate < startDate) {
+        alert('End date cannot be before start date');
+        endDateInput.value = '';
+      }
+    }
+  });
+
+  endDateInput.addEventListener('change', function () {
+    if (startDateInput.value && endDateInput.value) {
+      const startDate = new Date(startDateInput.value);
+      const endDate = new Date(endDateInput.value);
+
+      if (endDate < startDate) {
+        alert('End date cannot be before start date');
+        endDateInput.value = '';
+      }
+    }
+  });
+
+  // Debug function to see what dates are in the table
+  function debugTableDates() {
+    console.log('=== TABLE DATES DEBUG ===');
+    for (let i = 0; i < tableRows.length; i++) {
+      const dateCell = tableRows[i].cells[9];
+      if (dateCell) {
+        console.log(`Row ${i}: "${dateCell.textContent.trim()}"`);
+      }
+    }
+    console.log('=== END DEBUG ===');
+  }
+
+  // Uncomment the line below to see what dates are detected in your table
+  // debugTableDates();
+});

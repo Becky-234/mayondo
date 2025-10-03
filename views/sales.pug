@@ -145,8 +145,18 @@ html
           label.filter-label(for='productFilter') Filter by:
           select#productFilter.filter-dropdown
             option(value='all') All Products
-            option(value='raw') Raw Materials Only
-            option(value='furniture') Furniture Only
+            option(value='raw') Raw Products
+            option(value='furniture') Furniture Products
+
+            //- Date Filter Section
+        .date-filter-container(style="display: inline-block; margin-left: 20px;")
+          label.filter-label(for="startDate") From:
+          input#startDate.filter-date(type="date")
+          label.filter-label(for="endDate" style="margin-left: 10px;") To:
+          input#endDate.filter-date(type="date")
+          button#applyDateFilter.btns(style="margin-left: 10px;") Apply
+          button#clearDateFilter.btns(style="margin-left: 5px;") Clear    
+
         input#searchSale(type='search', placeholder='Search...')
 
       section
@@ -198,41 +208,6 @@ html
         br
         br
         h5#notFound Not Found!
-
-    script.
-      function closeMessageModal() {
-        // Remove the query parameters from URL
-        const url = new URL(window.location);
-        url.searchParams.delete('success');
-        url.searchParams.delete('error');
-        window.history.replaceState({}, '', url);
-        
-        // Hide the modal
-        const modals = document.querySelectorAll('.modal.show');
-        modals.forEach(modal => {
-          modal.style.display = 'none';
-        });
-      }
-
-      // Function to show delete confirmation modal
-      function showDeleteConfirmation(saleId) {
-        // Set the sale ID in the hidden input
-        document.getElementById('deleteSaleId').value = saleId;
-        
-        // Show the modal
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
-        deleteModal.show();
-      }
-
-      // Auto-close success/error modals after 5 seconds
-      document.addEventListener('DOMContentLoaded', function() {
-        if (document.querySelector('.modal.show')) {
-          setTimeout(() => {
-            closeMessageModal();
-          }, 5000);
-        }
-      });
-
     script(src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js')

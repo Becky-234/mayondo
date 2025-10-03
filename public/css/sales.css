@@ -600,3 +600,48 @@ td.actions .btn-icon:hover {
 .dash-card:hover i {
   transform: scale(1.1);
 }
+
+/* Date Filter Styles */
+.date-filter-container {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.filter-date {
+    padding: 4px 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    margin-left: 5px;
+    color: #fff;
+}
+
+.filter-label {
+    font-weight: 500;
+    color: #495057;
+    margin-right: 5px;
+}
+
+.date-filter-container .btns {
+    padding: 4px 12px;
+    font-size: 14px;
+}
+
+/* Responsive design for filters */
+@media (max-width: 768px) {
+    .date-filter-container {
+        display: block !important;
+        margin: 10px 0 !important;
+    }
+    
+    .date-filter-container .filter-label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .filter-date {
+        margin: 5px;
+    }
+}
+
