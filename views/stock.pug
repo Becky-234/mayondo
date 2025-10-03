@@ -105,24 +105,33 @@ html
             option(value="raw") Raw Only
             option(value="furniture") Furniture Only
 
+        //- Date Filter Section
+        .date-filter-container(style="display: inline-block; margin-left: 20px;")
+          label.filter-label(for="startDate") From:
+          input#startDate.filter-date(type="date")
+          label.filter-label(for="endDate" style="margin-left: 10px;") To:
+          input#endDate.filter-date(type="date")
+          button#applyDateFilter.btns(style="margin-left: 10px;") Apply
+          button#clearDateFilter.btns(style="margin-left: 5px;") Clear    
+
         input#searchStock(type='search' placeholder='Search...')
       
       section.table-section
         table#newStock.table-content
           thead.row-one 
             tr
-              th Product Name
-              th Product Type
-              th Total Quantity
-              th Available Quantity
-              th Cost Price UGX
-              th Product Price UGX
-              th Supplier Name
-              th Supplier Contact
-              th Quality
-              th Date
+              th.col-essential Product Name
+              th.col-essential Product Type
+              th.col-essential Total Quantity
+              th.col-essential Available Quantity
+              th.col-essential Cost Price UGX
+              th.col-essential Product Price UGX
+              th.col-optional Supplier Name
+              th.col-optional Supplier Contact
+              th.col-essential Quality
+              th.col-essential Date
               if currentUser && (currentUser.role === "manager")
-                th Actions 
+                th.col-optional Actions 
           tbody
             if items && items.length > 0
               - const groupedItems = {};
@@ -133,17 +142,17 @@ html
               each productGroup, productName in groupedItems
                 each item, index in productGroup
                   tr(data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-'))
-                    td #{item.pdtname}
-                    td #{item.pdttype}
-                    td #{item.pdtquantity1}
-                    td #{item.pdtquantity}
-                    td #{item.cprice.toLocaleString()}
-                    td #{Math.round(item.cprice * 1.5).toLocaleString()}
-                    td #{item.supplier}
-                    td +256#{item.supplierContact}
-                    td #{item.quality}
-                    td #{new Date(item.date).toLocaleDateString()}
-                    td.actions
+                    td.col-essential #{item.pdtname}
+                    td.col-essential #{item.pdttype}
+                    td.col-essential #{item.pdtquantity1}
+                    td.col-essential #{item.pdtquantity}
+                    td.col-essential #{item.cprice.toLocaleString()}
+                    td.col-essential #{Math.round(item.cprice * 1.5).toLocaleString()}
+                    td.col-optional #{item.supplier}
+                    td.col-optional +256#{item.supplierContact}
+                    td.col-essential #{item.quality}
+                    td.col-essential #{new Date(item.date).toLocaleDateString()}
+                    td.col-optional.actions
                       if currentUser && currentUser.role === "manager"
                         a.btn-icon(href=`/editStock/${item._id}` title='Edit')
                           i.fas.fa-edit
@@ -162,66 +171,29 @@ html
                   const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
                   const availableQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity || 0), 0);
                   const totalValue = productGroup.reduce((sum, item) => sum + (Math.round(item.cprice * 1.5) * parseInt(item.pdtquantity || 0)), 0);
+                
                 tr.product-summary-row
-                  td(colspan="2") 
+                  td.col-essential(colspan="2") 
                     strong #{productName} Total
-                  td 
+                  td.col-essential 
                     strong #{totalQuantity}
-                  td 
+                  td.col-essential 
                     strong #{availableQuantity}
-                  td 
-                  td 
+                  td.col-essential 
+                  td.col-essential 
                     strong #{totalValue.toLocaleString()}
-                  td(colspan="5")
+                  td.col-optional 
+                  td.col-optional 
+                  td.col-essential 
+                  td.col-essential 
+                  td.col-optional 
+                  if currentUser && (currentUser.role === "manager")
+                    td.col-optional
 
             else
               tr
                 td(colspan="11" style="text-align: center;") No stock items found
         h5#notFound Not Found
-
-    script.
-      function closeMessageModal() {
-        // Remove the modal from DOM
-        const modals = document.querySelectorAll('.modal.show.d-block');
-        modals.forEach(modal => {
-          modal.classList.remove('show', 'd-block');
-          modal.classList.add('fade');
-        });
-        
-        // Remove backdrop
-        const backdrops = document.querySelectorAll('.modal-backdrop');
-        backdrops.forEach(backdrop => backdrop.remove());
-        
-        // Enable body scrolling
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-      }
-
-      // Close modal when clicking outside
-      document.addEventListener('click', function(event) {
-        const modals = document.querySelectorAll('.modal.show.d-block');
-        modals.forEach(modal => {
-          if (event.target === modal) {
-            closeMessageModal();
-          }
-        });
-      });
-
-      // Close modal with Escape key
-      document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-          closeMessageModal();
-        }
-      });
-
-      // Show delete confirmation modal
-      function showDeleteModal(stockId) {
-        document.getElementById('deleteStockId').value = stockId;
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
-        deleteModal.show();
-      }
-
     script(src='../javascript/stock.js')
     //- SheetJS
     script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")

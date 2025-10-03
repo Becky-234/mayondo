@@ -71,10 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ONLY SUBMIT IF VALID
     if (valid) {
-      console.log("✅ VALIDATION PASSED - SUBMITTING FORM");
+      console.log("VALIDATION PASSED - SUBMITTING FORM");
       form.submit();
     } else {
-      console.log("❌ VALIDATION FAILED - SHOWING ERRORS");
+      console.log("VALIDATION FAILED - SHOWING ERRORS");
     }
   });
 
