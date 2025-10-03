@@ -1,80 +1,78 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Mayondo Wood And Furniture Ltd
-link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap", rel="stylesheet")
-link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css", rel="stylesheet")
-link(rel="stylesheet" href="css/index.css")
-header
-  .decoration
-    .circle
-    .circle
-    .circle
-    .circle
-  section.intro
-    p Welcome to
-    h1 Mayondo Wood And Furniture Ltd
-    br
-    a.btn(href="/login") Get Started
-section#about.animate-on-scroll
-  h2 About Us
-  p.
+extends layout.pug
+block styles
+  link(rel="stylesheet" href="css/index.css")
+block content 
+  header
+    .decoration
+      .circle
+      .circle
+      .circle
+      .circle
+    section.intro
+      p Welcome to
+      h1 Mayondo Wood And Furniture Ltd
+      br
+      a.btn(href="/login") Get Started
+  section#about.animate-on-scroll
+    h2 About Us
+    p.
+      
+      Our mission is to deliver high-quality services and products that help businesses succeed in the digital era. We focus on innovation, efficiency, and customer satisfaction.
+      
+    p.
+      
+      With over 20 years of experience in the wood and furniture industry, we pride ourselves on craftsmanship, sustainability, and attention to detail. Our team of skilled artisans transforms the finest materials into pieces that will last for generations.
+      
+  section.products
+    h2.animate-on-scroll Our Products
+    .products-grid
+      .product-card.animate-on-scroll
+        img(src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Wood")
+        h3 Premium Wood
+        p High-quality timber for all your construction and carpentry needs.
+      .product-card.animate-on-scroll
+        img(src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Furniture")
+        h3 Elegant Furniture
+        p Beautiful and durable furniture pieces crafted to perfection.
+      .product-card.animate-on-scroll
+        img(src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Office Furniture")
+        h3 Office Solutions
+        p Stylish and ergonomic furniture designed for modern workspaces.
+  footer
+    p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
+  script.
     
-    Our mission is to deliver high-quality services and products that help businesses succeed in the digital era. We focus on innovation, efficiency, and customer satisfaction.
-    
-  p.
-    
-    With over 20 years of experience in the wood and furniture industry, we pride ourselves on craftsmanship, sustainability, and attention to detail. Our team of skilled artisans transforms the finest materials into pieces that will last for generations.
-    
-section.products
-  h2.animate-on-scroll Our Products
-  .products-grid
-    .product-card.animate-on-scroll
-      img(src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Wood")
-      h3 Premium Wood
-      p High-quality timber for all your construction and carpentry needs.
-    .product-card.animate-on-scroll
-      img(src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Furniture")
-      h3 Elegant Furniture
-      p Beautiful and durable furniture pieces crafted to perfection.
-    .product-card.animate-on-scroll
-      img(src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80", alt="Office Furniture")
-      h3 Office Solutions
-      p Stylish and ergonomic furniture designed for modern workspaces.
-footer
-  p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
-script.
-  
-  // Animation for the intro section
-      document.addEventListener('DOMContentLoaded', function() {
-        const intro = document.querySelector('.intro');
-        setTimeout(() => {
-          intro.classList.add('visible');
-        }, 300);
-      });
-  
-      // Scroll animation for sections
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-  
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
+    // Animation for the intro section
+        document.addEventListener('DOMContentLoaded', function() {
+          const intro = document.querySelector('.intro');
+          setTimeout(() => {
+            intro.classList.add('visible');
+          }, 300);
         });
-      }, observerOptions);
-  
-      // Observe all elements with the animate-on-scroll class
-      document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        observer.observe(el);
-      });
-  
-      // Observe product cards individually for staggered animation
-      document.querySelectorAll('.product-card').forEach((card, index) => {
-        // Add a delay based on the index for staggered animation
-        card.style.transitionDelay = `${index * 0.2}s`;
-        observer.observe(card);
-      });
-  
+    
+        // Scroll animation for sections
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+    
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, observerOptions);
+    
+        // Observe all elements with the animate-on-scroll class
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+          observer.observe(el);
+        });
+    
+        // Observe product cards individually for staggered animation
+        document.querySelectorAll('.product-card').forEach((card, index) => {
+          // Add a delay based on the index for staggered animation
+          card.style.transitionDelay = `${index * 0.2}s`;
+          observer.observe(card);
+        });
+    

@@ -291,3 +291,17 @@ select {
 .btns:hover {
   background: #8a6420;
 }
+
+.error-message {
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .is-invalid {
+      border-color: #dc3545 !important;
+    }
+    .is-valid {
+      border-color: #198754 !important;
+    }
+

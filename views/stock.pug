@@ -1,203 +1,166 @@
-doctype html
-html
-  head
-    meta(charset='UTF-8')
-    meta(name='viewport' content='width=device-width, initial-scale=1.0')
-    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
-    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
-    link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
-    link(rel='stylesheet' href='/css/stock.css')
-    title Stock
-  body
-    header
-      aside.side-menu-container.active
-        .logo-menu
-          h2.logo MWF
-          i.fa-solid.fa-bars
-        ul.list
-          li.list-item
-            a(href='dashboard')
-              i.fa-solid.fa-house
-              span.link-name Dashboard
-          li.list-item
-            a(href='usersList')
-              i.fa-solid.fa-users
-              span.link-name Users
-          li.list-item
-            a(href='sales')
-              i.fa-solid.fa-cart-shopping
-              span.link-name Sales
-          li.list-item.active
-            a(href='stock')
-              i.fa-solid.fa-truck
-              span.link-name Stock
-          li.list-item
-            a(href='products')
-              i.fa-solid.fa-couch
-              span.link-name Products
-          li.list-item
-            a(href='settings')
-              i.fa-solid.fa-gear
-              span.link-name Settings
-    main.main-content
-      nav.navbar.bg-body-tertiary.dashboard-header
-        .container-fluid.d-flex.justify-content-end.align-items-center
-          .d-flex.align-items-center
-            a.logoutBtn(href='/index') Logout
+extends layout.pug 
+block styles 
+  link(rel='stylesheet' href='/css/stock.css')
+block content
+  include sidebar.pug
+  main.main-content
+    nav.navbar.bg-body-tertiary.dashboard-header
+      .container-fluid.d-flex.justify-content-end.align-items-center
+        .d-flex.align-items-center
+          a.logoutBtn(href='/index') Logout
 
-      // SUCCESS MODAL - Move outside navbar
-      if success
-        .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
-          .modal-dialog.modal-dialog-centered
-            .modal-content
-              .modal-header.bg-success.text-white
-                h5.modal-title
-                  i.fas.fa-check-circle.me-2
-                  | Success!
-                button.btn-close(type='button' onclick="closeMessageModal()")
-              .modal-body
-                p #{success}
-              .modal-footer
-                button.btn.btn-success(type='button' onclick="closeMessageModal()") OK
-
-      // ERROR MODAL - Move outside navbar
-      if error
-        .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
-          .modal-dialog.modal-dialog-centered
-            .modal-content
-              .modal-header.bg-danger.text-white
-                h5.modal-title
-                  i.fas.fa-exclamation-circle.me-2
-                  | Error!
-                button.btn-close(type='button' onclick="closeMessageModal()")
-              .modal-body
-                p #{error}
-              .modal-footer
-                button.btn.btn-danger(type='button' onclick="closeMessageModal()") OK
-
-      // DELETE CONFIRMATION MODAL
-      #deleteConfirmationModal.modal.fade(tabindex='-1' aria-labelledby='deleteConfirmationModalLabel' aria-hidden='true')
+    // SUCCESS MODAL - Move outside navbar
+    if success
+      .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
         .modal-dialog.modal-dialog-centered
           .modal-content
-            .modal-header.bg-warning.text-dark
+            .modal-header.bg-success.text-white
               h5.modal-title
-                i.fas.fa-exclamation-triangle.me-2
-                | Confirm Deletion
-              button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                i.fas.fa-check-circle.me-2
+                | Success!
+              button.btn-close(type='button' onclick="closeMessageModal()")
             .modal-body
-              p Are you sure you want to delete this stock item?
-              p.text-muted.small This action cannot be undone.
+              p #{success}
             .modal-footer
-              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Cancel
-              form#deleteForm(method='post' action='/deleteStock' style='display: inline;')
-                input(type='hidden' name='id' id='deleteStockId')
-                button.btn.btn-danger(type='submit') Delete
+              button.btn.btn-success(type='button' onclick="closeMessageModal()") OK
 
-      .include
-        a.btns(href='/addStock') Add Stock
-        a#downloadExcel.btns Download Excel
-        a#downloadPdf.btns Download PDF
-        
-        .table-filter(style="display: inline-block; margin-left: 20px;")
-          label.filter-label(for="productFilter") Filter by:
-          select#productFilter.filter-dropdown
-            option(value="all") All Products
-            option(value="raw") Raw Products 
-            option(value="furniture") Furniture Products
+    // ERROR MODAL - Move outside navbar
+    if error
+      .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
+        .modal-dialog.modal-dialog-centered
+          .modal-content
+            .modal-header.bg-danger.text-white
+              h5.modal-title
+                i.fas.fa-exclamation-circle.me-2
+                | Error!
+              button.btn-close(type='button' onclick="closeMessageModal()")
+            .modal-body
+              p #{error}
+            .modal-footer
+              button.btn.btn-danger(type='button' onclick="closeMessageModal()") OK
 
-        //- Date Filter Section
-        .date-filter-container(style="display: inline-block; margin-left: 20px;")
-          label.filter-label(for="startDate") From:
-          input#startDate.filter-date(type="date")
-          label.filter-label(for="endDate" style="margin-left: 10px;") To:
-          input#endDate.filter-date(type="date")
-          button#applyDateFilter.btns(style="margin-left: 10px;") Apply
-          button#clearDateFilter.btns(style="margin-left: 5px;") Clear    
+    // DELETE CONFIRMATION MODAL
+    #deleteConfirmationModal.modal.fade(tabindex='-1' aria-labelledby='deleteConfirmationModalLabel' aria-hidden='true')
+      .modal-dialog.modal-dialog-centered
+        .modal-content
+          .modal-header.bg-warning.text-dark
+            h5.modal-title
+              i.fas.fa-exclamation-triangle.me-2
+              | Confirm Deletion
+            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+          .modal-body
+            p Are you sure you want to delete this stock item?
+            p.text-muted.small This action cannot be undone.
+          .modal-footer
+            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Cancel
+            form#deleteForm(method='post' action='/deleteStock' style='display: inline;')
+              input(type='hidden' name='id' id='deleteStockId')
+              button.btn.btn-danger(type='submit') Delete
 
-        input#searchStock(type='search' placeholder='Search...')
+    .include
+      a.btns(href='/addStock') Add Stock
+      a#downloadExcel.btns Download Excel
+      a#downloadPdf.btns Download PDF
       
-      section.table-section
-        table#newStock.table-content
-          thead.row-one 
-            tr
-              th.col-essential Product Name
-              th.col-essential Product Type
-              th.col-essential Total Quantity
-              th.col-essential Available Quantity
-              th.col-essential Cost Price UGX
-              th.col-essential Product Price UGX
-              th.col-optional Supplier Name
-              th.col-optional Supplier Contact
-              th.col-essential Quality
-              th.col-essential Date
-              if currentUser && (currentUser.role === "manager")
-                th.col-optional Actions 
-          tbody
-            if items && items.length > 0
-              - const groupedItems = {};
-              each item in items 
-                - if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
-                - groupedItems[item.pdtname].push(item);
-              
-              each productGroup, productName in groupedItems
-                each item, index in productGroup
-                  tr(data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-'))
-                    td.col-essential #{item.pdtname}
-                    td.col-essential #{item.pdttype}
-                    td.col-essential #{item.pdtquantity1}
-                    td.col-essential #{item.pdtquantity}
-                    td.col-essential #{item.cprice.toLocaleString()}
-                    td.col-essential #{Math.round(item.cprice * 1.5).toLocaleString()}
-                    td.col-optional #{item.supplier}
-                    td.col-optional +256#{item.supplierContact}
-                    td.col-essential #{item.quality}
-                    td.col-essential #{new Date(item.date).toLocaleDateString()}
-                    td.col-optional.actions
-                      if currentUser && currentUser.role === "manager"
-                        a.btn-icon(href=`/editStock/${item._id}` title='Edit')
-                          i.fas.fa-edit
-                        button.btn-icon(
-                          type='button' 
-                          title='Delete' 
-                          onclick=`showDeleteModal('${item._id}')`
-                        )
-                          i.fas.fa-trash
-                        form(method='post' action=`/generateReceipt/${item._id}` style='display:inline')
-                          input(type='hidden' name='id' value=item._id)
-                          button.btn-icon(type='submit' title='Receipt')
-                            i.fas.fa-file-invoice
-                
-                - 
-                  const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
-                  const availableQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity || 0), 0);
-                  const totalValue = productGroup.reduce((sum, item) => sum + (Math.round(item.cprice * 1.5) * parseInt(item.pdtquantity || 0)), 0);
-                
-                tr.product-summary-row
-                  td.col-essential(colspan="2") 
-                    strong #{productName} Total
-                  td.col-essential 
-                    strong #{totalQuantity}
-                  td.col-essential 
-                    strong #{availableQuantity}
-                  td.col-essential 
-                  td.col-essential 
-                    strong #{totalValue.toLocaleString()}
-                  td.col-optional 
-                  td.col-optional 
-                  td.col-essential 
-                  td.col-essential 
-                  td.col-optional 
-                  if currentUser && (currentUser.role === "manager")
-                    td.col-optional
+      .table-filter(style="display: inline-block; margin-left: 20px;")
+        label.filter-label(for="productFilter") Filter by:
+        select#productFilter.filter-dropdown
+          option(value="all") All Products
+          option(value="raw") Raw Products 
+          option(value="furniture") Furniture Products
 
-            else
-              tr
-                td(colspan="11" style="text-align: center;") No stock items found
-        h5#notFound Not Found
-    script(src='../javascript/stock.js')
-    //- SheetJS
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
-    //- jsPDF + AutoTable
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js")
-    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous")
+      //- Date Filter Section
+      .date-filter-container(style="display: inline-block; margin-left: 20px;")
+        label.filter-label(for="startDate") From:
+        input#startDate.filter-date(type="date")
+        label.filter-label(for="endDate" style="margin-left: 10px;") To:
+        input#endDate.filter-date(type="date")
+        button#applyDateFilter.btns(style="margin-left: 10px;") Apply
+        button#clearDateFilter.btns(style="margin-left: 5px;") Clear    
+
+      input#searchStock(type='search' placeholder='Search...')
+    
+    section.table-section
+      table#newStock.table-content
+        thead.row-one 
+          tr
+            th.col-essential Product Name
+            th.col-essential Product Type
+            th.col-essential Total Quantity
+            th.col-essential Available Quantity
+            th.col-essential Cost Price UGX
+            th.col-essential Product Price UGX
+            th.col-optional Supplier Name
+            th.col-optional Supplier Contact
+            th.col-essential Quality
+            th.col-essential Date
+            if currentUser && (currentUser.role === "manager")
+              th.col-optional Actions 
+        tbody
+          if items && items.length > 0
+            - const groupedItems = {};
+            each item in items 
+              - if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
+              - groupedItems[item.pdtname].push(item);
+            
+            each productGroup, productName in groupedItems
+              each item, index in productGroup
+                tr(data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-'))
+                  td.col-essential #{item.pdtname}
+                  td.col-essential #{item.pdttype}
+                  td.col-essential #{item.pdtquantity1}
+                  td.col-essential #{item.pdtquantity}
+                  td.col-essential #{item.cprice.toLocaleString()}
+                  td.col-essential #{Math.round(item.cprice * 1.5).toLocaleString()}
+                  td.col-optional #{item.supplier}
+                  td.col-optional +256#{item.supplierContact}
+                  td.col-essential #{item.quality}
+                  td.col-essential #{new Date(item.date).toLocaleDateString()}
+                  td.col-optional.actions
+                    if currentUser && currentUser.role === "manager"
+                      a.btn-icon(href=`/editStock/${item._id}` title='Edit')
+                        i.fas.fa-edit
+                      button.btn-icon(
+                        type='button' 
+                        title='Delete' 
+                        onclick=`showDeleteModal('${item._id}')`
+                      )
+                        i.fas.fa-trash
+                      form(method='post' action=`/generateReceipt/${item._id}` style='display:inline')
+                        input(type='hidden' name='id' value=item._id)
+                        button.btn-icon(type='submit' title='Receipt')
+                          i.fas.fa-file-invoice
+              
+              - 
+                const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
+                const availableQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity || 0), 0);
+                const totalValue = productGroup.reduce((sum, item) => sum + (Math.round(item.cprice * 1.5) * parseInt(item.pdtquantity || 0)), 0);
+              
+              tr.product-summary-row
+                td.col-essential(colspan="2") 
+                  strong #{productName} Total
+                td.col-essential 
+                  strong #{totalQuantity}
+                td.col-essential 
+                  strong #{availableQuantity}
+                td.col-essential 
+                td.col-essential 
+                  strong #{totalValue.toLocaleString()}
+                td.col-optional 
+                td.col-optional 
+                td.col-essential 
+                td.col-essential 
+                td.col-optional 
+                if currentUser && (currentUser.role === "manager")
+                  td.col-optional
+
+          else
+            tr
+              td(colspan="11" style="text-align: center;") No stock items found
+      h5#notFound Not Found
+  script(src='../javascript/stock.js')
+  //- SheetJS
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
+  //- jsPDF + AutoTable
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js")

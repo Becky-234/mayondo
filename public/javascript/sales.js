@@ -255,8 +255,7 @@ setTimeout(() => {
   });
 }, 5000);
 
-// sales.js - Form Validation Only
-
+// FORM VALIDATION
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Form validation initialized");
   initializeFormValidation();
@@ -659,6 +658,6 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('=== END DEBUG ===');
   }
 
-  // Uncomment the line below to see what dates are detected in your table
+  // Uncommented the line below to see what dates are detected in the table
   // debugTableDates();
 });

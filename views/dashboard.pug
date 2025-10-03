@@ -1,174 +1,138 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css' integrity='sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==' crossorigin='anonymous' referrerpolicy='no-referrer')
-  link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap' rel='stylesheet')
-  script(src='https://cdn.jsdelivr.net/npm/chart.js')
+extends layout.pug 
+block styles 
   link(rel='stylesheet' href='../css/dashboard.css')
-  title Dashboard
-aside.side-menu-container
-  .logo-menu
-    h2.logo MWF
-    i.fa-solid.fa-bars
-  ul.list
-    li.list-item.active
-      a(href='/dashboard')
-        i.fa-solid.fa-house
-        span.link-name Dashboard
-    li.list-item
-      a(href='/usersList')
-        i.fa-solid.fa-users
-        span.link-name Users
-    li.list-item
-      a(href='/sales')
-        i.fa-solid.fa-cart-shopping
-        span.link-name Sales
-    li.list-item
-      a(href='/stock')
-        i.fa-solid.fa-truck
-        span.link-name Stock
-    li.list-item
-      a(href='/products')
-        i.fa-solid.fa-couch
-        span.link-name Products
-    li.list-item
-      a(href='/settings')
-        i.fa-solid.fa-gear
-        span.link-name Settings
-main.main-content
-  nav.navbar.bg-body-tertiary.dashboard-header
-    .container-fluid.d-flex.justify-content-end.align-items-center
-      .d-flex.align-items-center
-        a.logoutBtn(href='/index') Logout
-  .dashboarBody
-    //- h4 Dashboard
-    h3 Mayondo Wood & Furniture ltd
-    //- h1 Welcome #{currentUser.username}!
-    p You’re now logged in.
-    br
-    section#dash-top.dash
-      .row
-        .col-md-3
-          .dash-card
-            .card-body
-              i.fa-solid.fa-sack-dollar
-              h5.card-title Total Revenue
-              p.card-text Shs. #{dashboardData.totalRevenue}
-              small.text-muted Combined potential revenue
-        .col-md-3
-          .dash-card
-            .card-body
-              i.fa-solid.fa-credit-card
-              h5.card-title Total Profit
-              p.card-text Shs. #{dashboardData.totalProfit}
-              small.text-muted Combined potential profit
-        .col-md-3
-          .dash-card
-            .card-body
-              i.fa-solid.fa-users-line
-              h5.card-title Total Inventory Items 
-              p.card-text #{dashboardData.totalInventory}
-              small.text-muted Unique products in stock
-        .col-md-3
-          .dash-card
-            .card-body
-              i.fa-solid.fa-truck-ramp-box
-              h5.card-title Stock Warnings 
-              p.card-text #{dashboardData.stockWarnings}
-              small.text-muted Items with low stock
-    //- Raw Materials Section
-    br
-    section#raw-materials
-      h2 Raw Materials Overview
+block content
+  include sidebar.pug
+  main.main-content
+    nav.navbar.bg-body-tertiary.dashboard-header
+      .container-fluid.d-flex.justify-content-end.align-items-center
+        .d-flex.align-items-center
+          a.logoutBtn(href='/index') Logout
+    .dashboarBody
+      //- h4 Dashboard
+      h3 Mayondo Wood & Furniture ltd
+      //- h1 Welcome #{currentUser.username}!
+      p You’re now logged in.
       br
-      .row
-        .col
-          .dash-card.raw-card
-            .card-body
-              i.fa-solid.fa-tree
-              h6.card-title Raw Revenue
-              p.card-text Shs. #{dashboardData.rawRevenue}
-        .col
-          .dash-card.raw-card
-            .card-body
-              i.fa-solid.fa-coins
-              h6.card-title Raw Profit
-              p.card-text Shs. #{dashboardData.rawProfit}
-        .col
-          .dash-card.raw-card
-            .card-body
-              i.fa-solid.fa-box
-              h6.card-title Raw Items
-              p.card-text #{dashboardData.rawInventory}
-    section#raw-materials-two.dash.mt-5
-      .row
-        .col
-          .dash-card.raw-card
-            .card-body
-              i.fa-solid.fa-exclamation
-              h6.card-title Raw Warnings
-              p.card-text #{dashboardData.rawStockWarnings} 
-        .col
-          .dash-card.raw-card
-            .card-body
-              i.fa-solid.fa-cubes
-              h6.card-title Total Units
-              p.card-text #{dashboardData.rawItems}
-        .col
-          .dash-card.raw-card
-            .card-body
-              i.fa-solid.fa-dollar-sign
-              h6.card-title Inventory Value
-              p.card-text Shs. #{dashboardData.rawInventoryValue}
-    //- Furniture Section
-    br
-    br
-    section#furniture
-      h2 Furniture Overview
+      section#dash-top.dash
+        .row
+          .col-md-3
+            .dash-card
+              .card-body
+                i.fa-solid.fa-sack-dollar
+                h5.card-title Total Revenue
+                p.card-text Shs. #{dashboardData.totalRevenue}
+                small.text-muted Combined potential revenue
+          .col-md-3
+            .dash-card
+              .card-body
+                i.fa-solid.fa-credit-card
+                h5.card-title Total Profit
+                p.card-text Shs. #{dashboardData.totalProfit}
+                small.text-muted Combined potential profit
+          .col-md-3
+            .dash-card
+              .card-body
+                i.fa-solid.fa-users-line
+                h5.card-title Total Inventory Items 
+                p.card-text #{dashboardData.totalInventory}
+                small.text-muted Unique products in stock
+          .col-md-3
+            .dash-card
+              .card-body
+                i.fa-solid.fa-truck-ramp-box
+                h5.card-title Stock Warnings 
+                p.card-text #{dashboardData.stockWarnings}
+                small.text-muted Items with low stock
+      //- Raw Materials Section
       br
-      .row
-        .col
-          .dash-card.furniture-card
-            .card-body
-              i.fa-solid.fa-couch
-              h6.card-title Furniture Revenue
-              p.card-text Shs. #{dashboardData.furnitureRevenue}
-        .col
-          .dash-card.furniture-card
-            .card-body
-              i.fa-solid.fa-money-bill
-              h6.card-title Furniture Profit
-              p.card-text Shs. #{dashboardData.furnitureProfit}
-        .col
-          .dash-card.furniture-card
-            .card-body
-              i.fa-solid.fa-box-open
-              h6.card-title Furniture Items
-              p.card-text #{dashboardData.furnitureInventory}
-    section#furniture.dash-two.mt-5
-      .row
-        .col
-          .dash-card.furniture-card
-            .card-body
-              i.fa-solid.fa-exclamation-triangle
-              h6.card-title Furniture Warnings
-              p.card-text #{dashboardData.furnitureStockWarnings}
-        .col
-          .dash-card.furniture-card
-            .card-body
-              i.fa-solid.fa-layer-group
-              h6.card-title Total Units
-              p.card-text #{dashboardData.furnitureItems}
-        .col
-          .dash-card.furniture-card
-            .card-body
-              i.fa-solid.fa-tag
-              h6.card-title Inventory Value
-              p.card-text Shs. #{dashboardData.furnitureInventoryValue}
+      section#raw-materials
+        h2 Raw Materials Overview
+        br
+        .row
+          .col
+            .dash-card.raw-card
+              .card-body
+                i.fa-solid.fa-tree
+                h6.card-title Raw Revenue
+                p.card-text Shs. #{dashboardData.rawRevenue}
+          .col
+            .dash-card.raw-card
+              .card-body
+                i.fa-solid.fa-coins
+                h6.card-title Raw Profit
+                p.card-text Shs. #{dashboardData.rawProfit}
+          .col
+            .dash-card.raw-card
+              .card-body
+                i.fa-solid.fa-box
+                h6.card-title Raw Items
+                p.card-text #{dashboardData.rawInventory}
+      section#raw-materials-two.dash.mt-5
+        .row
+          .col
+            .dash-card.raw-card
+              .card-body
+                i.fa-solid.fa-exclamation
+                h6.card-title Raw Warnings
+                p.card-text #{dashboardData.rawStockWarnings} 
+          .col
+            .dash-card.raw-card
+              .card-body
+                i.fa-solid.fa-cubes
+                h6.card-title Total Units
+                p.card-text #{dashboardData.rawItems}
+          .col
+            .dash-card.raw-card
+              .card-body
+                i.fa-solid.fa-dollar-sign
+                h6.card-title Inventory Value
+                p.card-text Shs. #{dashboardData.rawInventoryValue}
+      //- Furniture Section
       br
       br
-script(src='../javascript/dashboard.js')
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
-script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.min.js' integrity='sha512-n/G+dROKbKL3GVngGWmWfwK0yPctjZQM752diVYnXZtD/48agpUKLIn0xDQL9ydZ91x6BiOmTIFwWjjFi2kEFg==' crossorigin='anonymous' referrerpolicy='no-referrer')
+      section#furniture
+        h2 Furniture Overview
+        br
+        .row
+          .col
+            .dash-card.furniture-card
+              .card-body
+                i.fa-solid.fa-couch
+                h6.card-title Furniture Revenue
+                p.card-text Shs. #{dashboardData.furnitureRevenue}
+          .col
+            .dash-card.furniture-card
+              .card-body
+                i.fa-solid.fa-money-bill
+                h6.card-title Furniture Profit
+                p.card-text Shs. #{dashboardData.furnitureProfit}
+          .col
+            .dash-card.furniture-card
+              .card-body
+                i.fa-solid.fa-box-open
+                h6.card-title Furniture Items
+                p.card-text #{dashboardData.furnitureInventory}
+      section#furniture.dash-two.mt-5
+        .row
+          .col
+            .dash-card.furniture-card
+              .card-body
+                i.fa-solid.fa-exclamation-triangle
+                h6.card-title Furniture Warnings
+                p.card-text #{dashboardData.furnitureStockWarnings}
+          .col
+            .dash-card.furniture-card
+              .card-body
+                i.fa-solid.fa-layer-group
+                h6.card-title Total Units
+                p.card-text #{dashboardData.furnitureItems}
+          .col
+            .dash-card.furniture-card
+              .card-body
+                i.fa-solid.fa-tag
+                h6.card-title Inventory Value
+                p.card-text Shs. #{dashboardData.furnitureInventoryValue}
+        br
+        br
+  script(src='../javascript/dashboard.js')
