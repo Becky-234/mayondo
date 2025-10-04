@@ -10,33 +10,25 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeProductFilter();
   initializeDateFilter();
   initializeAlerts();
-  initializeModals(); // ADD THIS LINE - MODALS INITIALIZATION
-  initializeFormValidation(); // Only if you're on the addStock page
+  initializeModals();
 });
 
 // MODAL INITIALIZATION FUNCTION
 function initializeModals() {
   console.log("Initializing modals...");
-
-  // Make modal functions globally available
   window.closeMessageModal = closeMessageModal;
   window.showDeleteModal = showDeleteModal;
 }
 
-// MODAL FUNCTIONS - KEEP THESE AS THEY ARE
+// MODAL FUNCTIONS
 function closeMessageModal() {
-  // Remove the modal from DOM
   const modals = document.querySelectorAll('.modal.show.d-block');
   modals.forEach(modal => {
     modal.classList.remove('show', 'd-block');
     modal.classList.add('fade');
   });
-
-  // Remove backdrop
   const backdrops = document.querySelectorAll('.modal-backdrop');
   backdrops.forEach(backdrop => backdrop.remove());
-
-  // Enable body scrolling
   document.body.classList.remove('modal-open');
   document.body.style.overflow = '';
   document.body.style.paddingRight = '';
@@ -66,16 +58,13 @@ function showDeleteModal(stockId) {
   deleteModal.show();
 }
 
-
 // Side menu functionality
 function initializeSideMenu() {
   const sidebar = document.querySelector(".side-menu-container");
   const toggleBtn = document.querySelector(".fa-bars");
-
   if (toggleBtn && sidebar) {
     toggleBtn.addEventListener("click", () => {
       sidebar.classList.toggle("collapsed");
-      console.log("Sidebar toggled");
     });
   }
 }
@@ -87,9 +76,7 @@ function initializePDFExport() {
     pdfBtn.addEventListener("click", () => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-
       doc.text("Stock Report", 14, 20);
-
       doc.autoTable({
         html: "#newStock",
         startY: 30,
@@ -109,7 +96,6 @@ function initializeExcelExport() {
       const table = document.getElementById("newStock");
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.table_to_sheet(table);
-
       XLSX.utils.book_append_sheet(wb, ws, "stock");
       XLSX.writeFile(wb, "Stock_Report.xlsx");
     });
@@ -120,11 +106,7 @@ function initializeExcelExport() {
 function initializeSearch() {
   const searchInput = document.getElementById("searchStock");
   const table = document.getElementById("newStock");
-
-  if (!searchInput || !table) {
-    console.error("Search elements not found");
-    return;
-  }
+  if (!searchInput || !table) return;
 
   const tbody = table.querySelector('tbody');
   if (!tbody) return;
@@ -136,24 +118,20 @@ function initializeSearch() {
     const searchTerm = this.value.toLowerCase().trim();
     let foundCount = 0;
 
-    // Reset all rows first
     allRows.forEach(row => {
       row.style.display = '';
     });
 
-    // If search term exists, filter rows
     if (searchTerm) {
       allRows.forEach(row => {
         const cells = row.getElementsByTagName("td");
         let matchesSearch = false;
-
         for (let cell of cells) {
           if (cell.textContent.toLowerCase().includes(searchTerm)) {
             matchesSearch = true;
             break;
           }
         }
-
         if (matchesSearch) {
           foundCount++;
         } else {
@@ -162,41 +140,29 @@ function initializeSearch() {
       });
     }
 
-    // Show not found message
     if (notFound) {
       notFound.style.display = (searchTerm && foundCount === 0) ? 'block' : 'none';
     }
   });
-
-  console.log("Search functionality initialized");
 }
 
-// Product Type Filter
+// PRODUCT TYPE FILTER
 function initializeProductFilter() {
   const productFilter = document.getElementById('productFilter');
   const table = document.getElementById('newStock');
-
-  if (!productFilter || !table) {
-    console.error("Filter elements not found");
-    return;
-  }
+  if (!productFilter || !table) return;
 
   const tbody = table.querySelector('tbody');
-  if (!tbody) {
-    console.error('Table body not found');
-    return;
-  }
+  if (!tbody) return;
 
   const rows = tbody.querySelectorAll('tr');
   const notFoundMessage = document.getElementById('notFound');
 
   productFilter.addEventListener('change', function () {
     const filterValue = this.value.toLowerCase();
-
     let visibleRows = 0;
     let groupVisible = false;
 
-    // Reset all rows first
     rows.forEach(row => {
       row.style.display = '';
     });
@@ -240,214 +206,171 @@ function initializeProductFilter() {
       notFoundMessage.style.display = 'none';
     }
   });
-
-  console.log("Product filter functionality initialized");
 }
 
- 
-// DATE FILTER - FIXED VERSION
+// DATE FILTER - HANDLES DD/MM/YYYY FORMAT
 function initializeDateFilter() {
+  console.log("🔄 Initializing date filter...");
+
   const applyDateFilterBtn = document.getElementById('applyDateFilter');
   const clearDateFilterBtn = document.getElementById('clearDateFilter');
   const startDateInput = document.getElementById('startDate');
   const endDateInput = document.getElementById('endDate');
 
   if (!applyDateFilterBtn || !clearDateFilterBtn || !startDateInput || !endDateInput) {
-    console.log("Date filter elements not found - skipping date filter initialization");
+    console.log("Date filter elements not found");
     return;
   }
 
-  console.log("Date filter initialized");
+  console.log("Date filter elements found");
 
-  // Function to check if date filter is active
-  function isDateFilterActive() {
-    const startDate = startDateInput.value;
-    const endDate = endDateInput.value;
-    return startDate || endDate;
-  }
-
-  // Function to toggle columns based on date filter state
-  function toggleColumnsBasedOnDateFilter() {
-    const isDateActive = isDateFilterActive();
-    const optionalColumns = document.querySelectorAll('.col-optional');
-    const essentialColumns = document.querySelectorAll('.col-essential');
-
-    if (isDateActive) {
-      // Hide optional columns when date filtering
-      optionalColumns.forEach(col => {
-        col.style.display = 'none';
-      });
-      // Ensure essential columns are visible
-      essentialColumns.forEach(col => {
-        col.style.display = '';
-      });
-    } else {
-      // Show all columns when no date filter
-      optionalColumns.forEach(col => {
-        col.style.display = '';
-      });
-    }
-  }
-
-  // SIMPLE DATE PARSING FUNCTION
-  function parseDate(dateString) {
+  // CONVERT DD/MM/YYYY to Date object
+  function parseTableDate(dateString) {
     if (!dateString) return null;
 
-    const clean = dateString.trim();
-    console.log(`Parsing date: "${clean}"`);
+    console.log(`Parsing table date: "${dateString}"`);
 
-    // Try MM/DD/YYYY format
-    if (clean.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-      const parts = clean.split('/');
-      const month = parseInt(parts[0]) - 1;
-      const day = parseInt(parts[1]);
+    // Handle DD/MM/YYYY format (from your table)
+    if (dateString.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+      const parts = dateString.split('/');
+      const day = parseInt(parts[0]);
+      const month = parseInt(parts[1]) - 1; // Months are 0-based
       const year = parseInt(parts[2]);
       const date = new Date(year, month, day);
 
       if (!isNaN(date.getTime())) {
+        console.log(`Success: ${date}`);
         return date;
       }
     }
 
+    console.log(`Failed to parse: "${dateString}"`);
     return null;
   }
 
-  // FIXED FILTER APPLICATION FUNCTION
+  // CONVERT YYYY-MM-DD to Date object (from HTML input)
+  function parseInputDate(dateString) {
+    if (!dateString) return null;
+
+    console.log(`Parsing input date: "${dateString}"`);
+
+    // Handle YYYY-MM-DD format (from HTML date input)
+    if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      const date = new Date(dateString);
+      if (!isNaN(date.getTime())) {
+        console.log(`Success: ${date}`);
+        return date;
+      }
+    }
+
+    console.log(`Failed to parse: "${dateString}"`);
+    return null;
+  }
+
   function applyDateFilter() {
-    console.log("=== APPLYING DATE FILTER ===");
+    const startValue = startDateInput.value; // This will be YYYY-MM-DD
+    const endValue = endDateInput.value;     // This will be YYYY-MM-DD
 
-    const startDateValue = startDateInput.value;
-    const endDateValue = endDateInput.value;
+    console.log("Raw input values:", startValue, "to", endValue);
 
-    console.log("Input dates - Start:", startDateValue, "End:", endDateValue);
+    const startDate = parseInputDate(startValue);
+    const endDate = parseInputDate(endValue);
 
-    // Parse filter dates
-    const startDate = startDateValue ? parseDate(startDateValue) : null;
-    const endDate = endDateValue ? parseDate(endDateValue) : null;
-
-    console.log("Parsed filter dates - Start:", startDate, "End:", endDate);
+    console.log("Parsed filter dates:", startDate, endDate);
 
     const allRows = document.querySelectorAll('#newStock tbody tr');
-    const notFoundMessage = document.getElementById('notFound');
+    let visibleCount = 0;
 
-    let visibleRows = 0;
+    // Show all rows first
+    allRows.forEach(row => row.style.display = '');
 
-    console.log("Total rows to process:", allRows.length);
-
-    // Reset all rows first
-    allRows.forEach(row => {
-      row.style.display = '';
-    });
-
-    // If no date filters are set, show everything including summary rows
-    if (!startDate && !endDate) {
-      console.log("No date filter applied - showing all rows including summaries");
-      toggleColumnsBasedOnDateFilter();
-      if (notFoundMessage) notFoundMessage.style.display = 'none';
+    // If no dates selected, do nothing
+    if (!startValue && !endValue) {
+      console.log("No dates selected - showing all rows");
+      document.getElementById('notFound').style.display = 'none';
       return;
     }
 
-    // Process each row - HIDE SUMMARY ROWS WHEN DATE FILTERING
+    // Filter rows
     allRows.forEach((row, index) => {
-      // Hide all summary rows when date filtering is active
+      // Skip summary rows
       if (row.classList.contains('product-summary-row')) {
         row.style.display = 'none';
-        console.log(`Row ${index}: HIDDEN (summary row during date filter)`);
         return;
       }
 
-      // Regular data row - look for date in column 9 (based on your table structure)
-      const dateCell = row.cells[9]; // Date is in column 9 (0-based index)
+      // Get date from column 9 (Date column)
+      const dateCell = row.cells[9];
       if (!dateCell) {
-        console.log(`Row ${index}: No date cell found - hiding`);
         row.style.display = 'none';
         return;
       }
 
       const rowDateText = dateCell.textContent.trim();
-      const rowDate = parseDate(rowDateText);
+      const rowDate = parseTableDate(rowDateText); // This is DD/MM/YYYY format
 
-      console.log(`Row ${index}: Date text = "${rowDateText}", Parsed date =`, rowDate);
+      console.log(`Row ${index}: Table date "${rowDateText}" -> Parsed: ${rowDate}`);
 
       if (!rowDate) {
-        console.log(`Row ${index}: Invalid date - hiding`);
         row.style.display = 'none';
         return;
       }
 
-      // Check if row date is within filter range
       let shouldShow = true;
 
-      // Clone dates for comparison
-      const rowDateCopy = new Date(rowDate);
-      const startDateCopy = startDate ? new Date(startDate) : null;
-      const endDateCopy = endDate ? new Date(endDate) : null;
+      // Check start date (rowDate should be >= startDate)
+      if (startDate && rowDate < startDate) {
+        shouldShow = false;
+        console.log(`Row ${index}: Before start date`);
+      }
 
-      // Reset times for date-only comparison
-      rowDateCopy.setHours(0, 0, 0, 0);
-      if (startDateCopy) startDateCopy.setHours(0, 0, 0, 0);
-      if (endDateCopy) endDateCopy.setHours(23, 59, 59, 999);
-
-      if (startDateCopy && endDateCopy) {
-        shouldShow = rowDateCopy >= startDateCopy && rowDateCopy <= endDateCopy;
-      } else if (startDateCopy) {
-        shouldShow = rowDateCopy >= startDateCopy;
-      } else if (endDateCopy) {
-        shouldShow = rowDateCopy <= endDateCopy;
+      // Check end date (rowDate should be <= endDate)  
+      if (endDate && shouldShow) {
+        const endOfDay = new Date(endDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        if (rowDate > endOfDay) {
+          shouldShow = false;
+          console.log(`Row ${index}: After end date`);
+        }
       }
 
       if (shouldShow) {
         row.style.display = '';
-        visibleRows++;
-        console.log(`Row ${index}: VISIBLE (date in range)`);
+        visibleCount++;
+        console.log(`Row ${index}: SHOW - Date is within range`);
       } else {
         row.style.display = 'none';
-        console.log(`Row ${index}: HIDDEN (date out of range)`);
       }
     });
 
-    console.log("Final visible data rows:", visibleRows);
+    console.log(`Result: ${visibleCount} rows visible`);
 
-    // Update not found message
-    if (notFoundMessage) {
-      if (visibleRows === 0) {
-        notFoundMessage.style.display = 'block';
-        notFoundMessage.textContent = 'No stock items found for the selected date range';
-        console.log("No items found - showing not found message");
-      } else {
-        notFoundMessage.style.display = 'none';
-        console.log("Items found - hiding not found message");
-      }
+    // Show/hide not found message
+    const notFound = document.getElementById('notFound');
+    if (visibleCount === 0) {
+      notFound.style.display = 'block';
+      notFound.textContent = 'No stock items found for the selected date range';
+      console.log("Showing 'not found' message");
+    } else {
+      notFound.style.display = 'none';
+      console.log("Hiding 'not found' message");
     }
-
-    // Update columns visibility - this will hide the empty columns
-    toggleColumnsBasedOnDateFilter();
   }
 
-  // Clear date filter function
   function clearDateFilter() {
-    console.log('Clearing date filter');
+    console.log("Clearing filter");
 
-    // Clear date inputs
     startDateInput.value = '';
     endDateInput.value = '';
 
     // Show all rows including summary rows
     const allRows = document.querySelectorAll('#newStock tbody tr');
-    allRows.forEach(row => {
-      row.style.display = '';
-    });
+    allRows.forEach(row => row.style.display = '');
 
     // Hide not found message
-    const notFoundMessage = document.getElementById('notFound');
-    if (notFoundMessage) {
-      notFoundMessage.style.display = 'none';
-    }
+    document.getElementById('notFound').style.display = 'none';
 
-    // Reset columns to show all
-    toggleColumnsBasedOnDateFilter();
-
-    console.log('Date filter cleared - showing all rows and columns');
+    console.log("All rows visible");
   }
 
   // Add event listeners
@@ -458,219 +381,36 @@ function initializeDateFilter() {
   startDateInput.addEventListener('change', applyDateFilter);
   endDateInput.addEventListener('change', applyDateFilter);
 
-  // Initialize column state
-  toggleColumnsBasedOnDateFilter();
-
-  console.log("Date filter functionality initialized successfully");
+  console.log("Date filter ready! Use: From 2025-08-30 to 2025-10-02");
 }
+
+// TEST FUNCTION - Run this in console
+window.testDateFilter = function () {
+
+  // Set test dates that should show your data
+  document.getElementById('startDate').value = '2025-09-01';
+  document.getElementById('endDate').value = '2025-10-03';
+
+  console.log("Set test range: 2025-09-01 to 2025-10-03");
+  console.log("This should show dates: 01/10/2025, 02/10/2025, 03/10/2025");
+
+  // Apply filter
+  const event = new Event('change');
+  document.getElementById('startDate').dispatchEvent(event);
+};
+
 
 // ALERTS FUNCTIONALITY
 function initializeAlerts() {
-  // Auto-hide alerts after 5 seconds
   setTimeout(() => {
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(alert => {
-      // Check if Bootstrap is available
       if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
         const bsAlert = new bootstrap.Alert(alert);
         bsAlert.close();
       } else {
-        // Fallback: hide manually
         alert.style.display = 'none';
       }
     });
   }, 5000);
 }
-
-// FORM VALIDATION FUNCTIONALITY (Only for addStock page)
-function initializeFormValidation() {
-  const form = document.getElementById('addStock');
-  const resetBtn = document.getElementById('resetBtn');
-
-  if (!form) return;
-
-  // Get all form fields
-  const fields = {
-    pdtname: document.getElementById('pdtname'),
-    pdttype: document.getElementById('tproduct'),
-    pdtquantity1: document.getElementById('pdtquantity1'),
-    pdtquantity: document.getElementById('pdtquantity'),
-    cprice: document.getElementById('cprice'),
-    pdtprice: document.getElementById('pdtprice'),
-    supplier: document.getElementById('supplier'),
-    supplierContact: document.getElementById('supplierContact'),
-    quality: document.getElementById('quality'),
-    date: document.getElementById('date')
-  };
-
-  // Validation functions
-  const validators = {
-    pdtname: (value) => value.trim().length >= 2 && value.trim().length <= 100,
-    pdttype: (value) => value && value !== "",
-    pdtquantity1: (value) => value && parseInt(value) > 0,
-    pdtquantity: (value) => value && parseInt(value) >= 0,
-    cprice: (value) => value && parseFloat(value) >= 0,
-    pdtprice: (value) => value && parseFloat(value) >= 0,
-    supplier: (value) => value.trim().length >= 2 && value.trim().length <= 100,
-    supplierContact: (value) => {
-      const phoneRegex = /^[+]?[0-9\s\-()]{10,}$/;
-      return phoneRegex.test(value.trim());
-    },
-    quality: (value) => value && value !== "",
-    date: (value) => value && !isNaN(new Date(value).getTime())
-  };
-
-  // Error messages
-  const errorMessages = {
-    pdtname: "Please enter a valid product name (2-100 characters)",
-    pdttype: "Please select a product type",
-    pdtquantity1: "Please enter a valid total quantity (minimum 1)",
-    pdtquantity: "Please enter a valid remaining quantity (cannot be negative)",
-    cprice: "Please enter a valid cost price",
-    pdtprice: "Please enter a valid product price",
-    supplier: "Please enter a valid supplier name (2-100 characters)",
-    supplierContact: "Please enter a valid supplier contact (phone number)",
-    quality: "Please select a quality level",
-    date: "Please select a valid date"
-  };
-
-  // Show error function
-  function showError(fieldName, message) {
-    const field = fields[fieldName];
-    const errorElement = document.getElementById(`${fieldName}-error`);
-
-    if (field && errorElement) {
-      field.classList.add('is-invalid');
-      field.classList.remove('is-valid');
-      errorElement.textContent = message;
-      errorElement.style.display = 'block';
-    }
-  }
-
-  // Show success function
-  function showSuccess(fieldName) {
-    const field = fields[fieldName];
-    const errorElement = document.getElementById(`${fieldName}-error`);
-
-    if (field && errorElement) {
-      field.classList.remove('is-invalid');
-      field.classList.add('is-valid');
-      errorElement.style.display = 'none';
-    }
-  }
-
-  // Validate single field
-  function validateField(fieldName) {
-    const field = fields[fieldName];
-    if (!field) return true;
-
-    const value = field.value;
-    const isValid = validators[fieldName](value);
-
-    if (!isValid) {
-      showError(fieldName, errorMessages[fieldName]);
-      return false;
-    } else {
-      showSuccess(fieldName);
-      return true;
-    }
-  }
-
-  // Validate entire form
-  function validateForm() {
-    let isValid = true;
-
-    Object.keys(fields).forEach(fieldName => {
-      if (!validateField(fieldName)) {
-        isValid = false;
-      }
-    });
-
-    // Additional validation: Remaining quantity shouldn't exceed total quantity
-    const totalQty = parseInt(fields.pdtquantity1.value);
-    const remainingQty = parseInt(fields.pdtquantity.value);
-
-    if (totalQty && remainingQty && remainingQty > totalQty) {
-      showError('pdtquantity', 'Remaining quantity cannot exceed total quantity');
-      isValid = false;
-    }
-
-    return isValid;
-  }
-
-  // Add event listeners to all fields for real-time validation
-  Object.keys(fields).forEach(fieldName => {
-    const field = fields[fieldName];
-    if (field) {
-      field.addEventListener('blur', () => validateField(fieldName));
-      field.addEventListener('input', () => {
-        if (field.classList.contains('is-invalid')) {
-          validateField(fieldName);
-        }
-      });
-    }
-  });
-
-  // Form submit event
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    if (validateForm()) {
-      // Form is valid, you can submit it
-      console.log('Form is valid, submitting...');
-      this.submit();
-    } else {
-      // Scroll to first error
-      const firstError = form.querySelector('.is-invalid');
-      if (firstError) {
-        firstError.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-        firstError.focus();
-      }
-    }
-  });
-
-  // Reset button functionality
-  if (resetBtn) {
-    resetBtn.addEventListener('click', function () {
-      // Clear all validation states
-      Object.keys(fields).forEach(fieldName => {
-        const field = fields[fieldName];
-        const errorElement = document.getElementById(`${fieldName}-error`);
-
-        if (field && errorElement) {
-          field.classList.remove('is-invalid', 'is-valid');
-          errorElement.style.display = 'none';
-        }
-      });
-    });
-  }
-
-  // Additional validation for quantity comparison
-  if (fields.pdtquantity1 && fields.pdtquantity) {
-    fields.pdtquantity1.addEventListener('change', function () {
-      const totalQty = parseInt(this.value);
-      const remainingQty = parseInt(fields.pdtquantity.value);
-
-      if (totalQty && remainingQty && remainingQty > totalQty) {
-        showError('pdtquantity', 'Remaining quantity cannot exceed total quantity');
-      }
-    });
-
-    fields.pdtquantity.addEventListener('change', function () {
-      const totalQty = parseInt(fields.pdtquantity1.value);
-      const remainingQty = parseInt(this.value);
-
-      if (totalQty && remainingQty && remainingQty > totalQty) {
-        showError('pdtquantity', 'Remaining quantity cannot exceed total quantity');
-      }
-    });
-  }
-
-  console.log("Form validation initialized");
-}
-
-
- 

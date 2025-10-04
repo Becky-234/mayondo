@@ -50,6 +50,12 @@ app.use("/html", express.static(path.join(__dirname, "html")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// For active pages
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path;
+  next();
+});
+
 // Session configuration
 app.use(
   expressSession({
