@@ -49,8 +49,29 @@ router.get("/addStock", ensureManager, (req, res) => {
 // Add stock - POST
 router.post("/addStock", ensureManager, async (req, res) => {
   try {
-    const stock = new StockModel(req.body);
-    console.log(req.body);
+    const { pdtname, pdttype, pdtquantity1, pdtquantity, cprice, supplier, supplierContact, quality, date } = req.body;
+
+    // Calculate product price automatically (50% markup)
+    const calculatedPrice = Math.round(cprice * 1.5);
+
+    const stock = new StockModel({
+      pdtname,
+      pdttype,
+      pdtquantity1,
+      pdtquantity,
+      cprice,
+      pdtprice: calculatedPrice, // Use the calculated price
+      supplier,
+      supplierContact,
+      quality,
+      date
+    });
+
+    console.log('Adding stock with calculated price:', {
+      costPrice: cprice,
+      productPrice: calculatedPrice
+    });
+
     await stock.save();
     res.redirect("/stock?success=Stock item added successfully!");
   } catch (error) {
@@ -95,10 +116,21 @@ router.get("/editStock/:id", ensureManager, async (req, res) => {
 // Updating stock - POST with messages
 router.post("/editStock/:id", ensureManager, async (req, res) => {
   try {
+    const { cprice, ...otherFields } = req.body;
+
+    // Recalculate product price when cost price changes
+    const calculatedPrice = Math.round(cprice * 1.5);
+
+    const updateData = {
+      ...otherFields,
+      cprice,
+      pdtprice: calculatedPrice // Update the calculated price
+    };
+
     const product = await StockModel.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true, runValidators: true } // Added runValidators
+      updateData,
+      { new: true, runValidators: true }
     );
 
     if (!product) {

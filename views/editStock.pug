@@ -87,4 +87,22 @@ block content
         .add
           button.btns(type='submit') Update Stock
           a.btns(href='/stock' style='text-decoration: none; color: white;') Cancel
+      script.
+        document.addEventListener('DOMContentLoaded', function() {
+          const costPriceInput = document.getElementById('cprice');
+          const productPriceInput = document.getElementById('pdtprice');
+          
+          if (costPriceInput && productPriceInput) {
+            // Calculate initial price
+            const initialCostPrice = parseFloat(costPriceInput.value) || 0;
+            productPriceInput.value = Math.round(initialCostPrice * 1.5);
+            
+            // Update on change
+            costPriceInput.addEventListener('input', function() {
+              const costPrice = parseFloat(this.value) || 0;
+              const productPrice = Math.round(costPrice * 1.5);
+              productPriceInput.value = productPrice;
+            });
+          }
+        });
       script(src='/javascript/sales.js')

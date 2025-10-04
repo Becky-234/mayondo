@@ -95,4 +95,17 @@ block content
           button.btns(type='submit') Save
           button.btns(type='reset' id='resetBtn') Cancel
 
-    script(src='../javascript/stock.js')
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const costPriceInput = document.getElementById('cprice');
+      const productPriceInput = document.getElementById('pdtprice');
+      
+      if (costPriceInput && productPriceInput) {
+        costPriceInput.addEventListener('input', function() {
+          const costPrice = parseFloat(this.value) || 0;
+          const productPrice = Math.round(costPrice * 1.5);
+          productPriceInput.value = productPrice;
+        });
+      }
+    });
+  script(src='../javascript/stock.js')

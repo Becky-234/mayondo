@@ -17,19 +17,11 @@ const stockSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Total Product quantity is required'],
         min: [0, 'Quantity cannot be negative'],
-        // validate: {
-        //     validator: Number.isInteger,
-        //     message: 'Quantity must be a whole number'
-        // }
     },
     pdtquantity: {
         type: Number,
         required: [true, 'Product quantity is required'],
         min: [0, 'Quantity cannot be negative'],
-        // validate: {
-        //     validator: Number.isInteger,
-        //     message: 'Quantity must be a whole number'
-        // }
     },
     cprice: {
         type: Number,
@@ -39,13 +31,6 @@ const stockSchema = new mongoose.Schema({
     pdtprice: {
         type: Number,
         required: [true, 'Product price is required'],
-        // min: [0, 'Product price cannot be negative'],
-        // validate: {
-        //     validator: function (value) {
-        //         return value >= this.cprice;
-        //     },
-        //     message: 'Product price should be greater than or equal to cost price'
-        // }
     },
     supplier: {
         type: String,
@@ -57,13 +42,6 @@ const stockSchema = new mongoose.Schema({
         type: String,
         required: false,
         trim: true,
-        // validate: {
-        //     validator: function (v) {
-        //         // Basic phone number validation for Uganda
-        //         return /^\+256\d{9}$/.test(v) || /^0\d{9}$/.test(v);
-        //     },
-        //     message: 'Please provide a valid Ugandan phone number'
-        // }
     },
     quality: {
         type: String,
@@ -76,21 +54,13 @@ const stockSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: [true, 'Date is required'],
-        // validate: {
-        //     validator: function (date) {
-        //         return date <= new Date();
-        //     },
-        //     message: 'Date cannot be in the future'
-        // }
     }
-    //     addedBy: {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'UserModel',
-    //         required: true
-    //     }
-    // }, {
-    //     timestamps: true // Adds createdAt and updatedAt automatically
+});
+
+// virtual field
+stockSchema.virtual('calculatedPrice').get(function () {
+    return this.cprice ? Math.round(this.cprice * 1.5) : 0;
 });
 
 
-module.exports = mongoose.model('StockModel', stockSchema); // Changed to 'Stock' for consistency
+module.exports = mongoose.model('StockModel', stockSchema);  

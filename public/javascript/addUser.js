@@ -137,7 +137,7 @@ function validateField(e) {
             break;
         case 'tel':
             isValid = validatePhone(value);
-            errorMessage = 'Please enter a valid phone number (10-15 digits)';
+            errorMessage = 'Please enter a valid Ugandan phone number (10 digits starting with 0, or 12 digits with 256)';
             break;
         case 'nin':
             isValid = validateNIN(value);
@@ -206,8 +206,10 @@ function validateEmail(email) {
 }
 
 function validatePhone(phone) {
-    const cleanPhone = phone.replace(/\D/g, '');
-    return cleanPhone.length >= 10 && cleanPhone.length <= 15;
+    const cleanPhone = phone.replace(/\D/g, ''); // Remove all non-digit characters
+
+    // Accept Ugandan phone numbers: 10 digits starting with 0, or 12 digits starting with 256
+    return /^(0[0-9]{9}|256[0-9]{9})$/.test(cleanPhone);
 }
 
 function validateNIN(nin) {

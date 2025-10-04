@@ -58,7 +58,7 @@ function showDeleteModal(stockId) {
   deleteModal.show();
 }
 
-// Side menu functionality
+// SIDEBAR FUNCTIONALITY
 function initializeSideMenu() {
   const sidebar = document.querySelector(".side-menu-container");
   const toggleBtn = document.querySelector(".fa-bars");
@@ -69,7 +69,7 @@ function initializeSideMenu() {
   }
 }
 
-// PDF Export
+// PDF EXPORT
 function initializePDFExport() {
   const pdfBtn = document.getElementById("downloadPdf");
   if (pdfBtn) {
@@ -88,7 +88,8 @@ function initializePDFExport() {
   }
 }
 
-// Excel Export
+
+// Excel EXPORT
 function initializeExcelExport() {
   const excelBtn = document.getElementById("downloadExcel");
   if (excelBtn) {
@@ -102,49 +103,42 @@ function initializeExcelExport() {
   }
 }
 
-// Search Functionality
-function initializeSearch() {
-  const searchInput = document.getElementById("searchStock");
+
+// SEARCH FUNCTIONALITY
+document.addEventListener("DOMContentLoaded", () => {
   const table = document.getElementById("newStock");
-  if (!searchInput || !table) return;
+  if (!table) {
+    return;
+  }
 
-  const tbody = table.querySelector('tbody');
-  if (!tbody) return;
-
-  const allRows = Array.from(tbody.getElementsByTagName("tr"));
+  const input = document.getElementById("searchStock");
+  const tbody = table.tBodies[0];
+  const rows = tbody.getElementsByTagName("tr");
   const notFound = document.getElementById("notFound");
 
-  searchInput.addEventListener("input", function () {
-    const searchTerm = this.value.toLowerCase().trim();
-    let foundCount = 0;
+  input.addEventListener("keyup", () => {
+    const filter = input.value.toUpperCase();
+    let hasResult = false;
 
-    allRows.forEach(row => {
-      row.style.display = '';
-    });
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName("td");
+      let found = false;
 
-    if (searchTerm) {
-      allRows.forEach(row => {
-        const cells = row.getElementsByTagName("td");
-        let matchesSearch = false;
-        for (let cell of cells) {
-          if (cell.textContent.toLowerCase().includes(searchTerm)) {
-            matchesSearch = true;
-            break;
-          }
+      for (let j = 0; j < cells.length; j++) {
+        //Use textContent or innerText, not cellTextContent
+        const cellText = cells[j].textContent || cells[j].innerText;
+        if (cellText.toUpperCase().includes(filter)) {
+          found = true;
+          hasResult = true;
+          break;
         }
-        if (matchesSearch) {
-          foundCount++;
-        } else {
-          row.style.display = 'none';
-        }
-      });
+      }
+      rows[i].style.display = found ? "" : "none";
     }
-
-    if (notFound) {
-      notFound.style.display = (searchTerm && foundCount === 0) ? 'block' : 'none';
-    }
+    notFound.style.display = hasResult ? "none" : "block";
   });
-}
+});
+ 
 
 // PRODUCT TYPE FILTER
 function initializeProductFilter() {
@@ -207,6 +201,7 @@ function initializeProductFilter() {
     }
   });
 }
+
 
 // DATE FILTER - HANDLES DD/MM/YYYY FORMAT
 function initializeDateFilter() {
@@ -384,6 +379,7 @@ function initializeDateFilter() {
   console.log("Date filter ready! Use: From 2025-08-30 to 2025-10-02");
 }
 
+
 // TEST FUNCTION - Run this in console
 window.testDateFilter = function () {
 
@@ -414,3 +410,200 @@ function initializeAlerts() {
     });
   }, 5000);
 }
+
+
+// FORM VALIDATION FUNCTIONALITY (Only for addStock page)
+function initializeFormValidation() {
+  const form = document.getElementById('addStock');
+  const resetBtn = document.getElementById('resetBtn');
+
+  if (!form) return;
+
+  // Get all form fields
+  const fields = {
+    pdtname: document.getElementById('pdtname'),
+    pdttype: document.getElementById('tproduct'),
+    pdtquantity1: document.getElementById('pdtquantity1'),
+    pdtquantity: document.getElementById('pdtquantity'),
+    cprice: document.getElementById('cprice'),
+    pdtprice: document.getElementById('pdtprice'),
+    supplier: document.getElementById('supplier'),
+    supplierContact: document.getElementById('supplierContact'),
+    quality: document.getElementById('quality'),
+    date: document.getElementById('date')
+  };
+
+  // Validation functions
+  const validators = {
+    pdtname: (value) => value.trim().length >= 2 && value.trim().length <= 100,
+    pdttype: (value) => value && value !== "",
+    pdtquantity1: (value) => value && parseInt(value) > 0,
+    pdtquantity: (value) => value && parseInt(value) >= 0,
+    cprice: (value) => value && parseFloat(value) >= 0,
+    pdtprice: (value) => value && parseFloat(value) >= 0,
+    supplier: (value) => value.trim().length >= 2 && value.trim().length <= 100,
+    supplierContact: (value) => {
+      const phoneRegex = /^[0-9]{9,12}$/; // Accepts 9-12 digit numbers
+      const cleanValue = value.trim().replace(/\s+/g, ''); // Remove spaces
+      return phoneRegex.test(cleanValue);
+    },
+    quality: (value) => value && value !== "",
+    date: (value) => value && !isNaN(new Date(value).getTime())
+  };
+
+  // Error messages
+  const errorMessages = {
+    pdtname: "Please enter a valid product name (2-100 characters)",
+    pdttype: "Please select a product type",
+    pdtquantity1: "Please enter a valid total quantity (minimum 1)",
+    pdtquantity: "Please enter a valid remaining quantity (cannot be negative)",
+    cprice: "Please enter a valid cost price",
+    pdtprice: "Please enter a valid product price",
+    supplier: "Please enter a valid supplier name (2-100 characters)",
+    supplierContact: "Please enter a valid phone number (9-12 digits)",
+    quality: "Please select a quality level",
+    date: "Please select a valid date"
+  };
+
+  // Show error function
+  function showError(fieldName, message) {
+    const field = fields[fieldName];
+    const errorElement = document.getElementById(`${fieldName}-error`);
+
+    if (field && errorElement) {
+      field.classList.add('is-invalid');
+      field.classList.remove('is-valid');
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
+    }
+  }
+
+  // Show success function
+  function showSuccess(fieldName) {
+    const field = fields[fieldName];
+    const errorElement = document.getElementById(`${fieldName}-error`);
+
+    if (field && errorElement) {
+      field.classList.remove('is-invalid');
+      field.classList.add('is-valid');
+      errorElement.style.display = 'none';
+    }
+  }
+
+  // Validate single field
+  function validateField(fieldName) {
+    const field = fields[fieldName];
+    if (!field) return true;
+
+    const value = field.value;
+    const isValid = validators[fieldName](value);
+
+    if (!isValid) {
+      showError(fieldName, errorMessages[fieldName]);
+      return false;
+    } else {
+      showSuccess(fieldName);
+      return true;
+    }
+  }
+
+  // Validate entire form
+  function validateForm() {
+    let isValid = true;
+
+    Object.keys(fields).forEach(fieldName => {
+      if (!validateField(fieldName)) {
+        isValid = false;
+      }
+    });
+
+    // Additional validation: Remaining quantity shouldn't exceed total quantity
+    const totalQty = parseInt(fields.pdtquantity1.value);
+    const remainingQty = parseInt(fields.pdtquantity.value);
+
+    if (totalQty && remainingQty && remainingQty > totalQty) {
+      showError('pdtquantity', 'Remaining quantity cannot exceed total quantity');
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  // Add event listeners to all fields for real-time validation
+  Object.keys(fields).forEach(fieldName => {
+    const field = fields[fieldName];
+    if (field) {
+      field.addEventListener('blur', () => validateField(fieldName));
+      field.addEventListener('input', () => {
+        if (field.classList.contains('is-invalid')) {
+          validateField(fieldName);
+        }
+      });
+    }
+  });
+
+  // Form submit event
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (validateForm()) {
+      // Form is valid, you can submit it
+      console.log('Form is valid, submitting...');
+      this.submit();
+    } else {
+      // Scroll to first error
+      const firstError = form.querySelector('.is-invalid');
+      if (firstError) {
+        firstError.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+        firstError.focus();
+      }
+    }
+  });
+
+  // Reset button functionality
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      // Clear all validation states
+      Object.keys(fields).forEach(fieldName => {
+        const field = fields[fieldName];
+        const errorElement = document.getElementById(`${fieldName}-error`);
+
+        if (field && errorElement) {
+          field.classList.remove('is-invalid', 'is-valid');
+          errorElement.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  // Additional validation for quantity comparison
+  if (fields.pdtquantity1 && fields.pdtquantity) {
+    fields.pdtquantity1.addEventListener('change', function () {
+      const totalQty = parseInt(this.value);
+      const remainingQty = parseInt(fields.pdtquantity.value);
+
+      if (totalQty && remainingQty && remainingQty > totalQty) {
+        showError('pdtquantity', 'Remaining quantity cannot exceed total quantity');
+      }
+    });
+
+    fields.pdtquantity.addEventListener('change', function () {
+      const totalQty = parseInt(fields.pdtquantity1.value);
+      const remainingQty = parseInt(this.value);
+
+      if (totalQty && remainingQty && remainingQty > totalQty) {
+        showError('pdtquantity', 'Remaining quantity cannot exceed total quantity');
+      }
+    });
+  }
+
+  console.log("Form validation initialized");
+}
+
+// Initialize form validation when DOM is loaded
+document.addEventListener("DOMContentLoaded", function () {
+  initializeFormValidation();
+});

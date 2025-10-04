@@ -280,8 +280,9 @@ function initializeFormValidation() {
   const validators = {
     name: (value) => value.trim().length >= 2 && value.trim().length <= 100,
     contact: (value) => {
-      const phoneRegex = /^[+]?[0-9\s\-()]{10,}$/;
-      return phoneRegex.test(value.trim());
+      const phoneRegex = /^[0-9]{9,12}$/; // Accepts 9-12 digit numbers
+      const cleanValue = value.trim().replace(/\s+/g, ''); // Remove spaces
+      return phoneRegex.test(cleanValue);
     },
     nproduct: (value) => value && value !== "",
     tproduct: (value) => value && value !== "",
@@ -306,7 +307,7 @@ function initializeFormValidation() {
   // Error messages
   const errorMessages = {
     name: "Please enter a valid customer name (2-100 characters)",
-    contact: "Please enter a valid phone number (at least 10 digits)",
+    contact: "Please enter a valid phone number (9-12 digits)",
     nproduct: "Please select a product",
     tproduct: "Please select a product type",
     quantity: (value) => {
