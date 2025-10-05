@@ -534,12 +534,12 @@ tr[data-product] {
 footer {
   text-align: center;
   font-size: 0.9rem;
-  color: white;
+  color: black;
   background-color: rgba(0.5, 0, 0, 0.1);
   flex: 1;
   min-width: 200px;
   margin-bottom: 20px;
-  padding: 0 25px;
+  padding: 0 45px;
 }
 
 
