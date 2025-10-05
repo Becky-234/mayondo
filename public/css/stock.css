@@ -225,28 +225,6 @@ body.sidebar-active {
   /* Ensure it's above other content if needed */
 }
 
-.dash-card {
-  flex: 1;
-  min-width: 200px;
-  background: #4c6444;
-  color: #fff;
-  border: solid 1px #fff;
-  border-radius: 10px;
-  padding: 5px;
-  height: 100px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 5px;
-  flex-wrap: nowrap; /* prevent wrapping */
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.dash-card:hover {
-  transform: translateY(-10px); /* lifts the card up by 10px */
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* adds a shadow for depth */
-}
 
 .include {
   display: flex;
@@ -527,7 +505,7 @@ tr[data-product] {
 
 .filter-label {
     font-weight: 500;
-    color: #495057;
+    color: #fff;
     margin-right: 5px;
 }
 
@@ -552,4 +530,16 @@ tr[data-product] {
         margin: 5px;
     }
 }
+
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: white;
+  background-color: rgba(0.5, 0, 0, 0.1);
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 20px;
+  padding: 0 25px;
+}
+
 

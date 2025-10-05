@@ -382,7 +382,7 @@ body.sidebar-active {
 .include input {
   border-radius: 10px;
   border: 2px solid #fff;
-  width: 250px; /* Fixed width instead of percentage */
+  width: 250px;
   margin-left: auto; /* Push search to the right */
   text-align: center;
   background: #caba9c;
@@ -619,7 +619,7 @@ td.actions .btn-icon:hover {
 
 .filter-label {
     font-weight: 500;
-    color: #495057;
+    color: #fff;
     margin-right: 5px;
 }
 
@@ -643,6 +643,17 @@ td.actions .btn-icon:hover {
     .filter-date {
         margin: 5px;
     }
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: white;
+  background-color: rgba(0.5, 0, 0, 0.1);
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 5px;
+  padding: 0 25px;
 }
 
 

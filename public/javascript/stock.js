@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeModals();
 });
 
+
 // MODAL INITIALIZATION FUNCTION
 function initializeModals() {
   console.log("Initializing modals...");
@@ -125,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let found = false;
 
       for (let j = 0; j < cells.length; j++) {
-        //Use textContent or innerText, not cellTextContent
+        //Used textContent or innerText, not cellTextContent
         const cellText = cells[j].textContent || cells[j].innerText;
         if (cellText.toUpperCase().includes(filter)) {
           found = true;
@@ -205,7 +206,7 @@ function initializeProductFilter() {
 
 // DATE FILTER - HANDLES DD/MM/YYYY FORMAT
 function initializeDateFilter() {
-  console.log("🔄 Initializing date filter...");
+  console.log("Initializing date filter...");
 
   const applyDateFilterBtn = document.getElementById('applyDateFilter');
   const clearDateFilterBtn = document.getElementById('clearDateFilter');

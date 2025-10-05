@@ -23,7 +23,7 @@ body {
   top: 0;
   left: 0;
   width: 260px;
-  height: 100%;
+  height: 100vh;
   background: #4c6444;
   padding: 6px 50px 0 0;
   overflow: hidden;
@@ -266,4 +266,15 @@ h2 {
 
 .logoutBtn :hover {
   background: #8a6420;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: white;
+  background-color: rgba(0.5, 0, 0, 0.1);
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 20px;
+  padding: 0 25px;
 }
