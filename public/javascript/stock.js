@@ -1,6 +1,20 @@
 /// Wait for DOM to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
   console.log("=== STOCK.JS LOADED ===");
+  console.log("Checking for date filter elements...");
+
+  // Check if buttons exist
+  const applyBtn = document.getElementById('applyDateFilter');
+  const clearBtn = document.getElementById('clearDateFilter');
+
+  console.log("Apply button found:", !!applyBtn);
+  console.log("Clear button found:", !!clearBtn);
+
+  if (applyBtn && clearBtn) {
+    console.log("Both date filter buttons found");
+  } else {
+    console.log("Date filter buttons not found - check HTML IDs");
+  }
 
   // Initialize all functionalities
   initializeSideMenu();
@@ -12,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeAlerts();
   initializeModals();
 });
-
 
 // MODAL INITIALIZATION FUNCTION
 function initializeModals() {
@@ -89,8 +102,7 @@ function initializePDFExport() {
   }
 }
 
-
-// Excel EXPORT
+// EXCEL EXPORT
 function initializeExcelExport() {
   const excelBtn = document.getElementById("downloadExcel");
   if (excelBtn) {
@@ -104,11 +116,13 @@ function initializeExcelExport() {
   }
 }
 
+// SEARCH FUNCTIONALITY 
+function initializeSearch() {
+  console.log("Initializing search...");
 
-// SEARCH FUNCTIONALITY
-document.addEventListener("DOMContentLoaded", () => {
   const table = document.getElementById("newStock");
   if (!table) {
+    console.log("Table not found for search");
     return;
   }
 
@@ -117,16 +131,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const rows = tbody.getElementsByTagName("tr");
   const notFound = document.getElementById("notFound");
 
+  if (!input) {
+    console.log("Search input not found");
+    return;
+  }
+
   input.addEventListener("keyup", () => {
     const filter = input.value.toUpperCase();
     let hasResult = false;
 
     for (let i = 0; i < rows.length; i++) {
+      // Skip summary rows in search
+      if (rows[i].classList.contains('product-summary-row')) {
+        rows[i].style.display = 'none';
+        continue;
+      }
+
       const cells = rows[i].getElementsByTagName("td");
       let found = false;
 
       for (let j = 0; j < cells.length; j++) {
-        //Used textContent or innerText, not cellTextContent
         const cellText = cells[j].textContent || cells[j].innerText;
         if (cellText.toUpperCase().includes(filter)) {
           found = true;
@@ -136,10 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       rows[i].style.display = found ? "" : "none";
     }
+
     notFound.style.display = hasResult ? "none" : "block";
   });
-});
- 
+
+  console.log("Search functionality initialized");
+}
 
 // PRODUCT TYPE FILTER
 function initializeProductFilter() {
@@ -203,8 +229,7 @@ function initializeProductFilter() {
   });
 }
 
-
-// DATE FILTER - HANDLES DD/MM/YYYY FORMAT
+// DATE FILTER
 function initializeDateFilter() {
   console.log("Initializing date filter...");
 
@@ -220,59 +245,37 @@ function initializeDateFilter() {
 
   console.log("Date filter elements found");
 
-  // CONVERT DD/MM/YYYY to Date object
   function parseTableDate(dateString) {
     if (!dateString) return null;
 
-    console.log(`Parsing table date: "${dateString}"`);
+    const trimmedDate = dateString.trim();
+    console.log(`Parsing date: "${trimmedDate}"`);
 
-    // Handle DD/MM/YYYY format (from your table)
-    if (dateString.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-      const parts = dateString.split('/');
-      const day = parseInt(parts[0]);
-      const month = parseInt(parts[1]) - 1; // Months are 0-based
-      const year = parseInt(parts[2]);
-      const date = new Date(year, month, day);
-
-      if (!isNaN(date.getTime())) {
-        console.log(`Success: ${date}`);
-        return date;
-      }
+    // Handle DD/MM/YYYY format
+    if (trimmedDate.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+      const parts = trimmedDate.split('/');
+      const day = parts[0].padStart(2, '0');
+      const month = parts[1].padStart(2, '0');
+      const year = parts[2];
+      return `${year}-${month}-${day}`;
+    }
+    // Handle DD-MM-YYYY format  
+    else if (trimmedDate.match(/^\d{1,2}-\d{1,2}-\d{4}$/)) {
+      const parts = trimmedDate.split('-');
+      const day = parts[0].padStart(2, '0');
+      const month = parts[1].padStart(2, '0');
+      const year = parts[2];
+      return `${year}-${month}-${day}`;
     }
 
-    console.log(`Failed to parse: "${dateString}"`);
-    return null;
-  }
-
-  // CONVERT YYYY-MM-DD to Date object (from HTML input)
-  function parseInputDate(dateString) {
-    if (!dateString) return null;
-
-    console.log(`Parsing input date: "${dateString}"`);
-
-    // Handle YYYY-MM-DD format (from HTML date input)
-    if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      const date = new Date(dateString);
-      if (!isNaN(date.getTime())) {
-        console.log(`Success: ${date}`);
-        return date;
-      }
-    }
-
-    console.log(`Failed to parse: "${dateString}"`);
     return null;
   }
 
   function applyDateFilter() {
-    const startValue = startDateInput.value; // This will be YYYY-MM-DD
-    const endValue = endDateInput.value;     // This will be YYYY-MM-DD
+    console.log("Apply filter clicked");
 
-    console.log("Raw input values:", startValue, "to", endValue);
-
-    const startDate = parseInputDate(startValue);
-    const endDate = parseInputDate(endValue);
-
-    console.log("Parsed filter dates:", startDate, endDate);
+    const startValue = startDateInput.value;
+    const endValue = endDateInput.value;
 
     const allRows = document.querySelectorAll('#newStock tbody tr');
     let visibleCount = 0;
@@ -282,30 +285,26 @@ function initializeDateFilter() {
 
     // If no dates selected, do nothing
     if (!startValue && !endValue) {
-      console.log("No dates selected - showing all rows");
       document.getElementById('notFound').style.display = 'none';
       return;
     }
 
     // Filter rows
-    allRows.forEach((row, index) => {
+    allRows.forEach((row) => {
       // Skip summary rows
       if (row.classList.contains('product-summary-row')) {
         row.style.display = 'none';
         return;
       }
 
-      // Get date from column 9 (Date column)
-      const dateCell = row.cells[9];
+      const dateCell = row.cells[9]; // Column 9 for date
       if (!dateCell) {
         row.style.display = 'none';
         return;
       }
 
       const rowDateText = dateCell.textContent.trim();
-      const rowDate = parseTableDate(rowDateText); // This is DD/MM/YYYY format
-
-      console.log(`Row ${index}: Table date "${rowDateText}" -> Parsed: ${rowDate}`);
+      const rowDate = parseTableDate(rowDateText);
 
       if (!rowDate) {
         row.style.display = 'none';
@@ -314,88 +313,54 @@ function initializeDateFilter() {
 
       let shouldShow = true;
 
-      // Check start date (rowDate should be >= startDate)
-      if (startDate && rowDate < startDate) {
+      // Compare dates as strings (YYYY-MM-DD format)
+      if (startValue && rowDate < startValue) {
         shouldShow = false;
-        console.log(`Row ${index}: Before start date`);
       }
 
-      // Check end date (rowDate should be <= endDate)  
-      if (endDate && shouldShow) {
-        const endOfDay = new Date(endDate);
-        endOfDay.setHours(23, 59, 59, 999);
-        if (rowDate > endOfDay) {
-          shouldShow = false;
-          console.log(`Row ${index}: After end date`);
-        }
+      if (endValue && shouldShow && rowDate > endValue) {
+        shouldShow = false;
       }
 
       if (shouldShow) {
         row.style.display = '';
         visibleCount++;
-        console.log(`Row ${index}: SHOW - Date is within range`);
       } else {
         row.style.display = 'none';
       }
     });
-
-    console.log(`Result: ${visibleCount} rows visible`);
 
     // Show/hide not found message
     const notFound = document.getElementById('notFound');
     if (visibleCount === 0) {
       notFound.style.display = 'block';
       notFound.textContent = 'No stock items found for the selected date range';
-      console.log("Showing 'not found' message");
     } else {
       notFound.style.display = 'none';
-      console.log("Hiding 'not found' message");
     }
+
+    console.log(`Filter applied: ${visibleCount} rows visible`);
   }
 
   function clearDateFilter() {
-    console.log("Clearing filter");
+    console.log("Clear filter clicked");
 
     startDateInput.value = '';
     endDateInput.value = '';
 
-    // Show all rows including summary rows
     const allRows = document.querySelectorAll('#newStock tbody tr');
     allRows.forEach(row => row.style.display = '');
-
-    // Hide not found message
     document.getElementById('notFound').style.display = 'none';
 
-    console.log("All rows visible");
+    console.log("Filter cleared: all rows visible");
   }
 
   // Add event listeners
   applyDateFilterBtn.addEventListener('click', applyDateFilter);
   clearDateFilterBtn.addEventListener('click', clearDateFilter);
 
-  // Auto-apply when dates change
-  startDateInput.addEventListener('change', applyDateFilter);
-  endDateInput.addEventListener('change', applyDateFilter);
-
-  console.log("Date filter ready! Use: From 2025-08-30 to 2025-10-02");
+  console.log("Date filter initialized");
 }
-
-
-// TEST FUNCTION - Run this in console
-window.testDateFilter = function () {
-
-  // Set test dates that should show your data
-  document.getElementById('startDate').value = '2025-09-01';
-  document.getElementById('endDate').value = '2025-10-03';
-
-  console.log("Set test range: 2025-09-01 to 2025-10-03");
-  console.log("This should show dates: 01/10/2025, 02/10/2025, 03/10/2025");
-
-  // Apply filter
-  const event = new Event('change');
-  document.getElementById('startDate').dispatchEvent(event);
-};
-
 
 // ALERTS FUNCTIONALITY
 function initializeAlerts() {
@@ -412,8 +377,7 @@ function initializeAlerts() {
   }, 5000);
 }
 
-
-// FORM VALIDATION FUNCTIONALITY (Only for addStock page)
+// FORM VALIDATION FUNCTIONALITY (for addStock page)
 function initializeFormValidation() {
   const form = document.getElementById('addStock');
   const resetBtn = document.getElementById('resetBtn');
@@ -444,8 +408,8 @@ function initializeFormValidation() {
     pdtprice: (value) => value && parseFloat(value) >= 0,
     supplier: (value) => value.trim().length >= 2 && value.trim().length <= 100,
     supplierContact: (value) => {
-      const phoneRegex = /^[0-9]{9,12}$/; // Accepts 9-12 digit numbers
-      const cleanValue = value.trim().replace(/\s+/g, ''); // Remove spaces
+      const phoneRegex = /^[0-9]{9,12}$/;
+      const cleanValue = value.trim().replace(/\s+/g, '');
       return phoneRegex.test(cleanValue);
     },
     quality: (value) => value && value !== "",
@@ -548,11 +512,9 @@ function initializeFormValidation() {
     e.preventDefault();
 
     if (validateForm()) {
-      // Form is valid, you can submit it
       console.log('Form is valid, submitting...');
       this.submit();
     } else {
-      // Scroll to first error
       const firstError = form.querySelector('.is-invalid');
       if (firstError) {
         firstError.scrollIntoView({
@@ -567,7 +529,6 @@ function initializeFormValidation() {
   // Reset button functionality
   if (resetBtn) {
     resetBtn.addEventListener('click', function () {
-      // Clear all validation states
       Object.keys(fields).forEach(fieldName => {
         const field = fields[fieldName];
         const errorElement = document.getElementById(`${fieldName}-error`);
@@ -603,8 +564,3 @@ function initializeFormValidation() {
 
   console.log("Form validation initialized");
 }
-
-// Initialize form validation when DOM is loaded
-document.addEventListener("DOMContentLoaded", function () {
-  initializeFormValidation();
-});

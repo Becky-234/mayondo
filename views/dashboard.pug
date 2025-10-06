@@ -42,8 +42,31 @@ block content
               .card-body
                 i.fa-solid.fa-truck-ramp-box
                 h5.card-title Stock Warnings 
-                p.card-text #{dashboardData.stockWarnings}
+                p.card-text #{dashboardData.totalStockWarnings}
                 small.text-muted Items with low stock
+                
+            // Stock alerts
+          .card.mb-4
+              .card-header.d-flex.justify-content-between.align-items-center
+                  h5.mb-0 Stock Warnings
+                  span.badge.bg-danger #{dashboardData.totalStockWarnings}
+              .card-body
+                  if dashboardData.totalLowStockItems && dashboardData.totalLowStockItems.length > 0
+                      .alert.alert-warning
+                          strong Low Stock Alert!
+                          |  The following items are running low:
+                      .low-stock-list
+                          each item in dashboardData.totalLowStockItems
+                              .low-stock-item.mb-2.p-2.border.rounded
+                                  .d-flex.justify-content-between
+                                      strong #{item.name}
+                                      span.badge.bg-warning #{item.quantity} left
+                                  small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
+                  else
+                      .alert.alert-success
+                          strong All good!
+                          |  No stock items are running low.
+                  
       //- Raw Materials Section
       br
       section#raw-materials

@@ -25,12 +25,11 @@ const stockSchema = new mongoose.Schema({
     },
     cprice: {
         type: Number,
-        required: [true, 'Cost price is required'],
-        min: [0, 'Cost price cannot be negative']
+        required: false,
     },
     pdtprice: {
         type: Number,
-        required: [true, 'Product price is required'],
+        required: true
     },
     supplier: {
         type: String,

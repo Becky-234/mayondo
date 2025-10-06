@@ -32,7 +32,8 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 inventoryCount: 0,
                 stockWarnings: 0,
                 totalItems: 0,
-                inventoryValue: 0
+                inventoryValue: 0,
+                lowStockItems: [] // ADD THIS: to store low stock items
             },
             rawMaterials: {
                 revenue: 0,
@@ -41,7 +42,8 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 stockWarnings: 0,
                 totalItems: 0,
                 inventoryValue: 0,
-                items: []
+                items: [],
+                lowStockItems: [] // ADD THIS
             },
             furniture: {
                 revenue: 0,
@@ -50,7 +52,8 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 stockWarnings: 0,
                 totalItems: 0,
                 inventoryValue: 0,
-                items: []
+                items: [],
+                lowStockItems: [] // ADD THIS
             }
         };
 
@@ -64,6 +67,9 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             const productType = item.pdttype.toLowerCase().includes('raw') ? 'rawMaterials' :
                 item.pdttype.toLowerCase().includes('furniture') ? 'furniture' : 'other';
 
+            // Check if item has low stock (less than 10)
+            const isLowStock = item.pdtquantity < 10;
+
             // Update total metrics
             metrics.total.revenue += itemRevenue;
             metrics.total.profit += itemProfit;
@@ -71,8 +77,15 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             metrics.total.totalItems += item.pdtquantity;
             metrics.total.inventoryValue += itemCost;
 
-            if (item.pdtquantity < 10) {
+            if (isLowStock) {
                 metrics.total.stockWarnings++;
+                // ADD low stock item to the array
+                metrics.total.lowStockItems.push({
+                    name: item.pdtname,
+                    quantity: item.pdtquantity,
+                    type: item.pdttype,
+                    threshold: 10
+                });
             }
 
             // Update specific product type metrics
@@ -84,8 +97,15 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 metrics[productType].inventoryValue += itemCost;
                 metrics[productType].items.push(item);
 
-                if (item.pdtquantity < 10) {
+                if (isLowStock) {
                     metrics[productType].stockWarnings++;
+                    // ADD low stock item to the specific category
+                    metrics[productType].lowStockItems.push({
+                        name: item.pdtname,
+                        quantity: item.pdtquantity,
+                        type: item.pdttype,
+                        threshold: 10
+                    });
                 }
             }
         });
@@ -99,6 +119,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             totalStockWarnings: metrics.total.stockWarnings,
             totalItems: metrics.total.totalItems,
             totalInventoryValue: Math.round(metrics.total.inventoryValue).toLocaleString(),
+            totalLowStockItems: metrics.total.lowStockItems, // ADD THIS
 
             // Raw Materials metrics
             rawRevenue: Math.round(metrics.rawMaterials.revenue).toLocaleString(),
@@ -107,6 +128,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             rawStockWarnings: metrics.rawMaterials.stockWarnings,
             rawItems: metrics.rawMaterials.totalItems,
             rawInventoryValue: Math.round(metrics.rawMaterials.inventoryValue).toLocaleString(),
+            rawLowStockItems: metrics.rawMaterials.lowStockItems, // ADD THIS
 
             // Furniture metrics
             furnitureRevenue: Math.round(metrics.furniture.revenue).toLocaleString(),
@@ -115,6 +137,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             furnitureStockWarnings: metrics.furniture.stockWarnings,
             furnitureItems: metrics.furniture.totalItems,
             furnitureInventoryValue: Math.round(metrics.furniture.inventoryValue).toLocaleString(),
+            furnitureLowStockItems: metrics.furniture.lowStockItems, // ADD THIS
 
             // Percentages
             rawPercentage: metrics.total.inventoryCount > 0 ?
@@ -123,8 +146,14 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 Math.round((metrics.furniture.inventoryCount / metrics.total.inventoryCount) * 100) : 0
         };
 
+        console.log("Low stock items found:", {
+            total: dashboardData.totalLowStockItems.length,
+            raw: dashboardData.rawLowStockItems.length,
+            furniture: dashboardData.furnitureLowStockItems.length
+        });
+
         res.render('dashboard', {
-            currentUser: currentUser, // Use the corrected currentUser
+            currentUser: currentUser,
             dashboardData: dashboardData
         });
 
@@ -146,18 +175,21 @@ function getDefaultDashboardData() {
         totalStockWarnings: '0',
         totalItems: '0',
         totalInventoryValue: '0',
+        totalLowStockItems: [], // ADD THIS
         rawRevenue: '0',
         rawProfit: '0',
         rawInventory: '0',
         rawStockWarnings: '0',
         rawItems: '0',
         rawInventoryValue: '0',
+        rawLowStockItems: [], // ADD THIS
         furnitureRevenue: '0',
         furnitureProfit: '0',
         furnitureInventory: '0',
         furnitureStockWarnings: '0',
         furnitureItems: '0',
         furnitureInventoryValue: '0',
+        furnitureLowStockItems: [], // ADD THIS
         rawPercentage: 0,
         furniturePercentage: 0
     };

@@ -91,9 +91,8 @@ block content
                 td
                   a.btn-icon(href=`/editUser/${user._id}` title='Edit')
                     i.fas.fa-edit
-                  form(method='post', action=`/deleteUser/${user._id}`, style='display:inline')
-                    input(type='hidden', name='_method', value='DELETE')
-                    button.btn-icon(type='submit', title='Delete', onclick="return confirm('Are you sure you want to delete this User?')")
+                  form(method='POST', action=`/deleteUser/${user._id}`, style='display:inline', onsubmit="return confirm('Are you sure you want to delete this User?')")
+                    button.btn-icon(type='submit', title='Delete',  data-user-id=user._id,  data-user-name=user.name)
                       i.fas.fa-trash
           else
             tr

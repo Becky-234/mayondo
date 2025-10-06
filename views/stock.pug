@@ -83,7 +83,16 @@ block content
 
       input#searchStock(type='search' placeholder='Search...')
     
+    //- STOCK ALERTS SUMMARY BANNER
     section.table-section
+      if hasLowStock
+        .alert.alert-warning.alert-dismissible.fade.show(role="alert")
+          strong 
+            i.fas.fa-exclamation-triangle.me-2
+            | Stock Alerts!
+          |  Some items are running low. Please review and restock.
+          button.btn-close(type="button" data-bs-dismiss="alert" aria-label="Close")
+
       table#newStock.table-content
         thead.row-one 
           tr
@@ -102,17 +111,47 @@ block content
         tbody
           if items && items.length > 0
             - const groupedItems = {};
+            - let hasLowStock = false;
+            
             each item in items 
               - if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
               - groupedItems[item.pdtname].push(item);
             
             each productGroup, productName in groupedItems
               each item, index in productGroup
-                tr(data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-'))
-                  td.col-essential #{item.pdtname}
+                - 
+                  // Determine stock status
+                  let stockStatus = 'ok';
+                  let stockClass = '';
+                  let alertBadge = '';
+                  let warningText = '';
+                  
+                  if (item.pdtquantity < 5) {
+                    stockStatus = 'critical';
+                    stockClass = 'stock-critical';
+                    alertBadge = '<span class="badge bg-danger stock-alert-badge">CRITICAL</span>';
+                    warningText = 'Very low stock!';
+                    hasLowStock = true;
+                  } else if (item.pdtquantity < 10) {
+                    stockStatus = 'low';
+                    stockClass = 'stock-low';
+                    alertBadge = '<span class="badge bg-warning stock-alert-badge">LOW</span>';
+                    warningText = 'Low stock';
+                    hasLowStock = true;
+                  } else {
+                    stockClass = 'stock-ok';
+                  }
+                
+                tr(class=stockClass data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-') data-stock-status=stockStatus)
+                  td.col-essential 
+                    | #{item.pdtname}
+                    | !{alertBadge}
                   td.col-essential #{item.pdttype}
                   td.col-essential #{item.pdtquantity1}
-                  td.col-essential #{item.pdtquantity}
+                  td.col-essential.quantity-cell 
+                    | #{item.pdtquantity}
+                    if warningText
+                      small.low-stock-warning #{warningText}
                   td.col-essential #{item.cprice.toLocaleString()}
                   td.col-essential #{Math.round(item.cprice * 1.5).toLocaleString()}
                   td.col-optional #{item.supplier}
@@ -160,11 +199,14 @@ block content
           else
             tr
               td(colspan="11" style="text-align: center;") No stock items found
-      br
-      br
-      h5#notFound Not Found! 
+    
+    br
+    br
+    h5#notFound Not Found! 
+    
     footer
       p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
+  
   script(src='../javascript/stock.js')
   //- SheetJS
   script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")

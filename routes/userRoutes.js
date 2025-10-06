@@ -168,18 +168,23 @@ router.post("/editUser/:id", ensureAuthenticated, ensureManager, async (req, res
   }
 });
 
-// DELETE user route
+
+// In UserRoutes.js
 router.post("/deleteUser/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
+    console.log("Deleting user with ID:", req.params.id);
+
     const user = await UserModel.findByIdAndDelete(req.params.id);
     if (!user) {
-      return res.redirect("/usersList?error=" + encodeURIComponent("User not found"));
+      return res.redirect("/usersList?error=User not found");
     }
-    res.redirect("/usersList?success=" + encodeURIComponent("User deleted successfully!"));
+
+    res.redirect("/usersList?success=User deleted successfully!");
   } catch (error) {
-    console.error(error);
-    res.redirect("/usersList?error=" + encodeURIComponent("Error deleting user"));
+    console.error("Delete error:", error);
+    res.redirect("/usersList?error=Error deleting user");
   }
 });
+
 
 module.exports = router;
