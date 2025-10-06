@@ -9,30 +9,25 @@ const { ensureAuthenticated, ensureAgent, ensureManager } = require("../middlewa
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", ensureAuthenticated, async (req, res) => {
   try {
-    console.log("User role in sales route:", req.user.role);
-    console.log("User data:", req.user);
+    // Use req.session.user instead of req.user for manager login
+    const currentUser = req.session.user || req.user;
+
+    console.log("User role in sales route:", currentUser.role);
+    console.log("User data:", currentUser);
 
     let items;
 
     // If user is Sales Agent, only show their sales
-    if (req.user.role === 'sales_agent') {
+    if (currentUser.role === 'sales_agent') {
       items = await SalesModel
-        .find({ agent: req.user._id })
+        .find({ agent: currentUser._id })
         .sort({ date: -1 });
     }
-    // If user is Manager, show sales from their agents
-    else if (req.user.role === 'manager') {
-      // Get all sales agents managed by this manager
-      const managedAgents = await UserModel.find({
-        managerId: req.user._id
-      }).select('_id');
-
-      const agentIds = managedAgents.map(agent => agent._id);
-      agentIds.push(req.user._id); // Include manager's own sales if any
-
-      items = await SalesModel
-        .find({ agent: { $in: agentIds } })
-        .sort({ date: -1 });
+    // If user is Manager, show ALL sales from ALL agents
+    else if (currentUser.role === 'manager') {
+      console.log("Manager view - showing ALL sales from ALL agents");
+      items = await SalesModel.find().sort({ date: -1 });
+      console.log("Found", items.length, "total sales for manager");
     }
     // Fallback for any other cases
     else {
@@ -90,10 +85,11 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
     console.log("Total Sales Raw:", totalSalesRaw);
     console.log("Total Sales Furniture:", totalSalesFurniture);
     console.log("Total Sales All:", totalSalesAll);
+    console.log("Total Orders:", totalOrders);
 
     res.render('sales', {
       items,
-      currentUser: req.user,
+      currentUser: currentUser, // Use the corrected currentUser
       success,
       error,
       dashboardMetrics: {
@@ -115,24 +111,29 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
   }
 });
 
+router.post("/sales", (req, res) => {
+  console.log(req.body);
+});
+
 // POST add-sale with success/error handling
 router.post("/addSale", ensureAuthenticated, async (req, res) => {
   console.log("POST /addSale hit", req.body);
 
   try {
+    const currentUser = req.session.user || req.user; // ADD THIS LINE
     const {
       name, contact, tproduct, nproduct, quantity,
       unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
 
-    // Check if req.user exists
-    if (!req.user || !req.user._id) {
-      console.error("req.user:", req.user);
+    // Check if currentUser exists (NOT req.user)
+    if (!currentUser || !currentUser._id) {
+      console.error("currentUser:", currentUser);
       return res.redirect("/addSale?error=User authentication failed. Please login again.");
     }
 
-    const userId = req.user._id;
-    const userName = req.user.name || 'Unknown Agent';
+    const userId = currentUser._id; // Use currentUser
+    const userName = currentUser.name || 'Unknown Agent'; // Use currentUser
 
     console.log("2. User ID:", userId, "User Name:", userName);
 
@@ -305,6 +306,8 @@ router.post("/addSale", ensureAuthenticated, async (req, res) => {
 // GET add-sale form
 router.get("/addSale", ensureAuthenticated, async (req, res) => {
   try {
+    const currentUser = req.session.user || req.user; // ADD THIS LINE
+
     // Use aggregation to group products and calculate totals
     const groupedProducts = await StockModel.aggregate([
       {
@@ -366,7 +369,7 @@ router.get("/addSale", ensureAuthenticated, async (req, res) => {
       lowStockItems: productsWithAlerts.filter(product => product.availableQuantity <= 5),
       success,
       error,
-      currentUser: req.user
+      currentUser: currentUser // FIXED: Use currentUser instead of req.user
     });
   } catch (error) {
     console.error("Error loading sale form:", error.message);
@@ -377,6 +380,8 @@ router.get("/addSale", ensureAuthenticated, async (req, res) => {
 // Other routes (editSales, deleteSale, getReceipt) remain the same...
 router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
+    const currentUser = req.session.user || req.user; // ADD THIS LINE
+
     let item = await SalesModel.findById(req.params.id);
     const success = req.query.success;
     const error = req.query.error;
@@ -389,7 +394,7 @@ router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res
       item,
       success,
       error,
-      currentUser: req.user
+      currentUser: currentUser // FIXED: Use currentUser instead of req.user
     });
   } catch (error) {
     console.error("Error in editSales GET:", error);
@@ -397,17 +402,18 @@ router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res
   }
 });
 
+
 router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
+    const currentUser = req.session.user || req.user;
+
     const existingSale = await SalesModel.findById(req.params.id);
     if (!existingSale) {
       return res.redirect("/sales?error=Sale not found");
     }
 
-    const agent = await UserModel.findById(existingSale.agent);
-    if (agent.managerId && agent.managerId.toString() !== req.user._id.toString() && existingSale.agent.toString() !== req.user._id.toString()) {
-      return res.redirect(`/editSales/${req.params.id}?error=You can only edit sales from your agents`);
-    }
+    // REMOVED the agent restriction - manager can edit ANY sale
+    // Since there's only one manager who should manage all sales
 
     const updateData = {
       name: req.body.name,
@@ -452,6 +458,7 @@ router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, re
   }
 });
 
+
 router.post("/deleteSale", ensureManager, async (req, res) => {
   try {
     const result = await SalesModel.deleteOne({ _id: req.body.id });
@@ -469,6 +476,8 @@ router.post("/deleteSale", ensureManager, async (req, res) => {
 
 router.post("/getReceipt/:id", ensureAuthenticated, async (req, res) => {
   try {
+    const currentUser = req.session.user || req.user; // ADD THIS
+
     const item = await SalesModel.findOne({ _id: req.params.id });
 
     if (!item) {
@@ -477,7 +486,7 @@ router.post("/getReceipt/:id", ensureAuthenticated, async (req, res) => {
 
     res.render("salesReceipt", {
       item,
-      currentUser: req.user
+      currentUser: currentUser // FIXED: Use currentUser instead of req.user
     });
   } catch (error) {
     console.error(error.message);

@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/userModel");
+const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
+
 
 // List users (only sales agents)
-router.get("/usersList", async (req, res) => {
+router.get("/usersList",  ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const users = await UserModel.find({ role: 'sales_agent' }).sort({ $natural: -1 });
 
@@ -34,7 +36,7 @@ router.get("/add", (req, res) => {
 });
 
 // Handle add-user form
-router.post("/add", async (req, res) => {
+router.post("/add", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     console.log("Received form data:", req.body);
 
@@ -97,7 +99,7 @@ router.post("/add", async (req, res) => {
 });
 
 // Show edit user form
-router.get("/editUser/:id", async (req, res) => {
+router.get("/editUser/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     let user = await UserModel.findById(req.params.id);
     if (!user) {
@@ -119,7 +121,7 @@ router.get("/editUser/:id", async (req, res) => {
 });
 
 // Handle edit user form submission
-router.post("/editUser/:id", async (req, res) => {
+router.post("/editUser/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const { name, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
 
@@ -167,7 +169,7 @@ router.post("/editUser/:id", async (req, res) => {
 });
 
 // DELETE user route
-router.post("/deleteUser/:id", async (req, res) => {
+router.post("/deleteUser/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const user = await UserModel.findByIdAndDelete(req.params.id);
     if (!user) {

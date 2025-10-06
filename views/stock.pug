@@ -58,7 +58,10 @@ block content
               button.btn.btn-danger(type='submit') Delete
 
     .include
-      a.btns(href='/addStock') Add Stock
+      //- Only show Add Stock button to manager
+      if currentUser && currentUser.role === "manager"
+        a.btns(href='/addStock') Add Stock
+      
       a#downloadExcel.btns Download Excel
       a#downloadPdf.btns Download PDF
       

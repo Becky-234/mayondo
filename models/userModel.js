@@ -36,6 +36,11 @@ const userSchema = new mongoose.Schema({
         enum: ['manager', 'sales_agent'],
         default: 'sales_agent'
     },
+    managerId: {  // ADD THIS FIELD
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserModel',
+        default: null
+    },
     date: {
         type: Date,
         required: [true, 'Date is required']

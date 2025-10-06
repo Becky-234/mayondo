@@ -9,11 +9,11 @@ block content
         .d-flex.align-items-center
           a.logoutBtn(href='/index') Logout
     .dashboarBody
-      //- h4 Dashboard
       h3 Mayondo Wood & Furniture ltd
-      //- h1 Welcome #{currentUser.username}!
-      p You’re now logged in.
-      br
+      .welcome-container
+        h3.fade-in Welcome 
+          span.username.typewriter #{currentUser.role}!
+        p.fade-in(style="animation-delay: 1.5s;") You're now logged in.
       section#dash-top.dash
         .row
           .col-md-3

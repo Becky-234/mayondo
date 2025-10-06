@@ -224,6 +224,77 @@ body.sidebar-active {
   padding-right: 20px;
 }
 
+/* Welcome Animation Styles */
+.welcome-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.username {
+  color: #2c5aa0;
+  font-weight: bold;
+  display: inline-block;
+  position: relative;
+}
+
+/* Typewriter animation */
+.typewriter {
+  overflow: hidden;
+  border-right: 0.15em solid #2c5aa0;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #2c5aa0 }
+}
+
+/* Fade in animation */
+.fade-in {
+  animation: fadeIn 2s ease-in;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Bounce animation */
+.bounce {
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Color change animation */
+.color-change {
+  animation: colorChange 3s infinite alternate;
+}
+
+@keyframes colorChange {
+  0% { color: #2c5aa0; }
+  25% { color: #4a7bc8; }
+  50% { color: #6f9de8; }
+  75% { color: #4a7bc8; }
+  100% { color: #2c5aa0; }
+}
+
 .dash-card {
   flex: 1;
   min-width: 200px;

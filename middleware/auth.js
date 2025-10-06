@@ -4,7 +4,7 @@ const ensureAuthenticated = (req, res, next) => {
 
   // Check session authentication
   if (req.session && req.session.user) {
-    // Make session user available as req.user for consistency
+    // Made session user available as req.user for consistency
     if (!req.user) {
       req.user = req.session.user;
     }
@@ -48,12 +48,8 @@ const ensureManager = (req, res, next) => {
     return next();
   }
 
-  console.log("User is NOT manager - access denied");
-  res.status(403).render("error", {
-    title: "Access Denied",
-    message: "Access denied. Manager privileges required.",
-    user: user,
-  });
+  console.log("User is NOT manager - redirecting to landing page");
+  res.redirect("/index");
 };
 
 const ensureSalesAgent = (req, res, next) => {

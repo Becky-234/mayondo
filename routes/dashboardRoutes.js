@@ -2,12 +2,25 @@ const express = require('express');
 const router = express.Router();
 const StockModel = require("../models/stockModel");
 const SalesModel = require("../models/salesModel");
+const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
 
 // Dashboard Page with Product Type Separation
-router.get('/dashboard', async (req, res) => {
-    // if (!req.user) return res.redirect('/login');
-
+router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) => {
     try {
+        // Use req.session.user instead of req.user
+        const currentUser = req.session.user || req.user;
+
+        if (!currentUser) {
+            console.log("No user found in session");
+            return res.redirect('/login');
+        }
+
+        console.log("Dashboard user data:", {
+            username: currentUser.username,
+            role: currentUser.role,
+            source: req.session.user ? 'session' : 'req.user'
+        });
+
         // Fetch all stock items
         const stockItems = await StockModel.find({});
 
@@ -111,14 +124,15 @@ router.get('/dashboard', async (req, res) => {
         };
 
         res.render('dashboard', {
-            currentUser: req.user,
+            currentUser: currentUser, // Use the corrected currentUser
             dashboardData: dashboardData
         });
 
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
+        const currentUser = req.session.user || req.user;
         res.render('dashboard', {
-            currentUser: req.user,
+            currentUser: currentUser,
             dashboardData: getDefaultDashboardData()
         });
     }
@@ -149,5 +163,8 @@ function getDefaultDashboardData() {
     };
 }
 
+router.post('/dashboard', ensureAuthenticated, ensureManager, (req, res) => {
+    console.log(req.body);
+});
 
 module.exports = router;

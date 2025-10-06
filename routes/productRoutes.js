@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const { ensureAuthenticated } = require("../middleware/auth")
 
 
 //Products page
-router.get('/products', (req, res) => {
+router.get('/products', ensureAuthenticated, (req, res) => {
     res.render('products', { title: 'Products page' });
 });
 
-router.post('/products', (req, res) => {
+router.post('/products', ensureAuthenticated, (req, res) => {
     console.log(req.body);
 });
 

@@ -4,6 +4,7 @@ const managerProfile = {
     nin: 'CF12345678AB',
     phone: '+256744807739',
     role: 'Manager',
+    username: 'Becky',
     isManager: true
 };
 

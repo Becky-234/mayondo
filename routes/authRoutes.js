@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); // Make sure mongoose is imported
 const { managerProfile } = require("../configs/managerConfigs");
 const UserModel = require("../models/userModel"); // Import UserModel
 
@@ -29,9 +29,12 @@ router.post("/login", async (req, res) => {
 
         // 1. Check if it's the manager login
         if (email === managerEmail && password === managerPassword) {
-            // Create manager user data
+            // Create manager user data with PROPER ObjectId
             const userData = {
+                _id: new mongoose.Types.ObjectId(), // FIXED: Generate real ObjectId
                 email: email,
+                username: managerProfile.username,
+                name: managerProfile.fname,
                 ...managerProfile,
                 role: 'manager',
                 isManager: true,
@@ -39,10 +42,16 @@ router.post("/login", async (req, res) => {
                 lastActivity: new Date()
             };
 
-            // Set session user
-            req.session.user = userData;
+            console.log("=== MANAGER LOGIN SUCCESS ===");
+            console.log("Username:", userData.username);
+            console.log("Manager ID:", userData._id);
+            console.log("Manager ID type:", typeof userData._id);
+            console.log("Manager ID string:", userData._id.toString());
 
-            // Save the session
+            // SET BOTH session.user AND req.user
+            req.session.user = userData;
+            req.user = userData;
+
             req.session.save((err) => {
                 if (err) {
                     console.error("Session save error:", err);
@@ -52,7 +61,9 @@ router.post("/login", async (req, res) => {
                     });
                 }
 
-                console.log("Manager login successful - session saved");
+                console.log("Manager login successful - redirecting to dashboard");
+                console.log("Session user set:", req.session.user.username);
+                console.log("Req user set:", req.user.username);
                 return res.redirect('/dashboard');
             });
         }
@@ -67,7 +78,7 @@ router.post("/login", async (req, res) => {
             if (salesAgent) {
                 console.log("Found sales agent:", salesAgent.email);
 
-                // Check if password matches (plain text comparison since you're storing plain text)
+                // Check if password matches
                 if (password === salesAgent.password) {
                     // Create sales agent user data
                     const userData = {
@@ -82,10 +93,13 @@ router.post("/login", async (req, res) => {
                         lastActivity: new Date()
                     };
 
-                    // Set session user
-                    req.session.user = userData;
+                    console.log("=== SALES AGENT LOGIN SUCCESS ===");
+                    console.log("Username:", userData.username);
 
-                    // Save the session
+                    // SET BOTH session.user AND req.user
+                    req.session.user = userData;
+                    req.user = userData;
+
                     req.session.save((err) => {
                         if (err) {
                             console.error("Session save error:", err);
@@ -95,7 +109,9 @@ router.post("/login", async (req, res) => {
                             });
                         }
 
-                        console.log("Sales Agent login successful - session saved");
+                        console.log("Sales Agent login successful - redirecting to sales");
+                        console.log("Session user set:", req.session.user.username);
+                        console.log("Req user set:", req.user.username);
                         return res.redirect('/sales');
                     });
                 } else {
@@ -106,7 +122,7 @@ router.post("/login", async (req, res) => {
                     });
                 }
             } else {
-                console.log(" Login failed - user not found");
+                console.log("Login failed - user not found");
                 return res.status(401).render('login', {
                     title: "Login page",
                     error: "Invalid credentials"

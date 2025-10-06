@@ -172,7 +172,7 @@ router.post("/deleteStock", ensureManager, async (req, res) => {
 
 
 // Generating receipt - Only authenticated users
-router.post("/generateReceipt/:id", ensureAuthenticated, async (req, res) => {
+router.post("/generateReceipt/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const item = await StockModel.findOne({ _id: req.params.id });
 
