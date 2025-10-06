@@ -6,9 +6,11 @@ const StockModel = require("../models/stockModel");
 const UserModel = require("../models/userModel");
 const { ensureAuthenticated, ensureAgent, ensureManager } = require("../middleware/auth");
 
+
 // GET /sales – fetch sales from DB and render the page
 router.get("/sales", ensureAuthenticated, async (req, res) => {
   try {
+
     // Use req.session.user instead of req.user for manager login
     const currentUser = req.session.user || req.user;
 
@@ -111,29 +113,31 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
   }
 });
 
+
 router.post("/sales", (req, res) => {
   console.log(req.body);
 });
+
 
 // POST add-sale with success/error handling
 router.post("/addSale", ensureAuthenticated, async (req, res) => {
   console.log("POST /addSale hit", req.body);
 
   try {
-    const currentUser = req.session.user || req.user; // ADD THIS LINE
+    const currentUser = req.session.user || req.user;  
     const {
       name, contact, tproduct, nproduct, quantity,
       unitPrice, transportCheck, totalPrice, payment, date
     } = req.body;
 
-    // Check if currentUser exists (NOT req.user)
+    // Check if currentUser exists
     if (!currentUser || !currentUser._id) {
       console.error("currentUser:", currentUser);
       return res.redirect("/addSale?error=User authentication failed. Please login again.");
     }
 
-    const userId = currentUser._id; // Use currentUser
-    const userName = currentUser.name || 'Unknown Agent'; // Use currentUser
+    const userId = currentUser._id;  
+    const userName = currentUser.name || 'Unknown Agent';  
 
     console.log("2. User ID:", userId, "User Name:", userName);
 
@@ -190,7 +194,7 @@ router.post("/addSale", ensureAuthenticated, async (req, res) => {
       return res.redirect(`/addSale?error=Insufficient stock! Only ${totalAvailable} units available.`);
     }
 
-    // CORRECTED TOTAL PRICE CALCULATION
+    // TOTAL PRICE CALCULATION
     let total = quantityNum * unitPriceNum;
     console.log("6. Price calculation:", {
       quantity: quantityNum,
@@ -376,6 +380,7 @@ router.get("/addSale", ensureAuthenticated, async (req, res) => {
     res.status(500).send("Error loading sale form");
   }
 });
+
 
 // Other routes (editSales, deleteSale, getReceipt) remain the same...
 router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {

@@ -7,7 +7,7 @@ const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
 // Dashboard Page with Product Type Separation
 router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) => {
     try {
-        // Use req.session.user instead of req.user
+        // Used req.session.user instead of req.user
         const currentUser = req.session.user || req.user;
 
         if (!currentUser) {
@@ -33,7 +33,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 stockWarnings: 0,
                 totalItems: 0,
                 inventoryValue: 0,
-                lowStockItems: [] // ADD THIS: to store low stock items
+                lowStockItems: [] // to store low stock items
             },
             rawMaterials: {
                 revenue: 0,
@@ -43,7 +43,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 totalItems: 0,
                 inventoryValue: 0,
                 items: [],
-                lowStockItems: [] // ADD THIS
+                lowStockItems: []
             },
             furniture: {
                 revenue: 0,
@@ -53,7 +53,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 totalItems: 0,
                 inventoryValue: 0,
                 items: [],
-                lowStockItems: [] // ADD THIS
+                lowStockItems: []
             }
         };
 
@@ -119,7 +119,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             totalStockWarnings: metrics.total.stockWarnings,
             totalItems: metrics.total.totalItems,
             totalInventoryValue: Math.round(metrics.total.inventoryValue).toLocaleString(),
-            totalLowStockItems: metrics.total.lowStockItems, // ADD THIS
+            totalLowStockItems: metrics.total.lowStockItems,
 
             // Raw Materials metrics
             rawRevenue: Math.round(metrics.rawMaterials.revenue).toLocaleString(),
@@ -128,7 +128,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             rawStockWarnings: metrics.rawMaterials.stockWarnings,
             rawItems: metrics.rawMaterials.totalItems,
             rawInventoryValue: Math.round(metrics.rawMaterials.inventoryValue).toLocaleString(),
-            rawLowStockItems: metrics.rawMaterials.lowStockItems, // ADD THIS
+            rawLowStockItems: metrics.rawMaterials.lowStockItems,
 
             // Furniture metrics
             furnitureRevenue: Math.round(metrics.furniture.revenue).toLocaleString(),
@@ -137,7 +137,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             furnitureStockWarnings: metrics.furniture.stockWarnings,
             furnitureItems: metrics.furniture.totalItems,
             furnitureInventoryValue: Math.round(metrics.furniture.inventoryValue).toLocaleString(),
-            furnitureLowStockItems: metrics.furniture.lowStockItems, // ADD THIS
+            furnitureLowStockItems: metrics.furniture.lowStockItems,
 
             // Percentages
             rawPercentage: metrics.total.inventoryCount > 0 ?
@@ -167,6 +167,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
     }
 });
 
+//- HELPER FUCTION
 function getDefaultDashboardData() {
     return {
         totalRevenue: '0',
@@ -175,25 +176,26 @@ function getDefaultDashboardData() {
         totalStockWarnings: '0',
         totalItems: '0',
         totalInventoryValue: '0',
-        totalLowStockItems: [], // ADD THIS
+        totalLowStockItems: [],
         rawRevenue: '0',
         rawProfit: '0',
         rawInventory: '0',
         rawStockWarnings: '0',
         rawItems: '0',
         rawInventoryValue: '0',
-        rawLowStockItems: [], // ADD THIS
+        rawLowStockItems: [],
         furnitureRevenue: '0',
         furnitureProfit: '0',
         furnitureInventory: '0',
         furnitureStockWarnings: '0',
         furnitureItems: '0',
         furnitureInventoryValue: '0',
-        furnitureLowStockItems: [], // ADD THIS
+        furnitureLowStockItems: [],
         rawPercentage: 0,
         furniturePercentage: 0
     };
 }
+
 
 router.post('/dashboard', ensureAuthenticated, ensureManager, (req, res) => {
     console.log(req.body);

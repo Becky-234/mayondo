@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    
     // FORM VALIDATION FUNCTIONALITY
     function initializeFormValidation() {
         const form = document.getElementById('addUser');
