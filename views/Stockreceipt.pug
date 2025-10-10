@@ -5,8 +5,9 @@ block content
   body
     .container.mt-4
       header.text-center.mb-4
-        h2 MAYONDO WOOD & FURNITURE LTD 
+        h2 MAYONDO WOOD AND FURNITURE LTD 
         p B2B wood & Furniture Company
+        p tel: +256778899000 / +256765434244
       
       section
         hr
@@ -14,11 +15,11 @@ block content
         
         if item
           .receipt-details
-            p Date: #{item.date}
-            p Product Name: #{item.pdtname}
-            p Supplier: #{item.supplier}
-            p Supplier Contact: #{item.supplierContact}
-            p Cost Price: #{Math.round(item.pdtquantity * item.pdtprice)}
+            p Date :  #{item.date}
+            p Product Name :  #{item.pdtname}
+            p Supplier :  #{item.supplier}
+            p Supplier Contact :  #{item.supplierContact}
+            p Cost Price :  #{Math.round(item.pdtquantity * item.pdtprice)}
         else
           p.text-danger No item data found
         

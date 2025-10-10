@@ -483,6 +483,11 @@ h2 {
   color: #e8d9b9;
 }
 
+
+span .badge {
+  background: #8a6420;
+}
+
 /* Chart Cards */
 .card.shadow-sm {
   border: none;
@@ -507,30 +512,6 @@ h2 {
   margin-bottom: 20px;
   font-size: 1.1rem;
 }
-
-/* Progress Bars */
-/* progress {
-  width: 100%;
-  height: 12px;
-  border-radius: 10px;
-  margin: 8px 0;
-  border: none;
-}
-
-progress::-webkit-progress-bar {
-  background-color: #e0e0e0;
-  border-radius: 10px;
-}
-
-progress::-webkit-progress-value {
-  background: linear-gradient(90deg, #4c6444, #caba9c);
-  border-radius: 10px;
-}
-
-progress::-moz-progress-bar {
-  background: linear-gradient(90deg, #4c6444, #caba9c);
-  border-radius: 10px;
-} */
 
 /* Responsive Design */
 @media (max-width: 768px) {

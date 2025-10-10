@@ -118,7 +118,6 @@ router.post("/sales", (req, res) => {
   console.log(req.body);
 });
 
-
 // POST add-sale with success/error handling
 router.post("/addSale", ensureAuthenticated, async (req, res) => {
   console.log("POST /addSale hit", req.body);
@@ -382,10 +381,10 @@ router.get("/addSale", ensureAuthenticated, async (req, res) => {
 });
 
 
-// Other routes (editSales, deleteSale, getReceipt) remain the same...
+// EDIT SALES
 router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
-    const currentUser = req.session.user || req.user; // ADD THIS LINE
+    const currentUser = req.session.user || req.user;  
 
     let item = await SalesModel.findById(req.params.id);
     const success = req.query.success;
@@ -399,7 +398,7 @@ router.get("/editSales/:id", ensureAuthenticated, ensureManager, async (req, res
       item,
       success,
       error,
-      currentUser: currentUser // FIXED: Use currentUser instead of req.user
+      currentUser: currentUser  
     });
   } catch (error) {
     console.error("Error in editSales GET:", error);
@@ -416,9 +415,6 @@ router.post("/editSales/:id", ensureAuthenticated, ensureManager, async (req, re
     if (!existingSale) {
       return res.redirect("/sales?error=Sale not found");
     }
-
-    // REMOVED the agent restriction - manager can edit ANY sale
-    // Since there's only one manager who should manage all sales
 
     const updateData = {
       name: req.body.name,
@@ -491,7 +487,7 @@ router.post("/getReceipt/:id", ensureAuthenticated, async (req, res) => {
 
     res.render("salesReceipt", {
       item,
-      currentUser: currentUser // FIXED: Use currentUser instead of req.user
+      currentUser: currentUser 
     });
   } catch (error) {
     console.error(error.message);
