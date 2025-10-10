@@ -2,25 +2,31 @@ aside.side-menu-container
   .logo-menu
     h2.logo MWF
     i.fa-solid.fa-bars
-  //- show current path
-  .debug(style="display: none;") Current Path: #{currentPath}
   ul.list
-    li.list-item
-      a(href='/dashboard' class=(currentPath === '/dashboard' ? 'active' : ''))
-        i.fa-solid.fa-house
-        span.link-name Dashboard
-    li.list-item
-      a(href='/usersList' class=(currentPath === '/usersList' ? 'active' : ''))
-        i.fa-solid.fa-users
-        span.link-name Users
+    //- Show Dashboard only to manager role
+    if user && user.role === 'manager'
+      li.list-item
+        a(href='/dashboard' class=(currentPath === '/dashboard' ? 'active' : ''))
+          i.fa-solid.fa-house
+          span.link-name Dashboard
+    
+    //- Show Users only to manager role
+    if user && user.role === 'manager'
+      li.list-item
+        a(href='/usersList' class=(currentPath === '/usersList' ? 'active' : ''))
+          i.fa-solid.fa-users
+          span.link-name Users
+    
     li.list-item
       a(href='/sales' class=(currentPath === '/sales' ? 'active' : ''))
         i.fa-solid.fa-cart-shopping
         span.link-name Sales
+    
     li.list-item
       a(href='/stock' class=(currentPath === '/stock' ? 'active' : ''))
         i.fa-solid.fa-truck
         span.link-name Stock
+    
     li.list-item
       a(href='/products' class=(currentPath === '/products' ? 'active' : ''))
         i.fa-solid.fa-couch
