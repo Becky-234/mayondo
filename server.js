@@ -107,6 +107,17 @@ passport.use(new LocalStrategy({
   }
 }));
 
+// // Make user available to all templates
+// app.use((req, res, next) => {
+//   // Get user from session and make it available to templates
+//   if (req.session && req.session.user) {
+//     res.locals.user = req.session.user;
+//   } else {
+//     res.locals.user = null;
+//   }
+//   next();
+// });
+
 
 
 //5.ROUTES

@@ -2,7 +2,6 @@ const ensureAuthenticated = (req, res, next) => {
   console.log("Authentication Check:");
   console.log("   req.session.user:", req.session.user);
 
-  // Check session authentication
   if (req.session && req.session.user) {
     // Made session user available as req.user for consistency
     if (!req.user) {
