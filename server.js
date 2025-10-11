@@ -86,39 +86,49 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-passport.use(new LocalStrategy({
-  usernameField: 'email'
-}, async (email, password, done) => {
-  try {
-    const user = await UserModel.findOne({ email: email, status: 'active' });
+// passport.use(new LocalStrategy({
+//   usernameField: 'email'
+// }, async (email, password, done) => {
+//   try {
+//     const user = await UserModel.findOne({ email: email, status: 'active' });
 
-    if (!user) {
-      return done(null, false, { message: 'User not found' });
-    }
+//     if (!user) {
+//       return done(null, false, { message: 'User not found' });
+//     }
 
-    // For production, use bcrypt.compare()
-    if (user.password !== password) {
-      return done(null, false, { message: 'Incorrect password' });
-    }
+//     // For production, use bcrypt.compare()
+//     if (user.password !== password) {
+//       return done(null, false, { message: 'Incorrect password' });
+//     }
 
-    return done(null, user);
-  } catch (error) {
-    return done(error);
-  }
-}));
-
-// // Make user available to all templates
-// app.use((req, res, next) => {
-//   // Get user from session and make it available to templates
-//   if (req.session && req.session.user) {
-//     res.locals.user = req.session.user;
-//   } else {
-//     res.locals.user = null;
+//     return done(null, user);
+//   } catch (error) {
+//     return done(error);
 //   }
-//   next();
-// });
+// }));
 
 
+
+// Make currentUser available to all templates - FIXED VERSION
+app.use((req, res, next) => {
+  // Check both Passport's req.user AND your custom req.session.user
+  if (req.user) {
+    // Passport.js user
+    res.locals.currentUser = req.user;
+  } else if (req.session && req.session.user) {
+    // custom session user
+    res.locals.currentUser = req.session.user;
+  } else {
+    res.locals.currentUser = null;
+  }
+
+  console.log('Current User Available:', !!res.locals.currentUser);
+  console.log('User from session:', req.session?.user?.email);
+  console.log('User from Passport:', req.user?.email);
+  next();
+});
+
+ 
 
 //5.ROUTES
 app.use("/", authRoutes);

@@ -18,7 +18,7 @@ router.get("/stock", ensureAuthenticated, async (req, res) => {
       items,
       success,
       error,
-      currentUser: req.user // Pass current user to template
+      // currentUser: req.user  
     });
   } catch (error) {
     res.status(400).send("Unable to get data from the database");
@@ -41,7 +41,7 @@ router.get("/addStock", ensureManager, (req, res) => {
     title: "Stock page",
     success,
     error,
-    currentUser: req.user // Pass current user to template
+    // currentUser: req.user  
   });
 });
 
@@ -100,11 +100,11 @@ router.get("/editStock/:id", ensureManager, async (req, res) => {
       return res.redirect("/stock?error=Stock item not found");
     }
 
-    res.render("editStock", { // Make sure this matches your .pug filename
+    res.render("editStock", {  
       item,
       success,
       error,
-      currentUser: req.user
+      // currentUser: req.user
     });
   } catch (error) {
     console.error("Error in editStock GET:", error);
@@ -182,7 +182,7 @@ router.post("/generateReceipt/:id", ensureAuthenticated, ensureManager, async (r
 
     res.render("stockReceipt", {
       item,
-      currentUser: req.user // Pass current user to template
+      // currentUser: req.user // Pass current user to template
     });
   } catch (error) {
     console.error(error.message);
