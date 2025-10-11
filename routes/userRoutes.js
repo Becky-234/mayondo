@@ -5,7 +5,7 @@ const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
 
 
 // List users (only sales agents)
-router.get("/usersList",  ensureAuthenticated, ensureManager, async (req, res) => {
+router.get("/usersList", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const users = await UserModel.find({ role: 'sales_agent' }).sort({ $natural: -1 });
 
@@ -15,7 +15,8 @@ router.get("/usersList",  ensureAuthenticated, ensureManager, async (req, res) =
     res.render("users", {
       users,
       success,
-      error
+      error,
+      currentUser: req.user // ← ADD THIS LINE
     });
   } catch (err) {
     console.error(err);

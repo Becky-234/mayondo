@@ -4,17 +4,17 @@ block styles
 block content
   include sidebar.pug
   main.main-content
-    nav.navbar.bg-body-tertiary.dashboard-header
-      .container-fluid.d-flex.justify-content-end.align-items-center
-        .d-flex.align-items-center
-          a.logoutBtn(href='/index') Logout
+    //- nav.navbar.bg-body-tertiary.dashboard-header
+    //-   .container-fluid.d-flex.justify-content-end.align-items-center
+    //-     .d-flex.align-items-center
+    //-       a.logoutBtn(href='/index') Logout
 
     // SUCCESS MODAL - Move outside navbar
     if success
       .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
         .modal-dialog.modal-dialog-centered
           .modal-content
-            .modal-header.bg-success.text-white
+            .modal-header.bg-success(style='bacground: #4c6444; color: #fff')
               h5.modal-title
                 i.fas.fa-check-circle.me-2
                 | Success!
@@ -43,7 +43,7 @@ block content
     #deleteConfirmationModal.modal.fade(tabindex='-1' aria-labelledby='deleteConfirmationModalLabel' aria-hidden='true')
       .modal-dialog.modal-dialog-centered
         .modal-content
-          .modal-header.bg-warning.text-dark
+          .modal-header.bg-warning(style='bacground: #4c6444; color: #fff')
             h5.modal-title
               i.fas.fa-exclamation-triangle.me-2
               | Confirm Deletion

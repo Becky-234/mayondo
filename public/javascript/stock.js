@@ -94,7 +94,7 @@ function initializePDFExport() {
       doc.autoTable({
         html: "#newStock",
         startY: 30,
-        styles: { fontSize: 10 },
+        styles: { fontSize: 5 },
         headStyles: { fillColor: [0, 119, 204] },
       });
       doc.save("Stock_Report.pdf");

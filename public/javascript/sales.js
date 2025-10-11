@@ -21,7 +21,7 @@ if (pdfBtn) {
     doc.autoTable({
       html: "#salesTable",
       startY: 30,
-      styles: { fontSize: 10 },
+      styles: { fontSize: 5 },
       headStyles: { fillColor: [0, 119, 204] },
     });
     doc.save("Sales_Report.pdf");

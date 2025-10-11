@@ -3,35 +3,35 @@ aside.side-menu-container
     h2.logo MWF
     i.fa-solid.fa-bars
   ul.list
-    //- Showing Dashboard only to manager role
-    if currentUser && currentUser.role === "manager"
+    if currentUser
+      //- Dashboard - Manager only
+      if currentUser.role === "manager"
+        li.list-item
+          a(href='/dashboard')
+            i.fa-solid.fa-house
+            span.link-name Dashboard
+      
+      //- UsersList - Manager only
+      if currentUser.role === "manager"
+        li.list-item
+          a(href='/usersList')
+            i.fa-solid.fa-users
+            span.link-name Users
+      
+      //- Common menu items for both roles
       li.list-item
-        a(href='/dashboard' class=(currentPath === '/dashboard' ? 'active' : ''))
-          i.fa-solid.fa-house
-          span.link-name Dashboard
-    
-    //- Showing Users only to manager role
-    if currentUser && currentUser.role === "manager"
+        a(href='/sales')
+          i.fa-solid.fa-cart-shopping
+          span.link-name Sales
       li.list-item
-        a(href='/usersList' class=(currentPath === '/usersList' ? 'active' : ''))
-          i.fa-solid.fa-users
-          span.link-name Users
-    
-    li.list-item
-      a(href='/sales' class=(currentPath === '/sales' ? 'active' : ''))
-        i.fa-solid.fa-cart-shopping
-        span.link-name Sales
-    
-    li.list-item
-      a(href='/stock' class=(currentPath === '/stock' ? 'active' : ''))
-        i.fa-solid.fa-truck
-        span.link-name Stock
-    
-    li.list-item
-      a(href='/products' class=(currentPath === '/products' ? 'active' : ''))
-        i.fa-solid.fa-couch
-        span.link-name Products
-    //- li.list-item
-    //-   a(href='/settings' class=(currentPath === '/settings' ? 'active' : ''))
-    //-     i.fa-solid.fa-gear
-    //-     span.link-name Settings
+        a(href='/stock')
+          i.fa-solid.fa-truck
+          span.link-name Stock
+      li.list-item
+        a(href='/products')
+          i.fa-solid.fa-couch
+          span.link-name Products
+      li.list-item
+        a(href='/index')
+          i.fa-solid.fa-power-off
+          span.link-name Logout 
