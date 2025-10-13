@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose"); // Make sure mongoose is imported
+const mongoose = require("mongoose"); 
 const { managerProfile } = require("../configs/managerConfigs");
-const UserModel = require("../models/userModel"); // Import UserModel
+const UserModel = require("../models/userModel");  
+
 
 // Getting the Login form
 router.get("/login", (req, res) => {
@@ -80,7 +81,7 @@ router.post("/login", async (req, res) => {
 
                 // Check if password matches
                 if (password === salesAgent.password) {
-                    // Create sales agent user data
+                    // Creating sales agent user data
                     const userData = {
                         _id: salesAgent._id,
                         name: salesAgent.name,
@@ -138,7 +139,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// Add this test route to check environment variables
+// test route to check environment variables
 router.get("/test-env", (req, res) => {
     res.json({
         managerEmail: process.env.MANAGER_EMAIL || "NOT SET",

@@ -14,10 +14,10 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             return res.redirect('/login');
         }
 
-        // Fetch all stock items
+        // Fetching all stock items
         const stockItems = await StockModel.find({});
 
-        // Group items by product name to match stock table logic
+        // Grouping items by product name to match stock table logic
         const groupedItems = {};
         stockItems.forEach(item => {
             if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
@@ -215,7 +215,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
     }
 });
 
-// Helper function (keep as is)
+// Helper function
 function getDefaultDashboardData() {
     return {
         totalRevenue: '0',

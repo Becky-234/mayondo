@@ -17,8 +17,7 @@ router.get("/stock", ensureAuthenticated, async (req, res) => {
     res.render("stock", {
       items,
       success,
-      error,
-      // currentUser: req.user  
+      error
     });
   } catch (error) {
     res.status(400).send("Unable to get data from the database");
@@ -40,8 +39,7 @@ router.get("/addStock", ensureManager, (req, res) => {
   res.render("addStock", {
     title: "Stock page",
     success,
-    error,
-    // currentUser: req.user  
+    error
   });
 });
 
@@ -77,7 +75,7 @@ router.post("/addStock", ensureManager, async (req, res) => {
   } catch (error) {
     console.error(error);
 
-    // Handle specific validation errors
+    // Handling specific validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.redirect(`/addStock?error=${encodeURIComponent(errors.join(', '))}`);
@@ -100,11 +98,10 @@ router.get("/editStock/:id", ensureManager, async (req, res) => {
       return res.redirect("/stock?error=Stock item not found");
     }
 
-    res.render("editStock", {  
+    res.render("editStock", {
       item,
       success,
-      error,
-      // currentUser: req.user
+      error
     });
   } catch (error) {
     console.error("Error in editStock GET:", error);
@@ -152,7 +149,6 @@ router.post("/editStock/:id", ensureManager, async (req, res) => {
 });
 
 
-
 // Deleting stock with messages
 router.post("/deleteStock", ensureManager, async (req, res) => {
   try {
@@ -171,7 +167,7 @@ router.post("/deleteStock", ensureManager, async (req, res) => {
 
 
 
-// Generating receipt - Only authenticated users
+// Generating receipt
 router.post("/generateReceipt/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     const item = await StockModel.findOne({ _id: req.params.id });
@@ -181,8 +177,7 @@ router.post("/generateReceipt/:id", ensureAuthenticated, ensureManager, async (r
     }
 
     res.render("stockReceipt", {
-      item,
-      // currentUser: req.user // Pass current user to template
+      item
     });
   } catch (error) {
     console.error(error.message);

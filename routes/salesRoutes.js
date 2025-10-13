@@ -25,7 +25,7 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
         .find({ agent: currentUser._id })
         .sort({ date: -1 });
     }
-    // If user is Manager, show ALL sales from ALL agents
+    // If user is Manager, show all sales from ALL agents
     else if (currentUser.role === 'manager') {
       console.log("Manager view - showing ALL sales from ALL agents");
       items = await SalesModel.find().sort({ date: -1 });
@@ -41,7 +41,7 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
       items = [];
     }
 
-    // Calculate dashboard metrics with PROPER DATA VALIDATION
+    // Calculating dashboard metrics with PROPER DATA VALIDATION
     const totalSalesRaw = items
       .filter(item => item.tproduct === "Raw")
       .reduce((sum, item) => {
@@ -58,7 +58,7 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
 
     const totalOrders = items.length;
 
-    // Calculate total sold products by type with validation
+    // Calculating total sold products by type with validation
     const totalSoldRaw = items
       .filter(item => item.tproduct === "Raw")
       .reduce((sum, item) => {
@@ -76,7 +76,7 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
     const totalSalesAll = totalSalesRaw + totalSalesFurniture;
     const totalSoldAll = totalSoldRaw + totalSoldFurniture;
 
-    // Calculate percentages with zero division protection
+    // Calculating percentages with zero division protection
     const rawPercentage = totalSalesAll > 0 ? Math.round((totalSalesRaw / totalSalesAll) * 100) : 0;
     const furniturePercentage = totalSalesAll > 0 ? Math.round((totalSalesFurniture / totalSalesAll) * 100) : 0;
 
@@ -91,7 +91,7 @@ router.get("/sales", ensureAuthenticated, async (req, res) => {
 
     res.render('sales', {
       items,
-      currentUser: currentUser, // Use the corrected currentUser
+      currentUser: currentUser,
       success,
       error,
       dashboardMetrics: {
@@ -265,7 +265,7 @@ router.post("/addSale", ensureAuthenticated, async (req, res) => {
     // Update stock quantities using FIFO (First In First Out)
     let remainingQuantity = quantityNum;
 
-    // Sort stock entries by date (oldest first for FIFO)
+    // Sort stock entries by date oldest first for FIFO
     const sortedStockEntries = stockEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     for (const stockEntry of sortedStockEntries) {

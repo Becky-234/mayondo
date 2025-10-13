@@ -4,10 +4,6 @@ block styles
 block content 
   include sidebar.pug
   main.main-content
-    //- nav.navbar.bg-body-tertiary.dashboard-header
-    //-   .container-fluid.d-flex.justify-content-end.align-items-center
-    //-     .d-flex.align-items-center
-    //-       a.logoutBtn(href='/index') Logout
     .user-form-container
       form#addUser(action=`/editUser/${user._id}` method='post')
         if error

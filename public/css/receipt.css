@@ -1,1 +1,291 @@
- 
+ /* Receipt Container */
+.receipt-container {
+  max-width: 500px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e0e0e0;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Receipt Header */
+.receipt-header {
+  background: linear-gradient(135deg, #2c5530, #4a7c59);
+  color: white;
+  padding: 2rem 1rem;
+  border-bottom: 3px dashed #b8b8b8;
+}
+
+.company-logo {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #ffd700;
+}
+
+.company-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.company-tagline {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.contact-info p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+
+.contact-info i {
+  margin-right: 0.5rem;
+  color: #ffd700;
+}
+
+/* Receipt Body */
+.receipt-body {
+  padding: 2rem;
+}
+
+.receipt-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 1rem;
+}
+
+.receipt-title h3 {
+  color: #2c5530;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.receipt-title h3 i {
+  margin-right: 0.5rem;
+  color: #4a7c59;
+}
+
+.receipt-number {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: bold;
+}
+
+/* Detail Sections */
+.customer-details,
+.product-details {
+  margin-bottom: 1.5rem;
+}
+
+.customer-details h4,
+.product-details h4 {
+  color: #2c5530;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+
+.customer-details h4 i,
+.product-details h4 i {
+  margin-right: 0.5rem;
+  color: #4a7c59;
+}
+
+.detail-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 600;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.value {
+  font-weight: bold;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* Total Section */
+.total-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid #4a7c59;
+}
+
+.total-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.total-label {
+  font-weight: 600;
+  color: #2c5530;
+}
+
+.total-value {
+  font-weight: bold;
+  color: #2c5530;
+  font-size: 1.4rem;
+}
+
+/* Payment Method */
+.payment-method {
+  text-align: center;
+  padding: 1rem;
+  background: #f0f7f0;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.payment-method h4 {
+  color: #2c5530;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.payment-method h4 i {
+  margin-right: 0.5rem;
+}
+
+/* Receipt Footer */
+.receipt-footer {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  text-align: center;
+  border-top: 2px dashed #b8b8b8;
+}
+
+.thank-you p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c5530;
+  margin-bottom: 1rem;
+}
+
+.thank-you i {
+  color: #e74c3c;
+  margin-right: 0.5rem;
+}
+
+.company-policy {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.company-policy p {
+  margin: 0.3rem 0;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-print {
+  background: linear-gradient(135deg, #2c5530, #4a7c59);
+  color: white;
+}
+
+.btn-print:hover {
+  background: linear-gradient(135deg, #4a7c59, #2c5530);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(44, 85, 48, 0.3);
+}
+
+.btn-back {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-back:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* Print Styles */
+@media print {
+  .action-buttons {
+    display: none;
+  }
+  
+  .receipt-container {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  body {
+    background: white !important;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .receipt-container {
+    margin: 0 1rem;
+  }
+  
+  .receipt-body {
+    padding: 1rem;
+  }
+  
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

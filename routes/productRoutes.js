@@ -5,8 +5,7 @@ const { ensureAuthenticated } = require("../middleware/auth")
 // Products page
 router.get('/products', ensureAuthenticated, (req, res) => {
     res.render('products', {
-        title: 'Products page',
-        // currentUser: req.user  
+        title: 'Products page'
     });
 });
 

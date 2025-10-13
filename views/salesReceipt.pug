@@ -1,31 +1,94 @@
 extends layout.pug
+
 block styles
-  link(rel='stylesheet' href='..css/receipt.css')
+  link(rel='stylesheet' href='../css/receipt.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
+
 block content
   .container.mt-4
-    header.text-center.mb-4
-      h2 MAYONDO WOOD AND FURNITURE LTD 
-      p B2B wood & Furniture Company
-      p tel: +256778899000 / +256765434244
-    
-    section
-      hr
-      h3.text-center RECEIPT 
-      
-      if item
-        .receipt-details
-          p Date: #{item.date}
-          p Customer Name: #{item.name}
-          p Customer Contact: #{item.contact}
-          p Product Name: #{item.pdtname}
-          p Quantity: #{item.quantity}
-          p Unit Price: #{item.unitPrice}
-          p Total Price: #{Math.round(item.totalPrice)}
-      else
-        p.text-danger No item data found
-      
-      hr
-      p.text-center Thank You For Choosing Us!
-      
-      button.btn.btn-primary.mt-3(onclick="window.print()") Print Receipt
-      a.btn.btn-secondary.mt-3.ms-2(href="/sales") Back to Home
+    .receipt-container
+      // Receipt Header
+      header.receipt-header.text-center.mb-4
+        .company-logo
+          i.fas.fa-chair
+        h2.company-name MAYONDO WOOD AND FURNITURE LTD
+        p.company-tagline B2B Wood & Furniture Company
+        .contact-info
+          p 
+            i.fas.fa-phone
+            |  +256778899000 / +256765434244
+          p
+            i.fas.fa-map-marker-alt
+            |  Kampala, Uganda
+
+      // Receipt Body
+      section.receipt-body
+        .receipt-title
+          h3 
+            i.fas.fa-receipt
+            |  SALES RECEIPT
+          .receipt-number
+            span Receipt No: ##{item.id || '001'}
+
+        .receipt-content
+          .customer-details
+            h4 
+              i.fas.fa-user
+              |  CUSTOMER DETAILS
+            .detail-grid
+              .detail-item
+                span.label Date:
+                span.value #{new Date(item.date).toLocaleDateString()}
+              .detail-item
+                span.label Customer Name:
+                span.value #{item.name}
+              .detail-item
+                span.label Contact:
+                span.value #{item.contact}
+
+          .product-details
+            h4 
+              i.fas.fa-cube
+              |  PRODUCT DETAILS
+            .detail-grid
+              .detail-item
+                span.label Product Name:
+                span.value #{item.pdtname}
+              .detail-item
+                span.label Quantity:
+                span.value #{item.quantity}
+              .detail-item
+                span.label Unit Price:
+                span.value UGX #{item.unitPrice}
+              
+          .total-section
+            .total-amount
+              span.total-label TOTAL AMOUNT:
+              span.total-value UGX #{Math.round(item.totalPrice)}
+
+        .payment-method
+          h4 
+            i.fas.fa-credit-card
+            |  PAYMENT METHOD
+          p Cash Payment
+
+      // Receipt Footer
+      footer.receipt-footer
+        .thank-you
+          p 
+            i.fas.fa-heart
+            |  Thank You For Your Business!
+        .company-policy
+          p 
+            small Goods sold are not returnable unless defective
+          p
+            small Valid for 30 days from date of purchase
+
+      // Action Buttons
+      .action-buttons.mt-4
+        button.btn.btn-print(onclick="window.print()")
+          i.fas.fa-print
+          |  Print Receipt
+        a.btn.btn-back(href="/sales")
+          i.fas.fa-arrow-left
+          |  Back to Sales

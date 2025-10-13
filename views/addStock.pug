@@ -226,7 +226,7 @@ block content
           }
         });
 
-        // Remaining quantity shouldn't exceed total quantity
+        // Remaining quantity shouldnot exceed total quantity
         const totalQty = parseInt(fields.pdtquantity1.value);
         const remainingQty = parseInt(fields.pdtquantity.value);
 
@@ -238,7 +238,7 @@ block content
         return isValid;
       }
 
-      // Add event listeners to all fields for real-time validation
+      // Add event listeners to all fields for real time validation
       Object.keys(fields).forEach(fieldName => {
         const field = fields[fieldName];
         if (field) {

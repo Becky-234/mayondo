@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// Date Filter Functionality
+// DATE FILTER FUNCTIONALITY
 document.addEventListener('DOMContentLoaded', function () {
   const startDateInput = document.getElementById('startDate');
   const endDateInput = document.getElementById('endDate');
@@ -530,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const parts = dateString.split('/');
       // Assuming format is DD/MM/YYYY
       const day = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10) - 1; // Months are 0-indexed
+      const month = parseInt(parts[1], 10) - 1; // Months are 0 indexed
       const year = parseInt(parts[2], 10);
       return new Date(year, month, day);
     } else if (dateString.includes('-')) {
@@ -659,6 +659,4 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('=== END DEBUG ===');
   }
 
-  // Uncommented the line below to see what dates are detected in the table
-  // debugTableDates();
 });

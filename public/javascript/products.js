@@ -1,4 +1,4 @@
-// Sidebar toggle (safe)
+// SIDEBAR
 const sidebar = document.querySelector('.side-menu-container');
 const toggleBtn = document.querySelector('.fa-bars');
 
@@ -12,7 +12,7 @@ if (toggleBtn) {
 }
 
 
-//Search
+// SEARCH FUNCTIONALITY
 document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("searchProduct");
     const mainSections = document.querySelectorAll(".pdt-section");
