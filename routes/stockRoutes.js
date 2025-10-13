@@ -168,21 +168,21 @@ router.post("/deleteStock", ensureManager, async (req, res) => {
 
 
 // Generating receipt
-router.post("/generateReceipt/:id", ensureAuthenticated, ensureManager, async (req, res) => {
-  try {
-    const item = await StockModel.findOne({ _id: req.params.id });
+// router.post("/generateReceipt/:id", ensureAuthenticated, ensureManager, async (req, res) => {
+//   try {
+//     const item = await StockModel.findOne({ _id: req.params.id });
 
-    if (!item) {
-      return res.status(404).send('Stock item not found');
-    }
+//     if (!item) {
+//       return res.status(404).send('Stock item not found');
+//     }
 
-    res.render("stockReceipt", {
-      item
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(400).send('Unable to find stock item');
-  }
-});
+//     res.render("stockReceipt", {
+//       item
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(400).send('Unable to find stock item');
+//   }
+// });
 
 module.exports = router;

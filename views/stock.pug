@@ -135,10 +135,10 @@ block content
                         onclick=`showDeleteModal('${item._id}')`
                       )
                         i.fas.fa-trash
-                      form(method='post' action=`/generateReceipt/${item._id}` style='display:inline')
-                        input(type='hidden' name='id' value=item._id)
-                        button.btn-icon(type='submit' title='Receipt')
-                          i.fas.fa-file-invoice
+                      //- form(method='post' action=`/generateReceipt/${item._id}` style='display:inline')
+                      //-   input(type='hidden' name='id' value=item._id)
+                      //-   button.btn-icon(type='submit' title='Receipt')
+                      //-     i.fas.fa-file-invoice
               
               - 
                 const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
