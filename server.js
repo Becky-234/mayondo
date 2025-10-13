@@ -25,6 +25,7 @@ const indexRoutes = require("./routes/indexRoutes");
 const userRoutes = require("./routes/userRoutes");
 //const settingsRoutes = require("./routes/settingsRoutes");
 
+
 //2.INSTANTIATIONS
 const app = express();
 const port = 3001;
@@ -110,8 +111,10 @@ passport.deserializeUser(async (id, done) => {
 
 
 // Make currentUser available to all templates - FIXED VERSION
+
+
 app.use((req, res, next) => {
-  // Check both Passport's req.user AND your custom req.session.user
+  // Checking for both Passport's req.user AND custom req.session.user
   if (req.user) {
     // Passport.js user
     res.locals.currentUser = req.user;

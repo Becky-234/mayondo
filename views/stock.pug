@@ -4,11 +4,6 @@ block styles
 block content
   include sidebar.pug
   main.main-content
-    //- nav.navbar.bg-body-tertiary.dashboard-header
-    //-   .container-fluid.d-flex.justify-content-end.align-items-center
-    //-     .d-flex.align-items-center
-    //-       a.logoutBtn(href='/index') Logout
-
     // SUCCESS MODAL - Move outside navbar
     if success
       .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
@@ -119,39 +114,11 @@ block content
             
             each productGroup, productName in groupedItems
               each item, index in productGroup
-                - 
-                  // Determine stock status
-                  let stockStatus = 'ok';
-                  let stockClass = '';
-                  let alertBadge = '';
-                  let warningText = '';
-                  
-                  if (item.pdtquantity < 5) {
-                    stockStatus = 'critical';
-                    stockClass = 'stock-critical';
-                    alertBadge = '<span class="badge bg-danger stock-alert-badge">CRITICAL</span>';
-                    warningText = 'Very low stock!';
-                    hasLowStock = true;
-                  } else if (item.pdtquantity < 10) {
-                    stockStatus = 'low';
-                    stockClass = 'stock-low';
-                    alertBadge = '<span class="badge bg-warning stock-alert-badge">LOW</span>';
-                    warningText = 'Low stock';
-                    hasLowStock = true;
-                  } else {
-                    stockClass = 'stock-ok';
-                  }
-                
-                tr(class=stockClass data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-') data-stock-status=stockStatus)
-                  td.col-essential 
-                    | #{item.pdtname}
-                    | !{alertBadge}
+                tr(data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-'))
+                  td.col-essential #{item.pdtname}
                   td.col-essential #{item.pdttype}
                   td.col-essential #{item.pdtquantity1}
-                  td.col-essential.quantity-cell 
-                    | #{item.pdtquantity}
-                    if warningText
-                      small.low-stock-warning #{warningText}
+                  td.col-essential #{item.pdtquantity}
                   td.col-essential #{item.cprice.toLocaleString()}
                   td.col-essential #{Math.round(item.cprice * 1.5).toLocaleString()}
                   td.col-optional #{item.supplier}
@@ -177,14 +144,39 @@ block content
                 const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
                 const availableQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity || 0), 0);
                 const totalValue = productGroup.reduce((sum, item) => sum + (Math.round(item.cprice * 1.5) * parseInt(item.pdtquantity || 0)), 0);
+                
+                // Determine stock status for the total
+                let stockStatus = 'ok';
+                let stockClass = '';
+                let alertBadge = '';
+                let warningText = '';
+                
+                if (availableQuantity < 5) {
+                  stockStatus = 'critical';
+                  stockClass = 'stock-critical';
+                  alertBadge = '<span class="badge bg-danger stock-alert-badge">CRITICAL</span>';
+                  warningText = 'Very low stock!';
+                  hasLowStock = true;
+                } else if (availableQuantity < 10) {
+                  stockStatus = 'low';
+                  stockClass = 'stock-low';
+                  alertBadge = '<span class="badge bg-warning stock-alert-badge">LOW</span>';
+                  warningText = 'Low stock';
+                  hasLowStock = true;
+                } else {
+                  stockClass = 'stock-ok';
+                }
               
-              tr.product-summary-row
+              tr.product-summary-row(class=stockClass data-stock-status=stockStatus)
                 td.col-essential(colspan="2") 
                   strong #{productName} Total
+                  | !{alertBadge}
                 td.col-essential 
                   strong #{totalQuantity}
-                td.col-essential 
+                td.col-essential.quantity-cell 
                   strong #{availableQuantity}
+                  if warningText
+                    small.low-stock-warning #{warningText}
                 td.col-essential 
                 td.col-essential 
                   strong #{totalValue.toLocaleString()}
@@ -192,7 +184,6 @@ block content
                 td.col-optional 
                 td.col-essential 
                 td.col-essential 
-                td.col-optional 
                 if currentUser && (currentUser.role === "manager")
                   td.col-optional
 

@@ -4,10 +4,6 @@ block styles
 block content
   include sidebar.pug
   main.main-content
-    //- nav.navbar.bg-body-tertiary.dashboard-header
-    //-   .container-fluid.d-flex.justify-content-end.align-items-center
-    //-     .d-flex.align-items-center
-    //-       a.logoutBtn(href='/index') Logout
     .dashboarBody
       h3 Mayondo Wood And Furniture ltd
       .welcome-container
@@ -45,27 +41,27 @@ block content
                 p.card-text #{dashboardData.totalStockWarnings}
                 small.text-muted Items with low stock
                 
-            // Stock alerts
-          .card.mb-4
-              .card-header.d-flex.justify-content-between.align-items-center
-                  h5.mb-0 Stock Warnings
-                  span.badge.bg-danger #{dashboardData.totalStockWarnings}
-              .card-body
-                  if dashboardData.totalLowStockItems && dashboardData.totalLowStockItems.length > 0
-                      .alert.alert-warning
-                          strong Low Stock Alert!
-                          |  The following items are running low:
-                      .low-stock-list
-                          each item in dashboardData.totalLowStockItems
-                              .low-stock-item.mb-2.p-2.border.rounded
-                                  .d-flex.justify-content-between
-                                      strong #{item.name}
-                                      span.badge.bg-warning #{item.quantity} left
-                                  small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
-                  else
-                      .alert.alert-success
-                          strong All good!
-                          |  No stock items are running low.
+        // Total Stock alerts
+        .card.mb-4
+          .card-header.d-flex.justify-content-between.align-items-center
+            h5.mb-0 Total Stock Warnings
+            span.badge.bg-danger #{dashboardData.totalStockWarnings}
+          .card-body
+            if dashboardData.totalLowStockItems && dashboardData.totalLowStockItems.length > 0
+              .alert.alert-warning
+                strong Total Low Stock Alert!
+                |  The following items are running low across all categories:
+              .low-stock-list
+                each item in dashboardData.totalLowStockItems
+                  .low-stock-item.mb-2.p-2.border.rounded
+                    .d-flex.justify-content-between
+                      strong #{item.name}
+                      span.badge.bg-warning #{item.quantity} left
+                    small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
+            else
+              .alert.alert-success
+                strong All good!
+                |  No stock items are running low.
                   
       //- Raw Materials Section
       br
@@ -111,6 +107,29 @@ block content
                 i.fa-solid.fa-dollar-sign
                 h6.card-title Inventory Value
                 p.card-text Shs. #{dashboardData.rawInventoryValue}
+        
+        // Raw Materials Stock Alerts
+        .card.mb-4
+          .card-header.d-flex.justify-content-between.align-items-center
+            h5.mb-0 Raw Materials Stock Warnings
+            span.badge.bg-danger #{dashboardData.rawStockWarnings}
+          .card-body
+            if dashboardData.rawLowStockItems && dashboardData.rawLowStockItems.length > 0
+              .alert.alert-warning
+                strong Raw Materials Low Stock Alert!
+                |  The following raw materials are running low:
+              .low-stock-list
+                each item in dashboardData.rawLowStockItems
+                  .low-stock-item.mb-2.p-2.border.rounded
+                    .d-flex.justify-content-between
+                      strong #{item.name}
+                      span.badge.bg-warning #{item.quantity} left
+                    small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
+            else
+              .alert.alert-success
+                strong All good!
+                |  No raw materials are running low.
+
       //- Furniture Section
       br
       br
@@ -156,6 +175,28 @@ block content
                 i.fa-solid.fa-tag
                 h6.card-title Inventory Value
                 p.card-text Shs. #{dashboardData.furnitureInventoryValue}
+        // Furniture Stock Alerts
+        .card.mb-4
+          .card-header.d-flex.justify-content-between.align-items-center
+            h5.mb-0 Furniture Stock Warnings
+            span.badge.bg-danger #{dashboardData.furnitureStockWarnings}
+          .card-body
+            if dashboardData.furnitureLowStockItems && dashboardData.furnitureLowStockItems.length > 0
+              .alert.alert-warning
+                strong Furniture Low Stock Alert!
+                |  The following furniture items are running low:
+              .low-stock-list
+                each item in dashboardData.furnitureLowStockItems
+                  .low-stock-item.mb-2.p-2.border.rounded
+                    .d-flex.justify-content-between
+                      strong #{item.name}
+                      span.badge.bg-warning #{item.quantity} left
+                    small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
+            else
+              .alert.alert-success
+                strong All good!
+                |  No furniture items are running low.
+        
         br
         br
     footer

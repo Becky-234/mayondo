@@ -7,7 +7,6 @@ const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
 // Dashboard Page with Product Type Separation
 router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) => {
     try {
-        // Used req.session.user instead of req.user
         const currentUser = req.session.user || req.user;
 
         if (!currentUser) {
@@ -15,100 +14,146 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             return res.redirect('/login');
         }
 
-        console.log("Dashboard user data:", {
-            username: currentUser.username,
-            role: currentUser.role,
-            source: req.session.user ? 'session' : 'req.user'
-        });
-
         // Fetch all stock items
         const stockItems = await StockModel.find({});
 
-        // Initialize metrics for different product types
+        // Group items by product name to match stock table logic
+        const groupedItems = {};
+        stockItems.forEach(item => {
+            if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
+            groupedItems[item.pdtname].push(item);
+        });
+
+        // Initialize metrics
         let metrics = {
             total: {
                 revenue: 0,
                 profit: 0,
                 inventoryCount: 0,
                 stockWarnings: 0,
+                criticalWarnings: 0,
                 totalItems: 0,
                 inventoryValue: 0,
-                lowStockItems: [] // to store low stock items
+                lowStockItems: [],
+                criticalStockItems: []
             },
             rawMaterials: {
                 revenue: 0,
                 profit: 0,
                 inventoryCount: 0,
                 stockWarnings: 0,
+                criticalWarnings: 0,
                 totalItems: 0,
                 inventoryValue: 0,
-                items: [],
-                lowStockItems: []
+                lowStockItems: [],
+                criticalStockItems: []
             },
             furniture: {
                 revenue: 0,
                 profit: 0,
                 inventoryCount: 0,
                 stockWarnings: 0,
+                criticalWarnings: 0,
                 totalItems: 0,
                 inventoryValue: 0,
-                items: [],
-                lowStockItems: []
+                lowStockItems: [],
+                criticalStockItems: []
             }
         };
 
-        stockItems.forEach(item => {
-            const sellingPrice = item.cprice * 1.5;
-            const itemRevenue = sellingPrice * item.pdtquantity;
-            const itemCost = item.cprice * item.pdtquantity;
-            const itemProfit = itemRevenue - itemCost;
+        // Process each product group (like stock table)
+        Object.keys(groupedItems).forEach(productName => {
+            const productGroup = groupedItems[productName];
 
-            // Determine product type
-            const productType = item.pdttype.toLowerCase().includes('raw') ? 'rawMaterials' :
-                item.pdttype.toLowerCase().includes('furniture') ? 'furniture' : 'other';
+            // Calculate totals for this product group
+            const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
+            const availableQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity || 0), 0);
 
-            // Check if item has low stock (less than 10)
-            const isLowStock = item.pdtquantity < 10;
+            // Calculate revenue and profit for the group
+            let groupRevenue = 0;
+            let groupProfit = 0;
+            let groupInventoryValue = 0;
+
+            productGroup.forEach(item => {
+                const sellingPrice = item.cprice * 1.5;
+                const itemRevenue = sellingPrice * item.pdtquantity;
+                const itemCost = item.cprice * item.pdtquantity;
+                const itemProfit = itemRevenue - itemCost;
+
+                groupRevenue += itemRevenue;
+                groupProfit += itemProfit;
+                groupInventoryValue += itemCost;
+            });
+
+            // Determine product type from first item in group
+            const productType = productGroup[0].pdttype.toLowerCase().includes('raw') ? 'rawMaterials' :
+                productGroup[0].pdttype.toLowerCase().includes('furniture') ? 'furniture' : 'other';
+
+            // MATCH STOCK TABLE LOGIC - Check totals, not individual items
+            const isCriticalStock = availableQuantity < 5; // CRITICAL: total available < 5
+            const isLowStock = availableQuantity < 10 && availableQuantity >= 5; // LOW: total available 5-9
 
             // Update total metrics
-            metrics.total.revenue += itemRevenue;
-            metrics.total.profit += itemProfit;
+            metrics.total.revenue += groupRevenue;
+            metrics.total.profit += groupProfit;
             metrics.total.inventoryCount++;
-            metrics.total.totalItems += item.pdtquantity;
-            metrics.total.inventoryValue += itemCost;
+            metrics.total.totalItems += totalQuantity;
+            metrics.total.inventoryValue += groupInventoryValue;
 
-            if (isLowStock) {
+            if (isCriticalStock) {
+                metrics.total.criticalWarnings++;
+                metrics.total.criticalStockItems.push({
+                    name: productName,
+                    quantity: availableQuantity,
+                    type: productGroup[0].pdttype,
+                    threshold: 5,
+                    status: 'critical'
+                });
+            } else if (isLowStock) {
                 metrics.total.stockWarnings++;
-                // ADD low stock item to the array
                 metrics.total.lowStockItems.push({
-                    name: item.pdtname,
-                    quantity: item.pdtquantity,
-                    type: item.pdttype,
-                    threshold: 10
+                    name: productName,
+                    quantity: availableQuantity,
+                    type: productGroup[0].pdttype,
+                    threshold: 10,
+                    status: 'low'
                 });
             }
 
             // Update specific product type metrics
             if (metrics[productType]) {
-                metrics[productType].revenue += itemRevenue;
-                metrics[productType].profit += itemProfit;
+                metrics[productType].revenue += groupRevenue;
+                metrics[productType].profit += groupProfit;
                 metrics[productType].inventoryCount++;
-                metrics[productType].totalItems += item.pdtquantity;
-                metrics[productType].inventoryValue += itemCost;
-                metrics[productType].items.push(item);
+                metrics[productType].totalItems += totalQuantity;
+                metrics[productType].inventoryValue += groupInventoryValue;
 
-                if (isLowStock) {
+                if (isCriticalStock) {
+                    metrics[productType].criticalWarnings++;
+                    metrics[productType].criticalStockItems.push({
+                        name: productName,
+                        quantity: availableQuantity,
+                        type: productGroup[0].pdttype,
+                        threshold: 5,
+                        status: 'critical'
+                    });
+                } else if (isLowStock) {
                     metrics[productType].stockWarnings++;
-                    // ADD low stock item to the specific category
                     metrics[productType].lowStockItems.push({
-                        name: item.pdtname,
-                        quantity: item.pdtquantity,
-                        type: item.pdttype,
-                        threshold: 10
+                        name: productName,
+                        quantity: availableQuantity,
+                        type: productGroup[0].pdttype,
+                        threshold: 10,
+                        status: 'low'
                     });
                 }
             }
         });
+
+        // Calculate total warnings (low + critical)
+        const totalAllWarnings = metrics.total.stockWarnings + metrics.total.criticalWarnings;
+        const rawAllWarnings = metrics.rawMaterials.stockWarnings + metrics.rawMaterials.criticalWarnings;
+        const furnitureAllWarnings = metrics.furniture.stockWarnings + metrics.furniture.criticalWarnings;
 
         // Format the data for the template
         const dashboardData = {
@@ -116,28 +161,31 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             totalRevenue: Math.round(metrics.total.revenue).toLocaleString(),
             totalProfit: Math.round(metrics.total.profit).toLocaleString(),
             totalInventory: metrics.total.inventoryCount,
-            totalStockWarnings: metrics.total.stockWarnings,
+            totalStockWarnings: totalAllWarnings,
+            totalCriticalWarnings: metrics.total.criticalWarnings,
             totalItems: metrics.total.totalItems,
             totalInventoryValue: Math.round(metrics.total.inventoryValue).toLocaleString(),
-            totalLowStockItems: metrics.total.lowStockItems,
+            totalLowStockItems: [...metrics.total.lowStockItems, ...metrics.total.criticalStockItems],
 
             // Raw Materials metrics
             rawRevenue: Math.round(metrics.rawMaterials.revenue).toLocaleString(),
             rawProfit: Math.round(metrics.rawMaterials.profit).toLocaleString(),
             rawInventory: metrics.rawMaterials.inventoryCount,
-            rawStockWarnings: metrics.rawMaterials.stockWarnings,
+            rawStockWarnings: rawAllWarnings,
+            rawCriticalWarnings: metrics.rawMaterials.criticalWarnings,
             rawItems: metrics.rawMaterials.totalItems,
             rawInventoryValue: Math.round(metrics.rawMaterials.inventoryValue).toLocaleString(),
-            rawLowStockItems: metrics.rawMaterials.lowStockItems,
+            rawLowStockItems: [...metrics.rawMaterials.lowStockItems, ...metrics.rawMaterials.criticalStockItems],
 
             // Furniture metrics
             furnitureRevenue: Math.round(metrics.furniture.revenue).toLocaleString(),
             furnitureProfit: Math.round(metrics.furniture.profit).toLocaleString(),
             furnitureInventory: metrics.furniture.inventoryCount,
-            furnitureStockWarnings: metrics.furniture.stockWarnings,
+            furnitureStockWarnings: furnitureAllWarnings,
+            furnitureCriticalWarnings: metrics.furniture.criticalWarnings,
             furnitureItems: metrics.furniture.totalItems,
             furnitureInventoryValue: Math.round(metrics.furniture.inventoryValue).toLocaleString(),
-            furnitureLowStockItems: metrics.furniture.lowStockItems,
+            furnitureLowStockItems: [...metrics.furniture.lowStockItems, ...metrics.furniture.criticalStockItems],
 
             // Percentages
             rawPercentage: metrics.total.inventoryCount > 0 ?
@@ -146,10 +194,10 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 Math.round((metrics.furniture.inventoryCount / metrics.total.inventoryCount) * 100) : 0
         };
 
-        console.log("Low stock items found:", {
-            total: dashboardData.totalLowStockItems.length,
-            raw: dashboardData.rawLowStockItems.length,
-            furniture: dashboardData.furnitureLowStockItems.length
+        console.log("Dashboard stock warnings (based on totals):", {
+            totalWarnings: totalAllWarnings,
+            criticalItems: metrics.total.criticalStockItems.length,
+            lowItems: metrics.total.lowStockItems.length
         });
 
         res.render('dashboard', {
@@ -167,13 +215,14 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
     }
 });
 
-//- HELPER FUCTION
+// Helper function (keep as is)
 function getDefaultDashboardData() {
     return {
         totalRevenue: '0',
         totalProfit: '0',
         totalInventory: '0',
         totalStockWarnings: '0',
+        totalCriticalWarnings: '0',
         totalItems: '0',
         totalInventoryValue: '0',
         totalLowStockItems: [],
@@ -181,6 +230,7 @@ function getDefaultDashboardData() {
         rawProfit: '0',
         rawInventory: '0',
         rawStockWarnings: '0',
+        rawCriticalWarnings: '0',
         rawItems: '0',
         rawInventoryValue: '0',
         rawLowStockItems: [],
@@ -188,6 +238,7 @@ function getDefaultDashboardData() {
         furnitureProfit: '0',
         furnitureInventory: '0',
         furnitureStockWarnings: '0',
+        furnitureCriticalWarnings: '0',
         furnitureItems: '0',
         furnitureInventoryValue: '0',
         furnitureLowStockItems: [],
@@ -195,7 +246,6 @@ function getDefaultDashboardData() {
         furniturePercentage: 0
     };
 }
-
 
 router.post('/dashboard', ensureAuthenticated, ensureManager, (req, res) => {
     console.log(req.body);
