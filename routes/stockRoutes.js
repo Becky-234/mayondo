@@ -30,7 +30,6 @@ router.post("/stock", ensureAuthenticated, (req, res) => {
 });
 
 
-
 // Add stock page - GET with messages
 router.get("/addStock", ensureManager, (req, res) => {
   const success = req.query.success;

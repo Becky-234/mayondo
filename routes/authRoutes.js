@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose"); 
+const mongoose = require("mongoose");
 const { managerProfile } = require("../configs/managerConfigs");
-const UserModel = require("../models/userModel");  
+const UserModel = require("../models/userModel");
 
 
 // Getting the Login form
@@ -138,70 +138,6 @@ router.post("/login", async (req, res) => {
         });
     }
 });
-
-
-router.post("/login", async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        // Basic validation
-        if (!email || !password) {
-            return res.status(400).render('login', {
-                title: "Login page",
-                email: email || "",
-                emailError: !email ? "Email is required" : "",
-                passwordError: !password ? "Password is required" : ""
-            });
-        }
-
-        const managerEmail = process.env.MANAGER_EMAIL;
-        const managerPassword = process.env.MANAGER_PASSWORD;
-
-        // 1. Check if it's the manager login
-        if (email === managerEmail && password === managerPassword) {
-            // ... your manager login code ...
-        }
-        // 2. Check if it's a sales agent login
-        else {
-            const salesAgent = await UserModel.findOne({
-                email: email,
-                role: 'sales_agent'
-            });
-
-            if (salesAgent) {
-                if (password === salesAgent.password) {
-                    // ... your sales agent login code ...
-                } else {
-                    return res.status(401).render('login', {
-                        title: "Login page",
-                        email: email, // Preserve email
-                        emailError: "", 
-                        passwordError: "Incorrect password" // Specific error
-                    });
-                }
-            } else {
-                return res.status(401).render('login', {
-                    title: "Login page",
-                    email: email, // Preserve email
-                    emailError: "Email not found", // Specific error
-                    passwordError: ""
-                });
-            }
-        }
-    } catch (error) {
-        console.error("Login error:", error);
-        return res.status(500).render('login', {
-            title: "Login page",
-            email: req.body.email || "",
-            emailError: "",
-            passwordError: "System error during login"
-        });
-    }
-});
-
-
-
-
 
 // test route to check environment variables
 router.get("/test-env", (req, res) => {
