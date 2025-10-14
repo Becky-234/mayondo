@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loginBtn: !!loginBtn
   });
 
-  // Apply error styling if server returned errors
+  //  error styling if server returned errors
   if (emailError && emailError.textContent.trim() !== '') {
     email.classList.add("error-border");
   }
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return isEmailValid && isPasswordValid;
   }
 
-  // Real-time validation
+  // Real time validation
   email.addEventListener('blur', validateEmail);
   password.addEventListener('blur', validatePassword);
 
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     } else {
       console.log("Form validation passed - allowing submission");
-      // Optional: Add loading state
+      // loading state
       loginBtn.disabled = true;
       loginBtn.textContent = "Logging in...";
     }
