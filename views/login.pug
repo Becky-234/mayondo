@@ -7,11 +7,20 @@ block content
       h1.head Login
       br
       .input-box
-        input#email(type="email", placeholder="Email", name="email")
-        span#emailError.error
+        input#email(
+          type="email", 
+          placeholder="Email", 
+          name="email", 
+          value=email || ""
+        )
+        span#emailError.error #{emailError || ''}
       .input-box
-        input#password(type="password", placeholder="Password", name="password")
-        span#passwordError.error
+        input#password(
+          type="password", 
+          placeholder="Password", 
+          name="password"
+        )
+        span#passwordError.error #{passwordError || ''}
       br
       br
       .remember-forgot
