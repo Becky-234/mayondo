@@ -4,10 +4,6 @@ block styles
 block content 
   include sidebar.pug
   main.main-content
-    //- nav.navbar.bg-body-tertiary.dashboard-header
-    //-   .container-fluid.d-flex.justify-content-end.align-items-center
-    //-     .d-flex.align-items-center
-    //-       a.logoutBtn(href="/index") Logout
     // SUCCESS MODAL
     if success
       .modal.fade.show(tabindex='-1', style='display: block; background-color: rgba(0,0,0,0.5);')
@@ -58,11 +54,18 @@ block content
     input#deleteUserId(type='hidden')
     
     .to-do
-      a#newUser.btns(href="/add") Add New User
-      a#downloadExcel.btns Download Excel
-      a#downloadPdf.btns Download PDF
-      input#searchUser(type="search", placeholder="Search...")
-
+      .button-group
+        a#newUser.btns(href="/add")
+          i.fas.fa-user-plus
+          | Add New User
+        a#downloadExcel.btns
+          i.fas.fa-file-excel
+          | Download Excel
+        a#downloadPdf.btns
+          i.fas.fa-file-pdf
+          | Download PDF
+      input#searchUser(type="search", placeholder="Search users...") 
+    
     .table-container
       table#usersTable.table-content
         thead

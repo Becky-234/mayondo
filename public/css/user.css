@@ -217,31 +217,127 @@ body.sidebar-active {
   /* Ensure it's above other content if needed */
 }
 
-/* USERS PAGE*/
 .to-do {
   display: flex;
-  gap: 30px;
-  background: #4c6444;
-  padding: 15px;
-  border-radius: 10px;
+  gap: 15px;
+  align-items: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4c6444 0%, #5a7a50 100%);
+  padding: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(76, 100, 68, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .btns {
-  padding: 5px;
-  text-decoration: none;
-  color: white;
-  border: 2px solid #fff;
-  border-radius: 10px;
-  background: #caba9c;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #caba9c 0%, #d8c9ad 100%);
+  color: #4c6444;
   text-align: center;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(202, 186, 156, 0.3);
+  white-space: nowrap;
 }
 
-.to-do input {
-  border-radius: 10px;
-  border: 2px solid #fff;
-  width: 30%;
-  text-align: center;
-  background: #caba9c;
+.btns:hover {
+  background: linear-gradient(135deg, #b8a98c 0%, #caba9c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(202, 186, 156, 0.4);
+}
+
+/* Search Input */
+.to-do input[type="search"] {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 250px;
+  padding: 10px 15px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.95);
+  color: #4c6444;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.to-do input[type="search"]:focus {
+  outline: none;
+  border-color: #caba9c;
+  box-shadow: 0 0 0 2px rgba(202, 186, 156, 0.3);
+  background: #fff;
+}
+
+.to-do input[type="search"]::placeholder {
+  color: #a0aec0;
+}
+
+/* Icon styling */
+.btns i {
+  font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .to-do {
+    gap: 12px;
+    padding: 15px;
+  }
+  
+  .to-do input[type="search"] {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .to-do {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .button-group {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .to-do input[type="search"] {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .to-do {
+    padding: 12px;
+  }
+  
+  .btns {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+  
+  .to-do input[type="search"] {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
 }
 
 #notFound {
