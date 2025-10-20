@@ -53,30 +53,33 @@ block content
               button.btn.btn-danger(type='submit') Delete
 
     .include
-      //- Only show Add Stock button to manager
-      if currentUser && currentUser.role === "manager"
-        a.btns(href='/addStock') Add Stock
+      .button-group
+        //- Only show Add Stock button to manager
+        if currentUser && currentUser.role === "manager"
+          a.btns(href='/addStock')
+            i.fas.fa-plus-circle
+            | Add Stock
+        
+        a#downloadPdf.btns
+          i.fas.fa-file-pdf
+          | Download PDF
       
-      //- a#downloadExcel.btns Download Excel
-      a#downloadPdf.btns Download PDF
-      
-      .table-filter(style="display: inline-block; margin-left: 20px;")
-        label.filter-label(for="productFilter") Filter by:
+      .filter-section
+        label.filter-label(for='productFilter') Filter by:
         select#productFilter.filter-dropdown
-          option(value="all") All Products
-          option(value="raw") Raw Products 
-          option(value="furniture") Furniture Products
+          option(value='all') All Products
+          option(value='raw') Raw Products 
+          option(value='furniture') Furniture Products
 
-      //- Date Filter Section
-      .date-filter-container(style="display: inline-block; margin-left: 20px;")
-        label.filter-label(for="startDate") From:
-        input#startDate.filter-date(type="date")
-        label.filter-label(for="endDate" style="margin-left: 10px;") To:
-        input#endDate.filter-date(type="date")
-        button#applyDateFilter.btns(style="margin-left: 10px;") Apply
-        button#clearDateFilter.btns(style="margin-left: 5px;") Clear    
+      .date-filter-container
+        label.filter-label(for='startDate') From:
+        input#startDate.filter-date(type='date')
+        label.filter-label(for='endDate') To:
+        input#endDate.filter-date(type='date')
+        button#applyDateFilter.btns.small Apply
+        button#clearDateFilter.btns.small Clear
 
-      input#searchStock(type='search' placeholder='Search...')
+      input#searchStock(type='search' placeholder='Search stock...')
     
     //- STOCK ALERTS SUMMARY BANNER
     section.table-section

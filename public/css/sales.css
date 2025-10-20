@@ -253,13 +253,22 @@ body.sidebar-active {
 }
 
 @keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 @keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: #2c5aa0 }
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #2c5aa0;
+  }
 }
 
 /* Fade in animation */
@@ -268,8 +277,14 @@ body.sidebar-active {
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Bounce animation */
@@ -278,8 +293,13 @@ body.sidebar-active {
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Color change animation */
@@ -288,11 +308,21 @@ body.sidebar-active {
 }
 
 @keyframes colorChange {
-  0% { color: #2c5aa0; }
-  25% { color: #4a7bc8; }
-  50% { color: #6f9de8; }
-  75% { color: #4a7bc8; }
-  100% { color: #2c5aa0; }
+  0% {
+    color: #2c5aa0;
+  }
+  25% {
+    color: #4a7bc8;
+  }
+  50% {
+    color: #6f9de8;
+  }
+  75% {
+    color: #4a7bc8;
+  }
+  100% {
+    color: #2c5aa0;
+  }
 }
 
 .dash-card {
@@ -567,7 +597,7 @@ body.sidebar-active {
     gap: 12px;
     padding: 15px;
   }
-  
+
   .include input[type="search"] {
     width: 200px;
   }
@@ -579,30 +609,30 @@ body.sidebar-active {
     align-items: stretch;
     gap: 10px;
   }
-  
+
   .button-group {
     justify-content: center;
     flex-wrap: wrap;
   }
-  
+
   .filter-section {
     justify-content: center;
     flex-wrap: wrap;
   }
-  
+
   .include input[type="search"] {
     width: 100%;
     margin-left: 0;
     margin-top: 10px;
   }
-  
+
   .date-filter-container {
     display: flex;
     flex-direction: column;
     gap: 8px;
     width: 100%;
   }
-  
+
   .date-filter-container .filter-label {
     text-align: center;
   }
@@ -612,18 +642,18 @@ body.sidebar-active {
   .include {
     padding: 12px;
   }
-  
+
   .btns {
     padding: 8px 16px;
     font-size: 12px;
   }
-  
+
   .filter-dropdown,
   .filter-date {
     padding: 6px 10px;
     font-size: 12px;
   }
-  
+
   .include input[type="search"] {
     padding: 8px 12px;
     font-size: 12px;
@@ -641,7 +671,6 @@ body.sidebar-active {
 .btns i {
   font-size: 12px;
 }
-
 
 
 #notFound {
@@ -696,8 +725,6 @@ td.actions .btn-icon {
 td.actions .btn-icon:hover {
   color: #007bff; /* hover color */
 }
-
-
 
 /* Main Dashboard Cards */
 .dash-card {
@@ -765,7 +792,6 @@ td.actions .btn-icon:hover {
   opacity: 0.9;
 }
 
-
 /* Card Icons */
 .dash-card i {
   font-size: 2.2rem;
@@ -780,46 +806,46 @@ td.actions .btn-icon:hover {
 
 /* Date Filter Styles */
 .date-filter-container {
-    background: #f8f9fa;
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #dee2e6;
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
 }
 
 .filter-date {
-    padding: 4px 8px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    margin-left: 5px;
-    color: #fff;
+  padding: 4px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  margin-left: 5px;
+  color: #fff;
 }
 
 .filter-label {
-    font-weight: 500;
-    color: #fff;
-    margin-right: 5px;
+  font-weight: 500;
+  color: #fff;
+  margin-right: 5px;
 }
 
 .date-filter-container .btns {
-    padding: 4px 12px;
-    font-size: 14px;
+  padding: 4px 12px;
+  font-size: 14px;
 }
 
 /* Responsive design for filters */
 @media (max-width: 768px) {
-    .date-filter-container {
-        display: block !important;
-        margin: 10px 0 !important;
-    }
-    
-    .date-filter-container .filter-label {
-        display: block;
-        margin-bottom: 5px;
-    }
-    
-    .filter-date {
-        margin: 5px;
-    }
+  .date-filter-container {
+    display: block !important;
+    margin: 10px 0 !important;
+  }
+
+  .date-filter-container .filter-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .filter-date {
+    margin: 5px;
+  }
 }
 
 footer {
@@ -832,6 +858,3 @@ footer {
   margin-bottom: 5px;
   padding: 0 45px;
 }
-
-
-

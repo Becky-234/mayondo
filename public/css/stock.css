@@ -229,36 +229,257 @@ body.sidebar-active {
 .include {
   display: flex;
   gap: 15px;
-  background: #4c6444;
   align-items: center;
-  flex-wrap: wrap; /* Allow wrapping on small screens */
-  padding: 15px;
-  border-radius: 10px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4c6444 0%, #5a7a50 100%);
+  padding: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(76, 100, 68, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.include input {
-  border-radius: 10px;
-  border: 2px solid #fff;
-  width: 250px; /* Fixed width instead of percentage */
-  margin-left: auto; /* Push search to the right */
-  text-align: center;
-  background: #caba9c;
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .btns {
-  padding: 5px;
-  text-decoration: none;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #caba9c 0%, #d8c9ad 100%);
+  color: #4c6444;
   text-align: center;
-  color: #fff;
-  background: #caba9c;
-  border: 2px solid #fff;
-  border-radius: 10px;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(202, 186, 156, 0.3);
+  white-space: nowrap;
 }
 
-.btns :hover {
-  background: #8a6420;
+.btns:hover {
+  background: linear-gradient(135deg, #b8a98c 0%, #caba9c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(202, 186, 156, 0.4);
 }
+
+/* Filter Sections */
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filter-label {
+  color: #fff;
+  font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.filter-dropdown {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #4c6444;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-dropdown:focus {
+  outline: none;
+  border-color: #caba9c;
+  box-shadow: 0 0 0 2px rgba(202, 186, 156, 0.3);
+  background: #fff;
+}
+
+/* Date Filter Container */
+.date-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filter-date {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #4c6444 !important;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+/* Force date input text color */
+.filter-date::-webkit-datetime-edit {
+  color: #4c6444 !important;
+}
+
+.filter-date::-webkit-datetime-edit-fields-wrapper {
+  color: #4c6444 !important;
+}
+
+.filter-date::-webkit-datetime-edit-text {
+  color: #4c6444 !important;
+}
+
+.filter-date::-webkit-datetime-edit-month-field {
+  color: #4c6444 !important;
+}
+
+.filter-date::-webkit-datetime-edit-day-field {
+  color: #4c6444 !important;
+}
+
+.filter-date::-webkit-datetime-edit-year-field {
+  color: #4c6444 !important;
+}
+
+.filter-date:focus {
+  outline: none;
+  border-color: #caba9c !important;
+  box-shadow: 0 0 0 2px rgba(202, 186, 156, 0.3) !important;
+  background: #fff !important;
+}
+
+/* Search Input */
+.include input[type="search"] {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 250px;
+  padding: 10px 15px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.95);
+  color: #4c6444;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.include input[type="search"]:focus {
+  outline: none;
+  border-color: #caba9c;
+  box-shadow: 0 0 0 2px rgba(202, 186, 156, 0.3);
+  background: #fff;
+}
+
+.include input[type="search"]::placeholder {
+  color: #a0aec0;
+}
+
+/* Small button variant for filter actions */
+.btns.small {
+  padding: 6px 12px;
+  font-size: 12px;
+  gap: 4px;
+}
+
+/* Icon styling */
+.btns i {
+  font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .include {
+    gap: 12px;
+    padding: 15px;
+  }
+  
+  .include input[type="search"] {
+    width: 200px;
+  }
+  
+  .filter-date {
+    min-width: 110px;
+  }
+}
+
+@media (max-width: 768px) {
+  .include {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .button-group {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .filter-section {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .date-filter-container {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .include input[type="search"] {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  
+  .filter-date {
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .include {
+    padding: 12px;
+  }
+  
+  .btns {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+  
+  .filter-dropdown,
+  .filter-date {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .include input[type="search"] {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .date-filter-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filter-date {
+    min-width: 200px;
+  }
+} 
+
 
 #notFound {
   color: red;
