@@ -1,142 +1,212 @@
 extends layout.pug 
 
 block styles
-  link(rel="stylesheet", href="../css/add-sale.css")
+  link(rel="stylesheet", href="/css/add-sale.css")
   
 block content 
   include sidebar.pug
   main.main-content
-    //- nav.navbar.bg-body-tertiary.dashboard-header
-    //-   .container-fluid.d-flex.justify-content-end.align-items-center
-    //-     .d-flex.align-items-center
-    //-       a.logoutBtn(href="/index") Logout 
-    
-    // SUCCESS/ERROR MESSAGES
-    if success
-      .container.mt-3
-        .alert.alert-success.alert-dismissible.fade.show(role="alert" style="max-width: 600px; margin: 0 auto;")
-          i.fas.fa-check-circle.me-2
-          strong Success! 
-          | #{success}
-          button.btn-close(type="button" data-bs-dismiss="alert")
-    
-    if error
-      .container.mt-3
-        .alert.alert-danger.alert-dismissible.fade.show(role="alert" style="max-width: 600px; margin: 0 auto;")
-          i.fas.fa-exclamation-circle.me-2
-          strong Error! 
-          | #{error}
-          button.btn-close(type="button" data-bs-dismiss="alert")
-    
-    // STOCK ALERT BANNER (Top of page)
-    if lowStockItems && lowStockItems.length > 0
-      .container.mt-3
-        .alert.alert-warning.d-flex.align-items-center.w-50.mx-auto 
-          i.fas.fa-exclamation-triangle.me-2
-          strong Stock Alert: 
-          | #{lowStockItems.length} product(s) are running low on stock.
-    
     .user-form-container
-      form#addSale(action="/addSale", method="post" novalidate)  
-        h2 Add Sale Here!
-        
-        .form-group
-          label(for="name") Name of Customer
-          br
-          input#name.form-control(type="text", name="name", required)
-          .error-message#name-error Please enter a valid customer name (2-100 characters)
-          br
-        
-        .form-group
-          label(for="contact") Customer Contact
-          br
-          input#contact.form-control(type="text", name="contact", required, pattern="[0-9+\-\s()]{10,}")
-          .error-message#contact-error Please enter a valid phone number (at least 10 digits)
-          br
-        
-        .form-group
-          label(for="nproduct") Name of Product
-          br
-          select#nproduct.form-control(name="nproduct", required, onchange="updateStockAlert()")
-            option(value="", disabled, selected) Select Product
-            if products && products.length
-              each product in products
-                option(
-                  value=product.pdtname, 
-                  data-stock-quantity=product.availableQuantity,
-                  data-stock-status=product.stockStatus,
-                  data-alert-message=product.alertMessage,
-                  data-product-type=product.pdttype,
-                  data-unit-price=product.unitPrice,
-                  disabled=(product.stockStatus === "out-of-stock")
-                )= product.pdtname + (product.stockStatus === "out-of-stock" ? " - OUT OF STOCK" : ` (Available: ${product.availableQuantity}, Price: ${Math.round(product.unitPrice).toLocaleString()} UGX)`)
-            else
-              option(value="", disabled) No products available
-          .error-message#nproduct-error Please select a product
-          br
+      .form-header
+        h2
+          i.fas.fa-cash-register
+          | Add Sale
+        p.instruction Record a new sale transaction
 
-          // STOCK ALERT DISPLAY (Dynamic - appears after product selection)
-          #stockAlertContainer.mt-2(style="display: none;")
-            .stock-alert#stockAlert
-          br
+      //- SUCCESS/ERROR MESSAGES
+      if success
+        .container.mt-3
+          .alert.alert-success.alert-dismissible.fade.show(role="alert")
+            i.fas.fa-check-circle.me-2
+            strong Success! 
+            | #{success}
+            button.btn-close(type="button" data-bs-dismiss="alert")
+      
+      if error
+        .container.mt-3
+          .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+            i.fas.fa-exclamation-circle.me-2
+            strong Error! 
+            | #{error}
+            button.btn-close(type="button" data-bs-dismiss="alert")
+      
+      //- STOCK ALERT BANNER (Top of page)
+      if lowStockItems && lowStockItems.length > 0
+        .container.mt-3
+          .alert.alert-warning.d-flex.align-items-center
+            i.fas.fa-exclamation-triangle.me-2
+            strong Stock Alert: 
+            | #{lowStockItems.length} product(s) are running low on stock.
+    
+      form#addSale(action="/addSale", method="post" novalidate)
+        .form-grid
+          .form-group
+            label(for="name")
+              i.fas.fa-user
+              | Customer Name
+            input#name.form-control(type="text", name="name", placeholder="Enter customer name" required)
+            .error-message#name-error Please enter a valid customer name (2-100 characters)
+          
+          .form-group
+            label(for="contact")
+              i.fas.fa-phone
+              | Customer Contact
+            input#contact.form-control(type="text", name="contact", placeholder="+256 XXX XXX XXX" required pattern="[0-9+\-\s()]{10,}")
+            .error-message#contact-error Please enter a valid phone number (at least 10 digits)
+          
+          .form-group
+            label(for="nproduct")
+              i.fas.fa-box
+              | Product Name
+            select#nproduct.form-control(name="nproduct", required, onchange="updateStockAlert()")
+              option(value="", disabled, selected) Select Product
+              if products && products.length
+                each product in products
+                  option(
+                    value=product.pdtname, 
+                    data-stock-quantity=product.availableQuantity,
+                    data-stock-status=product.stockStatus,
+                    data-alert-message=product.alertMessage,
+                    data-product-type=product.pdttype,
+                    data-unit-price=product.unitPrice,
+                    disabled=(product.stockStatus === "out-of-stock")
+                  )= product.pdtname + (product.stockStatus === "out-of-stock" ? " - OUT OF STOCK" : ` (Available: ${product.availableQuantity})`)
+              else
+                option(value="", disabled) No products available
+            .error-message#nproduct-error Please select a product
+
+            //- STOCK ALERT DISPLAY (Dynamic - appears after product selection)
+            #stockAlertContainer.mt-2(style="display: none;")
+              .stock-alert#stockAlert
+          
+          .form-group
+            label(for="tproduct")
+              i.fas.fa-list
+              | Product Type
+            select#tproduct.form-control(name="tproduct", required)
+              option(value="", disabled, selected) Select Product Type 
+              option(value="Raw") Raw Products 
+              option(value="Furniture") Furniture Products 
+            .error-message#tproduct-error Please select a product type
+          
+          .form-group
+            label(for="quantity")
+              i.fas.fa-layer-group
+              | Quantity
+            input#quantity.form-control(type="number", name="quantity", placeholder="0" required, min="1")
+            .error-message#quantity-error Please enter a valid quantity (minimum 1)
+          
+          .form-group
+            label(for="unitPrice")
+              i.fas.fa-tag
+              | Unit Price (UGX)
+            input#unitPrice.form-control(type="text", name="unitPrice", placeholder="0.00" required)
+            .error-message#unitPrice-error Please enter a valid unit price
+          
+          .form-group.full-width
+            .form-check
+              input#transportCheck.form-check-input(type="checkbox" name="transportCheck")
+              label.form-check-label(for="transportCheck") 
+                i.fas.fa-truck
+                | Add 5% Transport Fee
+          
+          .form-group.full-width
+            .price-display
+              .price-row
+                span Subtotal:
+                span#subtotalAmount 0 UGX
+              .price-row
+                span Transport Fee (5%):
+                span#transportAmount 0 UGX
+              .total-row
+                span Total:
+                span#totalPriceDisplay 0 UGX
+            input#totalPrice.form-control(type="hidden", name="totalPrice", required readonly)
+            .error-message#totalPrice-error Total price calculation error
+          
+          .form-group
+            label(for="payment")
+              i.fas.fa-credit-card
+              | Payment Method
+            select#payment.form-control(name="payment", required)
+              option(value="", disabled, selected) Select Payment Method
+              option(value="Bank Overdraft") Bank Overdraft 
+              option(value="Cash") Cash
+              option(value="Cheque") Cheque
+            .error-message#payment-error Please select a payment method
+          
+          .form-group
+            label(for="date")
+              i.fas.fa-calendar-alt
+              | Sale Date
+            input#date.form-control(type="date", name="date", required)
+            .error-message#date-error Please select a valid date
         
-        .form-group
-          label(for="tproduct") Type of Product
-          br
-          select#tproduct.form-control(name="tproduct", required)
-            option(value="", disabled, selected) Select Type of Product 
-            option(value="Raw") Raw Products 
-            option(value="Furniture") Furniture Products 
-          .error-message#tproduct-error Please select a product type
-          br
+        .form-actions
+          button.btn.btn-secondary(type="reset" id="resetBtn")
+            i.fas.fa-times
+            | Cancel
+          button.btn.btn-primary(type="submit")
+            i.fas.fa-save
+            | Save Sale
+
+  script.
+    function updateStockAlert() {
+      const productSelect = document.getElementById('nproduct');
+      const selectedOption = productSelect.options[productSelect.selectedIndex];
+      const stockAlertContainer = document.getElementById('stockAlertContainer');
+      const stockAlert = document.getElementById('stockAlert');
+      
+      if (selectedOption.value) {
+        const stockQuantity = selectedOption.getAttribute('data-stock-quantity');
+        const stockStatus = selectedOption.getAttribute('data-stock-status');
+        const alertMessage = selectedOption.getAttribute('data-alert-message');
+        const unitPrice = selectedOption.getAttribute('data-unit-price');
         
-        .form-group
-          label(for="quantity") Quantity
-          br
-          input#quantity.form-control(type="number", name="quantity", required, min="1")
-          .error-message#quantity-error Please enter a valid quantity (minimum 1)
-          br
+        // Update unit price field
+        if (unitPrice) {
+          document.getElementById('unitPrice').value = Math.round(unitPrice).toLocaleString();
+        }
         
-        .form-group
-          label(for="unitPrice") Unit Price (UGX)
-          br
-          input#unitPrice.form-control(type="text", name="unitPrice", required)
-          .error-message#unitPrice-error Please enter a valid unit price
-          br
+        // Update product type
+        const productType = selectedOption.getAttribute('data-product-type');
+        if (productType) {
+          const typeSelect = document.getElementById('tproduct');
+          for (let option of typeSelect.options) {
+            if (option.value === productType) {
+              option.selected = true;
+              break;
+            }
+          }
+        }
         
-        .form-group
-          .form-check
-            label.form-check-label(for="transportCheck" style= "margin-left: -19px") Add 5% Transport Fee 
-            input#transportCheck.form-check-input(type="checkbox" name="transportCheck")
-          br
-          br
+        // Show stock alert
+        stockAlertContainer.style.display = 'block';
+        stockAlert.className = 'stock-alert ' + stockStatus;
         
-        .form-group
-          label(for="totalPrice") Total Price (UGX)
-          br
-          input#totalPrice.form-control(type="text", name="totalPrice", required readonly)
-          .error-message#totalPrice-error Total price calculation error
-          br
+        let icon = 'fas fa-info-circle';
+        if (stockStatus === 'low-stock') icon = 'fas fa-exclamation-triangle';
+        if (stockStatus === 'out-of-stock') icon = 'fas fa-times-circle';
+        if (stockStatus === 'medium-stock') icon = 'fas fa-check-circle';
         
-        .form-group
-          label(for="payment") Select Payment Method
-          br
-          select#payment.form-control(name="payment", required)
-            option(value="", disabled, selected) Select Payment Method
-            option(value="Bank Overdraft") Bank Overdraft 
-            option(value="Cash") Cash
-            option(value="Cheque") Cheque
-          .error-message#payment-error Please select a payment method
-          br
+        stockAlert.innerHTML = `
+          <i class="${icon}"></i>
+          <span>${alertMessage}</span>
+          <span class="stock-status">${stockQuantity} units</span>
+        `;
         
-        .form-group
-          label(for="date") Date
-          br
-          input#date.form-control(type="date", name="date", required)
-          .error-message#date-error Please select a valid date
-          br
+        // Update quantity validation
+        const quantityInput = document.getElementById('quantity');
+        quantityInput.setAttribute('max', stockQuantity);
         
-        .add
-          button.btns(type="submit") Save
-          button.btns(type="reset" id="resetBtn") Cancel
-  script(src="../javascript/sales.js")
+      } else {
+        stockAlertContainer.style.display = 'none';
+      }
+      
+      // Call the function from sales.js
+      if (typeof calculateTotalPrice === 'function') {
+        calculateTotalPrice();
+      }
+    }
+
+  script(src="/javascript/sales.js")

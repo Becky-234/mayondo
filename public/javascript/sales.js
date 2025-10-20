@@ -8,7 +8,6 @@ toggleBtn.addEventListener("click", () => {
 });
 
 
-
 //PDF Export
 const pdfBtn = document.getElementById("downloadPdf");
 if (pdfBtn) {
@@ -410,7 +409,7 @@ function initializeFormValidation() {
   }
 }
 
-// Keep existing functions for the form
+
 function updateStockAlert() {
   const productSelect = document.getElementById('nproduct');
   const selectedOption = productSelect.options[productSelect.selectedIndex];
@@ -461,20 +460,61 @@ function updateStockAlert() {
   calculateTotalPrice();
 }
 
-function calculateTotalPrice() {
-  const quantity = document.getElementById('quantity').value;
-  const unitPrice = document.getElementById('unitPrice').value.replace(/,/g, '');
-  const transportCheck = document.getElementById('transportCheck').checked;
-  const totalPriceField = document.getElementById('totalPrice');
 
-  if (quantity && unitPrice) {
-    let total = parseFloat(quantity) * parseFloat(unitPrice);
-    if (transportCheck) total *= 1.05;
-    totalPriceField.value = Math.round(total).toLocaleString();
-  } else {
-    totalPriceField.value = '';
-  }
+// TOTAL PRICE CALCULATION FOR ADD SALE FORM
+function calculateTotalPrice() {
+  console.log('Calculating total price...');
+
+  // Get quantity value and convert to number
+  const quantityInput = document.getElementById('quantity');
+  const quantity = parseInt(quantityInput?.value) || 0;
+
+  // Get unit price value and convert to number (remove commas for calculation)
+  const unitPriceInput = document.getElementById('unitPrice');
+  let unitPriceValue = unitPriceInput?.value?.replace(/[^0-9.]/g, '') || '0';
+  const unitPrice = parseFloat(unitPriceValue) || 0;
+
+  // Check if transport fee is applied
+  const transportCheck = document.getElementById('transportCheck');
+  const transportApplied = transportCheck?.checked || false;
+
+  // Calculate amounts
+  const subtotal = quantity * unitPrice;
+  const transportFee = transportApplied ? subtotal * 0.05 : 0;
+  const total = subtotal + transportFee;
+
+  console.log('Calculation results:', { quantity, unitPrice, subtotal, transportFee, total });
+
+  // Update display elements
+  const subtotalElement = document.getElementById('subtotalAmount');
+  const transportElement = document.getElementById('transportAmount');
+  const totalDisplayElement = document.getElementById('totalPriceDisplay');
+  const totalInputElement = document.getElementById('totalPrice');
+
+  if (subtotalElement) subtotalElement.textContent = subtotal.toLocaleString() + ' UGX';
+  if (transportElement) transportElement.textContent = transportFee.toLocaleString() + ' UGX';
+  if (totalDisplayElement) totalDisplayElement.textContent = total.toLocaleString() + ' UGX';
+  if (totalInputElement) totalInputElement.value = total;
 }
+
+// Event listeners for real-time calculation
+document.addEventListener('DOMContentLoaded', function () {
+  // Only set up event listeners if we're on the add sale page
+  const quantityInput = document.getElementById('quantity');
+  const unitPriceInput = document.getElementById('unitPrice');
+  const transportCheck = document.getElementById('transportCheck');
+
+  if (quantityInput && unitPriceInput && transportCheck) {
+    console.log('Setting up sale form event listeners...');
+
+    quantityInput.addEventListener('input', calculateTotalPrice);
+    unitPriceInput.addEventListener('input', calculateTotalPrice);
+    transportCheck.addEventListener('change', calculateTotalPrice);
+
+    // Initialize calculation on page load
+    calculateTotalPrice();
+  }
+});
 
 
 //MODALS FUNCTIONALITY

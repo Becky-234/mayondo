@@ -48,7 +48,7 @@ router.post("/addStock", ensureManager, async (req, res) => {
   try {
     const { pdtname, pdttype, pdtquantity1, pdtquantity, cprice, supplier, supplierContact, quality, date } = req.body;
 
-    // Calculate product price automatically (50% markup)
+    // Calculate product price automatically
     const calculatedPrice = Math.round(cprice * 1.5);
 
     const stock = new StockModel({
@@ -83,7 +83,6 @@ router.post("/addStock", ensureManager, async (req, res) => {
     res.redirect("/addStock?error=Unable to add stock item. Please try again.");
   }
 });
-
 
 
 // Updating stock - GET with messages
