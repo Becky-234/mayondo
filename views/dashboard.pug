@@ -1,212 +1,285 @@
-extends layout.pug 
+extends layout.pug
+
 block styles 
   link(rel='stylesheet' href='../css/dashboard.css')
+
 block content
   include sidebar.pug
   main.main-content
-    .dashboarBody
-      h3 Mayondo Wood And Furniture ltd
-      .welcome-container
-        h3.fade-in Welcome 
-          span.username.typewriter #{currentUser.username}!
-        p.fade-in(style="animation-delay: 1.5s;") You're now logged in.
-      section#dash-top.dash
-        .row
-          .col-md-3
-            .dash-card
-              .card-body
-                i.fa-solid.fa-sack-dollar
-                h5.card-title Total Revenue
-                p.card-text Shs. #{dashboardData.totalRevenue}
-                small.text-muted Combined potential revenue
-          .col-md-3
-            .dash-card
-              .card-body
-                i.fa-solid.fa-credit-card
-                h5.card-title Total Profit
-                p.card-text Shs. #{dashboardData.totalProfit}
-                small.text-muted Combined potential profit
-          .col-md-3
-            .dash-card
-              .card-body
-                i.fa-solid.fa-users-line
-                h5.card-title Total Inventory Items 
-                p.card-text #{dashboardData.totalInventory}
-                small.text-muted Unique products in stock
-          .col-md-3
-            .dash-card
-              .card-body
-                i.fa-solid.fa-truck-ramp-box
-                h5.card-title Stock Warnings 
-                p.card-text #{dashboardData.totalStockWarnings}
-                small.text-muted Items with low stock
-        br
-        br
-        br       
-        // Total Stock alerts
-        .card.mb-4
-          .card-header.d-flex.justify-content-between.align-items-center
-            h5.mb-0 Total Stock Warnings
-            span.badge.bg-danger #{dashboardData.totalStockWarnings}
-          .card-body
-            if dashboardData.totalLowStockItems && dashboardData.totalLowStockItems.length > 0
-              .alert.alert-warning
-                strong Total Low Stock Alert!
-                |  The following items are running low across all categories:
-              .low-stock-list
-                each item in dashboardData.totalLowStockItems
-                  .low-stock-item.mb-2.p-2.border.rounded
-                    .d-flex.justify-content-between
-                      strong #{item.name}
-                      span.badge.bg-warning #{item.quantity} left
-                    small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
-            else
-              .alert.alert-success
-                strong All good!
-                |  No stock items are running low.
-                  
-      //- Raw Materials Section
-      br
-      section#raw-materials
-        h2 Raw Materials Overview
-        br
-        .row
-          .col
-            .dash-card.raw-card
-              .card-body
-                i.fa-solid.fa-tree
-                h6.card-title Raw Revenue
-                p.card-text Shs. #{dashboardData.rawRevenue}
-          .col
-            .dash-card.raw-card
-              .card-body
-                i.fa-solid.fa-coins
-                h6.card-title Raw Profit
-                p.card-text Shs. #{dashboardData.rawProfit}
-          .col
-            .dash-card.raw-card
-              .card-body
-                i.fa-solid.fa-box
-                h6.card-title Raw Items
-                p.card-text #{dashboardData.rawInventory}
-      section#raw-materials-two.dash.mt-5
-        .row
-          .col
-            .dash-card.raw-card
-              .card-body
-                i.fa-solid.fa-exclamation
-                h6.card-title Raw Warnings
-                p.card-text #{dashboardData.rawStockWarnings} 
-          .col
-            .dash-card.raw-card
-              .card-body
-                i.fa-solid.fa-cubes
-                h6.card-title Total Units
-                p.card-text #{dashboardData.rawItems}
-          .col
-            .dash-card.raw-card
-              .card-body
-                i.fa-solid.fa-dollar-sign
-                h6.card-title Inventory Value
-                p.card-text Shs. #{dashboardData.rawInventoryValue}
-        br
-        br
-        br
-        // Raw Materials Stock Alerts
-        .card.mb-4
-          .card-header.d-flex.justify-content-between.align-items-center
-            h5.mb-0 Raw Materials Stock Warnings
-            span.badge.bg-danger #{dashboardData.rawStockWarnings}
-          .card-body
-            if dashboardData.rawLowStockItems && dashboardData.rawLowStockItems.length > 0
-              .alert.alert-warning
-                strong Raw Materials Low Stock Alert!
-                |  The following raw materials are running low:
-              .low-stock-list
-                each item in dashboardData.rawLowStockItems
-                  .low-stock-item.mb-2.p-2.border.rounded
-                    .d-flex.justify-content-between
-                      strong #{item.name}
-                      span.badge.bg-warning #{item.quantity} left
-                    small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
-            else
-              .alert.alert-success
-                strong All good!
-                |  No raw materials are running low.
+    .dashboard-header
+      .header-content
+        .company-branding
+          h1.company-name Mayondo Wood & Furniture Ltd
+          p.company-tagline Crafting Excellence Since 1985
+        .user-welcome
+          .welcome-container
+            .welcome-text
+              h3.welcome-message
+                | Welcome back, 
+                span.username.typewriter #{currentUser.username}!
+              p.welcome-subtitle You're now logged in to your dashboard
+            .user-status
+              .status-indicator
+                i.fas.fa-circle.status-online
+                span.status-text Online
+            .quick-actions
+              button.action-btn.notifications
+                i.fas.fa-bell
+                span.badge 3
+              button.action-btn.messages
+                i.fas.fa-envelope
+                span.badge 5
+              //- a.logoutBtn(href="/logout")
+              //-   i.fas.fa-sign-out-alt
+              //-   span Logout
 
-      //- Furniture Section
-      br
-      br
-      section#furniture
-        h2 Furniture Overview
-        br
-        .row
-          .col
-            .dash-card.furniture-card
-              .card-body
-                i.fa-solid.fa-couch
-                h6.card-title Furniture Revenue
-                p.card-text Shs. #{dashboardData.furnitureRevenue}
-          .col
-            .dash-card.furniture-card
-              .card-body
-                i.fa-solid.fa-money-bill
-                h6.card-title Furniture Profit
-                p.card-text Shs. #{dashboardData.furnitureProfit}
-          .col
-            .dash-card.furniture-card
-              .card-body
-                i.fa-solid.fa-box-open
-                h6.card-title Furniture Items
-                p.card-text #{dashboardData.furnitureInventory}
-      section#furniture.dash-two.mt-5
-        .row
-          .col
-            .dash-card.furniture-card
-              .card-body
-                i.fa-solid.fa-exclamation-triangle
-                h6.card-title Furniture Warnings
-                p.card-text #{dashboardData.furnitureStockWarnings}
-          .col
-            .dash-card.furniture-card
-              .card-body
-                i.fa-solid.fa-layer-group
-                h6.card-title Total Units
-                p.card-text #{dashboardData.furnitureItems}
-          .col
-            .dash-card.furniture-card
-              .card-body
-                i.fa-solid.fa-tag
-                h6.card-title Inventory Value
-                p.card-text Shs. #{dashboardData.furnitureInventoryValue}
-        br
-        br
-        br
-        // Furniture Stock Alerts
-        .card.mb-4
-          .card-header.d-flex.justify-content-between.align-items-center
-            h5.mb-0 Furniture Stock Warnings
-            span.badge.bg-danger #{dashboardData.furnitureStockWarnings}
-          .card-body
-            if dashboardData.furnitureLowStockItems && dashboardData.furnitureLowStockItems.length > 0
-              .alert.alert-warning
-                strong Furniture Low Stock Alert!
-                |  The following furniture items are running low:
-              .low-stock-list
-                each item in dashboardData.furnitureLowStockItems
-                  .low-stock-item.mb-2.p-2.border.rounded
-                    .d-flex.justify-content-between
-                      strong #{item.name}
-                      span.badge.bg-warning #{item.quantity} left
-                    small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
-            else
-              .alert.alert-success
-                strong All good!
-                |  No furniture items are running low.
+    .dashboard-scroll-content
+      .dashboarBody
+        .dashboard-overview
+          .overview-card
+            h4 Today's Summary
+            p Current performance metrics and activities
+            .stats-preview
+              .stat-item
+                span.stat-value 12
+                span.stat-label New Orders
+              .stat-item
+                span.stat-value 8
+                span.stat-label Completed
+              .stat-item
+                span.stat-value 94%
+                span.stat-label Efficiency
+
+        section#dash-top.dash
+          .section-header
+            h2 Financial Overview
+            p Real-time financial performance metrics
+          .row
+            .col-md-3
+              .dash-card.revenue-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-sack-dollar
+                  .card-content
+                    h5.card-title Total Revenue
+                    p.card-text Shs. #{dashboardData.totalRevenue}
+                    small.text-muted Combined potential revenue
+            .col-md-3
+              .dash-card.profit-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-credit-card
+                  .card-content
+                    h5.card-title Total Profit
+                    p.card-text Shs. #{dashboardData.totalProfit}
+                    small.text-muted Combined potential profit
+            .col-md-3
+              .dash-card.inventory-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-users-line
+                  .card-content
+                    h5.card-title Total Inventory Items 
+                    p.card-text #{dashboardData.totalInventory}
+                    small.text-muted Unique products in stock
+            .col-md-3
+              .dash-card.warning-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-truck-ramp-box
+                  .card-content
+                    h5.card-title Stock Warnings 
+                    p.card-text #{dashboardData.totalStockWarnings}
+                    small.text-muted Items with low stock
         
-        br
-        br
-    footer
-      p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
-      p Designed By Kirabo Rebecca.
+          // Total Stock alerts
+          .alert-section
+            .card.mb-4
+              .card-header.d-flex.justify-content-between.align-items-center
+                h5.mb-0 Total Stock Warnings
+                span.badge.bg-danger #{dashboardData.totalStockWarnings}
+              .card-body
+                if dashboardData.totalLowStockItems && dashboardData.totalLowStockItems.length > 0
+                  .alert.alert-warning
+                    strong Total Low Stock Alert!
+                    |  The following items are running low across all categories:
+                  .low-stock-list
+                    each item in dashboardData.totalLowStockItems
+                      .low-stock-item.mb-2.p-2.border.rounded
+                        .d-flex.justify-content-between
+                          strong #{item.name}
+                          span.badge.bg-warning #{item.quantity} left
+                        small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
+                else
+                  .alert.alert-success
+                    strong All good!
+                    |  No stock items are running low.
+                    
+        //- Raw Materials Section
+        section#raw-materials
+          .section-header
+            h2 Raw Materials Overview
+            p Inventory and performance metrics for raw materials
+          .row
+            .col
+              .dash-card.raw-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-tree
+                  .card-content
+                    h6.card-title Raw Revenue
+                    p.card-text Shs. #{dashboardData.rawRevenue}
+            .col
+              .dash-card.raw-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-coins
+                  .card-content
+                    h6.card-title Raw Profit
+                    p.card-text Shs. #{dashboardData.rawProfit}
+            .col
+              .dash-card.raw-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-box
+                  .card-content
+                    h6.card-title Raw Items
+                    p.card-text #{dashboardData.rawInventory}
+      
+        section#raw-materials-two.dash.mt-5
+          .row
+            .col
+              .dash-card.raw-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-exclamation
+                  .card-content
+                    h6.card-title Raw Warnings
+                    p.card-text #{dashboardData.rawStockWarnings} 
+            .col
+              .dash-card.raw-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-cubes
+                  .card-content
+                    h6.card-title Total Units
+                    p.card-text #{dashboardData.rawItems}
+            .col
+              .dash-card.raw-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-dollar-sign
+                  .card-content
+                    h6.card-title Inventory Value
+                    p.card-text Shs. #{dashboardData.rawInventoryValue}
+        
+          // Raw Materials Stock Alerts
+          .alert-section
+            .card.mb-4
+              .card-header.d-flex.justify-content-between.align-items-center
+                h5.mb-0 Raw Materials Stock Warnings
+                span.badge.bg-danger #{dashboardData.rawStockWarnings}
+              .card-body
+                if dashboardData.rawLowStockItems && dashboardData.rawLowStockItems.length > 0
+                  .alert.alert-warning
+                    strong Raw Materials Low Stock Alert!
+                    |  The following raw materials are running low:
+                  .low-stock-list
+                    each item in dashboardData.rawLowStockItems
+                      .low-stock-item.mb-2.p-2.border.rounded
+                        .d-flex.justify-content-between
+                          strong #{item.name}
+                          span.badge.bg-warning #{item.quantity} left
+                        small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
+                else
+                  .alert.alert-success
+                    strong All good!
+                    |  No raw materials are running low.
+
+        //- Furniture Section
+        section#furniture
+          .section-header
+            h2 Furniture Overview
+            p Performance metrics for furniture products
+          .row
+            .col
+              .dash-card.furniture-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-couch
+                  .card-content
+                    h6.card-title Furniture Revenue
+                    p.card-text Shs. #{dashboardData.furnitureRevenue}
+            .col
+              .dash-card.furniture-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-money-bill
+                  .card-content
+                    h6.card-title Furniture Profit
+                    p.card-text Shs. #{dashboardData.furnitureProfit}
+            .col
+              .dash-card.furniture-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-box-open
+                  .card-content
+                    h6.card-title Furniture Items
+                    p.card-text #{dashboardData.furnitureInventory}
+      
+        section#furniture.dash-two.mt-5
+          .row
+            .col
+              .dash-card.furniture-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-exclamation-triangle
+                  .card-content
+                    h6.card-title Furniture Warnings
+                    p.card-text #{dashboardData.furnitureStockWarnings}
+            .col
+              .dash-card.furniture-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-layer-group
+                  .card-content
+                    h6.card-title Total Units
+                    p.card-text #{dashboardData.furnitureItems}
+            .col
+              .dash-card.furniture-card
+                .card-body
+                  .card-icon
+                    i.fa-solid.fa-tag
+                  .card-content
+                    h6.card-title Inventory Value
+                    p.card-text Shs. #{dashboardData.furnitureInventoryValue}
+        
+          // Furniture Stock Alerts
+          .alert-section
+            .card.mb-4
+              .card-header.d-flex.justify-content-between.align-items-center
+                h5.mb-0 Furniture Stock Warnings
+                span.badge.bg-danger #{dashboardData.furnitureStockWarnings}
+              .card-body
+                if dashboardData.furnitureLowStockItems && dashboardData.furnitureLowStockItems.length > 0
+                  .alert.alert-warning
+                    strong Furniture Low Stock Alert!
+                    |  The following furniture items are running low:
+                  .low-stock-list
+                    each item in dashboardData.furnitureLowStockItems
+                      .low-stock-item.mb-2.p-2.border.rounded
+                        .d-flex.justify-content-between
+                          strong #{item.name}
+                          span.badge.bg-warning #{item.quantity} left
+                        small.text-muted Type: #{item.type} | Threshold: #{item.threshold}
+                else
+                  .alert.alert-success
+                    strong All good!
+                    |  No furniture items are running low.
+        
+      footer
+        .footer-content
+          p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
+          p Designed By Kirabo Rebecca.
+  
   script(src='../javascript/dashboard.js')
