@@ -6,7 +6,6 @@
   font-family: "Poppins", sans-serif;
 }
 
-/* Main Body Layout: Flexbox for Sidebar and Main Content */
 body {
   display: flex;
   min-height: 100vh;
@@ -192,7 +191,7 @@ body.sidebar-active {
 /* Sale Form Container */
 .user-form-container {
   max-width: 1000px;
-  margin: 0 auto;
+  margin-left: 100px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
