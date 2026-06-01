@@ -192,7 +192,7 @@ body.sidebar-active {
 /* Stock Form Container */
 .stock-form-container {
   max-width: 1000px;
-  margin: 0 auto;
+  margin-left: 100px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
