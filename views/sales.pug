@@ -11,12 +11,13 @@ block content
         h4.fade-in Welcome 
           span.username.typewriter #{currentUser.username}!
         p.fade-in(style="animation-delay: 1.5s;") You're now logged in.
+    
     // SUCCESS MODAL
     if success
       .modal.fade.show(tabindex='-1', style='display: block; background-color: rgba(0,0,0,0.5);')
         .modal-dialog.modal-dialog-centered
           .modal-content
-            .modal-header.bg-success(style='bacground: #4c6444; color: #fff')
+            .modal-header.bg-success(style='background: #4c6444; color: #fff')
               h5.modal-title
                 i.fas.fa-check-circle.me-2
                 | Success!
@@ -58,6 +59,7 @@ block content
             form#deleteForm(method='post', action='/deleteSale', style='display: inline;')
               input(type='hidden', name='id', id='deleteSaleId')
               button.btn.btn-danger(type='submit') Delete
+    
     br
     section#dash-top.dash
       .row
@@ -102,15 +104,11 @@ block content
       br
       br
 
-    
     #including.include
       .button-group
         a.btns(href='/addSale')
           i.fas.fa-plus-circle
           | Add Sale
-        //- a#downloadExcel.btns
-        //-   i.fas.fa-file-excel
-        //-   | Download Excel
         a#downloadPdf.btns
           i.fas.fa-file-pdf
           | Download PDF
@@ -149,43 +147,346 @@ block content
             th Sales Agent 
             if currentUser && currentUser.role === 'manager'
               th Actions
-        tbody.row-others
-          if items && items.length
-            each item in items
-              tr
-                td #{item.name}
-                td #{item.contact}
-                td #{item.nproduct}
-                td #{item.tproduct}
-                td #{item.quantity}
-                td #{(item.unitPrice && !isNaN(item.unitPrice)) ? item.unitPrice.toLocaleString() : '0'}
-                td #{item.transportCheck ? 'Yes' : 'No'}
-                td #{(item.totalPrice && !isNaN(item.totalPrice)) ? Math.round(item.totalPrice).toLocaleString() : '0'}
-                td #{item.payment}
-                td #{new Date(item.date).toLocaleDateString()}
-                td #{item.agentName}
-                if currentUser && currentUser.role === 'manager'
-                  td.actions
-                    a.btn-icon(href=`/editSales/${item._id}`, title='Edit')
-                      i.fas.fa-edit
-                    button.btn-icon(type='button', title='Delete', onclick=`showDeleteConfirmation('${item._id}')`)
-                      i.fas.fa-trash
-                    form(method='post', action=`/getReceipt/${item._id}`, style='display:inline')
-                      input(type='hidden', name='id', value=item._id)
-                      button.btn-icon(type='submit', title='Receipt')
-                        i.fas.fa-file-invoice
-          else
-            tr
-              td(colspan=(currentUser && currentUser.role === 'manager' ? 12 : 11), style='text-align:center;')
-                | No sales records found
+        tbody#salesTableBody.row-others
+          // Table body will be populated by JavaScript for pagination
+          
+      // Pagination Controls
+      .pagination-container
+        .pagination-info
+          span Showing 
+          span#showingStart 0
+          span  to 
+          span#showingEnd 0
+          span  of 
+          span#totalRecords 0
+          span  entries
+        .pagination-controls
+          button#prevPage.pagination-btn(type='button', disabled)
+            i.fas.fa-chevron-left
+            | Previous
+          .pagination-pages
+            // Page numbers will be dynamically generated here
+          button#nextPage.pagination-btn(type='button', disabled)
+            | Next
+            i.fas.fa-chevron-right
+      
       br
       br
       h5#notFound Not Found!
+    
     footer
       p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
       p Designed By Kirabo Rebecca.
+  
   script(src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js')
   script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js')
-  script(src='/javascript/sales.js')
+  
+  script.
+    // Sales data passed from server
+    const salesData = !{JSON.stringify(items)};
+    const currentUserRole = '!{currentUser ? currentUser.role : ""}';
+    const isManager = currentUserRole === 'manager';
+    
+    // Pagination variables
+    let currentPage = 1;
+    const rowsPerPage = 10;
+    let filteredData = [...salesData];
+    
+    // Function to render table with pagination
+    function renderTable() {
+      const startIndex = (currentPage - 1) * rowsPerPage;
+      const endIndex = startIndex + rowsPerPage;
+      const pageData = filteredData.slice(startIndex, endIndex);
+      const tbody = document.getElementById('salesTableBody');
+      
+      // Clear existing rows
+      tbody.innerHTML = '';
+      
+      if (pageData.length === 0) {
+        const colspan = isManager ? 12 : 11;
+        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center;">No sales records found</td></tr>`;
+        document.getElementById('notFound').style.display = 'block';
+      } else {
+        document.getElementById('notFound').style.display = 'none';
+        
+        pageData.forEach(item => {
+          const row = tbody.insertRow();
+          row.insertCell(0).textContent = item.name || '';
+          row.insertCell(1).textContent = item.contact || '';
+          row.insertCell(2).textContent = item.nproduct || '';
+          row.insertCell(3).textContent = item.tproduct || '';
+          row.insertCell(4).textContent = item.quantity || 0;
+          row.insertCell(5).textContent = (item.unitPrice && !isNaN(item.unitPrice)) ? item.unitPrice.toLocaleString() : '0';
+          row.insertCell(6).textContent = item.transportCheck ? 'Yes' : 'No';
+          row.insertCell(7).textContent = (item.totalPrice && !isNaN(item.totalPrice)) ? Math.round(item.totalPrice).toLocaleString() : '0';
+          row.insertCell(8).textContent = item.payment || '';
+          row.insertCell(9).textContent = item.date ? new Date(item.date).toLocaleDateString() : '';
+          row.insertCell(10).textContent = item.agentName || '';
+          
+          if (isManager) {
+            const actionsCell = row.insertCell(11);
+            actionsCell.className = 'actions';
+            
+            // Edit button
+            const editBtn = document.createElement('a');
+            editBtn.href = `/editSales/${item._id}`;
+            editBtn.className = 'btn-icon';
+            editBtn.title = 'Edit';
+            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            actionsCell.appendChild(editBtn);
+            
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn-icon';
+            deleteBtn.title = 'Delete';
+            deleteBtn.type = 'button';
+            deleteBtn.onclick = () => showDeleteConfirmation(item._id);
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            actionsCell.appendChild(deleteBtn);
+            
+            // Receipt button
+            const receiptForm = document.createElement('form');
+            receiptForm.method = 'post';
+            receiptForm.action = `/getReceipt/${item._id}`;
+            receiptForm.style.display = 'inline';
+            const receiptInput = document.createElement('input');
+            receiptInput.type = 'hidden';
+            receiptInput.name = 'id';
+            receiptInput.value = item._id;
+            const receiptBtn = document.createElement('button');
+            receiptBtn.className = 'btn-icon';
+            receiptBtn.type = 'submit';
+            receiptBtn.title = 'Receipt';
+            receiptBtn.innerHTML = '<i class="fas fa-file-invoice"></i>';
+            receiptForm.appendChild(receiptInput);
+            receiptForm.appendChild(receiptBtn);
+            actionsCell.appendChild(receiptForm);
+          }
+        });
+      }
+      
+      // Update pagination info
+      updatePaginationInfo();
+      updatePaginationButtons();
+    }
+    
+    // Update pagination info text
+    function updatePaginationInfo() {
+      const totalRecords = filteredData.length;
+      const startIndex = (currentPage - 1) * rowsPerPage + 1;
+      const endIndex = Math.min(startIndex + rowsPerPage - 1, totalRecords);
+      
+      document.getElementById('showingStart').textContent = totalRecords === 0 ? 0 : startIndex;
+      document.getElementById('showingEnd').textContent = endIndex;
+      document.getElementById('totalRecords').textContent = totalRecords;
+    }
+    
+    // Update pagination buttons
+    function updatePaginationButtons() {
+      const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      
+      // Update Prev/Next buttons
+      const prevBtn = document.getElementById('prevPage');
+      const nextBtn = document.getElementById('nextPage');
+      
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+      
+      // Generate page numbers
+      const paginationPages = document.querySelector('.pagination-pages');
+      paginationPages.innerHTML = '';
+      
+      if (totalPages === 0) {
+        paginationPages.innerHTML = '<span class="pagination-ellipsis">No pages</span>';
+        return;
+      }
+      
+      // Determine which page numbers to show
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 4);
+      
+      if (endPage - startPage < 4) {
+        startPage = Math.max(1, endPage - 4);
+      }
+      
+      // First page button
+      if (startPage > 1) {
+        const firstBtn = document.createElement('button');
+        firstBtn.className = 'pagination-num';
+        firstBtn.textContent = '1';
+        firstBtn.onclick = () => goToPage(1);
+        paginationPages.appendChild(firstBtn);
+        
+        if (startPage > 2) {
+          const ellipsis = document.createElement('span');
+          ellipsis.className = 'pagination-ellipsis';
+          ellipsis.textContent = '...';
+          paginationPages.appendChild(ellipsis);
+        }
+      }
+      
+      // Page number buttons
+      for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = 'pagination-num';
+        if (i === currentPage) pageBtn.classList.add('active');
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => goToPage(i);
+        paginationPages.appendChild(pageBtn);
+      }
+      
+      // Last page button
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsis = document.createElement('span');
+          ellipsis.className = 'pagination-ellipsis';
+          ellipsis.textContent = '...';
+          paginationPages.appendChild(ellipsis);
+        }
+        
+        const lastBtn = document.createElement('button');
+        lastBtn.className = 'pagination-num';
+        lastBtn.textContent = totalPages;
+        lastBtn.onclick = () => goToPage(totalPages);
+        paginationPages.appendChild(lastBtn);
+      }
+    }
+    
+    // Go to specific page
+    function goToPage(page) {
+      const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      if (page < 1 || page > totalPages) return;
+      currentPage = page;
+      renderTable();
+    }
+    
+    // Filter and search functionality
+    function applyFilters() {
+      const productFilter = document.getElementById('productFilter').value;
+      const searchTerm = document.getElementById('searchSale').value.toLowerCase();
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      
+      filteredData = [...salesData];
+      
+      // Apply product type filter
+      if (productFilter !== 'all') {
+        filteredData = filteredData.filter(item => 
+          item.tproduct && item.tproduct.toLowerCase() === productFilter
+        );
+      }
+      
+      // Apply search filter
+      if (searchTerm) {
+        filteredData = filteredData.filter(item => 
+          (item.name && item.name.toLowerCase().includes(searchTerm)) ||
+          (item.contact && item.contact.toLowerCase().includes(searchTerm)) ||
+          (item.nproduct && item.nproduct.toLowerCase().includes(searchTerm)) ||
+          (item.agentName && item.agentName.toLowerCase().includes(searchTerm))
+        );
+      }
+      
+      // Apply date range filter
+      if (startDate) {
+        const start = new Date(startDate);
+        filteredData = filteredData.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate >= start;
+        });
+      }
+      
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59);
+        filteredData = filteredData.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate <= end;
+        });
+      }
+      
+      // Reset to first page and re-render
+      currentPage = 1;
+      renderTable();
+    }
+    
+    // Clear all filters
+    function clearFilters() {
+      document.getElementById('productFilter').value = 'all';
+      document.getElementById('searchSale').value = '';
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      filteredData = [...salesData];
+      currentPage = 1;
+      renderTable();
+    }
+    
+    // Event listeners for filters
+    document.getElementById('productFilter').addEventListener('change', applyFilters);
+    document.getElementById('searchSale').addEventListener('input', applyFilters);
+    document.getElementById('applyDateFilter').addEventListener('click', applyFilters);
+    document.getElementById('clearDateFilter').addEventListener('click', clearFilters);
+    
+    // Pagination button events
+    document.getElementById('prevPage').addEventListener('click', () => {
+      if (currentPage > 1) goToPage(currentPage - 1);
+    });
+    
+    document.getElementById('nextPage').addEventListener('click', () => {
+      const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      if (currentPage < totalPages) goToPage(currentPage + 1);
+    });
+    
+    // Initial render
+    renderTable();
+    
+    // Function to close message modal
+    function closeMessageModal() {
+      const modal = document.querySelector('.modal.show');
+      if (modal) modal.remove();
+      window.location.href = '/sales';
+    }
+    
+    // Function to show delete confirmation
+    function showDeleteConfirmation(id) {
+      document.getElementById('deleteSaleId').value = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+      modal.show();
+    }
+    
+    // PDF Download functionality
+    document.getElementById('downloadPdf').addEventListener('click', function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape' });
+      
+      const tableColumn = isManager ? 
+        ["Customer Name", "Contact", "Product", "Type", "Qty", "Unit Price", "Transport", "Total Price", "Payment", "Date", "Agent"] :
+        ["Customer Name", "Contact", "Product", "Type", "Qty", "Unit Price", "Transport", "Total Price", "Payment", "Date", "Agent"];
+      
+      const tableRows = filteredData.map(item => [
+        item.name || '',
+        item.contact || '',
+        item.nproduct || '',
+        item.tproduct || '',
+        item.quantity || 0,
+        (item.unitPrice || 0).toLocaleString(),
+        item.transportCheck ? 'Yes' : 'No',
+        (item.totalPrice ? Math.round(item.totalPrice).toLocaleString() : '0'),
+        item.payment || '',
+        item.date ? new Date(item.date).toLocaleDateString() : '',
+        item.agentName || ''
+      ]);
+      
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 20,
+        theme: 'striped',
+        headStyles: { fillColor: [76, 100, 68], textColor: 255 },
+        styles: { fontSize: 8, cellPadding: 2 }
+      });
+      
+      doc.text("Sales Report", 14, 10);
+      doc.save('sales_report.pdf');
+    });
