@@ -12,14 +12,141 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../css/user.css">
     <style>
+        /* Pagination Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
 
+        .pagination-info {
+            color: #4c6444;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-btn {
+            padding: 8px 16px;
+            background: #4c6444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: #3a5035;
+            transform: translateY(-2px);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-pages {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .pagination-num {
+            min-width: 35px;
+            height: 35px;
+            padding: 0 8px;
+            background: #f0f0f0;
+            color: #4c6444;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-num:hover {
+            background: #4c6444;
+            color: white;
+            border-color: #4c6444;
+        }
+
+        .pagination-num.active {
+            background: #4c6444;
+            color: white;
+            border-color: #4c6444;
+        }
+
+        .pagination-ellipsis {
+            padding: 0 5px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .pagination-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pagination-controls {
+                justify-content: center;
+            }
+
+            .pagination-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .pagination-num {
+                min-width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pagination-pages {
+                order: 1;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .pagination-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .pagination-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <header>
-
         <aside class="side-menu-container active">
             <div class="logo-menu">
                 <h2 class="logo">MWF</h2>
@@ -64,19 +191,12 @@
                 </li>
             </ul>
         </aside>
-
     </header>
 
     <main class="main-content">
-
         <nav class="navbar bg-body-tertiary dashboard-header">
             <div class="container-fluid d-flex justify-content-end align-items-center">
                 <div class="d-flex align-items-center">
-                    <form class="d-flex me-3" role="search">
-                        <input id="userSearch" class="form-control me-2" type="search" placeholder="Search"
-                            aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
                     <a class="logoutBtn" href="/html/index.html">Logout</a>
                 </div>
             </div>
@@ -90,7 +210,6 @@
         </div>
 
         <table id="addUser" class="table-content">
-
             <thead class="row-one" id="top-one">
                 <tr>
                     <th>Full Name</th>
@@ -101,10 +220,31 @@
                     <th>Operation</th>
                 </tr>
             </thead>
-            <tbody class="row-others" id="others">
-
+            <tbody id="userTableBody" class="row-others">
+                <!-- Table body will be populated by JavaScript -->
             </tbody>
         </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span
+                    id="totalRecords">0</span> entries
+            </div>
+            <div class="pagination-controls">
+                <button id="prevPage" class="pagination-btn" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                    Previous
+                </button>
+                <div class="pagination-pages">
+                    <!-- Page numbers will be dynamically generated here -->
+                </div>
+                <button id="nextPage" class="pagination-btn" disabled>
+                    Next
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
 
         <h5 id="notFound">Not Found</h5>
 
@@ -114,10 +254,296 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-        <script src="../javascript/user.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
             crossorigin="anonymous"></script>
+
+    </main>
+
+    <script>
+        // Sample user data - Replace this with your actual data from backend
+        let usersData = [
+            { id: 1, fullName: "John Mukiibi", email: "john@mayondo.com", contact: "+256712345678", status: "Active" },
+            { id: 2, fullName: "Sarah Nakato", email: "sarah@mayondo.com", contact: "+256723456789", status: "Active" },
+            { id: 3, fullName: "Peter Okello", email: "peter@mayondo.com", contact: "+256734567890", status: "Inactive" },
+            { id: 4, fullName: "Grace Auma", email: "grace@mayondo.com", contact: "+256745678901", status: "Active" },
+            { id: 5, fullName: "James Mukasa", email: "james@mayondo.com", contact: "+256756789012", status: "Active" },
+            { id: 6, fullName: "Mary Nambi", email: "mary@mayondo.com", contact: "+256767890123", status: "Inactive" },
+            { id: 7, fullName: "Robert Sseguya", email: "robert@mayondo.com", contact: "+256778901234", status: "Active" },
+            { id: 8, fullName: "Alice Nanteza", email: "alice@mayondo.com", contact: "+256789012345", status: "Active" },
+            { id: 9, fullName: "Charles Ochieng", email: "charles@mayondo.com", contact: "+256790123456", status: "Inactive" },
+            { id: 10, fullName: "Diana Nabatanzi", email: "diana@mayondo.com", contact: "+256701234567", status: "Active" },
+            { id: 11, fullName: "Frank Mwanga", email: "frank@mayondo.com", contact: "+256712345678", status: "Active" },
+            { id: 12, fullName: "Joyce Nalwoga", email: "joyce@mayondo.com", contact: "+256723456789", status: "Active" }
+        ];
+
+        // Pagination variables
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let filteredData = [...usersData];
+
+        // Function to render table with pagination
+        function renderTable() {
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = Math.min(startIndex + rowsPerPage, filteredData.length);
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = '';
+
+            if (pageData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No users found</td></tr>`;
+                document.getElementById('notFound').style.display = 'block';
+            } else {
+                document.getElementById('notFound').style.display = 'none';
+
+                pageData.forEach(user => {
+                    const row = tbody.insertRow();
+
+                    row.insertCell(0).textContent = user.fullName || '';
+                    row.insertCell(1).textContent = user.email || '';
+                    row.insertCell(2).textContent = user.contact || '';
+
+                    const statusCell = row.insertCell(3);
+                    statusCell.innerHTML = user.status === 'Active'
+                        ? '<span style="color: #28a745; font-weight: 600;">Active</span>'
+                        : '<span style="color: #dc3545; font-weight: 600;">Inactive</span>';
+
+                    row.insertCell(4).innerHTML = `
+                        <button class="btn-icon" onclick="editUser(${user.id})" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-icon" onclick="resetPassword(${user.id})" title="Reset Password">
+                            <i class="fas fa-key"></i>
+                        </button>
+                    `;
+
+                    row.insertCell(5).innerHTML = `
+                        <button class="btn-icon" onclick="deleteUser(${user.id})" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                });
+            }
+
+            // Update pagination info
+            updatePaginationInfo();
+            updatePaginationButtons();
+        }
+
+        // Update pagination info text
+        function updatePaginationInfo() {
+            const totalRecords = filteredData.length;
+            const startIndex = (currentPage - 1) * rowsPerPage + 1;
+            const endIndex = Math.min(startIndex + rowsPerPage - 1, totalRecords);
+
+            document.getElementById('showingStart').textContent = totalRecords === 0 ? 0 : startIndex;
+            document.getElementById('showingEnd').textContent = endIndex;
+            document.getElementById('totalRecords').textContent = totalRecords;
+        }
+
+        // Update pagination buttons
+        function updatePaginationButtons() {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+            const paginationPages = document.querySelector('.pagination-pages');
+            paginationPages.innerHTML = '';
+
+            if (totalPages === 0) {
+                paginationPages.innerHTML = '<span class="pagination-ellipsis">No pages</span>';
+                return;
+            }
+
+            // Determine which page numbers to show
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            // First page button
+            if (startPage > 1) {
+                const firstBtn = document.createElement('button');
+                firstBtn.className = 'pagination-num';
+                firstBtn.textContent = '1';
+                firstBtn.onclick = () => goToPage(1);
+                paginationPages.appendChild(firstBtn);
+
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'pagination-ellipsis';
+                    ellipsis.textContent = '...';
+                    paginationPages.appendChild(ellipsis);
+                }
+            }
+
+            // Page number buttons
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = 'pagination-num';
+                if (i === currentPage) pageBtn.classList.add('active');
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => goToPage(i);
+                paginationPages.appendChild(pageBtn);
+            }
+
+            // Last page button
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'pagination-ellipsis';
+                    ellipsis.textContent = '...';
+                    paginationPages.appendChild(ellipsis);
+                }
+
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'pagination-num';
+                lastBtn.textContent = totalPages;
+                lastBtn.onclick = () => goToPage(totalPages);
+                paginationPages.appendChild(lastBtn);
+            }
+        }
+
+        // Go to specific page
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTable();
+        }
+
+        // Search functionality
+        function applySearch() {
+            const searchTerm = document.getElementById('searchUser').value.toLowerCase();
+
+            if (searchTerm) {
+                filteredData = usersData.filter(user =>
+                    (user.fullName && user.fullName.toLowerCase().includes(searchTerm)) ||
+                    (user.email && user.email.toLowerCase().includes(searchTerm)) ||
+                    (user.contact && user.contact.toLowerCase().includes(searchTerm)) ||
+                    (user.status && user.status.toLowerCase().includes(searchTerm))
+                );
+            } else {
+                filteredData = [...usersData];
+            }
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Function to clear search (optional)
+        function clearSearch() {
+            document.getElementById('searchUser').value = '';
+            filteredData = [...usersData];
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Action functions
+        function editUser(id) {
+            alert(`Edit user with ID: ${id}`);
+            // Redirect to edit page or open modal
+            // window.location.href = `/edit-user/${id}`;
+        }
+
+        function deleteUser(id) {
+            if (confirm(`Are you sure you want to delete this user? This action cannot be undone.`)) {
+                usersData = usersData.filter(user => user.id !== id);
+                applySearch();
+                alert(`User deleted successfully!`);
+            }
+        }
+
+        function resetPassword(id) {
+            if (confirm(`Are you sure you want to reset the password for this user?`)) {
+                alert(`Password reset link sent to user's email!`);
+                // Call API to reset password
+            }
+        }
+
+        // Event listeners
+        document.getElementById('searchUser').addEventListener('input', applySearch);
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) goToPage(currentPage - 1);
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage < totalPages) goToPage(currentPage + 1);
+        });
+
+        // PDF Download
+        document.getElementById('downloadPdf').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape' });
+
+            const tableColumn = ["Full Name", "Email", "Contact", "Status"];
+
+            const tableRows = filteredData.map(user => [
+                user.fullName || '',
+                user.email || '',
+                user.contact || '',
+                user.status || ''
+            ]);
+
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: 20,
+                theme: 'striped',
+                headStyles: { fillColor: [76, 100, 68], textColor: 255 },
+                styles: { fontSize: 10, cellPadding: 3 }
+            });
+
+            doc.text("Users Report", 14, 10);
+            doc.save('users_report.pdf');
+        });
+
+        // Excel Download
+        document.getElementById('downloadExcel').addEventListener('click', function () {
+            const wsData = filteredData.map(user => ({
+                'Full Name': user.fullName,
+                'Email': user.email,
+                'Contact': user.contact,
+                'Status': user.status
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(wsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Users Data');
+            XLSX.writeFile(wb, 'users_data.xlsx');
+        });
+
+        // Sidebar toggle functionality
+        const toggleBtn = document.querySelector('.fa-bars');
+        const sidebar = document.querySelector('.side-menu-container');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+            });
+        }
+
+        // Remove the form submit to prevent page reload
+        const searchForm = document.querySelector('.d-flex[role="search"]');
+        if (searchForm) {
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                applySearch();
+            });
+        }
+
+        // Initial render
+        renderTable();
+    </script>
 
 </body>
 
