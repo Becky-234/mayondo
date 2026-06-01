@@ -185,7 +185,7 @@ body.sidebar-active {
   background-color: #f5f7fa;
   position: relative;
   padding: 30px;
-  margin-left: 260px;
+  margin-left: 100px;
   transition: margin-left 0.5s;
 }
 
