@@ -4,21 +4,18 @@ aside.side-menu-container
     i.fa-solid.fa-bars
   ul.list
     if currentUser
-      //- Dashboard - Manager only
       if currentUser.role === "manager"
         li.list-item
           a(href='/dashboard')
             i.fa-solid.fa-house
             span.link-name Dashboard
       
-      //- UsersList - Manager only
       if currentUser.role === "manager"
         li.list-item
           a(href='/usersList')
             i.fa-solid.fa-users
             span.link-name Users
       
-      //- Common menu items for both roles
       li.list-item
         a(href='/sales')
           i.fa-solid.fa-cart-shopping
@@ -32,6 +29,40 @@ aside.side-menu-container
           i.fa-solid.fa-couch
           span.link-name Products
       li.list-item
-        a(href='/index')
+        a#logoutBtn(href='#', style='cursor: pointer;')
           i.fa-solid.fa-arrow-right-from-bracket(style='font-size: 25px;')
-          span.link-name Logout 
+          span.link-name Logout
+
+//- Logout Confirmation Modal
+#logoutConfirmationModal.modal.fade(tabindex='-1', aria-labelledby='logoutConfirmationModalLabel', aria-hidden='true')
+  .modal-dialog.modal-dialog-centered
+    .modal-content
+      .modal-header.bg-warning.text-dark
+        h5#logoutConfirmationModalLabel.modal-title
+          i.fas.fa-exclamation-triangle.me-2
+          | Confirm Logout
+        button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+      .modal-body
+        p Are you sure you want to logout?
+        p.text-muted.small You will be redirected to the login page.
+      .modal-footer
+        button.btn.btn-secondary(type='button', data-bs-dismiss='modal')
+          i.fas.fa-times
+          | Cancel
+        //- CHANGE THIS TO USE GET INSTEAD OF POST
+        a#confirmLogoutBtn.btn.btn-danger(href='/logout')
+          i.fas.fa-sign-out-alt
+          | Logout
+
+script.
+  document.addEventListener('DOMContentLoaded', function() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const logoutModal = new bootstrap.Modal(document.getElementById('logoutConfirmationModal'));
+        logoutModal.show();
+      });
+    }
+  });
