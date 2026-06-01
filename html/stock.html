@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -64,107 +62,101 @@
     </header>
 
     <main class="main-content">
-
         <nav class="navbar bg-body-tertiary dashboard-header">
             <div class="container-fluid d-flex justify-content-end align-items-center">
                 <div class="d-flex align-items-center">
-                    <form class="d-flex me-3" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
                     <a class="logoutBtn" href="index.html">Logout</a>
                 </div>
             </div>
         </nav>
 
-        <section class="dash" id="dash-top">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="dash-card">
-                        <div class="card-body">
-                            <i class="fa-solid fa-file-lines"></i>
-                            <h5 class="card-title">Invoices</h5>
-                            <p class="card-text">Shs.500,000</p>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="dash-card">
-                        <div class="card-body">
-                            <i class="fa-solid fa-money-check-dollar"></i>
-                            <h5 class="card-title">Profit</h5>
-                            <p class="card-text">70%</p>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="dash-card">
-                        <div class="card-body">
-                            <i class="fa-solid fa-coins"></i>
-                            <h5 class="card-title">Revenue</h5>
-                            <p class="card-text">Shs. 50,000</p>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="dash-card">
-                        <div class="card-body">
-                            <i class="fa-solid fa-users-line"></i>
-                            <h5 class="card-title">Customers</h5>
-                            <p class="card-text">15</p>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <br><br><br>
-        </section>
-
         <div class="include">
-            <a class="btns" href="add-stock.html">Add Product</a>
-            <a class="btns" id="downloadExcel">Download Excel</a>
-            <a class="btns" id="downloadPdf">Download PDF</a>
+            <div class="button-group">
+                <a class="btns" href="add-stock.html">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Stock
+                </a>
+                <a class="btns" id="downloadExcel">
+                    <i class="fas fa-file-excel"></i>
+                    Download Excel
+                </a>
+                <a class="btns" id="downloadPdf">
+                    <i class="fas fa-file-pdf"></i>
+                    Download PDF
+                </a>
+            </div>
 
-            <input type="search" id="searchStock" placeholder="Search...">
-
-            <div class="table-filter" style="display: inline-block; margin-left: 20px;">
+            <div class="filter-section">
                 <label class="filter-label" for="productFilter">Filter by:</label>
                 <select id="productFilter" class="filter-dropdown">
                     <option value="all">All Products</option>
-                    <option value="raw">Raw Only</option>
-                    <option value="furniture">Furniture Only</option>
+                    <option value="raw">Raw Products</option>
+                    <option value="furniture">Furniture Products</option>
                 </select>
             </div>
 
+            <div class="date-filter-container">
+                <label class="filter-label" for="startDate">From:</label>
+                <input id="startDate" class="filter-date" type="date">
+                <label class="filter-label" for="endDate">To:</label>
+                <input id="endDate" class="filter-date" type="date">
+                <button id="applyDateFilter" class="btns small">Apply</button>
+                <button id="clearDateFilter" class="btns small">Clear</button>
+            </div>
 
+            <input type="search" id="searchStock" placeholder="Search stock...">
         </div>
 
         <section>
             <table class="table-content" id="newStock">
                 <thead class="row-one">
                     <tr>
-                        <th>Product Name</th>
-                        <th>Product Type</th>
-                        <th>Cost Price</th>
-                        <th>Quantity</th>
-                        <th>Product Price</th>
-                        <th>Supplier Name</th>
-                        <th>Date</th>
-                        <th>Quality</th>
+                        <th class="col-essential">Product Name</th>
+                        <th class="col-essential">Product Type</th>
+                        <th class="col-essential">Total Quantity</th>
+                        <th class="col-essential">Available Quantity</th>
+                        <th class="col-essential">Cost Price UGX</th>
+                        <th class="col-essential">Product Price UGX</th>
+                        <th class="col-optional">Supplier Name</th>
+                        <th class="col-optional">Supplier Contact</th>
+                        <th class="col-essential">Quality</th>
+                        <th class="col-essential">Date</th>
+                        <th class="col-optional">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="row-others">
-
+                <tbody id="stockTableBody" class="row-others">
                 </tbody>
             </table>
-            <h5 id="notFound">Not Found</h5>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span
+                        id="totalRecords">0</span> entries
+                </div>
+                <div class="pagination-controls">
+                    <button id="prevPage" class="pagination-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <div class="pagination-pages">
+                        <!-- Page numbers will be dynamically generated here -->
+                    </div>
+                    <button id="nextPage" class="pagination-btn" disabled>
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <br><br>
+            <h5 id="notFound">Not Found!</h5>
         </section>
+
+        <footer>
+            <p>© 2025 Mayondo Wood & Furniture Ltd. All rights reserved.</p>
+            <p>Designed By Kirabo Rebecca.</p>
+        </footer>
     </main>
 
     <!-- SheetJS-->
@@ -173,10 +165,367 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
-    <script src="/javascript/stock.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script> -->
+    <script>
+        // Sample stock data - Replace this with your actual data from backend
+        let stockData = [
+            { _id: "1", pdtname: "Mahogany Wood", pdttype: "Raw", pdtquantity1: 500, pdtquantity: 450, cprice: 55000, supplier: "Jorame Ltd", supplierContact: "773516030", quality: "Good", date: "2025-01-10" },
+            { _id: "2", pdtname: "Oak Wood", pdttype: "Raw", pdtquantity1: 300, pdtquantity: 280, cprice: 65000, supplier: "Timber Corp", supplierContact: "772345678", quality: "Premium", date: "2025-01-12" },
+            { _id: "3", pdtname: "Dining Table", pdttype: "Furniture", pdtquantity1: 50, pdtquantity: 45, cprice: 250000, supplier: "Furniture Ltd", supplierContact: "771234567", quality: "Good", date: "2025-01-15" },
+            { _id: "4", pdtname: "Office Chair", pdttype: "Furniture", pdtquantity1: 100, pdtquantity: 95, cprice: 120000, supplier: "Office Supplies", supplierContact: "770123456", quality: "Fair", date: "2025-01-18" },
+            { _id: "5", pdtname: "Pine Wood", pdttype: "Raw", pdtquantity1: 200, pdtquantity: 8, cprice: 35000, supplier: "Wood Suppliers", supplierContact: "769876543", quality: "Good", date: "2025-01-20" },
+            { _id: "6", pdtname: "Bookshelf", pdttype: "Furniture", pdtquantity1: 75, pdtquantity: 72, cprice: 180000, supplier: "Furniture Ltd", supplierContact: "771234567", quality: "Premium", date: "2025-01-22" },
+            { _id: "7", pdtname: "Teak Wood", pdttype: "Raw", pdtquantity1: 150, pdtquantity: 3, cprice: 85000, supplier: "Jorame Ltd", supplierContact: "773516030", quality: "Premium", date: "2025-01-25" },
+            { _id: "8", pdtname: "Coffee Table", pdttype: "Furniture", pdtquantity1: 60, pdtquantity: 58, cprice: 150000, supplier: "Office Supplies", supplierContact: "770123456", quality: "Good", date: "2025-01-28" }
+        ];
+
+        // Pagination variables
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let filteredData = [...stockData];
+        const isManager = true;
+
+        function renderTable() {
+            const groupedItems = {};
+            filteredData.forEach(item => {
+                if (!groupedItems[item.pdtname]) {
+                    groupedItems[item.pdtname] = [];
+                }
+                groupedItems[item.pdtname].push(item);
+            });
+
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const productNames = Object.keys(groupedItems);
+            const endIndex = Math.min(startIndex + rowsPerPage, productNames.length);
+            const currentProducts = productNames.slice(startIndex, endIndex);
+
+            const tbody = document.getElementById('stockTableBody');
+            tbody.innerHTML = '';
+
+            if (currentProducts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;">No stock items found</td></tr>`;
+                document.getElementById('notFound').style.display = 'block';
+            } else {
+                document.getElementById('notFound').style.display = 'none';
+
+                currentProducts.forEach(productName => {
+                    const productGroup = groupedItems[productName];
+
+                    productGroup.forEach((item, index) => {
+                        const row = tbody.insertRow();
+                        row.setAttribute('data-product', item.pdtname.toLowerCase().replace(/\s+/g, '-'));
+
+                        row.insertCell(0).textContent = item.pdtname;
+                        row.insertCell(1).textContent = item.pdttype;
+                        row.insertCell(2).textContent = item.pdtquantity1;
+                        row.insertCell(3).textContent = item.pdtquantity;
+                        row.insertCell(4).textContent = (item.cprice || 0).toLocaleString();
+                        row.insertCell(5).textContent = Math.round((item.cprice || 0) * 1.5).toLocaleString();
+                        row.insertCell(6).textContent = item.supplier || '';
+                        row.insertCell(7).textContent = item.supplierContact ? '+256' + item.supplierContact : '';
+                        row.insertCell(8).textContent = item.quality || '';
+                        row.insertCell(9).textContent = item.date ? new Date(item.date).toLocaleDateString() : '';
+
+                        const actionsCell = row.insertCell(10);
+                        actionsCell.className = 'actions';
+                        if (isManager) {
+                            const editBtn = document.createElement('a');
+                            editBtn.href = `/editStock/${item._id}`;
+                            editBtn.className = 'btn-icon';
+                            editBtn.title = 'Edit';
+                            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                            actionsCell.appendChild(editBtn);
+
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.className = 'btn-icon';
+                            deleteBtn.title = 'Delete';
+                            deleteBtn.type = 'button';
+                            deleteBtn.onclick = () => showDeleteModal(item._id);
+                            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                            actionsCell.appendChild(deleteBtn);
+                        }
+                    });
+
+                    const totalQuantity = productGroup.reduce((sum, item) => sum + (parseInt(item.pdtquantity1) || 0), 0);
+                    const availableQuantity = productGroup.reduce((sum, item) => sum + (parseInt(item.pdtquantity) || 0), 0);
+                    const totalValue = productGroup.reduce((sum, item) => sum + (Math.round((item.cprice || 0) * 1.5) * (parseInt(item.pdtquantity) || 0)), 0);
+
+                    let stockClass = '';
+                    let alertBadge = '';
+                    let warningText = '';
+
+                    if (availableQuantity < 5) {
+                        stockClass = 'stock-critical';
+                        alertBadge = '<span class="badge bg-danger stock-alert-badge">CRITICAL</span>';
+                        warningText = 'Very low stock!';
+                    } else if (availableQuantity < 10) {
+                        stockClass = 'stock-low';
+                        alertBadge = '<span class="badge bg-warning stock-alert-badge">LOW</span>';
+                        warningText = 'Low stock';
+                    } else {
+                        stockClass = 'stock-ok';
+                    }
+
+                    const summaryRow = tbody.insertRow();
+                    summaryRow.className = `product-summary-row ${stockClass}`;
+
+                    const summaryCell1 = summaryRow.insertCell(0);
+                    summaryCell1.colSpan = 2;
+                    summaryCell1.innerHTML = `<strong>${productName} Total</strong> ${alertBadge}`;
+
+                    summaryRow.insertCell(1).textContent = '';
+                    summaryRow.insertCell(2).innerHTML = `<strong>${totalQuantity}</strong>`;
+
+                    const qtyCell = summaryRow.insertCell(3);
+                    qtyCell.className = 'quantity-cell';
+                    qtyCell.innerHTML = `<strong>${availableQuantity}</strong>${warningText ? `<small class="low-stock-warning">${warningText}</small>` : ''}`;
+
+                    summaryRow.insertCell(4).textContent = '';
+                    summaryRow.insertCell(5).innerHTML = `<strong>${totalValue.toLocaleString()}</strong>`;
+                    summaryRow.insertCell(6).textContent = '';
+                    summaryRow.insertCell(7).textContent = '';
+                    summaryRow.insertCell(8).textContent = '';
+                    summaryRow.insertCell(9).textContent = '';
+
+                    if (isManager) {
+                        summaryRow.insertCell(10).textContent = '';
+                    }
+                });
+            }
+
+            updatePaginationInfo(productNames.length);
+            updatePaginationButtons(productNames.length);
+        }
+
+        function updatePaginationInfo(totalItems) {
+            const startIndex = (currentPage - 1) * rowsPerPage + 1;
+            const endIndex = Math.min(startIndex + rowsPerPage - 1, totalItems);
+
+            document.getElementById('showingStart').textContent = totalItems === 0 ? 0 : startIndex;
+            document.getElementById('showingEnd').textContent = endIndex;
+            document.getElementById('totalRecords').textContent = totalItems;
+        }
+
+        function updatePaginationButtons(totalItems) {
+            const totalPages = Math.ceil(totalItems / rowsPerPage);
+
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+            const paginationPages = document.querySelector('.pagination-pages');
+            paginationPages.innerHTML = '';
+
+            if (totalPages === 0) {
+                paginationPages.innerHTML = '<span class="pagination-ellipsis">No pages</span>';
+                return;
+            }
+
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            if (startPage > 1) {
+                const firstBtn = document.createElement('button');
+                firstBtn.className = 'pagination-num';
+                firstBtn.textContent = '1';
+                firstBtn.onclick = () => goToPage(1, totalPages);
+                paginationPages.appendChild(firstBtn);
+
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'pagination-ellipsis';
+                    ellipsis.textContent = '...';
+                    paginationPages.appendChild(ellipsis);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = 'pagination-num';
+                if (i === currentPage) pageBtn.classList.add('active');
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => goToPage(i, totalPages);
+                paginationPages.appendChild(pageBtn);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'pagination-ellipsis';
+                    ellipsis.textContent = '...';
+                    paginationPages.appendChild(ellipsis);
+                }
+
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'pagination-num';
+                lastBtn.textContent = totalPages;
+                lastBtn.onclick = () => goToPage(totalPages, totalPages);
+                paginationPages.appendChild(lastBtn);
+            }
+        }
+
+        function goToPage(page, totalPages) {
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTable();
+        }
+
+        function applyFilters() {
+            const productFilter = document.getElementById('productFilter').value;
+            const searchTerm = document.getElementById('searchStock').value.toLowerCase();
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            filteredData = [...stockData];
+
+            if (productFilter !== 'all') {
+                filteredData = filteredData.filter(item =>
+                    item.pdttype && item.pdttype.toLowerCase() === productFilter
+                );
+            }
+
+            if (searchTerm) {
+                filteredData = filteredData.filter(item =>
+                    (item.pdtname && item.pdtname.toLowerCase().includes(searchTerm)) ||
+                    (item.pdttype && item.pdttype.toLowerCase().includes(searchTerm)) ||
+                    (item.supplier && item.supplier.toLowerCase().includes(searchTerm)) ||
+                    (item.quality && item.quality.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            if (startDate) {
+                const start = new Date(startDate);
+                filteredData = filteredData.filter(item => {
+                    const itemDate = new Date(item.date);
+                    return itemDate >= start;
+                });
+            }
+
+            if (endDate) {
+                const end = new Date(endDate);
+                end.setHours(23, 59, 59);
+                filteredData = filteredData.filter(item => {
+                    const itemDate = new Date(item.date);
+                    return itemDate <= end;
+                });
+            }
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function clearFilters() {
+            document.getElementById('productFilter').value = 'all';
+            document.getElementById('searchStock').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            filteredData = [...stockData];
+            currentPage = 1;
+            renderTable();
+        }
+
+        function showDeleteModal(id) {
+            if (confirm('Are you sure you want to delete this stock item? This action cannot be undone.')) {
+                stockData = stockData.filter(item => item._id !== id);
+                applyFilters();
+            }
+        }
+
+        document.getElementById('productFilter').addEventListener('change', applyFilters);
+        document.getElementById('searchStock').addEventListener('input', applyFilters);
+        document.getElementById('applyDateFilter').addEventListener('click', applyFilters);
+        document.getElementById('clearDateFilter').addEventListener('click', clearFilters);
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                const groupedItems = {};
+                filteredData.forEach(item => {
+                    if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
+                    groupedItems[item.pdtname].push(item);
+                });
+                const totalPages = Math.ceil(Object.keys(groupedItems).length / rowsPerPage);
+                if (currentPage > 1) goToPage(currentPage - 1, totalPages);
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const groupedItems = {};
+            filteredData.forEach(item => {
+                if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
+                groupedItems[item.pdtname].push(item);
+            });
+            const totalPages = Math.ceil(Object.keys(groupedItems).length / rowsPerPage);
+            if (currentPage < totalPages) goToPage(currentPage + 1, totalPages);
+        });
+
+        document.getElementById('downloadPdf').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape' });
+
+            const tableColumn = ["Product Name", "Type", "Total Qty", "Available Qty", "Cost Price", "Product Price", "Supplier", "Contact", "Quality", "Date"];
+
+            const tableRows = filteredData.map(item => [
+                item.pdtname || '',
+                item.pdttype || '',
+                item.pdtquantity1 || 0,
+                item.pdtquantity || 0,
+                (item.cprice || 0).toLocaleString(),
+                Math.round((item.cprice || 0) * 1.5).toLocaleString(),
+                item.supplier || '',
+                item.supplierContact ? '+256' + item.supplierContact : '',
+                item.quality || '',
+                item.date ? new Date(item.date).toLocaleDateString() : ''
+            ]);
+
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: 20,
+                theme: 'striped',
+                headStyles: { fillColor: [76, 100, 68], textColor: 255 },
+                styles: { fontSize: 8, cellPadding: 2 }
+            });
+
+            doc.text("Stock Report", 14, 10);
+            doc.save('stock_report.pdf');
+        });
+
+        document.getElementById('downloadExcel').addEventListener('click', function () {
+            const wsData = filteredData.map(item => ({
+                'Product Name': item.pdtname,
+                'Product Type': item.pdttype,
+                'Total Quantity': item.pdtquantity1,
+                'Available Quantity': item.pdtquantity,
+                'Cost Price (UGX)': item.cprice,
+                'Product Price (UGX)': Math.round((item.cprice || 0) * 1.5),
+                'Supplier Name': item.supplier,
+                'Supplier Contact': item.supplierContact ? '+256' + item.supplierContact : '',
+                'Quality': item.quality,
+                'Date': item.date ? new Date(item.date).toLocaleDateString() : ''
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(wsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Stock Data');
+            XLSX.writeFile(wb, 'stock_data.xlsx');
+        });
+
+        const toggleBtn = document.querySelector('.fa-bars');
+        const sidebar = document.querySelector('.side-menu-container');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+            });
+        }
+
+        renderTable();
+    </script>
 </body>
 
 </html>
