@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
         if (email === managerEmail && password === managerPassword) {
             // Create manager user data with PROPER ObjectId
             const userData = {
-                _id: new mongoose.Types.ObjectId(), // FIXED: Generate real ObjectId
+                _id: new mongoose.Types.ObjectId(),
                 email: email,
                 username: managerProfile.username,
                 name: managerProfile.fname,
@@ -46,8 +46,6 @@ router.post("/login", async (req, res) => {
             console.log("=== MANAGER LOGIN SUCCESS ===");
             console.log("Username:", userData.username);
             console.log("Manager ID:", userData._id);
-            console.log("Manager ID type:", typeof userData._id);
-            console.log("Manager ID string:", userData._id.toString());
 
             // SET BOTH session.user AND req.user
             req.session.user = userData;
@@ -63,8 +61,6 @@ router.post("/login", async (req, res) => {
                 }
 
                 console.log("Manager login successful - redirecting to dashboard");
-                console.log("Session user set:", req.session.user.username);
-                console.log("Req user set:", req.user.username);
                 return res.redirect('/dashboard');
             });
         }
@@ -111,8 +107,6 @@ router.post("/login", async (req, res) => {
                         }
 
                         console.log("Sales Agent login successful - redirecting to sales");
-                        console.log("Session user set:", req.session.user.username);
-                        console.log("Req user set:", req.user.username);
                         return res.redirect('/sales');
                     });
                 } else {
@@ -156,12 +150,36 @@ router.get("/debug-auth", (req, res) => {
     });
 });
 
-router.get("/logout", (req, res) => {
+// CHANGE THIS FROM GET TO POST
+router.post("/logout", (req, res) => {
+    console.log("Logout request received");
+
+    // Destroy the session
     req.session.destroy((err) => {
         if (err) {
-            console.log("Error destroying session:", err);
+            console.error("Error destroying session:", err);
             return res.status(500).send("Error logging out");
         }
+
+        // Clear the session cookie
+        res.clearCookie('connect.sid');
+
+        console.log("Logout successful - redirecting to login");
+        res.redirect("/login");
+    });
+});
+
+// Keep GET logout as backup (optional)
+router.get("/logout", (req, res) => {
+    console.log("GET logout request received");
+
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+            return res.status(500).send("Error logging out");
+        }
+
+        res.clearCookie('connect.sid');
         res.redirect("/login");
     });
 });
