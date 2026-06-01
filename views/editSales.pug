@@ -4,75 +4,224 @@ block styles
 block content 
   include sidebar.pug
   main.main-content
-    //- nav.navbar.bg-body-tertiary.dashboard-header
-    //-   .container-fluid.d-flex.justify-content-end.align-items-center
-    //-     .d-flex.align-items-center
-    //-       a.logoutBtn(href="/index") Logout
     .user-form-container
-      form#addSale(action=`/editSales/${item._id}`, method="post")
-        h2 Edit Sale Here!
-        label(for="name") Name of Customer
-        br
-        input#name(type="text", name="name", required value=`${item.name}`)
-        br
-        br
-        label(for="contact") Customer Contact
-        br
-        input#name(type="text", name="contact", required value=`${item.contact}`)
-        br
-        br
-        label(for="nproduct") Name of Product
-        br
-        input#nproduct(type="text", name="nproduct", required value=`${item.nproduct}`)
-        br
-        br
-        label(for="tproduct") Type of Product
-        br
-        select#tproduct(name="tproduct", required)
-          option(value=`${item.tproduct}`) #{item.tproduct}
-          option(value="Raw Material") Raw 
-          option(value="Furniture") Furniture 
-        br
-        br
-        label(for="quantity") Quantity
-        br
-        input#quantity(type="number", name="quantity", required value=`${item.quantity}`)
-        br
-        br
-        label(for="unitPrice") Unit Price
-        br
-        input#unitPrice(type="text", name="unitPrice", required value=`${item.unitPrice}`)
-        br
-        br
-        label(for="transportCheck") Add 5% Transport Fee 
-        input#transportCheck(type="checkbox" name="transportCheck" value=`${item.transportCheck}`)
-        br
-        br
-        label(for="totalPrice") Total Price
-        br
-        input#totalPrice(type="text", name="totalPrice", required value=`${item.totalPrice}` readonly)
-        br
-        br
-        label(for="payment") Select Payment Method
-        br
-        select#payment(name="payment", required)
-          option(value=`${item.payment}`) #{item.payment}
-          option(value="Bank Overdraft") Bank Overdraft
-          option(value="Cash") Cash 
-          option(value="Cheque") Cheque
-        br
-        br
-        label(for="date") Date
-        br
-        input#date(type="date", name="date", required value=item.date ? new Date(item.date).toISOString().split('T')[0] : '')
-        br
-        br
-        label(for="agent") Sales Agent Name
-        br
-        input#agent(type="text", name="agent", required value=`${item.agentName}`, readonly)
-        br
-        br
-        .add
-          button.btns(type="submit") Update Sale 
-          button.btns(type="reset") Cancel
-  script(src="/javascript/sales.js")
+      .form-header
+        h2
+          i.fas.fa-edit
+          | Edit Sale Here!
+        p.instruction Update the sale details below
+
+      form#editSale(action=`/editSales/${item._id}`, method="post")
+        .form-grid
+          // Customer Name
+          .form-group
+            label(for="name")
+              i.fas.fa-user
+              | Name of Customer
+            input#name.form-control(type="text", name="name", required value=`${item.name}` placeholder="Enter customer name")
+            .error-message Please enter customer name
+
+          // Customer Contact
+          .form-group
+            label(for="contact")
+              i.fas.fa-phone-alt
+              | Customer Contact
+            input#contact.form-control(type="text", name="contact", required value=`${item.contact}` placeholder="+256XXXXXXXXX")
+            .error-message Please enter customer contact
+
+          // Product Name
+          .form-group
+            label(for="nproduct")
+              i.fas.fa-box
+              | Name of Product
+            input#nproduct.form-control(type="text", name="nproduct", required value=`${item.nproduct}` placeholder="Enter product name")
+            .error-message Please enter product name
+
+          // Product Type
+          .form-group
+            label(for="tproduct")
+              i.fas.fa-tags
+              | Type of Product
+            select#tproduct.form-control(name="tproduct", required)
+              option(value=`${item.tproduct}`) #{item.tproduct}
+              option(value="Raw Material") Raw Material
+              option(value="Furniture") Furniture
+            .error-message Please select product type
+
+          // Quantity
+          .form-group
+            label(for="quantity")
+              i.fas.fa-calculator
+              | Quantity
+            input#quantity.form-control(type="number", name="quantity", required value=`${item.quantity}` placeholder="0" min="1")
+            .error-message Please enter quantity
+
+          // Unit Price
+          .form-group
+            label(for="unitPrice")
+              i.fas.fa-tag
+              | Unit Price (UGX)
+            input#unitPrice.form-control(type="number", name="unitPrice", required value=`${item.unitPrice}` placeholder="0.00" step="0.01")
+            .error-message Please enter unit price
+
+          // Transport Fee Checkbox
+          .form-group
+            .form-check
+              input#transportCheck.form-check-input(type="checkbox" name="transportCheck" checked=item.transportCheck === 'on')
+              label.form-check-label(for="transportCheck")
+                i.fas.fa-truck
+                | Add 5% Transport Fee
+
+          // Total Price
+          .form-group
+            label(for="totalPrice")
+              i.fas.fa-file-invoice-dollar
+              | Total Price (UGX)
+            input#totalPrice.form-control(type="text", name="totalPrice", required value=`${item.totalPrice}` readonly style="background-color: #f0fff4; font-weight: 600;")
+            .error-message Total price auto-calculated
+
+          // Payment Method
+          .form-group
+            label(for="payment")
+              i.fas.fa-credit-card
+              | Select Payment Method
+            select#payment.form-control(name="payment", required)
+              option(value=`${item.payment}`) #{item.payment}
+              option(value="Bank Overdraft") Bank Overdraft
+              option(value="Cash") Cash
+              option(value="Cheque") Cheque
+            .error-message Please select payment method
+
+          // Date
+          .form-group
+            label(for="date")
+              i.fas.fa-calendar
+              | Date
+            input#date.form-control(type="date", name="date", required value=item.date ? new Date(item.date).toISOString().split('T')[0] : '')
+            .error-message Please select date
+
+          // Sales Agent
+          .form-group
+            label(for="agent")
+              i.fas.fa-user-circle
+              | Sales Agent Name
+            input#agent.form-control(type="text", name="agent", required value=`${item.agentName}` readonly style="background-color: #f8fafc;")
+            .error-message Auto-filled from logged-in user
+
+        .form-actions
+          button.btn.btn-primary(type="submit")
+            i.fas.fa-save
+            | Update Sale
+          a.btn.btn-secondary(href="/sales" style="text-decoration: none;")
+            i.fas.fa-times
+            | Cancel
+
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const quantityInput = document.getElementById('quantity');
+      const unitPriceInput = document.getElementById('unitPrice');
+      const transportCheck = document.getElementById('transportCheck');
+      const totalPriceInput = document.getElementById('totalPrice');
+      
+      // Function to calculate total price
+      function calculateTotal() {
+        const quantity = parseFloat(quantityInput.value) || 0;
+        const unitPrice = parseFloat(unitPriceInput.value) || 0;
+        let total = quantity * unitPrice;
+        
+        // Add 5% transport fee if checked
+        if (transportCheck.checked) {
+          total = total * 1.05;
+        }
+        
+        totalPriceInput.value = total.toFixed(2);
+        
+        // Add animation effect
+        totalPriceInput.style.transform = 'scale(1.02)';
+        setTimeout(() => {
+          totalPriceInput.style.transform = 'scale(1)';
+        }, 200);
+      }
+      
+      // Add event listeners
+      if (quantityInput) quantityInput.addEventListener('input', calculateTotal);
+      if (unitPriceInput) unitPriceInput.addEventListener('input', calculateTotal);
+      if (transportCheck) transportCheck.addEventListener('change', calculateTotal);
+      
+      // Initial calculation
+      calculateTotal();
+      
+      // Form validation
+      const form = document.getElementById('editSale');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          const quantity = parseFloat(quantityInput.value) || 0;
+          const unitPrice = parseFloat(unitPriceInput.value) || 0;
+          const customerName = document.getElementById('name').value.trim();
+          const contact = document.getElementById('contact').value.trim();
+          
+          if (quantity <= 0) {
+            e.preventDefault();
+            alert('Quantity must be greater than 0!');
+            quantityInput.focus();
+            return false;
+          }
+          
+          if (unitPrice <= 0) {
+            e.preventDefault();
+            alert('Unit price must be greater than 0!');
+            unitPriceInput.focus();
+            return false;
+          }
+          
+          if (customerName === '') {
+            e.preventDefault();
+            alert('Please enter customer name!');
+            return false;
+          }
+          
+          if (contact === '') {
+            e.preventDefault();
+            alert('Please enter customer contact!');
+            return false;
+          }
+          
+          // Validate phone number (basic)
+          const phoneRegex = /^[0-9+\-\s()]{10,15}$/;
+          if (!phoneRegex.test(contact)) {
+            e.preventDefault();
+            alert('Please enter a valid phone number!');
+            return false;
+          }
+        });
+      }
+      
+      // Format unit price as currency-like input
+      if (unitPriceInput) {
+        unitPriceInput.addEventListener('blur', function() {
+          let value = parseFloat(this.value);
+          if (!isNaN(value)) {
+            this.value = value.toFixed(2);
+          }
+        });
+      }
+      
+      // Quantity validation
+      if (quantityInput) {
+        quantityInput.addEventListener('change', function() {
+          if (this.value < 1) this.value = 1;
+        });
+      }
+      
+      // Stock availability check (if needed)
+      const productNameInput = document.getElementById('nproduct');
+      if (productNameInput) {
+        productNameInput.addEventListener('blur', function() {
+          const productName = this.value.trim();
+          if (productName) {
+            // You can add an AJAX call here to check stock availability
+            console.log('Checking stock for: ' + productName);
+          }
+        });
+      }
+    });
