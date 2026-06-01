@@ -5,100 +5,151 @@ block content
   include sidebar.pug
   main.main-content
     .stock-form-container
-      //- Display success/error messages
-      if success
-        .alert.alert-success= success
-      if error
-        .alert.alert-danger= error
+      .form-header
+        h2
+          i.fas.fa-edit
+          | Edit Stock Here!
+        p.instruction Update the product details below
 
-      form#addStock(action="/editStock/" + item._id method="post")
-        h2 Edit Stock Here!
-        
-        label(for='pdtname') Product Name
-        br
-        input#pdtname(type='text' name='pdtname' required value=item.pdtname)
-        br
-        br
-        
-        label(for='pdttype') Type of Product
-        br
-        select#tproduct(name="pdttype" required)
-          option(value=item.pdttype selected)= item.pdttype
-          option(value="Raw Material") Raw
-          option(value="Furniture") Furniture
-        br
-        br
-        label(for='pdtquantity1') Total Quantity
-        br
-        input#pdtquantity1(type='number' name='pdtquantity1' required value=item.pdtquantity1)
-        br
-        br
-        label(for='pdtquantity') Available Quantity
-        br
-        input#pdtquantity(type='number' name='pdtquantity' required value=item.pdtquantity)
-        br
-        br
-        
-        label(for='cprice') Cost Price
-        br
-        input#cprice(type='number' name='cprice' required step="0.01" value=item.cprice)
-        br
-        br
-        
-        label(for='pdtprice') Product Price
-        br
-        input#pdtprice(type='number' name='pdtprice' required step="0.01" value=item.pdtprice)
-        br
-        br
-        
-        label(for='supplier') Supplier Name
-        br
-        input#supplier(type='text' name='supplier' value=item.supplier)
-        br
-        br
-        
-        label(for='supplierContact') Supplier Contact
-        br
-        input#supplierContact(type='text' name='supplierContact' value=item.supplierContact)
-        br
-        br
-        
-        label(for='quality') Quality
-        br
-        select#quality(name="quality" required)
-          option(value=item.quality selected)= item.quality
-          option(value="Premium") Premium
-          option(value="Good") Good
-          option(value="Fair") Fair
-          option(value="Poor") Poor
-        br
-        br
-        
-        label(for='date') Date
-        br
-        input#date(type='date' name='date' required value=item.date.toISOString().split('T')[0])
-        br
-        br
-        
-        .add
-          button.btns(type='submit') Update Stock
-          a.btns(href='/stock' style='text-decoration: none; color: white;') Cancel
+      form#editStock(action="/editStock/" + item._id method="post")
+        .form-grid
+          // Product Name
+          .form-group
+            label(for='pdtname')
+              i.fas.fa-box
+              | Product Name
+            input#pdtname.form-control(type='text' name='pdtname' required value=item.pdtname placeholder="Enter product name")
+            .error-message Please enter a product name
+
+          // Type of Product
+          .form-group
+            label(for='pdttype')
+              i.fas.fa-tags
+              | Type of Product
+            select#pdttype.form-control(name="pdttype" required)
+              option(value=item.pdttype selected)= item.pdttype
+              option(value="Raw Material") Raw Material
+              option(value="Furniture") Furniture
+            .error-message Please select a product type
+
+          // Total Quantity
+          .form-group
+            label(for='pdtquantity1')
+              i.fas.fa-layer-group
+              | Total Quantity
+            input#pdtquantity1.form-control(type='number' name='pdtquantity1' required value=item.pdtquantity1 placeholder="0")
+            .error-message Please enter total quantity
+
+          // Available Quantity
+          .form-group
+            label(for='pdtquantity')
+              i.fas.fa-check-circle
+              | Available Quantity
+            input#pdtquantity.form-control(type='number' name='pdtquantity' required value=item.pdtquantity placeholder="0")
+            .error-message Please enter available quantity
+
+          // Cost Price
+          .form-group
+            label(for='cprice')
+              i.fas.fa-dollar-sign
+              | Cost Price (UGX)
+            input#cprice.form-control(type='number' name='cprice' required step="0.01" value=item.cprice placeholder="0.00")
+            .error-message Please enter cost price
+
+          // Product Price
+          .form-group
+            label(for='pdtprice')
+              i.fas.fa-tag
+              | Product Price (UGX)
+            input#pdtprice.form-control(type='number' name='pdtprice' required step="0.01" value=Math.round(item.cprice * 1.5) placeholder="0.00")
+            .error-message Product price auto-calculated
+
+          // Supplier Name
+          .form-group
+            label(for='supplier')
+              i.fas.fa-building
+              | Supplier Name
+            input#supplier.form-control(type='text' name='supplier' value=item.supplier placeholder="Enter supplier name")
+            .error-message Optional field
+
+          // Supplier Contact
+          .form-group
+            label(for='supplierContact')
+              i.fas.fa-phone
+              | Supplier Contact
+            input#supplierContact.form-control(type='text' name='supplierContact' value=item.supplierContact placeholder="+256XXXXXXXXX")
+            .error-message Enter valid phone number
+
+          // Quality
+          .form-group
+            label(for='quality')
+              i.fas.fa-star
+              | Quality
+            select#quality.form-control(name="quality" required)
+              option(value=item.quality selected)= item.quality
+              option(value="Premium") Premium
+              option(value="Good") Good
+              option(value="Fair") Fair
+              option(value="Poor") Poor
+            .error-message Please select quality
+
+          // Date
+          .form-group
+            label(for='date')
+              i.fas.fa-calendar
+              | Date
+            input#date.form-control(type='date' name='date' required value=item.date ? item.date.toISOString().split('T')[0] : '')
+            .error-message Please select a date
+
+        .form-actions
+          button.btn.btn-primary(type='submit')
+            i.fas.fa-save
+            | Update Stock
+          a.btn.btn-secondary(href='/stock')
+            i.fas.fa-times
+            | Cancel
+
       script.
         document.addEventListener('DOMContentLoaded', function() {
           const costPriceInput = document.getElementById('cprice');
           const productPriceInput = document.getElementById('pdtprice');
           
           if (costPriceInput && productPriceInput) {
-            // Calculate initial price
-            const initialCostPrice = parseFloat(costPriceInput.value) || 0;
-            productPriceInput.value = Math.round(initialCostPrice * 1.5);
-            
-            // Update on change
-            costPriceInput.addEventListener('input', function() {
-              const costPrice = parseFloat(this.value) || 0;
+            // Update product price function
+            const updateProductPrice = () => {
+              const costPrice = parseFloat(costPriceInput.value) || 0;
               const productPrice = Math.round(costPrice * 1.5);
               productPriceInput.value = productPrice;
+            };
+            
+            // Initial calculation
+            updateProductPrice();
+            
+            // Update on cost price change
+            costPriceInput.addEventListener('input', updateProductPrice);
+            
+            // Add validation effect
+            productPriceInput.style.backgroundColor = '#f0fff4';
+          }
+          
+          // Form validation
+          const form = document.getElementById('editStock');
+          if (form) {
+            form.addEventListener('submit', function(e) {
+              const totalQty = parseInt(document.getElementById('pdtquantity1').value) || 0;
+              const availableQty = parseInt(document.getElementById('pdtquantity').value) || 0;
+              
+              if (availableQty > totalQty) {
+                e.preventDefault();
+                alert('Available Quantity cannot exceed Total Quantity!');
+                return false;
+              }
+              
+              if (availableQty < 0 || totalQty < 0) {
+                e.preventDefault();
+                alert('Quantities cannot be negative!');
+                return false;
+              }
             });
           }
         });
-      script(src='/javascript/sales.js')
