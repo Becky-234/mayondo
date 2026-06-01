@@ -9,7 +9,7 @@ block content
       .modal.fade.show.d-block(tabindex='-1' style='background-color: rgba(0,0,0,0.5);')
         .modal-dialog.modal-dialog-centered
           .modal-content
-            .modal-header.bg-success(style='bacground: #4c6444; color: #fff')
+            .modal-header.bg-success(style='background: #4c6444; color: #fff')
               h5.modal-title
                 i.fas.fa-check-circle.me-2
                 | Success!
@@ -38,7 +38,7 @@ block content
     #deleteConfirmationModal.modal.fade(tabindex='-1' aria-labelledby='deleteConfirmationModalLabel' aria-hidden='true')
       .modal-dialog.modal-dialog-centered
         .modal-content
-          .modal-header.bg-warning(style='bacground: #4c6444; color: #fff')
+          .modal-header.bg-warning(style='background: #4c6444; color: #fff')
             h5.modal-title
               i.fas.fa-exclamation-triangle.me-2
               | Confirm Deletion
@@ -106,93 +106,28 @@ block content
             th.col-essential Date
             if currentUser && (currentUser.role === "manager")
               th.col-optional Actions 
-        tbody
-          if items && items.length > 0
-            - const groupedItems = {};
-            - let hasLowStock = false;
-            
-            each item in items 
-              - if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
-              - groupedItems[item.pdtname].push(item);
-            
-            each productGroup, productName in groupedItems
-              each item, index in productGroup
-                tr(data-product=item.pdtname.toLowerCase().replace(/\s+/g, '-'))
-                  td.col-essential #{item.pdtname}
-                  td.col-essential #{item.pdttype}
-                  td.col-essential #{item.pdtquantity1}
-                  td.col-essential #{item.pdtquantity}
-                  td.col-essential #{item.cprice.toLocaleString()}
-                  td.col-essential #{Math.round(item.cprice * 1.5).toLocaleString()}
-                  td.col-optional #{item.supplier}
-                  td.col-optional +256#{item.supplierContact}
-                  td.col-essential #{item.quality}
-                  td.col-essential #{new Date(item.date).toLocaleDateString()}
-                  td.col-optional.actions
-                    if currentUser && currentUser.role === "manager"
-                      a.btn-icon(href=`/editStock/${item._id}` title='Edit')
-                        i.fas.fa-edit
-                      button.btn-icon(
-                        type='button' 
-                        title='Delete' 
-                        onclick=`showDeleteModal('${item._id}')`
-                      )
-                        i.fas.fa-trash
-                      //- form(method='post' action=`/generateReceipt/${item._id}` style='display:inline')
-                      //-   input(type='hidden' name='id' value=item._id)
-                      //-   button.btn-icon(type='submit' title='Receipt')
-                      //-     i.fas.fa-file-invoice
-              
-              - 
-                const totalQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity1 || 0), 0);
-                const availableQuantity = productGroup.reduce((sum, item) => sum + parseInt(item.pdtquantity || 0), 0);
-                const totalValue = productGroup.reduce((sum, item) => sum + (Math.round(item.cprice * 1.5) * parseInt(item.pdtquantity || 0)), 0);
-                
-                // Determine stock status for the total
-                let stockStatus = 'ok';
-                let stockClass = '';
-                let alertBadge = '';
-                let warningText = '';
-                
-                if (availableQuantity < 5) {
-                  stockStatus = 'critical';
-                  stockClass = 'stock-critical';
-                  alertBadge = '<span class="badge bg-danger stock-alert-badge">CRITICAL</span>';
-                  warningText = 'Very low stock!';
-                  hasLowStock = true;
-                } else if (availableQuantity < 10) {
-                  stockStatus = 'low';
-                  stockClass = 'stock-low';
-                  alertBadge = '<span class="badge bg-warning stock-alert-badge">LOW</span>';
-                  warningText = 'Low stock';
-                  hasLowStock = true;
-                } else {
-                  stockClass = 'stock-ok';
-                }
-              
-              tr.product-summary-row(class=stockClass data-stock-status=stockStatus)
-                td.col-essential(colspan="2") 
-                  strong #{productName} Total
-                  | !{alertBadge}
-                td.col-essential 
-                  strong #{totalQuantity}
-                td.col-essential.quantity-cell 
-                  strong #{availableQuantity}
-                  if warningText
-                    small.low-stock-warning #{warningText}
-                td.col-essential 
-                td.col-essential 
-                  strong #{totalValue.toLocaleString()}
-                td.col-optional 
-                td.col-optional 
-                td.col-essential 
-                td.col-essential 
-                if currentUser && (currentUser.role === "manager")
-                  td.col-optional
-
-          else
-            tr
-              td(colspan="11" style="text-align: center;") No stock items found
+        tbody#stockTableBody
+          //- Table body will be populated by JavaScript for pagination
+      
+      //- Pagination Controls
+      .pagination-container
+        .pagination-info
+          span Showing 
+          span#showingStart 0
+          span  to 
+          span#showingEnd 0
+          span  of 
+          span#totalRecords 0
+          span  entries
+        .pagination-controls
+          button#prevPage.pagination-btn(type='button', disabled)
+            i.fas.fa-chevron-left
+            | Previous
+          .pagination-pages
+            //- Page numbers will be dynamically generated here
+          button#nextPage.pagination-btn(type='button', disabled)
+            | Next
+            i.fas.fa-chevron-right
     
     br
     br
@@ -208,3 +143,372 @@ block content
   //- jsPDF + AutoTable
   script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
   script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js")
+  
+  script.
+    // Stock data passed from server
+    const stockData = !{JSON.stringify(items)};
+    const currentUserRole = '!{currentUser ? currentUser.role : ""}';
+    const isManager = currentUserRole === 'manager';
+    
+    // Pagination variables
+    let currentPage = 1;
+    const rowsPerPage = 5;
+    let filteredData = [...stockData];
+    let hasLowStockFlag = false;
+    
+    // Function to render table with pagination and grouping
+    function renderTable() {
+      // Group items by product name
+      const groupedItems = {};
+      filteredData.forEach(item => {
+        if (!groupedItems[item.pdtname]) {
+          groupedItems[item.pdtname] = [];
+        }
+        groupedItems[item.pdtname].push(item);
+      });
+      
+      // Get unique product names for pagination
+      const productNames = Object.keys(groupedItems);
+      const startIndex = (currentPage - 1) * rowsPerPage;
+      const endIndex = Math.min(startIndex + rowsPerPage, productNames.length);
+      const currentProducts = productNames.slice(startIndex, endIndex);
+      
+      const tbody = document.getElementById('stockTableBody');
+      tbody.innerHTML = '';
+      hasLowStockFlag = false;
+      
+      if (currentProducts.length === 0) {
+        const colspan = isManager ? 11 : 10;
+        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align: center;">No stock items found<\/td><\/tr>`;
+        document.getElementById('notFound').style.display = 'block';
+      } else {
+        document.getElementById('notFound').style.display = 'none';
+        
+        currentProducts.forEach(productName => {
+          const productGroup = groupedItems[productName];
+          
+          // Display individual items
+          productGroup.forEach((item, index) => {
+            const row = tbody.insertRow();
+            row.setAttribute('data-product', item.pdtname.toLowerCase().replace(/\\s+/g, '-'));
+            
+            row.insertCell(0).textContent = item.pdtname;
+            row.insertCell(1).textContent = item.pdttype;
+            row.insertCell(2).textContent = item.pdtquantity1;
+            row.insertCell(3).textContent = item.pdtquantity;
+            row.insertCell(4).textContent = (item.cprice || 0).toLocaleString();
+            row.insertCell(5).textContent = Math.round((item.cprice || 0) * 1.5).toLocaleString();
+            row.insertCell(6).textContent = item.supplier || '';
+            row.insertCell(7).textContent = item.supplierContact ? '+256' + item.supplierContact : '';
+            row.insertCell(8).textContent = item.quality || '';
+            row.insertCell(9).textContent = item.date ? new Date(item.date).toLocaleDateString() : '';
+            
+            if (isManager) {
+              const actionsCell = row.insertCell(10);
+              actionsCell.className = 'actions';
+              
+              const editBtn = document.createElement('a');
+              editBtn.href = `/editStock/${item._id}`;
+              editBtn.className = 'btn-icon';
+              editBtn.title = 'Edit';
+              editBtn.innerHTML = '<i class="fas fa-edit"><\/i>';
+              actionsCell.appendChild(editBtn);
+              
+              const deleteBtn = document.createElement('button');
+              deleteBtn.className = 'btn-icon';
+              deleteBtn.title = 'Delete';
+              deleteBtn.type = 'button';
+              deleteBtn.onclick = () => showDeleteModal(item._id);
+              deleteBtn.innerHTML = '<i class="fas fa-trash"><\/i>';
+              actionsCell.appendChild(deleteBtn);
+            }
+          });
+          
+          // Calculate totals for this product group
+          const totalQuantity = productGroup.reduce((sum, item) => sum + (parseInt(item.pdtquantity1) || 0), 0);
+          const availableQuantity = productGroup.reduce((sum, item) => sum + (parseInt(item.pdtquantity) || 0), 0);
+          const totalValue = productGroup.reduce((sum, item) => sum + (Math.round((item.cprice || 0) * 1.5) * (parseInt(item.pdtquantity) || 0)), 0);
+          
+          // Determine stock status
+          let stockClass = '';
+          let alertBadge = '';
+          let warningText = '';
+          
+          if (availableQuantity < 5) {
+            stockClass = 'stock-critical';
+            alertBadge = '<span class="badge bg-danger stock-alert-badge">CRITICAL<\/span>';
+            warningText = 'Very low stock!';
+            hasLowStockFlag = true;
+          } else if (availableQuantity < 10) {
+            stockClass = 'stock-low';
+            alertBadge = '<span class="badge bg-warning stock-alert-badge">LOW<\/span>';
+            warningText = 'Low stock';
+            hasLowStockFlag = true;
+          } else {
+            stockClass = 'stock-ok';
+          }
+          
+          // Add summary row
+          const summaryRow = tbody.insertRow();
+          summaryRow.className = `product-summary-row ${stockClass}`;
+          
+          const summaryCell1 = summaryRow.insertCell(0);
+          summaryCell1.colSpan = 2;
+          summaryCell1.innerHTML = `<strong>${productName} Total<\/strong> ${alertBadge}`;
+          
+          summaryRow.insertCell(1).textContent = '';
+          summaryRow.insertCell(2).innerHTML = `<strong>${totalQuantity}<\/strong>`;
+          
+          const qtyCell = summaryRow.insertCell(3);
+          qtyCell.className = 'quantity-cell';
+          qtyCell.innerHTML = `<strong>${availableQuantity}<\/strong>${warningText ? `<small class="low-stock-warning">${warningText}<\/small>` : ''}`;
+          
+          summaryRow.insertCell(4).textContent = '';
+          summaryRow.insertCell(5).innerHTML = `<strong>${totalValue.toLocaleString()}<\/strong>`;
+          summaryRow.insertCell(6).textContent = '';
+          summaryRow.insertCell(7).textContent = '';
+          summaryRow.insertCell(8).textContent = '';
+          summaryRow.insertCell(9).textContent = '';
+          
+          if (isManager) {
+            summaryRow.insertCell(10).textContent = '';
+          }
+        });
+      }
+      
+      // Update stock alert banner
+      updateStockAlertBanner();
+      
+      // Update pagination info
+      updatePaginationInfo(productNames.length);
+      updatePaginationButtons(productNames.length);
+    }
+    
+    // Update stock alert banner
+    function updateStockAlertBanner() {
+      const alertBanner = document.querySelector('.alert.alert-warning');
+      if (alertBanner) {
+        if (hasLowStockFlag) {
+          alertBanner.style.display = 'flex';
+        } else {
+          alertBanner.style.display = 'none';
+        }
+      }
+    }
+    
+    // Update pagination info text
+    function updatePaginationInfo(totalItems) {
+      const startIndex = (currentPage - 1) * rowsPerPage + 1;
+      const endIndex = Math.min(startIndex + rowsPerPage - 1, totalItems);
+      
+      document.getElementById('showingStart').textContent = totalItems === 0 ? 0 : startIndex;
+      document.getElementById('showingEnd').textContent = endIndex;
+      document.getElementById('totalRecords').textContent = totalItems;
+    }
+    
+    // Update pagination buttons
+    function updatePaginationButtons(totalItems) {
+      const totalPages = Math.ceil(totalItems / rowsPerPage);
+      
+      const prevBtn = document.getElementById('prevPage');
+      const nextBtn = document.getElementById('nextPage');
+      
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+      
+      const paginationPages = document.querySelector('.pagination-pages');
+      paginationPages.innerHTML = '';
+      
+      if (totalPages === 0) {
+        paginationPages.innerHTML = '<span class="pagination-ellipsis">No pages<\/span>';
+        return;
+      }
+      
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 4);
+      
+      if (endPage - startPage < 4) {
+        startPage = Math.max(1, endPage - 4);
+      }
+      
+      if (startPage > 1) {
+        const firstBtn = document.createElement('button');
+        firstBtn.className = 'pagination-num';
+        firstBtn.textContent = '1';
+        firstBtn.onclick = () => goToPage(1, totalPages);
+        paginationPages.appendChild(firstBtn);
+        
+        if (startPage > 2) {
+          const ellipsis = document.createElement('span');
+          ellipsis.className = 'pagination-ellipsis';
+          ellipsis.textContent = '...';
+          paginationPages.appendChild(ellipsis);
+        }
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = 'pagination-num';
+        if (i === currentPage) pageBtn.classList.add('active');
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => goToPage(i, totalPages);
+        paginationPages.appendChild(pageBtn);
+      }
+      
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsis = document.createElement('span');
+          ellipsis.className = 'pagination-ellipsis';
+          ellipsis.textContent = '...';
+          paginationPages.appendChild(ellipsis);
+        }
+        
+        const lastBtn = document.createElement('button');
+        lastBtn.className = 'pagination-num';
+        lastBtn.textContent = totalPages;
+        lastBtn.onclick = () => goToPage(totalPages, totalPages);
+        paginationPages.appendChild(lastBtn);
+      }
+    }
+    
+    function goToPage(page, totalPages) {
+      if (page < 1 || page > totalPages) return;
+      currentPage = page;
+      renderTable();
+    }
+    
+    // Filter and search functionality
+    function applyFilters() {
+      const productFilter = document.getElementById('productFilter').value;
+      const searchTerm = document.getElementById('searchStock').value.toLowerCase();
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      
+      filteredData = [...stockData];
+      
+      // Apply product type filter
+      if (productFilter !== 'all') {
+        filteredData = filteredData.filter(item => 
+          item.pdttype && item.pdttype.toLowerCase() === productFilter
+        );
+      }
+      
+      // Apply search filter
+      if (searchTerm) {
+        filteredData = filteredData.filter(item => 
+          (item.pdtname && item.pdtname.toLowerCase().includes(searchTerm)) ||
+          (item.pdttype && item.pdttype.toLowerCase().includes(searchTerm)) ||
+          (item.supplier && item.supplier.toLowerCase().includes(searchTerm)) ||
+          (item.quality && item.quality.toLowerCase().includes(searchTerm))
+        );
+      }
+      
+      // Apply date range filter
+      if (startDate) {
+        const start = new Date(startDate);
+        filteredData = filteredData.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate >= start;
+        });
+      }
+      
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59);
+        filteredData = filteredData.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate <= end;
+        });
+      }
+      
+      // Reset to first page and re-render
+      currentPage = 1;
+      renderTable();
+    }
+    
+    function clearFilters() {
+      document.getElementById('productFilter').value = 'all';
+      document.getElementById('searchStock').value = '';
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      filteredData = [...stockData];
+      currentPage = 1;
+      renderTable();
+    }
+    
+    function showDeleteModal(id) {
+      document.getElementById('deleteStockId').value = id;
+      const modalElement = document.getElementById('deleteConfirmationModal');
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
+    
+    function closeMessageModal() {
+      const modal = document.querySelector('.modal.show');
+      if (modal) modal.remove();
+      window.location.href = '/stock';
+    }
+    
+    // Event listeners
+    document.getElementById('productFilter').addEventListener('change', applyFilters);
+    document.getElementById('searchStock').addEventListener('input', applyFilters);
+    document.getElementById('applyDateFilter').addEventListener('click', applyFilters);
+    document.getElementById('clearDateFilter').addEventListener('click', clearFilters);
+    
+    document.getElementById('prevPage').addEventListener('click', () => {
+      if (currentPage > 1) {
+        const groupedItems = {};
+        filteredData.forEach(item => {
+          if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
+          groupedItems[item.pdtname].push(item);
+        });
+        const totalPages = Math.ceil(Object.keys(groupedItems).length / rowsPerPage);
+        if (currentPage > 1) goToPage(currentPage - 1, totalPages);
+      }
+    });
+    
+    document.getElementById('nextPage').addEventListener('click', () => {
+      const groupedItems = {};
+      filteredData.forEach(item => {
+        if (!groupedItems[item.pdtname]) groupedItems[item.pdtname] = [];
+        groupedItems[item.pdtname].push(item);
+      });
+      const totalPages = Math.ceil(Object.keys(groupedItems).length / rowsPerPage);
+      if (currentPage < totalPages) goToPage(currentPage + 1, totalPages);
+    });
+    
+    // PDF Download
+    document.getElementById('downloadPdf').addEventListener('click', function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape' });
+      
+      const tableColumn = ["Product Name", "Type", "Total Qty", "Available Qty", "Cost Price", "Product Price", "Supplier", "Contact", "Quality", "Date"];
+      
+      const tableRows = filteredData.map(item => [
+        item.pdtname || '',
+        item.pdttype || '',
+        item.pdtquantity1 || 0,
+        item.pdtquantity || 0,
+        (item.cprice || 0).toLocaleString(),
+        Math.round((item.cprice || 0) * 1.5).toLocaleString(),
+        item.supplier || '',
+        item.supplierContact ? '+256' + item.supplierContact : '',
+        item.quality || '',
+        item.date ? new Date(item.date).toLocaleDateString() : ''
+      ]);
+      
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 20,
+        theme: 'striped',
+        headStyles: { fillColor: [76, 100, 68], textColor: 255 },
+        styles: { fontSize: 8, cellPadding: 2 }
+      });
+      
+      doc.text("Stock Report", 14, 10);
+      doc.save('stock_report.pdf');
+    });
+    
+    // Initial render
+    renderTable();
