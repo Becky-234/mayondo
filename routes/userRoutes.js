@@ -3,7 +3,6 @@ const router = express.Router();
 const UserModel = require("../models/userModel");
 const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
 
-
 // List users (only sales agents)
 router.get("/usersList", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
@@ -16,7 +15,7 @@ router.get("/usersList", ensureAuthenticated, ensureManager, async (req, res) =>
       users,
       success,
       error,
-      currentUser: req.user // ← ADD THIS LINE
+      currentUser: req.user
     });
   } catch (err) {
     console.error(err);
@@ -24,20 +23,14 @@ router.get("/usersList", ensureAuthenticated, ensureManager, async (req, res) =>
   }
 });
 
-// Show add-user form
-router.get("/add", (req, res) => {
-  const success = req.query.success;
+// Show add-user form - FIXED: change from /add to /addUser
+router.get("/addUser", ensureAuthenticated, ensureManager, (req, res) => {
   const error = req.query.error;
-
-  res.render("adduser", {
-    title: "Add Sales Agent",
-    success,
-    error
-  });
+  res.render("addUser", { error, currentUser: req.user });
 });
 
-// Handle add-user form
-router.post("/add", ensureAuthenticated, ensureManager, async (req, res) => {
+// Handle add-user form - FIXED: change from /add to /addUser
+router.post("/addUser", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     console.log("Received form data:", req.body);
 
@@ -46,13 +39,13 @@ router.post("/add", ensureAuthenticated, ensureManager, async (req, res) => {
     // Validate required fields
     if (!name || !email || !tel || !nin || !address || !username || !password || !confirmPassword || !date) {
       console.log("Missing fields detected");
-      return res.redirect("/add?error=" + encodeURIComponent("All fields are required"));
+      return res.redirect("/addUser?error=" + encodeURIComponent("All fields are required"));
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
       console.log("Passwords don't match");
-      return res.redirect("/add?error=" + encodeURIComponent("Passwords do not match"));
+      return res.redirect("/addUser?error=" + encodeURIComponent("Passwords do not match"));
     }
 
     // Check if user already exists
@@ -62,7 +55,7 @@ router.post("/add", ensureAuthenticated, ensureManager, async (req, res) => {
 
     if (existingUser) {
       console.log("User already exists:", existingUser);
-      return res.redirect("/add?error=" + encodeURIComponent("User with this email or username already exists"));
+      return res.redirect("/addUser?error=" + encodeURIComponent("User with this email or username already exists"));
     }
 
     // Create new sales agent - password will be hashed by the model
@@ -87,15 +80,15 @@ router.post("/add", ensureAuthenticated, ensureManager, async (req, res) => {
     console.error("Detailed error:", err);
 
     if (err.code === 11000) {
-      return res.redirect("/add?error=" + encodeURIComponent("User with this email or username already exists"));
+      return res.redirect("/addUser?error=" + encodeURIComponent("User with this email or username already exists"));
     }
 
     if (err.name === 'ValidationError') {
       const errors = Object.values(err.errors).map(error => error.message);
-      return res.redirect("/add?error=" + encodeURIComponent(errors.join(', ')));
+      return res.redirect("/addUser?error=" + encodeURIComponent(errors.join(', ')));
     }
 
-    res.redirect("/add?error=" + encodeURIComponent("Failed to create user account: " + err.message));
+    res.redirect("/addUser?error=" + encodeURIComponent("Failed to create user account: " + err.message));
   }
 });
 
@@ -113,7 +106,8 @@ router.get("/editUser/:id", ensureAuthenticated, ensureManager, async (req, res)
     res.render("editUser", {
       user,
       success,
-      error
+      error,
+      currentUser: req.user
     });
   } catch (error) {
     console.error(error);
@@ -169,8 +163,7 @@ router.post("/editUser/:id", ensureAuthenticated, ensureManager, async (req, res
   }
 });
 
-
-// In UserRoutes.js
+// Delete user
 router.post("/deleteUser/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     console.log("Deleting user with ID:", req.params.id);
@@ -186,6 +179,5 @@ router.post("/deleteUser/:id", ensureAuthenticated, ensureManager, async (req, r
     res.redirect("/usersList?error=Error deleting user");
   }
 });
-
 
 module.exports = router;

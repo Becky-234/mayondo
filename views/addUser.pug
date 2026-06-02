@@ -4,280 +4,89 @@ block styles
   link(rel='stylesheet' href='/css/add-user.css')
   
 block content 
-  div
-    .user-form-container
-      .form-header
-        h2
-          i.fas.fa-user-plus
-          | Register New Sales Agent
-        p.instruction Create a new sales agent account
+  .user-form-container
+    .form-header
+      h2
+        i.fas.fa-user-plus
+        | Register New Sales Agent
+      p.instruction Create a new sales agent account
 
-      form#addUser(action='/add' method='post' novalidate)
-        .form-grid
-          if error
-            .alert.alert-danger
-              i.fas.fa-exclamation-circle
-              | #{error}
-          
-          .form-group
-            label(for='name')
-              i.fas.fa-user
-              | Full Name
-            input#name.form-control(type='text' name='name' placeholder='Enter full name' required)
-            .error-message#name-error Please enter a valid full name (2-100 characters)
-          
-          .form-group
-            label(for='email')
-              i.fas.fa-envelope
-              | Email Address
-            input#email.form-control(type="email", name="email", placeholder="Enter email address" required)
-            .error-message#email-error Please enter a valid email address
-          
-          .form-group
-            label(for='tel')
-              i.fas.fa-phone
-              | Phone Number
-            input#tel.form-control(type="text", name="tel", placeholder="+256 XXX XXX XXX" required)
-            .error-message#tel-error Please enter a valid phone number (9-10 digits)
-          
-          .form-group
-            label(for='nin')
-              i.fas.fa-id-card
-              | NIN Number
-            input#nin.form-control(type='text' name='nin' placeholder='Enter NIN number' required)
-            .error-message#nin-error Please enter a valid NIN number
-          
-          .form-group
-            label(for='address')
-              i.fas.fa-home
-              | Address
-            input#address.form-control(type='text' name='address' placeholder='Enter full address' required)
-            .error-message#address-error Please enter a valid address
-          
-          .form-group
-            label(for='username')
-              i.fas.fa-user-circle
-              | Username
-            input#username.form-control(type='text' name='username' placeholder='Choose a username' required)
-            .error-message#username-error Please enter a username (3-20 characters)
-          
-          .form-group
-            label(for='password')
-              i.fas.fa-lock
-              | Password
-            input#password.form-control(type='password' name='password' placeholder='Create password' required)
-            .error-message#password-error Password must be at least 6 characters
-            .password-strength
-              .strength-bar#passwordStrength
-          
-          .form-group
-            label(for='confirmPassword')
-              i.fas.fa-lock
-              | Confirm Password
-            input#confirmPassword.form-control(type='password' name='confirmPassword' placeholder='Confirm password' required)
-            .error-message#confirmPassword-error Passwords do not match
-          
-          .form-group
-            label(for='date')
-              i.fas.fa-calendar-alt
-              | Registration Date
-            input#date.form-control(type='date' name='date' required)
-            .error-message#date-error Please select a valid date
+    form#addUser(action='/addUser' method='post' novalidate)
+      .form-grid
+        if error
+          .alert.alert-danger
+            i.fas.fa-exclamation-circle
+            | #{error}
         
-        .form-actions
-          button.btn.btn-secondary(type='reset' id='resetBtn')
-            i.fas.fa-times
-            | Cancel
-          button.btn.btn-primary(type='submit')
-            i.fas.fa-user-plus
-            | Create Sales Agent
-
-  script.
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM loaded - validation starting');
+        .form-group
+          label(for='name')
+            i.fas.fa-user
+            | Full Name
+          input#name.form-control(type='text' name='name' placeholder='Enter full name' required)
+          .error-message#name-error Please enter a valid full name (2-100 characters)
+        
+        .form-group
+          label(for='email')
+            i.fas.fa-envelope
+            | Email Address
+          input#email.form-control(type="email", name="email", placeholder="Enter email address" required)
+          .error-message#email-error Please enter a valid email address
+        
+        .form-group
+          label(for='tel')
+            i.fas.fa-phone
+            | Phone Number
+          input#tel.form-control(type="text", name="tel", placeholder="+256 XXX XXX XXX" required)
+          .error-message#tel-error Please enter a valid phone number (9-10 digits)
+        
+        .form-group
+          label(for='nin')
+            i.fas.fa-id-card
+            | NIN Number
+          input#nin.form-control(type='text' name='nin' placeholder='Enter NIN number' required)
+          .error-message#nin-error Please enter a valid NIN number
+        
+        .form-group
+          label(for='address')
+            i.fas.fa-home
+            | Address
+          input#address.form-control(type='text' name='address' placeholder='Enter full address' required)
+          .error-message#address-error Please enter a valid address
+        
+        .form-group
+          label(for='username')
+            i.fas.fa-user-circle
+            | Username
+          input#username.form-control(type='text' name='username' placeholder='Choose a username' required)
+          .error-message#username-error Please enter a username (3-20 characters)
+        
+        .form-group
+          label(for='password')
+            i.fas.fa-lock
+            | Password
+          input#password.form-control(type='password' name='password' placeholder='Create password' required)
+          .error-message#password-error Password must be at least 6 characters
+          .password-strength
+            .strength-bar#passwordStrength
+        
+        .form-group
+          label(for='confirmPassword')
+            i.fas.fa-lock
+            | Confirm Password
+          input#confirmPassword.form-control(type='password' name='confirmPassword' placeholder='Confirm password' required)
+          .error-message#confirmPassword-error Passwords do not match
+        
+        .form-group
+          label(for='date')
+            i.fas.fa-calendar-alt
+            | Registration Date
+          input#date.form-control(type='date' name='date' required)
+          .error-message#date-error Please select a valid date
       
-      const form = document.getElementById('addUser');
-      const resetBtn = document.getElementById('resetBtn');
-      const passwordInput = document.getElementById('password');
-      const passwordStrength = document.getElementById('passwordStrength');
-
-      if (!form) {
-        console.error('Form not found!');
-        return;
-      }
-
-      console.log('Form found');
-
-      // Password strength indicator
-      if (passwordInput && passwordStrength) {
-        passwordInput.addEventListener('input', function() {
-          const password = this.value;
-          let strength = 0;
-          
-          if (password.length >= 6) strength++;
-          if (password.length >= 8) strength++;
-          if (/[A-Z]/.test(password)) strength++;
-          if (/[0-9]/.test(password)) strength++;
-          if (/[^A-Za-z0-9]/.test(password)) strength++;
-          
-          // Reset classes
-          passwordStrength.className = 'strength-bar';
-          
-          // Apply strength classes
-          if (password.length === 0) {
-            passwordStrength.style.width = '0%';
-          } else if (strength <= 2) {
-            passwordStrength.classList.add('strength-weak');
-          } else if (strength <= 4) {
-            passwordStrength.classList.add('strength-medium');
-          } else {
-            passwordStrength.classList.add('strength-strong');
-          }
-        });
-      }
-
-      // Enhanced validation functions
-      const validators = {
-        name: (value) => value.trim().length >= 2 && value.trim().length <= 100,
-        email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()),
-        tel: (value) => {
-          const cleanValue = value.replace(/\s+/g, '');
-          return /^(\+?256|0)?[0-9]{9}$/.test(cleanValue);
-        },
-        nin: (value) => value.trim().length >= 10 && value.trim().length <= 14,
-        address: (value) => value.trim().length >= 5 && value.trim().length <= 200,
-        username: (value) => value.trim().length >= 3 && value.trim().length <= 20 && /^[a-zA-Z0-9_]+$/.test(value),
-        password: (value) => value.length >= 6,
-        confirmPassword: (value) => {
-          const password = document.getElementById('password').value;
-          return value === password;
-        },
-        date: (value) => value && !isNaN(new Date(value).getTime())
-      };
-
-      // Error messages
-      const errorMessages = {
-        name: "Please enter a valid full name (2-100 characters)",
-        email: "Please enter a valid email address",
-        tel: "Please enter a valid phone number (9-10 digits)",
-        nin: "Please enter a valid NIN number (10-14 characters)",
-        address: "Please enter a valid address (5-200 characters)",
-        username: "Username must be 3-20 characters (letters, numbers, underscores only)",
-        password: "Password must be at least 6 characters",
-        confirmPassword: "Passwords do not match",
-        date: "Please select a valid date"
-      };
-
-      // Show error function
-      function showError(fieldName, message) {
-        const field = document.getElementById(fieldName);
-        const errorElement = document.getElementById(fieldName + '-error');
-        
-        if (field && errorElement) {
-          field.classList.add('is-invalid');
-          field.classList.remove('is-valid');
-          errorElement.textContent = message;
-          errorElement.style.display = 'block';
-        }
-      }
-
-      // Show success function
-      function showSuccess(fieldName) {
-        const field = document.getElementById(fieldName);
-        const errorElement = document.getElementById(fieldName + '-error');
-        
-        if (field && errorElement) {
-          field.classList.remove('is-invalid');
-          field.classList.add('is-valid');
-          errorElement.style.display = 'none';
-        }
-      }
-
-      // Validate single field
-      function validateField(fieldName) {
-        const field = document.getElementById(fieldName);
-        if (!field) return true;
-
-        const value = field.value;
-        const isValid = validators[fieldName](value);
-
-        if (!isValid) {
-          showError(fieldName, errorMessages[fieldName]);
-          return false;
-        } else {
-          showSuccess(fieldName);
-          return true;
-        }
-      }
-
-      // Validate entire form
-      function validateForm() {
-        let isValid = true;
-        const fields = ['name', 'email', 'tel', 'nin', 'address', 'username', 'password', 'confirmPassword', 'date'];
-        
-        fields.forEach(fieldName => {
-          if (!validateField(fieldName)) {
-            isValid = false;
-          }
-        });
-
-        return isValid;
-      }
-
-      // Form submit handler
-      form.addEventListener('submit', function(e) {
-        console.log('Submit event triggered');
-        
-        if (!validateForm()) {
-          e.preventDefault();
-          console.log('Form validation failed - preventing submit');
-          
-          // Scroll to first error
-          const firstError = form.querySelector('.is-invalid');
-          if (firstError) {
-            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            firstError.focus();
-          }
-        } else {
-          console.log('Form validation passed');
-        }
-      });
-
-      // Reset button handler
-      if (resetBtn) {
-        resetBtn.addEventListener('click', function() {
-          const fields = form.querySelectorAll('input');
-          fields.forEach(field => {
-            field.classList.remove('is-invalid', 'is-valid');
-          });
-          
-          const errors = form.querySelectorAll('.error-message');
-          errors.forEach(error => {
-            error.style.display = 'none';
-          });
-
-          // Reset password strength
-          if (passwordStrength) {
-            passwordStrength.className = 'strength-bar';
-            passwordStrength.style.width = '0%';
-          }
-        });
-      }
-
-      // Real-time validation as user types
-      const inputs = form.querySelectorAll('input');
-      inputs.forEach(input => {
-        input.addEventListener('blur', function() {
-          validateField(this.id);
-        });
-        
-        input.addEventListener('input', function() {
-          if (this.classList.contains('is-invalid')) {
-            validateField(this.id);
-          }
-        });
-      });
-
-      console.log('Form validation initialized successfully');
-    });
-  script(src='/javascript/user.js')
+      .form-actions
+        button.btn.btn-secondary(type='reset' id='resetBtn')
+          i.fas.fa-times
+          | Cancel
+        button.btn.btn-primary(type='submit')
+          i.fas.fa-user-plus
+          | Create Sales Agent
