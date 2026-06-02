@@ -112,32 +112,20 @@ router.post("/login", async (req, res) => {
         req.login(user, (err) => {
             if (err) {
                 console.error("❌ req.login error:", err);
-                return res.render('login', {
-                    title: "Login page",
-                    error: "Authentication system error",
-                    email: email
-                });
+                return res.render('login', { title: "Login page", error: "Authentication error", email: email });
             }
 
-            console.log("✅ Login successful - user saved to session");
-            console.log("Session ID:", req.sessionID);
-            console.log("User role:", user.role);
+            console.log("✅ Login successful");
 
-            // EXPLICITLY SAVE THE SESSION - CRITICAL FOR RENDER
+            // CRITICAL: Force session save
             req.session.save((saveErr) => {
                 if (saveErr) {
                     console.error("❌ Session save error:", saveErr);
-                    return res.render('login', {
-                        title: "Login page",
-                        error: "Session error - please try again",
-                        email: email
-                    });
+                    return res.render('login', { title: "Login page", error: "Session error", email: email });
                 }
 
-                console.log("✅ Session saved successfully");
-                console.log("Redirecting to:", user.role === 'manager' ? '/dashboard' : '/sales');
+                console.log("✅ Session saved with user:", req.session.passport?.user);
 
-                // Redirect based on role
                 if (user.role === 'manager') {
                     return res.redirect('/dashboard');
                 } else {
@@ -145,6 +133,7 @@ router.post("/login", async (req, res) => {
                 }
             });
         });
+        
     } catch (error) {
         console.error("❌ Login error details:", error);
         return res.render('login', {

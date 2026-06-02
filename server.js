@@ -21,7 +21,6 @@ try {
   console.log("Manager profile loaded:", managerProfile?.username);
 } catch (err) {
   console.error("Failed to load managerConfigs:", err.message);
-  // Provide fallback to avoid crash
   managerProfile = { username: "manager", fname: "Manager" };
 }
 
@@ -77,7 +76,7 @@ app.use((req, res, next) => {
 });
 
 // ==============================================
-// SESSION CONFIGURATION - FIXED FOR RENDER
+// SESSION CONFIGURATION - FINAL FIX FOR RENDER
 // ==============================================
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
@@ -85,30 +84,34 @@ if (!sessionSecret) {
   process.exit(1);
 }
 
-app.use(
-  expressSession({
-    name: 'mwf.sid',
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URL
-    }),
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      secure: false,     // CRITICAL: false for Render (HTTPS is terminated at load balancer)
-      httpOnly: true,
-      sameSite: 'lax'
-    },
-    proxy: true,         // CRITICAL: Trust the proxy (Render)
-    rolling: true,       // Reset cookie expiration on each response
-  })
-);
+const sessionStore = MongoStore.create({
+  mongoUrl: process.env.MONGODB_URL,
+  collectionName: 'sessions',
+  ttl: 24 * 60 * 60 // 24 hours
+});
 
-// Session debug middleware (helps diagnose session issues)
+app.use(expressSession({
+  name: 'mwf.sid',
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: false,
+    httpOnly: true,
+    sameSite: 'lax'
+  },
+  proxy: true
+}));
+
+// Session debug middleware
 app.use((req, res, next) => {
-  console.log("📊 Session ID:", req.sessionID);
-  console.log("👤 User in session:", req.user?.email || 'Not authenticated');
+  console.log("🔍 SESSION CHECK - ID:", req.sessionID);
+  console.log("🔍 SESSION CHECK - User:", req.user?.email || 'No user');
+  if (req.session) {
+    console.log("🔍 SESSION CHECK - Passport user:", req.session.passport?.user || 'None');
+  }
   next();
 });
 
@@ -116,18 +119,18 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Serialization: store user identifier
+// Serialization
 passport.serializeUser((user, done) => {
+  console.log("📝 Serializing user:", user.email || user._id);
   if (user.isManager) {
     return done(null, `manager_${user.email}`);
   }
   done(null, user._id.toString());
 });
 
-// Deserialization: reconstruct user object
+// Deserialization
 passport.deserializeUser(async (id, done) => {
   try {
-    // Handle manager
     if (typeof id === 'string' && id.startsWith('manager_')) {
       const email = id.replace('manager_', '');
       const managerUser = {
@@ -141,7 +144,6 @@ passport.deserializeUser(async (id, done) => {
       };
       return done(null, managerUser);
     }
-    // Regular database user
     const user = await UserModel.findById(id);
     if (!user) {
       return done(null, false);
@@ -159,9 +161,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ==============================================
-// HEALTH CHECK ENDPOINTS - REQUIRED FOR RENDER
-// ==============================================
+// Health check endpoints
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
@@ -193,9 +193,9 @@ app.get('/debug-session', (req, res) => {
   res.json({
     sessionID: req.sessionID,
     sessionExists: !!req.session,
+    passportUser: req.session?.passport?.user || null,
     user: req.user ? { email: req.user.email, role: req.user.role } : null,
-    isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
-    cookies: req.headers.cookie || 'No cookies'
+    isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false
   });
 });
 
@@ -211,19 +211,17 @@ app.use((err, req, res, next) => {
 });
 
 // ==============================================
-// START SERVER WITH CORRECT BINDING FOR RENDER
+// START SERVER
 // ==============================================
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`❤️ Health check available at /health`);
-  console.log(`🔍 Session debug at /debug-session`);
+  console.log(`❤️ Health check: /health`);
+  console.log(`🔍 Session debug: /debug-session`);
 });
 
-// Increase timeouts to prevent 502 errors on Render
 server.keepAliveTimeout = 120000;
 server.headersTimeout = 120000;
 
-// Handle graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, closing server...');
   server.close(() => {
