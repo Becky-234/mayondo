@@ -54,7 +54,7 @@ block content
     .include
       .button-group
         //- Only show Add Stock button to manager
-        if currentUser && currentUser.role === "manager"
+        if currentUser && (currentUser.role === "manager" || currentUser.role === "Manager" || currentUser.isManager === true)
           a.btns(href='/addStock')
             i.fas.fa-plus-circle
             | Add Stock
