@@ -1,12 +1,10 @@
 const ensureAuthenticated = (req, res, next) => {
   console.log("Authentication Check:");
-  console.log("   req.session.user:", req.session.user);
+  console.log("   req.user:", req.user?.email || 'No user');
+  console.log("   req.isAuthenticated():", req.isAuthenticated ? req.isAuthenticated() : false);
 
-  if (req.session && req.session.user) {
-    // Made session user available as req.user for consistency
-    if (!req.user) {
-      req.user = req.session.user;
-    }
+  // Check using Passport's isAuthenticated method
+  if (req.isAuthenticated && req.isAuthenticated()) {
     console.log("User is authenticated");
     return next();
   }
@@ -18,7 +16,7 @@ const ensureAuthenticated = (req, res, next) => {
 const ensureAgent = (req, res, next) => {
   console.log("Agent Check:");
 
-  const user = req.session.user || req.user;
+  const user = req.user;  // CHANGE THIS - use req.user, not req.session.user
   console.log("  User role:", user ? user.role : "No user");
 
   if (user && (user.role === "sales_agent" || user.role === "manager")) {
@@ -37,11 +35,10 @@ const ensureAgent = (req, res, next) => {
 const ensureManager = (req, res, next) => {
   console.log("Manager Check:");
 
-  const user = req.session.user || req.user;
+  const user = req.user;  // CHANGE THIS - use req.user
   console.log("   User role:", user ? user.role : "No user");
   console.log("   User isManager:", user ? user.isManager : "No user");
 
-  // Only allow users with manager role
   if (user && user.role === "manager") {
     console.log("User is manager");
     return next();
@@ -54,7 +51,7 @@ const ensureManager = (req, res, next) => {
 const ensureSalesAgent = (req, res, next) => {
   console.log("Sales Agent Check:");
 
-  const user = req.session.user || req.user;
+  const user = req.user;  // CHANGE THIS - use req.user
   console.log("   User role:", user ? user.role : "No user");
 
   if (user && user.role === "sales_agent") {
