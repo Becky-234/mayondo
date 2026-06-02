@@ -1,9 +1,9 @@
+// middleware/auth.js
 const ensureAuthenticated = (req, res, next) => {
   console.log("Authentication Check:");
   console.log("   req.user:", req.user?.email || 'No user');
   console.log("   req.isAuthenticated():", req.isAuthenticated ? req.isAuthenticated() : false);
 
-  // Check using Passport's isAuthenticated method
   if (req.isAuthenticated && req.isAuthenticated()) {
     console.log("User is authenticated");
     return next();
@@ -15,11 +15,10 @@ const ensureAuthenticated = (req, res, next) => {
 
 const ensureAgent = (req, res, next) => {
   console.log("Agent Check:");
-
   const user = req.user;
   console.log("  User role:", user ? user.role : "No user");
 
-  if (user && (user.role === "sales_agent" || user.role === "manager" || user.role === "Manager")) {
+  if (user && (user.role === "sales_agent" || user.role === "Sales_Agent" || user.role === "manager" || user.role === "Manager")) {
     console.log("User has agent/manager access");
     return next();
   }
@@ -39,25 +38,23 @@ const ensureManager = (req, res, next) => {
 
   const user = req.user;
 
-  // Check MULTIPLE conditions for manager (case-insensitive)
+  // Comprehensive manager check (case-insensitive)
   if (user && (
     user.role === "manager" ||
     user.role === "Manager" ||
     user.isManager === true ||
     (user.role && user.role.toLowerCase() === "manager")
   )) {
-    console.log("✅ User is manager - allowing access to dashboard");
+    console.log("User is manager - allowing access");
     return next();
   }
 
-  console.log("❌ User is NOT manager - redirecting to landing page");
-  console.log("   User role was:", user?.role);
+  console.log("User is NOT manager - redirecting to landing page");
   res.redirect("/index");
 };
 
 const ensureSalesAgent = (req, res, next) => {
   console.log("Sales Agent Check:");
-
   const user = req.user;
   console.log("   User role:", user ? user.role : "No user");
 
