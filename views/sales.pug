@@ -2,7 +2,7 @@ extends layout.pug
 block styles 
   link(rel='stylesheet', href='../css/sales.css')
 block content
-  main.main-content
+  div
     .dashboarBody
       h3 Mayondo Wood And Furniture ltd
     if currentUser && currentUser.role === 'sales_agent'
