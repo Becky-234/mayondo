@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt"); // ADD THIS
 const { managerProfile } = require("../configs/managerConfigs");
 const UserModel = require("../models/userModel");
 
@@ -41,17 +42,22 @@ router.post("/login", async (req, res) => {
         // 2. Check sales agent in database
         else {
             const salesAgent = await UserModel.findOne({ email: email, role: 'sales_agent' });
-            if (salesAgent && password === salesAgent.password) {
-                user = {
-                    _id: salesAgent._id,
-                    name: salesAgent.name,
-                    email: salesAgent.email,
-                    tel: salesAgent.tel,
-                    username: salesAgent.username,
-                    role: 'sales_agent',
-                    isManager: false
-                };
-                console.log("Sales agent authenticated");
+            if (salesAgent) {
+                // FIX: Use bcrypt to compare password
+                const isPasswordValid = await bcrypt.compare(password, salesAgent.password);
+
+                if (isPasswordValid) {
+                    user = {
+                        _id: salesAgent._id,
+                        name: salesAgent.name,
+                        email: salesAgent.email,
+                        tel: salesAgent.tel,
+                        username: salesAgent.username,
+                        role: 'sales_agent',
+                        isManager: false
+                    };
+                    console.log("Sales agent authenticated");
+                }
             }
         }
 
