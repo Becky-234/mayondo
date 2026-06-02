@@ -1,129 +1,93 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const passport = require("passport");  // <-- ADDED
 const { managerProfile } = require("../configs/managerConfigs");
 const UserModel = require("../models/userModel");
-
 
 // Getting the Login form
 router.get("/login", (req, res) => {
     res.render("login", { title: "Login page" });
 });
 
-router.post("/login", async (req, res) => {
+// Use Passport's authenticate middleware, but with custom verification
+router.post("/login", async (req, res, next) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).render('login', {
+            title: "Login page",
+            error: "Email and password are required"
+        });
+    }
+
+    const managerEmail = process.env.MANAGER_EMAIL;
+    const managerPassword = process.env.MANAGER_PASSWORD;
+
+    console.log("Login Debug:", { email });
+
     try {
-        const { email, password } = req.body;
+        let user = null;
 
-        // Basic validation
-        if (!email || !password) {
-            return res.status(400).render('login', {
-                title: "Login page",
-                error: "Email and password are required"
-            });
-        }
-
-        const managerEmail = process.env.MANAGER_EMAIL;
-        const managerPassword = process.env.MANAGER_PASSWORD;
-
-        console.log("Login Debug:");
-        console.log("Input Email:", email);
-
-        // 1. Check if it's the manager login
+        // 1. Check manager
         if (email === managerEmail && password === managerPassword) {
-            // Create manager user data with PROPER ObjectId
-            const userData = {
+            // Create a user-like object for manager (must have an _id)
+            user = {
                 _id: new mongoose.Types.ObjectId(),
                 email: email,
                 username: managerProfile.username,
                 name: managerProfile.fname,
                 ...managerProfile,
                 role: 'manager',
-                isManager: true,
-                loginTime: new Date(),
-                lastActivity: new Date()
+                isManager: true
             };
-
-            console.log("=== MANAGER LOGIN SUCCESS ===");
-            console.log("Username:", userData.username);
-            console.log("Manager ID:", userData._id);
-
-            // SET BOTH session.user AND req.user
-            req.session.user = userData;
-            req.user = userData;
-
-            req.session.save((err) => {
-                if (err) {
-                    console.error("Session save error:", err);
-                    return res.status(500).render('login', {
-                        title: "Login page",
-                        error: "Authentication error"
-                    });
-                }
-
-                console.log("Manager login successful - redirecting to dashboard");
-                return res.redirect('/dashboard');
-            });
+            console.log("Manager authenticated");
         }
-        // 2. Check if it's a sales agent login
+        // 2. Check sales agent from database
         else {
-            // Find sales agent by email
             const salesAgent = await UserModel.findOne({
                 email: email,
                 role: 'sales_agent'
             });
-
-            if (salesAgent) {
-                console.log("Found sales agent:", salesAgent.email);
-
-                // Check if password matches
-                if (password === salesAgent.password) {
-                    // Creating sales agent user data
-                    const userData = {
-                        _id: salesAgent._id,
-                        name: salesAgent.name,
-                        email: salesAgent.email,
-                        tel: salesAgent.tel,
-                        username: salesAgent.username,
-                        role: 'sales_agent',
-                        isManager: false,
-                        loginTime: new Date(),
-                        lastActivity: new Date()
-                    };
-
-                    console.log("=== SALES AGENT LOGIN SUCCESS ===");
-                    console.log("Username:", userData.username);
-
-                    // SET BOTH session.user AND req.user
-                    req.session.user = userData;
-                    req.user = userData;
-
-                    req.session.save((err) => {
-                        if (err) {
-                            console.error("Session save error:", err);
-                            return res.status(500).render('login', {
-                                title: "Login page",
-                                error: "Authentication error"
-                            });
-                        }
-
-                        console.log("Sales Agent login successful - redirecting to sales");
-                        return res.redirect('/sales');
-                    });
-                } else {
-                    console.log("Sales Agent login failed - password incorrect");
-                    return res.status(401).render('login', {
-                        title: "Login page",
-                        error: "Invalid credentials"
-                    });
-                }
-            } else {
-                console.log("Login failed - user not found");
-                return res.status(401).render('login', {
-                    title: "Login page",
-                    error: "Invalid credentials"
-                });
+            if (salesAgent && password === salesAgent.password) {
+                user = {
+                    _id: salesAgent._id,
+                    name: salesAgent.name,
+                    email: salesAgent.email,
+                    tel: salesAgent.tel,
+                    username: salesAgent.username,
+                    role: 'sales_agent',
+                    isManager: false
+                };
+                console.log("Sales agent authenticated");
             }
         }
+
+        if (!user) {
+            console.log("Login failed - invalid credentials");
+            return res.status(401).render('login', {
+                title: "Login page",
+                error: "Invalid credentials"
+            });
+        }
+
+        // Use Passport's req.login to properly establish session
+        req.login(user, (err) => {
+            if (err) {
+                console.error("req.login error:", err);
+                return res.status(500).render('login', {
+                    title: "Login page",
+                    error: "Authentication error"
+                });
+            }
+            console.log("Login successful - redirecting");
+            // Redirect based on role
+            if (user.role === 'manager') {
+                return res.redirect('/dashboard');
+            } else {
+                return res.redirect('/sales');
+            }
+        });
     } catch (error) {
         console.error("Login error:", error);
         return res.status(500).render('login', {
@@ -133,7 +97,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// test route to check environment variables
+// Test route
 router.get("/test-env", (req, res) => {
     res.json({
         managerEmail: process.env.MANAGER_EMAIL || "NOT SET",
@@ -145,42 +109,37 @@ router.get("/test-env", (req, res) => {
 router.get("/debug-auth", (req, res) => {
     res.json({
         reqUser: req.user,
-        reqSessionUser: req.session.user,
+        reqSessionUser: req.session?.user,
         isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : 'N/A'
     });
 });
 
-// CHANGE THIS FROM GET TO POST
+// Logout (both POST and GET)
 router.post("/logout", (req, res) => {
-    console.log("Logout request received");
-
-    // Destroy the session
-    req.session.destroy((err) => {
+    req.logout((err) => {
         if (err) {
-            console.error("Error destroying session:", err);
+            console.error("Logout error:", err);
             return res.status(500).send("Error logging out");
         }
-
-        // Clear the session cookie
-        res.clearCookie('connect.sid');
-
-        console.log("Logout successful - redirecting to login");
-        res.redirect("/login");
+        req.session.destroy((err) => {
+            if (err) console.error("Session destroy error:", err);
+            res.clearCookie('mwf.sid'); // match the cookie name in server.js
+            res.redirect("/login");
+        });
     });
 });
 
-// Keep GET logout as backup (optional)
 router.get("/logout", (req, res) => {
-    console.log("GET logout request received");
-
-    req.session.destroy((err) => {
+    req.logout((err) => {
         if (err) {
-            console.error("Error destroying session:", err);
+            console.error("Logout error:", err);
             return res.status(500).send("Error logging out");
         }
-
-        res.clearCookie('connect.sid');
-        res.redirect("/login");
+        req.session.destroy((err) => {
+            if (err) console.error("Session destroy error:", err);
+            res.clearCookie('mwf.sid');
+            res.redirect("/login");
+        });
     });
 });
 

@@ -10,7 +10,6 @@ const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
 const moment = require("moment");
 const methodOverride = require('method-override');
-const LocalStrategy = require('passport-local').Strategy;
 
 const UserModel = require("./models/userModel");
 
@@ -36,7 +35,7 @@ app.locals.moment = moment;
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URL, {
   tls: true,
-  tlsAllowInvalidCertificates: true,   // Bypass SSL validation for Render
+  tlsAllowInvalidCertificates: true,
   retryWrites: true,
   w: 'majority'
 })
@@ -70,7 +69,7 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: false,          // MUST be false for Render (proxy doesn't forward HTTPS correctly)
+      secure: false,          // Required for Render
       httpOnly: true,
       sameSite: 'lax'
     },
@@ -81,31 +80,41 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// LOCAL STRATEGY (authenticate with email + password)
-passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
-  try {
-    const user = await UserModel.findOne({ email: email });
-    if (!user) {
-      return done(null, false, { message: 'Invalid email or password' });
-    }
-    // Plain text comparison – upgrade to bcrypt in production
-    if (user.password !== password) {
-      return done(null, false, { message: 'Invalid email or password' });
-    }
-    return done(null, user);
-  } catch (err) {
-    return done(err);
-  }
-}));
-
-// Serialization / Deserialization
+// Serialization: store only the user's id (or a special marker for manager)
 passport.serializeUser((user, done) => {
-  done(null, user._id);
+  // For manager, we store a special string: 'manager_' + their email
+  if (user.isManager) {
+    return done(null, `manager_${user.email}`);
+  }
+  // For normal DB users, store the ObjectId as string
+  done(null, user._id.toString());
 });
 
+// Deserialization: retrieve full user object from DB or create manager object
 passport.deserializeUser(async (id, done) => {
+  // Check if it's a manager marker
+  if (typeof id === 'string' && id.startsWith('manager_')) {
+    const email = id.replace('manager_', '');
+    // Reconstruct manager object (you can fetch from config or env)
+    const managerProfile = require("./configs/managerConfigs").managerProfile;
+    const managerUser = {
+      _id: 'manager_' + email,  // fake ID
+      email: email,
+      username: managerProfile.username,
+      name: managerProfile.fname,
+      ...managerProfile,
+      role: 'manager',
+      isManager: true
+    };
+    return done(null, managerUser);
+  }
+
+  // Otherwise, fetch from MongoDB
   try {
     const user = await UserModel.findById(id);
+    if (!user) {
+      return done(null, false);
+    }
     done(null, user);
   } catch (error) {
     done(error);
@@ -114,27 +123,19 @@ passport.deserializeUser(async (id, done) => {
 
 // Make currentUser available to all templates
 app.use((req, res, next) => {
-  if (req.user) {
-    res.locals.currentUser = req.user;
-  } else if (req.session && req.session.user) {
-    res.locals.currentUser = req.session.user;
-  } else {
-    res.locals.currentUser = null;
-  }
+  res.locals.currentUser = req.user || null;
   console.log('Current User Available:', !!res.locals.currentUser);
   next();
 });
 
-// ========= DEFAULT ROOT ROUTE (Fixes "Cannot GET /") =========
+// ========= DEFAULT ROOT ROUTE =========
 app.get('/', (req, res) => {
-  // If user is logged in, go to dashboard; otherwise go to login
   if (req.user) {
     res.redirect('/dashboard');
   } else {
     res.redirect('/login');
   }
 });
-// ============================================================
 
 //5.ROUTES
 app.use("/", authRoutes);
@@ -145,7 +146,7 @@ app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
 app.use("/", userRoutes);
 
-// Catch-all 404 handler (optional)
+// Catch-all 404 handler
 app.use((req, res) => {
   res.status(404).send('Page not found');
 });
