@@ -10,7 +10,7 @@ const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
 const moment = require("moment");
 const methodOverride = require('method-override');
-const LocalStrategy = require('passport-local').Strategy; // <-- ADDED
+const LocalStrategy = require('passport-local').Strategy;
 
 const UserModel = require("./models/userModel");
 
@@ -27,7 +27,7 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// TRUST PROXY - Required for sessions to work on Render
+// TRUST PROXY - Required for sessions on Render
 app.set('trust proxy', 1);
 
 //3.CONFIGURATIONS
@@ -36,14 +36,14 @@ app.locals.moment = moment;
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URL, {
   tls: true,
-  tlsAllowInvalidCertificates: true,
+  tlsAllowInvalidCertificates: true,   // Bypass SSL validation for Render
   retryWrites: true,
   w: 'majority'
 })
   .then(() => console.log("Successfully connected to MongoDB"))
   .catch(err => console.log(`Connection error: ${err.message}`));
 
-// Setting view engine to pug
+// View engine
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
@@ -60,17 +60,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Session configuration (fixed for Render)
+// SESSION CONFIGURATION (Fixed for Render)
 app.use(
   expressSession({
     name: 'mwf.sid',
-    secret: process.env.SESSION_SECRET || 'fallback-secret-change-this-in-production',
+    secret: process.env.SESSION_SECRET || 'fallback-secret-change-me',
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: false,          // Allows cookie over HTTPS behind proxy
+      secure: false,          // MUST be false for Render (proxy doesn't forward HTTPS correctly)
       httpOnly: true,
       sameSite: 'lax'
     },
@@ -81,25 +81,24 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// ---- LOCAL STRATEGY (ADD THIS) ----
+// LOCAL STRATEGY (authenticate with email + password)
 passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
   try {
     const user = await UserModel.findOne({ email: email });
     if (!user) {
-      return done(null, false, { message: 'Incorrect email or password.' });
+      return done(null, false, { message: 'Invalid email or password' });
     }
-    // Compare plain text passwords (for development only – use bcrypt in production)
+    // Plain text comparison – upgrade to bcrypt in production
     if (user.password !== password) {
-      return done(null, false, { message: 'Incorrect email or password.' });
+      return done(null, false, { message: 'Invalid email or password' });
     }
     return done(null, user);
   } catch (err) {
     return done(err);
   }
 }));
-// ---------------------------------
 
-// Serialization/Deserialization (already correct)
+// Serialization / Deserialization
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
@@ -122,12 +121,20 @@ app.use((req, res, next) => {
   } else {
     res.locals.currentUser = null;
   }
-
   console.log('Current User Available:', !!res.locals.currentUser);
-  console.log('User from session:', req.session?.user?.email);
-  console.log('User from Passport:', req.user?.email);
   next();
 });
+
+// ========= DEFAULT ROOT ROUTE (Fixes "Cannot GET /") =========
+app.get('/', (req, res) => {
+  // If user is logged in, go to dashboard; otherwise go to login
+  if (req.user) {
+    res.redirect('/dashboard');
+  } else {
+    res.redirect('/login');
+  }
+});
+// ============================================================
 
 //5.ROUTES
 app.use("/", authRoutes);
@@ -137,5 +144,10 @@ app.use("/", productRoutes);
 app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
 app.use("/", userRoutes);
+
+// Catch-all 404 handler (optional)
+app.use((req, res) => {
+  res.status(404).send('Page not found');
+});
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
