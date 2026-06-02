@@ -6,6 +6,12 @@ block content
     .form-container
       h1.head Login
       br
+      
+      //- DISPLAY ERROR MESSAGE IF EXISTS
+      if error
+        div(style="color: red; background: #ffe0e0; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; border: 1px solid red;")
+          | #{error}
+      
       .input-box
         input#email(
           type="email", 
@@ -27,13 +33,10 @@ block content
         label
           input(type="checkbox")
           | Remember Me
+        //- a(href="#") Forgot Password?
       br
       br
       button.button#login-btn(type="submit") Login
       br
 
-  //- TEMPORARILY REMOVED FOR TESTING
-  //- script.
-  //-   console.log("=== DEBUG ===");
-  //-   console.log("Form:", document.getElementById('loginForm'));
-  //- script(src="../javascript/login.js")
+  script(src="../javascript/login.js")
