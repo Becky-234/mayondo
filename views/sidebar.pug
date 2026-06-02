@@ -4,13 +4,14 @@ aside.side-menu-container
     i.fa-solid.fa-bars
   ul.list
     if currentUser
-      if currentUser.role === "manager"
+      // Check for manager (case-insensitive)
+      if currentUser.role === "manager" || currentUser.role === "Manager" || currentUser.isManager === true
         li.list-item
           a(href='/dashboard')
             i.fa-solid.fa-house
             span.link-name Dashboard
       
-      if currentUser.role === "manager"
+      if currentUser.role === "manager" || currentUser.role === "Manager" || currentUser.isManager === true
         li.list-item
           a(href='/usersList')
             i.fa-solid.fa-users
@@ -49,7 +50,6 @@ aside.side-menu-container
         button.btn.btn-secondary(type='button', data-bs-dismiss='modal')
           i.fas.fa-times
           | Cancel
-        //- CHANGE THIS TO USE GET INSTEAD OF POST
         a#confirmLogoutBtn.btn.btn-danger(href='/logout')
           i.fas.fa-sign-out-alt
           | Logout
