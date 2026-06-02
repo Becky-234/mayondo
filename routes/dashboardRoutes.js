@@ -2,19 +2,18 @@ const express = require('express');
 const router = express.Router();
 const StockModel = require("../models/stockModel");
 const SalesModel = require("../models/salesModel");
-const { ensureAuthenticated, ensureManager } = require("./authMiddleware");  // ← FIXED PATH
+const { ensureAuthenticated, ensureManager } = require("../middleware/auth");  // ← FIXED - USE ../middleware/auth
 
 // Dashboard Page with Product Type Separation
 router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) => {
     try {
-        const currentUser = req.user;  // ← USE req.user, not req.session.user
+        const currentUser = req.user;
 
         if (!currentUser) {
             console.log("No user found in session");
             return res.redirect('/login');
         }
 
-        // Rest of your code remains the same...
         // Fetching all stock items
         const stockItems = await StockModel.find({});
 
@@ -91,8 +90,8 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 productGroup[0].pdttype.toLowerCase().includes('furniture') ? 'furniture' : 'other';
 
             // MATCH STOCK TABLE LOGIC - Check totals, not individual items
-            const isCriticalStock = availableQuantity < 5; // CRITICAL: total available < 5
-            const isLowStock = availableQuantity < 10 && availableQuantity >= 5; // LOW: total available 5-9
+            const isCriticalStock = availableQuantity < 5;
+            const isLowStock = availableQuantity < 10 && availableQuantity >= 5;
 
             // Update total metrics
             metrics.total.revenue += groupRevenue;
@@ -158,7 +157,6 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
 
         // Format the data for the template
         const dashboardData = {
-            // Total metrics
             totalRevenue: Math.round(metrics.total.revenue).toLocaleString(),
             totalProfit: Math.round(metrics.total.profit).toLocaleString(),
             totalInventory: metrics.total.inventoryCount,
@@ -167,8 +165,6 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             totalItems: metrics.total.totalItems,
             totalInventoryValue: Math.round(metrics.total.inventoryValue).toLocaleString(),
             totalLowStockItems: [...metrics.total.lowStockItems, ...metrics.total.criticalStockItems],
-
-            // Raw Materials metrics
             rawRevenue: Math.round(metrics.rawMaterials.revenue).toLocaleString(),
             rawProfit: Math.round(metrics.rawMaterials.profit).toLocaleString(),
             rawInventory: metrics.rawMaterials.inventoryCount,
@@ -177,8 +173,6 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             rawItems: metrics.rawMaterials.totalItems,
             rawInventoryValue: Math.round(metrics.rawMaterials.inventoryValue).toLocaleString(),
             rawLowStockItems: [...metrics.rawMaterials.lowStockItems, ...metrics.rawMaterials.criticalStockItems],
-
-            // Furniture metrics
             furnitureRevenue: Math.round(metrics.furniture.revenue).toLocaleString(),
             furnitureProfit: Math.round(metrics.furniture.profit).toLocaleString(),
             furnitureInventory: metrics.furniture.inventoryCount,
@@ -187,8 +181,6 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
             furnitureItems: metrics.furniture.totalItems,
             furnitureInventoryValue: Math.round(metrics.furniture.inventoryValue).toLocaleString(),
             furnitureLowStockItems: [...metrics.furniture.lowStockItems, ...metrics.furniture.criticalStockItems],
-
-            // Percentages
             rawPercentage: metrics.total.inventoryCount > 0 ?
                 Math.round((metrics.rawMaterials.inventoryCount / metrics.total.inventoryCount) * 100) : 0,
             furniturePercentage: metrics.total.inventoryCount > 0 ?
