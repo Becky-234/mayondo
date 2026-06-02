@@ -36,7 +36,7 @@ const userRoutes = require("./routes/userRoutes");
 
 //2.INSTANTIATIONS
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
 
 // TRUST PROXY - Required for sessions on Render
 app.set('trust proxy', 1);
