@@ -16,10 +16,10 @@ const ensureAuthenticated = (req, res, next) => {
 const ensureAgent = (req, res, next) => {
   console.log("Agent Check:");
 
-  const user = req.user;  // CHANGE THIS - use req.user, not req.session.user
+  const user = req.user;
   console.log("  User role:", user ? user.role : "No user");
 
-  if (user && (user.role === "sales_agent" || user.role === "manager")) {
+  if (user && (user.role === "sales_agent" || user.role === "manager" || user.role === "Manager")) {
     console.log("User has agent/manager access");
     return next();
   }
@@ -34,27 +34,34 @@ const ensureAgent = (req, res, next) => {
 
 const ensureManager = (req, res, next) => {
   console.log("Manager Check:");
+  console.log("   User role:", req.user?.role);
+  console.log("   User isManager:", req.user?.isManager);
 
-  const user = req.user;  // CHANGE THIS - use req.user
-  console.log("   User role:", user ? user.role : "No user");
-  console.log("   User isManager:", user ? user.isManager : "No user");
+  const user = req.user;
 
-  if (user && user.role === "manager") {
-    console.log("User is manager");
+  // Check MULTIPLE conditions for manager (case-insensitive)
+  if (user && (
+    user.role === "manager" ||
+    user.role === "Manager" ||
+    user.isManager === true ||
+    (user.role && user.role.toLowerCase() === "manager")
+  )) {
+    console.log("✅ User is manager - allowing access to dashboard");
     return next();
   }
 
-  console.log("User is NOT manager - redirecting to landing page");
+  console.log("❌ User is NOT manager - redirecting to landing page");
+  console.log("   User role was:", user?.role);
   res.redirect("/index");
 };
 
 const ensureSalesAgent = (req, res, next) => {
   console.log("Sales Agent Check:");
 
-  const user = req.user;  // CHANGE THIS - use req.user
+  const user = req.user;
   console.log("   User role:", user ? user.role : "No user");
 
-  if (user && user.role === "sales_agent") {
+  if (user && (user.role === "sales_agent" || user.role === "Sales_Agent")) {
     console.log("User is sales agent");
     return next();
   }
