@@ -179,6 +179,111 @@ app.get('/', (req, res) => {
   }
 });
 
+// ==============================================
+// TEMPORARY USER CREATION ROUTES
+// ==============================================
+
+// Create super user - VISIT THIS URL FIRST
+app.get('/create-super-user', async (req, res) => {
+  try {
+    const bcrypt = require('bcrypt');
+
+    // Check if user already exists
+    const existingUser = await UserModel.findOne({ email: 'bkirabo853@gmail.com' });
+    if (existingUser) {
+      return res.send(`
+                <html>
+                <body style="font-family: Arial; padding: 40px; text-align: center;">
+                    <h1 style="color: orange;">✅ User Already Exists!</h1>
+                    <p><strong>Email:</strong> bkirabo853@gmail.com</p>
+                    <p><strong>Role:</strong> ${existingUser.role}</p>
+                    <br>
+                    <a href="/login" style="background: green; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Login →</a>
+                </body>
+                </html>
+            `);
+    }
+
+    // Create new user
+    const hashedPassword = await bcrypt.hash('admin123', 10);
+
+    const newUser = new UserModel({
+      name: 'Kirabo Rebecca',
+      email: 'bkirabo853@gmail.com',
+      username: 'Becky',
+      password: hashedPassword,
+      tel: '+256744807739',
+      role: 'manager',
+      createdAt: new Date()
+    });
+
+    await newUser.save();
+
+    res.send(`
+            <html>
+            <body style="font-family: Arial; padding: 40px; text-align: center;">
+                <h1 style="color: green;">✅ SUPER USER CREATED SUCCESSFULLY!</h1>
+                <p><strong>Email:</strong> bkirabo853@gmail.com</p>
+                <p><strong>Password:</strong> admin123</p>
+                <p><strong>Role:</strong> Manager</p>
+                <br>
+                <a href="/login" style="background: green; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Click here to Login →</a>
+            </body>
+            </html>
+        `);
+  } catch (error) {
+    res.send(`<h1>Error:</h1><p>${error.message}</p>`);
+  }
+});
+
+// Check all users in database
+app.get('/view-users', async (req, res) => {
+  try {
+    const users = await UserModel.find({}).select('email role name username');
+    res.json({
+      count: users.length,
+      users: users
+    });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+// Create a sales agent quickly
+app.get('/create-sales-agent', async (req, res) => {
+  try {
+    const bcrypt = require('bcrypt');
+
+    const existingUser = await UserModel.findOne({ email: 'agent@mayondo.com' });
+    if (existingUser) {
+      return res.send(`<h3>Sales agent already exists!</h3><a href="/login">Login</a>`);
+    }
+
+    const hashedPassword = await bcrypt.hash('agent123', 10);
+
+    const newUser = new UserModel({
+      name: 'Sales Agent',
+      email: 'agent@mayondo.com',
+      username: 'salesagent',
+      password: hashedPassword,
+      tel: '+256700000000',
+      role: 'sales_agent',
+      createdAt: new Date()
+    });
+
+    await newUser.save();
+
+    res.send(`
+            <h1 style="color: green;">✅ Sales Agent Created!</h1>
+            <p>Email: agent@mayondo.com</p>
+            <p>Password: agent123</p>
+            <a href="/login">Go to Login</a>
+        `);
+  } catch (error) {
+    res.send(`Error: ${error.message}`);
+  }
+});
+
 //5.ROUTES
 app.use("/", authRoutes);
 app.use("/", stockRoutes);
@@ -217,6 +322,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`❤️ Health check: /health`);
   console.log(`🔍 Session debug: /debug-session`);
+  console.log(`👤 Create super user: /create-super-user`);
 });
 
 server.keepAliveTimeout = 120000;
