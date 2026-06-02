@@ -4,7 +4,6 @@ block styles
   link(rel='stylesheet' href='../css/dashboard.css')
 
 block content
-  include sidebar.pug
   main.main-content
     .dashboard-header
       .header-content
@@ -29,9 +28,6 @@ block content
               button.action-btn.messages
                 i.fas.fa-envelope
                 span.badge 5
-              //- a.logoutBtn(href="/logout")
-              //-   i.fas.fa-sign-out-alt
-              //-   span Logout
 
     .dashboard-scroll-content
       .dashboarBody
