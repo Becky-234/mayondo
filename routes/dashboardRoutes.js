@@ -2,18 +2,19 @@ const express = require('express');
 const router = express.Router();
 const StockModel = require("../models/stockModel");
 const SalesModel = require("../models/salesModel");
-const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
+const { ensureAuthenticated, ensureManager } = require("./authMiddleware");  // ← FIXED PATH
 
 // Dashboard Page with Product Type Separation
 router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) => {
     try {
-        const currentUser = req.session.user || req.user;
+        const currentUser = req.user;  // ← USE req.user, not req.session.user
 
         if (!currentUser) {
             console.log("No user found in session");
             return res.redirect('/login');
         }
 
+        // Rest of your code remains the same...
         // Fetching all stock items
         const stockItems = await StockModel.find({});
 
@@ -194,7 +195,8 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
                 Math.round((metrics.furniture.inventoryCount / metrics.total.inventoryCount) * 100) : 0
         };
 
-        console.log("Dashboard stock warnings (based on totals):", {
+        console.log("Dashboard accessed by:", currentUser.email);
+        console.log("Dashboard stock warnings:", {
             totalWarnings: totalAllWarnings,
             criticalItems: metrics.total.criticalStockItems.length,
             lowItems: metrics.total.lowStockItems.length
@@ -207,7 +209,7 @@ router.get('/dashboard', ensureAuthenticated, ensureManager, async (req, res) =>
 
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
-        const currentUser = req.session.user || req.user;
+        const currentUser = req.user;
         res.render('dashboard', {
             currentUser: currentUser,
             dashboardData: getDefaultDashboardData()
