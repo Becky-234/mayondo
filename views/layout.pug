@@ -43,6 +43,12 @@ html
         justify-content: space-between;
         padding: 20px;
         border-bottom: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s;
+      }
+      
+      .side-menu-container.collapsed .logo-menu {
+        justify-content: center;
+        padding: 20px 0;
       }
       
       .logo-menu .logo {
@@ -50,18 +56,21 @@ html
         color: #fff;
         font-weight: 700;
         white-space: nowrap;
-        overflow: hidden;
-        transition: opacity 0.3s;
+        transition: all 0.3s;
       }
       
       .side-menu-container.collapsed .logo-menu .logo {
-        opacity: 0;
+        display: none;
       }
       
       .logo-menu .fa-bars {
         font-size: 25px;
         color: #fff;
         cursor: pointer;
+      }
+      
+      .side-menu-container.collapsed .logo-menu .fa-bars {
+        margin: 0 auto;
       }
       
       .list {
@@ -73,7 +82,8 @@ html
         margin: 5px 0;
       }
       
-      .list-item a {
+      /* Normal state - expanded */
+      .side-menu-container .list-item a {
         display: flex;
         align-items: center;
         padding: 12px 20px;
@@ -84,31 +94,37 @@ html
         border-radius: 6px;
       }
       
-      .list-item a:hover {
-        background: rgba(255,255,255,0.2);
-        padding-left: 25px;
-      }
-      
-      .list-item a i {
+      .side-menu-container .list-item a i {
         width: 25px;
         font-size: 18px;
+        text-align: center;
       }
       
-      .list-item a .link-name {
-        white-space: nowrap;
-        transition: opacity 0.3s;
+      /* Collapsed state */
+      .side-menu-container.collapsed .list-item a {
+        justify-content: center;
+        padding: 12px 0;
+      }
+      
+      .side-menu-container.collapsed .list-item a i {
+        margin: 0;
+        font-size: 22px;
       }
       
       .side-menu-container.collapsed .list-item a .link-name {
         display: none;
       }
       
-      .side-menu-container.collapsed .list-item a {
-        justify-content: center;
-        padding: 12px;
+      .list-item a:hover {
+        background: rgba(255,255,255,0.2);
+        padding-left: 25px;
       }
       
-      /* MAIN CONTENT - SCROLLING FIXED */
+      .side-menu-container.collapsed .list-item a:hover {
+        padding-left: 0;
+      }
+      
+      /* Main Content */
       .main-content {
         flex: 1;
         padding: 20px;
