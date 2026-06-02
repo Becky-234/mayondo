@@ -49,6 +49,7 @@ if (!process.env.MONGODB_URL) {
   console.error("FATAL: MONGODB_URL environment variable not set");
   process.exit(1);
 }
+
 mongoose.connect(process.env.MONGODB_URL, {
   tls: true,
   tlsAllowInvalidCertificates: true,
@@ -81,6 +82,7 @@ if (!sessionSecret) {
   console.error("FATAL: SESSION_SECRET environment variable not set");
   process.exit(1);
 }
+
 app.use(
   expressSession({
     name: 'mwf.sid',
@@ -90,7 +92,7 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: false,
+      secure: false, // Set to true if using HTTPS only
       httpOnly: true,
       sameSite: 'lax'
     },
@@ -141,8 +143,22 @@ passport.deserializeUser(async (id, done) => {
 // Make currentUser available to all templates
 app.use((req, res, next) => {
   res.locals.currentUser = req.user || null;
-  console.log('Current User Available:', !!res.locals.currentUser);
+  // Only log in development to avoid excessive logs
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('Current User Available:', !!res.locals.currentUser);
+  }
   next();
+});
+
+// ==============================================
+// HEALTH CHECK ENDPOINTS - REQUIRED FOR RENDER
+// ==============================================
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+app.get('/healthz', (req, res) => {
+  res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
 // DEFAULT ROOT ROUTE
@@ -174,4 +190,26 @@ app.use((err, req, res, next) => {
   res.status(500).send('Internal Server Error');
 });
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+// ==============================================
+// START SERVER WITH CORRECT BINDING FOR RENDER
+// ==============================================
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Health check available at /health`);
+});
+
+// Increase timeouts to prevent 502 errors on Render
+server.keepAliveTimeout = 120000; // 120 seconds
+server.headersTimeout = 120000; // 120 seconds
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, closing server...');
+  server.close(() => {
+    console.log('Server closed');
+    mongoose.connection.close(false, () => {
+      console.log('MongoDB connection closed');
+      process.exit(0);
+    });
+  });
+});
