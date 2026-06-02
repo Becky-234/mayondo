@@ -31,6 +31,7 @@ html
         color: white;
         z-index: 1000;
         transition: all 0.3s;
+        overflow-y: auto;
       }
       
       .logo-menu {
@@ -88,13 +89,20 @@ html
         font-size: 14px;
       }
       
-      /* Main Content */
+      /* Main Content - THIS IS THE FIX */
       .main-content {
-        margin-left: 260px;
+        margin-left: 260px;  /* Same width as sidebar */
         padding: 20px;
         min-height: 100vh;
+        width: calc(100% - 260px);
       }
       
+      /* For pages that don't have sidebar (like login page) */
+      body:has(.side-menu-container) .main-content {
+        margin-left: 260px;
+      }
+      
+      /* Responsive */
       @media (max-width: 768px) {
         .side-menu-container {
           width: 70px;
@@ -107,7 +115,69 @@ html
         }
         .main-content {
           margin-left: 70px;
+          width: calc(100% - 70px);
         }
+      }
+      
+      /* Additional styles for dashboard cards */
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -10px;
+      }
+      
+      .col-md-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
+        padding: 0 10px;
+        box-sizing: border-box;
+      }
+      
+      .dash-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      .card-body {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      
+      .card-icon i {
+        font-size: 40px;
+        color: #1a1a2e;
+      }
+      
+      .card-content {
+        flex: 1;
+      }
+      
+      .card-title {
+        margin: 0 0 5px 0;
+        font-size: 14px;
+        color: #666;
+      }
+      
+      .card-text {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+      
+      .alert-section {
+        margin-top: 20px;
+      }
+      
+      footer {
+        margin-top: 40px;
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #ddd;
       }
     block styles
 
