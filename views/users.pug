@@ -1,111 +1,111 @@
 extends layout.pug 
+
 block styles
   link(rel="stylesheet", href="/css/user.css")  
+
 block content 
-  div
-    // SUCCESS MODAL
-    if success
-      .modal.fade.show(tabindex='-1', style='display: block; background-color: rgba(0,0,0,0.5);')
-        .modal-dialog.modal-dialog-centered
-          .modal-content
-            .modal-header.bg-success.text-white
-              h5.modal-title
-                i.fas.fa-check-circle.me-2
-                | Success!
-              button.btn-close(type='button', onclick="closeMessageModal()")
-            .modal-body
-              p #{success}
-            .modal-footer
-              button.btn.btn-success(type='button', onclick="closeMessageModal()") OK
-
-    // ERROR MODAL
-    if error
-      .modal.fade.show(tabindex='-1', style='display: block; background-color: rgba(0,0,0,0.5);')
-        .modal-dialog.modal-dialog-centered
-          .modal-content
-            .modal-header.bg-danger.text-white
-              h5.modal-title
-                i.fas.fa-exclamation-circle.me-2
-                | Error!
-              button.btn-close(type='button', onclick="closeMessageModal()")
-            .modal-body
-              p #{error}
-            .modal-footer
-              button.btn.btn-danger(type='button', onclick="closeMessageModal()") OK
-
-    // DELETE CONFIRMATION MODAL
-    #deleteConfirmationModal.modal.fade(tabindex='-1', aria-labelledby='deleteConfirmationModalLabel', aria-hidden='true')
+  // SUCCESS MODAL
+  if success
+    .modal.fade.show(tabindex='-1', style='display: block; background-color: rgba(0,0,0,0.5);')
       .modal-dialog.modal-dialog-centered
         .modal-content
-          .modal-header.bg-warning.text-dark
-            h5#deleteConfirmationModalLabel.modal-title
-              i.fas.fa-exclamation-triangle.me-2
-              | Confirm Deletion
-            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+          .modal-header.bg-success.text-white
+            h5.modal-title
+              i.fas.fa-check-circle.me-2
+              | Success!
+            button.btn-close(type='button', onclick="closeMessageModal()")
           .modal-body
-            p#deleteModalText Are you sure you want to delete this user?
-            p.text-muted.small This action cannot be undone.
+            p #{success}
           .modal-footer
-            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Cancel
-            button#confirmDeleteBtn.btn.btn-danger(type='button') Delete
+            button.btn.btn-success(type='button', onclick="closeMessageModal()") OK
 
-    // HIDDEN INPUT FOR USER ID
-    input#deleteUserId(type='hidden')
-    
-    .to-do
-      .button-group
-        a#newUser.btns(href="/add")
-          i.fas.fa-user-plus
-          | Add New User
-        a#downloadExcel.btns
-          i.fas.fa-file-excel
-          | Download Excel
-        a#downloadPdf.btns
-          i.fas.fa-file-pdf
-          | Download PDF
-      input#searchUser(type="search", placeholder="Search users...") 
-    
-    .table-container
-      table#usersTable.table-content
-        thead
-          tr
-            th Full Name
-            th Email
-            th Phone Number
-            th NIN
-            th Address
-            th Username 
-            th Password 
-            th Date
-            th Actions 
-        tbody#usersTableBody
-          //- Table body will be populated by JavaScript for pagination
-      
-      //- Pagination Controls
-      .pagination-container
-        .pagination-info
-          span Showing 
-          span#showingStart 0
-          span  to 
-          span#showingEnd 0
-          span  of 
-          span#totalRecords 0
-          span  entries
-        .pagination-controls
-          button#prevPage.pagination-btn(type='button', disabled)
-            i.fas.fa-chevron-left
-            | Previous
-          .pagination-pages
-            //- Page numbers will be dynamically generated here
-          button#nextPage.pagination-btn(type='button', disabled)
-            | Next
-            i.fas.fa-chevron-right
-    
-    h5#notFound Not Found
+  // ERROR MODAL
+  if error
+    .modal.fade.show(tabindex='-1', style='display: block; background-color: rgba(0,0,0,0.5);')
+      .modal-dialog.modal-dialog-centered
+        .modal-content
+          .modal-header.bg-danger.text-white
+            h5.modal-title
+              i.fas.fa-exclamation-circle.me-2
+              | Error!
+            button.btn-close(type='button', onclick="closeMessageModal()")
+          .modal-body
+            p #{error}
+          .modal-footer
+            button.btn.btn-danger(type='button', onclick="closeMessageModal()") OK
 
-    footer
-      p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
-      p Designed By Kirabo Rebecca
+  // DELETE CONFIRMATION MODAL
+  #deleteConfirmationModal.modal.fade(tabindex='-1', aria-labelledby='deleteConfirmationModalLabel', aria-hidden='true')
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header.bg-warning.text-dark
+          h5#deleteConfirmationModalLabel.modal-title
+            i.fas.fa-exclamation-triangle.me-2
+            | Confirm Deletion
+          button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+        .modal-body
+          p#deleteModalText Are you sure you want to delete this user?
+          p.text-muted.small This action cannot be undone.
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Cancel
+          button#confirmDeleteBtn.btn.btn-danger(type='button') Delete
+
+  // HIDDEN INPUT FOR USER ID
+  input#deleteUserId(type='hidden')
+  
+  .to-do
+    .button-group
+      a#newUser.btns(href="/addUser")
+        i.fas.fa-user-plus
+        | Add New User
+      a#downloadExcel.btns
+        i.fas.fa-file-excel
+        | Download Excel
+      a#downloadPdf.btns
+        i.fas.fa-file-pdf
+        | Download PDF
+    input#searchUser(type="search", placeholder="Search users...") 
+  
+  .table-container
+    table#usersTable.table-content
+      thead
+        tr
+          th Full Name
+          th Email
+          th Phone Number
+          th NIN
+          th Address
+          th Username 
+          th Date
+          th Actions 
+      tbody#usersTableBody
+        //- Table body will be populated by JavaScript for pagination
+    
+    //- Pagination Controls
+    .pagination-container
+      .pagination-info
+        span Showing 
+        span#showingStart 0
+        span  to 
+        span#showingEnd 0
+        span  of 
+        span#totalRecords 0
+        span  entries
+      .pagination-controls
+        button#prevPage.pagination-btn(type='button', disabled)
+          i.fas.fa-chevron-left
+          | Previous
+        .pagination-pages
+          //- Page numbers will be dynamically generated here
+        button#nextPage.pagination-btn(type='button', disabled)
+          | Next
+          i.fas.fa-chevron-right
+  
+  h5#notFound Not Found
+
+  footer
+    p © 2025 Mayondo Wood & Furniture Ltd. All rights reserved.
+    p Designed By Kirabo Rebecca
 
   script(src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js")
   script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
@@ -132,7 +132,7 @@ block content
       tbody.innerHTML = '';
       
       if (pageData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center;">No users found</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center;">No users found</td></tr>`;
         document.getElementById('notFound').style.display = 'block';
       } else {
         document.getElementById('notFound').style.display = 'none';
@@ -146,10 +146,9 @@ block content
           row.insertCell(3).textContent = user.nin || '';
           row.insertCell(4).textContent = user.address || '';
           row.insertCell(5).textContent = user.username || '';
-          row.insertCell(6).textContent = user.password || '';
-          row.insertCell(7).textContent = user.date ? new Date(user.date).toLocaleDateString() : '';
+          row.insertCell(6).textContent = user.date ? new Date(user.date).toLocaleDateString() : '';
           
-          const actionsCell = row.insertCell(8);
+          const actionsCell = row.insertCell(7);
           actionsCell.className = 'actions';
           
           // Edit button
@@ -205,7 +204,6 @@ block content
         return;
       }
       
-      // Determine which page numbers to show
       let startPage = Math.max(1, currentPage - 2);
       let endPage = Math.min(totalPages, startPage + 4);
       
@@ -213,7 +211,6 @@ block content
         startPage = Math.max(1, endPage - 4);
       }
       
-      // First page button
       if (startPage > 1) {
         const firstBtn = document.createElement('button');
         firstBtn.className = 'pagination-num';
@@ -229,7 +226,6 @@ block content
         }
       }
       
-      // Page number buttons
       for (let i = startPage; i <= endPage; i++) {
         const pageBtn = document.createElement('button');
         pageBtn.className = 'pagination-num';
@@ -239,7 +235,6 @@ block content
         paginationPages.appendChild(pageBtn);
       }
       
-      // Last page button
       if (endPage < totalPages) {
         if (endPage < totalPages - 1) {
           const ellipsis = document.createElement('span');
@@ -256,7 +251,6 @@ block content
       }
     }
     
-    // Go to specific page
     function goToPage(page) {
       const totalPages = Math.ceil(filteredData.length / rowsPerPage);
       if (page < 1 || page > totalPages) return;
@@ -264,7 +258,6 @@ block content
       renderTable();
     }
     
-    // Search functionality
     function applySearch() {
       const searchTerm = document.getElementById('searchUser').value.toLowerCase();
       
@@ -284,7 +277,6 @@ block content
       renderTable();
     }
     
-    // Show delete confirmation modal
     function showDeleteModal(userId, userName) {
       currentDeleteId = userId;
       currentDeleteName = userName;
@@ -296,11 +288,10 @@ block content
       modal.show();
     }
     
-    // Close message modal
     function closeMessageModal() {
       const modal = document.querySelector('.modal.show');
       if (modal) modal.remove();
-      window.location.href = '/users';
+      window.location.href = '/usersList';
     }
     
     // Event listeners
@@ -315,21 +306,12 @@ block content
       if (currentPage < totalPages) goToPage(currentPage + 1);
     });
     
-    // Confirm delete button
     document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
       if (currentDeleteId) {
-        // Create form and submit to delete user
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/deleteUser/${currentDeleteId}`;
         form.style.display = 'inline';
-        
-        const csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = '_csrf';
-        csrfInput.value = '!{csrfToken}';
-        form.appendChild(csrfInput);
-        
         document.body.appendChild(form);
         form.submit();
       }
