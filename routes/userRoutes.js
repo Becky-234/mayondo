@@ -3,6 +3,11 @@ const router = express.Router();
 const UserModel = require("../models/userModel");
 const { ensureAuthenticated, ensureManager } = require("../middleware/auth")
 
+// Redirect from old /add to /addUser (FIX FOR THE 404 ERROR)
+router.get("/add", ensureAuthenticated, ensureManager, (req, res) => {
+  res.redirect("/addUser");
+});
+
 // List users (only sales agents)
 router.get("/usersList", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
@@ -23,13 +28,13 @@ router.get("/usersList", ensureAuthenticated, ensureManager, async (req, res) =>
   }
 });
 
-// Show add-user form - FIXED: change from /add to /addUser
+// Show add-user form
 router.get("/addUser", ensureAuthenticated, ensureManager, (req, res) => {
   const error = req.query.error;
   res.render("addUser", { error, currentUser: req.user });
 });
 
-// Handle add-user form - FIXED: change from /add to /addUser
+// Handle add-user form
 router.post("/addUser", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
     console.log("Received form data:", req.body);
@@ -58,7 +63,7 @@ router.post("/addUser", ensureAuthenticated, ensureManager, async (req, res) => 
       return res.redirect("/addUser?error=" + encodeURIComponent("User with this email or username already exists"));
     }
 
-    // Create new sales agent - password will be hashed by the model
+    // Create new sales agent
     const newUser = new UserModel({
       name,
       email,
@@ -66,7 +71,7 @@ router.post("/addUser", ensureAuthenticated, ensureManager, async (req, res) => 
       nin,
       address,
       username,
-      password, // Store plain password - model will hash it
+      password,
       role: 'sales_agent',
       date: date
     });
@@ -120,7 +125,6 @@ router.post("/editUser/:id", ensureAuthenticated, ensureManager, async (req, res
   try {
     const { name, email, tel, nin, address, username, password, confirmPassword, date } = req.body;
 
-    // Check if passwords are provided and match
     if (password && password !== confirmPassword) {
       return res.redirect(`/editUser/${req.params.id}?error=` + encodeURIComponent("Passwords do not match"));
     }
@@ -135,7 +139,6 @@ router.post("/editUser/:id", ensureAuthenticated, ensureManager, async (req, res
       date
     };
 
-    // Only update password if provided
     if (password) {
       updateData.password = password;
     }
