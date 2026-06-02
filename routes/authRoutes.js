@@ -1,17 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const passport = require("passport");  // <-- ADDED
 const { managerProfile } = require("../configs/managerConfigs");
 const UserModel = require("../models/userModel");
 
-// Getting the Login form
+// GET login page
 router.get("/login", (req, res) => {
     res.render("login", { title: "Login page" });
 });
 
-// Use Passport's authenticate middleware, but with custom verification
-router.post("/login", async (req, res, next) => {
+// POST login - uses Passport's req.login
+router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -24,31 +23,24 @@ router.post("/login", async (req, res, next) => {
     const managerEmail = process.env.MANAGER_EMAIL;
     const managerPassword = process.env.MANAGER_PASSWORD;
 
-    console.log("Login Debug:", { email });
-
     try {
         let user = null;
 
-        // 1. Check manager
+        // 1. Check manager credentials
         if (email === managerEmail && password === managerPassword) {
-            // Create a user-like object for manager (must have an _id)
             user = {
                 _id: new mongoose.Types.ObjectId(),
                 email: email,
                 username: managerProfile.username,
                 name: managerProfile.fname,
-                ...managerProfile,
                 role: 'manager',
                 isManager: true
             };
             console.log("Manager authenticated");
         }
-        // 2. Check sales agent from database
+        // 2. Check sales agent in database
         else {
-            const salesAgent = await UserModel.findOne({
-                email: email,
-                role: 'sales_agent'
-            });
+            const salesAgent = await UserModel.findOne({ email: email, role: 'sales_agent' });
             if (salesAgent && password === salesAgent.password) {
                 user = {
                     _id: salesAgent._id,
@@ -71,7 +63,7 @@ router.post("/login", async (req, res, next) => {
             });
         }
 
-        // Use Passport's req.login to properly establish session
+        // Use Passport's req.login to establish session
         req.login(user, (err) => {
             if (err) {
                 console.error("req.login error:", err);
@@ -81,7 +73,6 @@ router.post("/login", async (req, res, next) => {
                 });
             }
             console.log("Login successful - redirecting");
-            // Redirect based on role
             if (user.role === 'manager') {
                 return res.redirect('/dashboard');
             } else {
@@ -97,24 +88,22 @@ router.post("/login", async (req, res, next) => {
     }
 });
 
-// Test route
+// Debug routes
 router.get("/test-env", (req, res) => {
     res.json({
         managerEmail: process.env.MANAGER_EMAIL || "NOT SET",
         hasManagerPassword: !!process.env.MANAGER_PASSWORD,
-        managerPasswordLength: process.env.MANAGER_PASSWORD ? process.env.MANAGER_PASSWORD.length : 0
     });
 });
 
 router.get("/debug-auth", (req, res) => {
     res.json({
-        reqUser: req.user,
-        reqSessionUser: req.session?.user,
-        isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : 'N/A'
+        user: req.user ? { email: req.user.email, role: req.user.role } : null,
+        isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false
     });
 });
 
-// Logout (both POST and GET)
+// Logout handlers
 router.post("/logout", (req, res) => {
     req.logout((err) => {
         if (err) {
@@ -123,7 +112,7 @@ router.post("/logout", (req, res) => {
         }
         req.session.destroy((err) => {
             if (err) console.error("Session destroy error:", err);
-            res.clearCookie('mwf.sid'); // match the cookie name in server.js
+            res.clearCookie('mwf.sid');
             res.redirect("/login");
         });
     });
