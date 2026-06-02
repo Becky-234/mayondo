@@ -10,6 +10,7 @@ const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
 const moment = require("moment");
 const methodOverride = require('method-override');
+const LocalStrategy = require('passport-local').Strategy; // <-- ADDED
 
 const UserModel = require("./models/userModel");
 
@@ -21,7 +22,6 @@ const productRoutes = require("./routes/productRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const indexRoutes = require("./routes/indexRoutes");
 const userRoutes = require("./routes/userRoutes");
-// const settingsRoutes = require("./routes/settingsRoutes");
 
 //2.INSTANTIATIONS
 const app = express();
@@ -36,7 +36,7 @@ app.locals.moment = moment;
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URL, {
   tls: true,
-  tlsAllowInvalidCertificates: true,   // Bypass SSL validation for Render
+  tlsAllowInvalidCertificates: true,
   retryWrites: true,
   w: 'majority'
 })
@@ -60,7 +60,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// FIXED Session configuration for Render (secure: false allows cookie over HTTP/HTTPS behind proxy)
+// Session configuration (fixed for Render)
 app.use(
   expressSession({
     name: 'mwf.sid',
@@ -70,18 +70,36 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: false,           // CHANGE: false for Render (proxy breaks secure detection)
+      secure: false,          // Allows cookie over HTTPS behind proxy
       httpOnly: true,
       sameSite: 'lax'
     },
   })
 );
 
-// Passport configuration
+// Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Manual Passport configuration
+// ---- LOCAL STRATEGY (ADD THIS) ----
+passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+  try {
+    const user = await UserModel.findOne({ email: email });
+    if (!user) {
+      return done(null, false, { message: 'Incorrect email or password.' });
+    }
+    // Compare plain text passwords (for development only – use bcrypt in production)
+    if (user.password !== password) {
+      return done(null, false, { message: 'Incorrect email or password.' });
+    }
+    return done(null, user);
+  } catch (err) {
+    return done(err);
+  }
+}));
+// ---------------------------------
+
+// Serialization/Deserialization (already correct)
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
@@ -95,10 +113,6 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// IMPORTANT: Your LocalStrategy must be defined somewhere (likely in authRoutes)
-// Ensure that in authRoutes you have passport.use(new LocalStrategy(...)) and that
-// the login route calls passport.authenticate().
-
 // Make currentUser available to all templates
 app.use((req, res, next) => {
   if (req.user) {
@@ -109,7 +123,6 @@ app.use((req, res, next) => {
     res.locals.currentUser = null;
   }
 
-  // Optional: reduce logging after confirming it works
   console.log('Current User Available:', !!res.locals.currentUser);
   console.log('User from session:', req.session?.user?.email);
   console.log('User from Passport:', req.user?.email);
@@ -124,6 +137,5 @@ app.use("/", productRoutes);
 app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
 app.use("/", userRoutes);
-// app.use("/", settingsRoutes);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
