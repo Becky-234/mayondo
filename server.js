@@ -215,15 +215,15 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 });
 
 // Increase timeouts to prevent 502 errors on Render
-server.keepAliveTimeout = 120000; // 120 seconds
-server.headersTimeout = 120000; // 120 seconds
+server.keepAliveTimeout = 120000;
+server.headersTimeout = 120000;
 
-// Handle graceful shutdown - FIXED
+// Handle graceful shutdown - CORRECTED FOR MONGOOSE 7+
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, closing server...');
   server.close(() => {
     console.log('Server closed');
-    // FIX: Use promises instead of callback (mongoose 6+)
+    // Use promise syntax - NO CALLBACK
     mongoose.connection.close()
       .then(() => {
         console.log('MongoDB connection closed');
