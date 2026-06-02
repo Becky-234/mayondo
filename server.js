@@ -76,7 +76,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// SESSION CONFIGURATION
+// SESSION CONFIGURATION - FIXED FOR RENDER
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
   console.error("FATAL: SESSION_SECRET environment variable not set");
@@ -87,12 +87,15 @@ app.use(
   expressSession({
     name: 'mwf.sid',
     secret: sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
+    resave: true,        // CHANGED: false -> true
+    saveUninitialized: true,  // CHANGED: false -> true
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URL,
+      touchAfter: 24 * 3600 // lazy session update (optional)
+    }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: false, // Set to true if using HTTPS only
+      secure: true,      // CHANGED: false -> true (Render uses HTTPS)
       httpOnly: true,
       sameSite: 'lax'
     },
@@ -179,6 +182,19 @@ app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
 app.use("/", userRoutes);
 
+// Session debug middleware (optional - remove after testing)
+app.use((req, res, next) => {
+  if (req.path === '/debug-session') {
+    return res.json({
+      sessionID: req.sessionID,
+      session: req.session,
+      user: req.user,
+      isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false
+    });
+  }
+  next();
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).send('Page not found');
@@ -202,14 +218,20 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 server.keepAliveTimeout = 120000; // 120 seconds
 server.headersTimeout = 120000; // 120 seconds
 
-// Handle graceful shutdown
+// Handle graceful shutdown - FIXED
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, closing server...');
   server.close(() => {
     console.log('Server closed');
-    mongoose.connection.close(false, () => {
-      console.log('MongoDB connection closed');
-      process.exit(0);
-    });
+    // FIX: Use promises instead of callback (mongoose 6+)
+    mongoose.connection.close()
+      .then(() => {
+        console.log('MongoDB connection closed');
+        process.exit(0);
+      })
+      .catch(err => {
+        console.error('Error closing MongoDB:', err);
+        process.exit(1);
+      });
   });
 });
