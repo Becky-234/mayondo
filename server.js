@@ -101,10 +101,10 @@ app.use(expressSession({
     secure: false,
     httpOnly: true,
     sameSite: 'lax',
-    path: '/'           // ← ADD THIS LINE
+    path: '/'
   },
   proxy: true,
-  rolling: true         // ← ADD THIS LINE
+  rolling: true
 }));
 
 // Session debug middleware
@@ -132,6 +132,7 @@ passport.serializeUser((user, done) => {
 
 // Deserialization
 passport.deserializeUser(async (id, done) => {
+  console.log("🔓 Deserialize called with ID:", id);
   try {
     if (typeof id === 'string' && id.startsWith('manager_')) {
       const email = id.replace('manager_', '');
@@ -144,12 +145,15 @@ passport.deserializeUser(async (id, done) => {
         isManager: true,
         ...managerProfile
       };
+      console.log("🔓 Deserialized manager:", email);
       return done(null, managerUser);
     }
     const user = await UserModel.findById(id);
     if (!user) {
+      console.log("🔓 Deserialize: User not found for ID:", id);
       return done(null, false);
     }
+    console.log("🔓 Deserialized user:", user.email);
     done(null, user);
   } catch (error) {
     console.error("Deserialize error:", error);
@@ -157,7 +161,48 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// Make currentUser available to all templates
+// ==============================================
+// MANUAL USER RESTORE - FIX FOR RENDER
+// ==============================================
+app.use(async (req, res, next) => {
+  // If session has passport user but req.user is not set
+  if (req.session?.passport?.user && !req.user) {
+    console.log("🔄 Manual restore triggered for:", req.session.passport.user);
+
+    const userId = req.session.passport.user;
+
+    if (typeof userId === 'string' && userId.startsWith('manager_')) {
+      const email = userId.replace('manager_', '');
+      req.user = {
+        _id: 'manager_' + email,
+        email: email,
+        username: managerProfile.username,
+        name: managerProfile.fname,
+        role: 'manager',
+        isManager: true,
+        ...managerProfile
+      };
+      req.isAuthenticated = () => true;
+      console.log("✅ Manager manually restored:", email);
+    } else {
+      try {
+        const user = await UserModel.findById(userId);
+        if (user) {
+          req.user = user;
+          req.isAuthenticated = () => true;
+          console.log("✅ User manually restored:", user.email);
+        }
+      } catch (err) {
+        console.error("Manual restore error:", err);
+      }
+    }
+  }
+
+  res.locals.currentUser = req.user || null;
+  next();
+});
+
+// Make currentUser available to all templates (additional)
 app.use((req, res, next) => {
   res.locals.currentUser = req.user || null;
   next();
@@ -194,16 +239,16 @@ app.get('/create-super-user', async (req, res) => {
     const existingUser = await UserModel.findOne({ email: 'bkirabo853@gmail.com' });
     if (existingUser) {
       return res.send(`
-                <html>
-                <body style="font-family: Arial; padding: 40px; text-align: center;">
-                    <h1 style="color: orange;">✅ User Already Exists!</h1>
-                    <p><strong>Email:</strong> bkirabo853@gmail.com</p>
-                    <p><strong>Role:</strong> ${existingUser.role}</p>
-                    <br>
-                    <a href="/login" style="background: green; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Login →</a>
-                </body>
-                </html>
-            `);
+        <html>
+        <body style="font-family: Arial; padding: 40px; text-align: center;">
+          <h1 style="color: orange;">✅ User Already Exists!</h1>
+          <p><strong>Email:</strong> bkirabo853@gmail.com</p>
+          <p><strong>Role:</strong> ${existingUser.role}</p>
+          <br>
+          <a href="/login" style="background: green; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Login →</a>
+        </body>
+        </html>
+      `);
     }
 
     // Create new user
@@ -222,17 +267,17 @@ app.get('/create-super-user', async (req, res) => {
     await newUser.save();
 
     res.send(`
-            <html>
-            <body style="font-family: Arial; padding: 40px; text-align: center;">
-                <h1 style="color: green;">✅ SUPER USER CREATED SUCCESSFULLY!</h1>
-                <p><strong>Email:</strong> bkirabo853@gmail.com</p>
-                <p><strong>Password:</strong> admin123</p>
-                <p><strong>Role:</strong> Manager</p>
-                <br>
-                <a href="/login" style="background: green; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Click here to Login →</a>
-            </body>
-            </html>
-        `);
+      <html>
+      <body style="font-family: Arial; padding: 40px; text-align: center;">
+        <h1 style="color: green;">✅ SUPER USER CREATED SUCCESSFULLY!</h1>
+        <p><strong>Email:</strong> bkirabo853@gmail.com</p>
+        <p><strong>Password:</strong> admin123</p>
+        <p><strong>Role:</strong> Manager</p>
+        <br>
+        <a href="/login" style="background: green; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Click here to Login →</a>
+      </body>
+      </html>
+    `);
   } catch (error) {
     res.send(`<h1>Error:</h1><p>${error.message}</p>`);
   }
@@ -276,11 +321,11 @@ app.get('/create-sales-agent', async (req, res) => {
     await newUser.save();
 
     res.send(`
-            <h1 style="color: green;">✅ Sales Agent Created!</h1>
-            <p>Email: agent@mayondo.com</p>
-            <p>Password: agent123</p>
-            <a href="/login">Go to Login</a>
-        `);
+      <h1 style="color: green;">✅ Sales Agent Created!</h1>
+      <p>Email: agent@mayondo.com</p>
+      <p>Password: agent123</p>
+      <a href="/login">Go to Login</a>
+    `);
   } catch (error) {
     res.send(`Error: ${error.message}`);
   }
