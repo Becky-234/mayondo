@@ -3,36 +3,34 @@ aside.side-menu-container
     h2.logo MWF
     i.fa-solid.fa-bars
   ul.list
-    if currentUser
-      // Check for manager (case-insensitive)
-      if currentUser.role === "manager" || currentUser.role === "Manager" || currentUser.isManager === true
-        li.list-item
-          a(href='/dashboard')
-            i.fa-solid.fa-house
-            span.link-name Dashboard
-      
-      if currentUser.role === "manager" || currentUser.role === "Manager" || currentUser.isManager === true
-        li.list-item
-          a(href='/usersList')
-            i.fa-solid.fa-users
-            span.link-name Users
-      
+    // Manager-only links
+    if currentUser.role === "manager" || currentUser.role === "Manager" || currentUser.isManager === true
       li.list-item
-        a(href='/sales')
-          i.fa-solid.fa-cart-shopping
-          span.link-name Sales
+        a(href='/dashboard')
+          i.fa-solid.fa-house
+          span.link-name Dashboard
       li.list-item
-        a(href='/stock')
-          i.fa-solid.fa-truck
-          span.link-name Stock
-      li.list-item
-        a(href='/products')
-          i.fa-solid.fa-couch
-          span.link-name Products
-      li.list-item
-        a#logoutBtn(href='#', style='cursor: pointer;')
-          i.fa-solid.fa-arrow-right-from-bracket(style='font-size: 25px;')
-          span.link-name Logout
+        a(href='/usersList')
+          i.fa-solid.fa-users
+          span.link-name Users
+    
+    // Common links for all logged-in users
+    li.list-item
+      a(href='/sales')
+        i.fa-solid.fa-cart-shopping
+        span.link-name Sales
+    li.list-item
+      a(href='/stock')
+        i.fa-solid.fa-truck
+        span.link-name Stock
+    li.list-item
+      a(href='/products')
+        i.fa-solid.fa-couch
+        span.link-name Products
+    li.list-item
+      a#logoutBtn(href='#', style='cursor: pointer;')
+        i.fa-solid.fa-arrow-right-from-bracket
+        span.link-name Logout
 
 //- Logout Confirmation Modal
 #logoutConfirmationModal.modal.fade(tabindex='-1', aria-labelledby='logoutConfirmationModalLabel', aria-hidden='true')
@@ -45,7 +43,6 @@ aside.side-menu-container
         button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
       .modal-body
         p Are you sure you want to logout?
-        p.text-muted.small You will be redirected to the login page.
       .modal-footer
         button.btn.btn-secondary(type='button', data-bs-dismiss='modal')
           i.fas.fa-times
@@ -57,7 +54,6 @@ aside.side-menu-container
 script.
   document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutBtn');
-    
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function(e) {
         e.preventDefault();
