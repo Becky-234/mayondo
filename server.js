@@ -76,7 +76,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// ==============================================
 // SESSION CONFIGURATION - FIXED FOR RENDER
+// ==============================================
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
   console.error("FATAL: SESSION_SECRET environment variable not set");
@@ -87,20 +89,28 @@ app.use(
   expressSession({
     name: 'mwf.sid',
     secret: sessionSecret,
-    resave: true,        // CHANGED: false -> true
-    saveUninitialized: true,  // CHANGED: false -> true
+    resave: false,
+    saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URL,
-      touchAfter: 24 * 3600 // lazy session update (optional)
+      mongoUrl: process.env.MONGODB_URL
     }),
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
-      secure: true,      // CHANGED: false -> true (Render uses HTTPS)
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      secure: false,     // CRITICAL: false for Render (HTTPS is terminated at load balancer)
       httpOnly: true,
       sameSite: 'lax'
     },
+    proxy: true,         // CRITICAL: Trust the proxy (Render)
+    rolling: true,       // Reset cookie expiration on each response
   })
 );
+
+// Session debug middleware (helps diagnose session issues)
+app.use((req, res, next) => {
+  console.log("📊 Session ID:", req.sessionID);
+  console.log("👤 User in session:", req.user?.email || 'Not authenticated');
+  next();
+});
 
 // Passport initialization
 app.use(passport.initialize());
@@ -146,10 +156,6 @@ passport.deserializeUser(async (id, done) => {
 // Make currentUser available to all templates
 app.use((req, res, next) => {
   res.locals.currentUser = req.user || null;
-  // Only log in development to avoid excessive logs
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('Current User Available:', !!res.locals.currentUser);
-  }
   next();
 });
 
@@ -182,17 +188,15 @@ app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
 app.use("/", userRoutes);
 
-// Session debug middleware (optional - remove after testing)
-app.use((req, res, next) => {
-  if (req.path === '/debug-session') {
-    return res.json({
-      sessionID: req.sessionID,
-      session: req.session,
-      user: req.user,
-      isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false
-    });
-  }
-  next();
+// Debug session endpoint
+app.get('/debug-session', (req, res) => {
+  res.json({
+    sessionID: req.sessionID,
+    sessionExists: !!req.session,
+    user: req.user ? { email: req.user.email, role: req.user.role } : null,
+    isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
+    cookies: req.headers.cookie || 'No cookies'
+  });
 });
 
 // 404 handler
@@ -210,20 +214,20 @@ app.use((err, req, res, next) => {
 // START SERVER WITH CORRECT BINDING FOR RENDER
 // ==============================================
 const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Health check available at /health`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`❤️ Health check available at /health`);
+  console.log(`🔍 Session debug at /debug-session`);
 });
 
 // Increase timeouts to prevent 502 errors on Render
 server.keepAliveTimeout = 120000;
 server.headersTimeout = 120000;
 
-// Handle graceful shutdown - CORRECTED FOR MONGOOSE 7+
+// Handle graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, closing server...');
   server.close(() => {
     console.log('Server closed');
-    // Use promise syntax - NO CALLBACK
     mongoose.connection.close()
       .then(() => {
         console.log('MongoDB connection closed');
