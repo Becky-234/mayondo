@@ -1,5 +1,7 @@
 //1.DEPENDENCIES
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -28,14 +30,19 @@ const userRoutes = require("./routes/userRoutes");
 
 //2.INSTANTIATIONS
 const app = express();
-const port = 3001;
+const PORT = process.env.PORT || 3001;
 
 
 //3.CONFIGURATIONS
 app.locals.moment = moment;
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URL)
+mongoose.connect(process.env.MONGODB_URL, {
+  tls: true,
+  tlsAllowInvalidCertificates: true,   // Bypass SSL validation for Render
+  retryWrites: true,
+  w: 'majority'
+})
   .then(() => console.log("Successfully connected to MongoDB"))
   .catch(err => console.log(`Connection error: ${err.message}`));
 
@@ -144,4 +151,4 @@ app.use("/", userRoutes);
 // app.use("/", settingsRoutes);
 
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
