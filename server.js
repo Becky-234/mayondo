@@ -60,17 +60,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Session configuration (updated for production)
+// FIXED Session configuration for Render (secure: false allows cookie over HTTP/HTTPS behind proxy)
 app.use(
   expressSession({
     name: 'mwf.sid',
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'fallback-secret-change-this-in-production',
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: 'auto',        // Use HTTPS when proxy indicates it
+      secure: false,           // CHANGE: false for Render (proxy breaks secure detection)
       httpOnly: true,
       sameSite: 'lax'
     },
@@ -95,7 +95,9 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// Your LocalStrategy is commented out – uncomment and implement if needed
+// IMPORTANT: Your LocalStrategy must be defined somewhere (likely in authRoutes)
+// Ensure that in authRoutes you have passport.use(new LocalStrategy(...)) and that
+// the login route calls passport.authenticate().
 
 // Make currentUser available to all templates
 app.use((req, res, next) => {
@@ -107,6 +109,7 @@ app.use((req, res, next) => {
     res.locals.currentUser = null;
   }
 
+  // Optional: reduce logging after confirming it works
   console.log('Current User Available:', !!res.locals.currentUser);
   console.log('User from session:', req.session?.user?.email);
   console.log('User from Passport:', req.user?.email);
