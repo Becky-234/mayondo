@@ -1,64 +1,48 @@
 aside.side-menu-container
   .logo-menu
     h2.logo MWF
-    i.fa-solid.fa-bars
   ul.list
-    // Manager-only links
     if currentUser.role === "manager" || currentUser.role === "Manager" || currentUser.isManager === true
       li.list-item
         a(href='/dashboard')
           i.fa-solid.fa-house
-          span.link-name Dashboard
+          span Dashboard
       li.list-item
         a(href='/usersList')
           i.fa-solid.fa-users
-          span.link-name Users
-    
-    // Common links for all logged-in users
+          span Users
     li.list-item
       a(href='/sales')
         i.fa-solid.fa-cart-shopping
-        span.link-name Sales
+        span Sales
     li.list-item
       a(href='/stock')
         i.fa-solid.fa-truck
-        span.link-name Stock
+        span Stock
     li.list-item
       a(href='/products')
         i.fa-solid.fa-couch
-        span.link-name Products
+        span Products
     li.list-item
-      a#logoutBtn(href='#', style='cursor: pointer;')
-        i.fa-solid.fa-arrow-right-from-bracket
-        span.link-name Logout
+      a#logoutBtn(href='#')
+        i.fa-solid.fa-sign-out-alt
+        span Logout
 
-//- Logout Confirmation Modal
-#logoutConfirmationModal.modal.fade(tabindex='-1', aria-labelledby='logoutConfirmationModalLabel', aria-hidden='true')
+// Logout Modal
+#logoutConfirmationModal.modal.fade
   .modal-dialog.modal-dialog-centered
     .modal-content
-      .modal-header.bg-warning.text-dark
-        h5#logoutConfirmationModalLabel.modal-title
-          i.fas.fa-exclamation-triangle.me-2
-          | Confirm Logout
-        button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+      .modal-header.bg-warning
+        h5.modal-title Confirm Logout
+        button.btn-close(data-bs-dismiss='modal')
       .modal-body
         p Are you sure you want to logout?
       .modal-footer
-        button.btn.btn-secondary(type='button', data-bs-dismiss='modal')
-          i.fas.fa-times
-          | Cancel
-        a#confirmLogoutBtn.btn.btn-danger(href='/logout')
-          i.fas.fa-sign-out-alt
-          | Logout
+        button.btn.btn-secondary(data-bs-dismiss='modal') Cancel
+        a.btn.btn-danger(href='/logout') Logout
 
 script.
-  document.addEventListener('DOMContentLoaded', function() {
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const logoutModal = new bootstrap.Modal(document.getElementById('logoutConfirmationModal'));
-        logoutModal.show();
-      });
-    }
+  document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    new bootstrap.Modal(document.getElementById('logoutConfirmationModal')).show();
   });

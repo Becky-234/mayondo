@@ -17,28 +17,23 @@ html
       
       body {
         background: #f4f6f9;
-        overflow-x: hidden;
       }
       
       /* Sidebar Styles */
       .side-menu-container {
         position: fixed;
-        left: 0;
         top: 0;
-        width: 260px;
-        height: 100%;
+        left: 0;
+        width: 280px;
+        height: 100vh;
         background: #1a1a2e;
         color: white;
         z-index: 1000;
-        transition: all 0.3s;
         overflow-y: auto;
       }
       
       .logo-menu {
         padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         border-bottom: 1px solid rgba(255,255,255,0.1);
       }
       
@@ -48,16 +43,9 @@ html
         color: #fff;
       }
       
-      .logo-menu i {
-        cursor: pointer;
-        font-size: 20px;
-        color: #fff;
-      }
-      
       .list {
         list-style: none;
-        padding: 0;
-        margin-top: 20px;
+        padding: 20px 0;
       }
       
       .list-item {
@@ -70,8 +58,8 @@ html
         padding: 12px 20px;
         color: #ccc;
         text-decoration: none;
-        transition: all 0.3s;
         gap: 12px;
+        transition: all 0.3s;
       }
       
       .list-item a:hover {
@@ -82,24 +70,13 @@ html
       
       .list-item a i {
         width: 20px;
-        font-size: 18px;
       }
       
-      .list-item a span {
-        font-size: 14px;
-      }
-      
-      /* Main Content - THIS IS THE FIX */
+      /* Main Content - THIS IS KEY */
       .main-content {
-        margin-left: 260px;  /* Same width as sidebar */
+        margin-left: 280px;
         padding: 20px;
         min-height: 100vh;
-        width: calc(100% - 260px);
-      }
-      
-      /* For pages that don't have sidebar (like login page) */
-      body:has(.side-menu-container) .main-content {
-        margin-left: 260px;
       }
       
       /* Responsive */
@@ -115,69 +92,7 @@ html
         }
         .main-content {
           margin-left: 70px;
-          width: calc(100% - 70px);
         }
-      }
-      
-      /* Additional styles for dashboard cards */
-      .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin: 0 -10px;
-      }
-      
-      .col-md-3 {
-        flex: 0 0 25%;
-        max-width: 25%;
-        padding: 0 10px;
-        box-sizing: border-box;
-      }
-      
-      .dash-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      }
-      
-      .card-body {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-      }
-      
-      .card-icon i {
-        font-size: 40px;
-        color: #1a1a2e;
-      }
-      
-      .card-content {
-        flex: 1;
-      }
-      
-      .card-title {
-        margin: 0 0 5px 0;
-        font-size: 14px;
-        color: #666;
-      }
-      
-      .card-text {
-        margin: 0;
-        font-size: 24px;
-        font-weight: 600;
-        color: #1a1a2e;
-      }
-      
-      .alert-section {
-        margin-top: 20px;
-      }
-      
-      footer {
-        margin-top: 40px;
-        padding: 20px;
-        text-align: center;
-        border-top: 1px solid #ddd;
       }
     block styles
 
