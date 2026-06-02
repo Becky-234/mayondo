@@ -100,9 +100,11 @@ app.use(expressSession({
     maxAge: 24 * 60 * 60 * 1000,
     secure: false,
     httpOnly: true,
-    sameSite: 'lax'
+    sameSite: 'lax',
+    path: '/'           // ← ADD THIS LINE
   },
-  proxy: true
+  proxy: true,
+  rolling: true         // ← ADD THIS LINE
 }));
 
 // Session debug middleware
