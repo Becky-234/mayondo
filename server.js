@@ -13,6 +13,18 @@ const methodOverride = require('method-override');
 
 const UserModel = require("./models/userModel");
 
+// Import manager profile (do it once at top)
+let managerProfile = {};
+try {
+  const managerConfig = require("./configs/managerConfigs");
+  managerProfile = managerConfig.managerProfile || managerConfig;
+  console.log("Manager profile loaded:", managerProfile?.username);
+} catch (err) {
+  console.error("Failed to load managerConfigs:", err.message);
+  // Provide fallback to avoid crash
+  managerProfile = { username: "manager", fname: "Manager" };
+}
+
 // Import Routes
 const authRoutes = require("./routes/authRoutes");
 const stockRoutes = require("./routes/stockRoutes");
@@ -33,6 +45,10 @@ app.set('trust proxy', 1);
 app.locals.moment = moment;
 
 // MongoDB connection
+if (!process.env.MONGODB_URL) {
+  console.error("FATAL: MONGODB_URL environment variable not set");
+  process.exit(1);
+}
 mongoose.connect(process.env.MONGODB_URL, {
   tls: true,
   tlsAllowInvalidCertificates: true,
@@ -59,17 +75,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// SESSION CONFIGURATION (Fixed for Render)
+// SESSION CONFIGURATION
+const sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret) {
+  console.error("FATAL: SESSION_SECRET environment variable not set");
+  process.exit(1);
+}
 app.use(
   expressSession({
     name: 'mwf.sid',
-    secret: process.env.SESSION_SECRET || 'fallback-secret-change-me',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: false,          // Required for Render
+      secure: false,
       httpOnly: true,
       sameSite: 'lax'
     },
@@ -80,43 +101,39 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Serialization: store only the user's id (or a special marker for manager)
+// Serialization: store user identifier
 passport.serializeUser((user, done) => {
-  // For manager, we store a special string: 'manager_' + their email
   if (user.isManager) {
     return done(null, `manager_${user.email}`);
   }
-  // For normal DB users, store the ObjectId as string
   done(null, user._id.toString());
 });
 
-// Deserialization: retrieve full user object from DB or create manager object
+// Deserialization: reconstruct user object
 passport.deserializeUser(async (id, done) => {
-  // Check if it's a manager marker
-  if (typeof id === 'string' && id.startsWith('manager_')) {
-    const email = id.replace('manager_', '');
-    // Reconstruct manager object (you can fetch from config or env)
-    const managerProfile = require("./configs/managerConfigs").managerProfile;
-    const managerUser = {
-      _id: 'manager_' + email,  // fake ID
-      email: email,
-      username: managerProfile.username,
-      name: managerProfile.fname,
-      ...managerProfile,
-      role: 'manager',
-      isManager: true
-    };
-    return done(null, managerUser);
-  }
-
-  // Otherwise, fetch from MongoDB
   try {
+    // Handle manager
+    if (typeof id === 'string' && id.startsWith('manager_')) {
+      const email = id.replace('manager_', '');
+      const managerUser = {
+        _id: 'manager_' + email,
+        email: email,
+        username: managerProfile.username,
+        name: managerProfile.fname,
+        role: 'manager',
+        isManager: true,
+        ...managerProfile
+      };
+      return done(null, managerUser);
+    }
+    // Regular database user
     const user = await UserModel.findById(id);
     if (!user) {
       return done(null, false);
     }
     done(null, user);
   } catch (error) {
+    console.error("Deserialize error:", error);
     done(error);
   }
 });
@@ -128,7 +145,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ========= DEFAULT ROOT ROUTE =========
+// DEFAULT ROOT ROUTE
 app.get('/', (req, res) => {
   if (req.user) {
     res.redirect('/dashboard');
@@ -146,9 +163,15 @@ app.use("/", dashboardRoutes);
 app.use("/", indexRoutes);
 app.use("/", userRoutes);
 
-// Catch-all 404 handler
+// 404 handler
 app.use((req, res) => {
   res.status(404).send('Page not found');
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).send('Internal Server Error');
 });
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
