@@ -13,6 +13,7 @@ block content
           | #{error}
       
       .input-box
+        i.fas.fa-envelope.input-icon
         input#email(
           type="email", 
           placeholder="Email", 
@@ -20,13 +21,17 @@ block content
           value=email || ""
         )
         span#emailError.error #{emailError || ''}
+      
       .input-box
+        i.fas.fa-lock.input-icon
         input#password(
           type="password", 
           placeholder="Password", 
           name="password"
         )
+        i.fas.fa-eye-slash.toggle-password#togglePassword
         span#passwordError.error #{passwordError || ''}
+      
       br
       br
       .remember-forgot
@@ -39,3 +44,19 @@ block content
       br
 
   script(src="../javascript/login.js")
+  script.
+    // Toggle password visibility
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+      togglePassword.addEventListener('click', function() {
+        // Toggle the type attribute
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        // Toggle the eye icon
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+      });
+    }
