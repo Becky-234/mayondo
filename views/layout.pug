@@ -82,7 +82,6 @@ html
         margin: 5px 0;
       }
       
-      /* Normal state - expanded */
       .side-menu-container .list-item a {
         display: flex;
         align-items: center;
@@ -100,7 +99,6 @@ html
         text-align: center;
       }
       
-      /* Collapsed state */
       .side-menu-container.collapsed .list-item a {
         justify-content: center;
         padding: 12px 0;
@@ -131,9 +129,48 @@ html
         overflow-y: auto;
         height: 100vh;
       }
+
+      /* Floating logout button - ADD THIS */
+      .logout-float {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+      }
+
+      .logout-float .btn-logout {
+        background: #dc3545;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .logout-float .btn-logout:hover {
+        background: #c82333;
+      }
+
+      @media (max-width: 768px) {
+        .logout-float .btn-logout span {
+          display: none;
+        }
+      }
     block styles
 
   body
+    // FLOATING LOGOUT BUTTON - ADD THIS RIGHT AFTER BODY TAG
+    if currentUser
+      .logout-float
+        button#logoutBtn.btn-logout(type='button')
+          i.fa-solid.fa-sign-out-alt
+          span Logout
+
     if currentUser
       aside.side-menu-container
         .logo-menu
@@ -161,15 +198,12 @@ html
             a(href='/products')
               i.fa-solid.fa-couch
               span.link-name Products
-          li.list-item
-            a#logoutBtn(href='#')
-              i.fa-solid.fa-sign-out-alt
-              span.link-name Logout
       .main-content
         block content
     else
       block content
 
+    // Logout Modal
     #logoutConfirmationModal.modal.fade
       .modal-dialog.modal-dialog-centered
         .modal-content
@@ -194,9 +228,10 @@ html
         });
       }
       
-      // Logout functionality
+      // Logout functionality - FIXED
       document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
         e.preventDefault();
-        new bootstrap.Modal(document.getElementById('logoutConfirmationModal')).show();
+        const modal = new bootstrap.Modal(document.getElementById('logoutConfirmationModal'));
+        modal.show();
       });
     block scripts
