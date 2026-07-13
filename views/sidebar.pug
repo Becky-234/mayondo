@@ -1,32 +1,33 @@
 aside.side-menu-container
   .logo-menu
     h2.logo MWF
+    i.fa-solid.fa-bars
   ul.list
     if currentUser.role === "manager" || currentUser.role === "Manager" || currentUser.isManager === true
-      li.list-item
+      li.list-item(class=(currentPath === '/dashboard' ? 'active' : ''))
         a(href='/dashboard')
           i.fa-solid.fa-house
-          span Dashboard
-      li.list-item
+          span.link-name Dashboard
+      li.list-item(class=(currentPath === '/usersList' ? 'active' : ''))
         a(href='/usersList')
           i.fa-solid.fa-users
-          span Users
-    li.list-item
+          span.link-name Users
+    li.list-item(class=(currentPath === '/sales' ? 'active' : ''))
       a(href='/sales')
         i.fa-solid.fa-cart-shopping
-        span Sales
-    li.list-item
+        span.link-name Sales
+    li.list-item(class=(currentPath === '/stock' ? 'active' : ''))
       a(href='/stock')
         i.fa-solid.fa-truck
-        span Stock
-    li.list-item
+        span.link-name Stock
+    li.list-item(class=(currentPath === '/products' ? 'active' : ''))
       a(href='/products')
         i.fa-solid.fa-couch
-        span Products
+        span.link-name Products
     li.list-item
       a#logoutBtn(href='#')
         i.fa-solid.fa-sign-out-alt
-        span Logout
+        span.link-name Logout
 
 // Logout Modal
 #logoutConfirmationModal.modal.fade
@@ -42,7 +43,28 @@ aside.side-menu-container
         a.btn.btn-danger(href='/logout') Logout
 
 script.
-  document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    new bootstrap.Modal(document.getElementById('logoutConfirmationModal')).show();
+  // Sidebar toggle functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.querySelector('.logo-menu .fa-bars');
+    const sidebar = document.querySelector('.side-menu-container');
+    
+    if (toggleBtn && sidebar) {
+      toggleBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        sidebar.classList.toggle('collapsed');
+      });
+    }
+    
+    // Logout functionality
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const modalElement = document.getElementById('logoutConfirmationModal');
+        if (modalElement) {
+          const modal = new bootstrap.Modal(modalElement);
+          modal.show();
+        }
+      });
+    }
   });
